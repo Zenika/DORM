@@ -5,60 +5,75 @@ import java.util.List;
 
 public final class DormArtifact<T extends MetadataExtension> {
 
-	private DormMetadata<T> metadata;
-	private DormFile file;
-	private List<DormArtifact<T>> dependencies;
-	private List<DormFile> optionnalFiles;
+    private DormMetadata<T> metadata;
+    private DormFile file;
+    private List<DormArtifact<T>> dependencies = new ArrayList<DormArtifact<T>>();
 
-	public DormArtifact() {
-		this.dependencies = new ArrayList<DormArtifact<T>>();
-		this.optionnalFiles = new ArrayList<DormFile>();
-	}
+    public DormArtifact(DormMetadata<T> metadata) {
 
-	public DormArtifact(DormMetadata<T> metadata) {
-		this();
-		this.metadata = metadata;
-	}
+        if (null == metadata) {
+            throw new IllegalArgumentException("Metadata is null");
+        }
 
-	public DormArtifact(DormMetadata<T> metadata, DormFile file,
-			List<DormArtifact<T>> dependencies, List<DormFile> optionnalFiles) {
+        this.metadata = metadata;
+    }
 
-		this(metadata);
+    public DormArtifact(DormMetadata<T> metadata, DormFile file) {
+        this(metadata);
+        this.file = file;
+    }
 
-		this.file = file;
-		this.dependencies = dependencies;
-		this.optionnalFiles = optionnalFiles;
-	}
+    public DormArtifact(DormMetadata<T> metadata, DormFile file,
+                        List<DormArtifact<T>> dependencies) {
 
-	public DormMetadata<T> getMetadata() {
-		return metadata;
-	}
+        this(metadata, file);
+        this.dependencies = dependencies;
+    }
 
-	public void setMetadata(DormMetadata<T> metadata) {
-		this.metadata = metadata;
-	}
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
 
-	public DormFile getFile() {
-		return file;
-	}
+        DormArtifact that = (DormArtifact) o;
 
-	public void setFile(DormFile file) {
-		this.file = file;
-	}
+        if (!metadata.equals(that.metadata)) return false;
 
-	public List<DormArtifact<T>> getDependencies() {
-		return dependencies;
-	}
+        return true;
+    }
 
-	public void setDependencies(List<DormArtifact<T>> dependencies) {
-		this.dependencies = dependencies;
-	}
+    @Override
+    public int hashCode() {
+        int result = metadata.hashCode();
+        return result;
+    }
 
-	public List<DormFile> getOptionnalFiles() {
-		return optionnalFiles;
-	}
+    @Override
+    public String toString() {
+        return metadata.getFullQualifier();
+    }
 
-	public void setOptionnalFiles(List<DormFile> optionnalFiles) {
-		this.optionnalFiles = optionnalFiles;
-	}
+    public DormMetadata<T> getMetadata() {
+        return metadata;
+    }
+
+    public void setMetadata(DormMetadata<T> metadata) {
+        this.metadata = metadata;
+    }
+
+    public DormFile getFile() {
+        return file;
+    }
+
+    public void setFile(DormFile file) {
+        this.file = file;
+    }
+
+    public List<DormArtifact<T>> getDependencies() {
+        return dependencies;
+    }
+
+    public void setDependencies(List<DormArtifact<T>> dependencies) {
+        this.dependencies = dependencies;
+    }
 }

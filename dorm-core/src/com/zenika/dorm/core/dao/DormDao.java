@@ -8,7 +8,7 @@ import com.zenika.dorm.core.model.MetadataExtension;
 
 public interface DormDao {
 
-    public <T extends MetadataExtension> DormArtifact<T> create(
+    public <T extends MetadataExtension> DormArtifact<T> save(
             DormArtifact<T> artifact);
 
     public <T extends MetadataExtension> DormArtifact<T> getByMetadata(

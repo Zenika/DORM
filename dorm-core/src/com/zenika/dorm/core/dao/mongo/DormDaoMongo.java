@@ -22,7 +22,7 @@ public class DormDaoMongo implements DormDao {
     private MongoDB db;
 
     @Override
-    public <T extends MetadataExtension> DormArtifact<T> create(DormArtifact<T> artifact) {
+    public <T extends MetadataExtension> DormArtifact<T> save(DormArtifact<T> artifact) {
 
         BasicDBObject object = MongoMapping.getDocumentFromArtifact(artifact);
 

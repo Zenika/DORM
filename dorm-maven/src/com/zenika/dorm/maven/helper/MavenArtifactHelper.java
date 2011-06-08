@@ -24,7 +24,7 @@ public class MavenArtifactHelper {
 				mavenArtifact.getExtension());
 
 		// dorm artifact
-		DormArtifact<DormMavenMetadata> dormArtifact = new DormArtifact<DormMavenMetadata>();
+		DormArtifact<DormMavenMetadata> dormArtifact = new DormArtifact<DormMavenMetadata>(dormMetadata, dormFile);
 		dormArtifact.setMetadata(dormMetadata);
 		dormArtifact.setFile(dormFile);
 

@@ -2,9 +2,7 @@ package com.zenika.dorm.core.ws.resource;
 
 import com.google.inject.Inject;
 import com.zenika.dorm.core.exception.ArtifactException;
-import com.zenika.dorm.core.helper.DormFileHelper;
 import com.zenika.dorm.core.model.DormArtifact;
-import com.zenika.dorm.core.model.DormFile;
 import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.core.model.MetadataExtension;
 import com.zenika.dorm.core.service.DormService;
@@ -18,171 +16,135 @@ import java.io.IOException;
 import java.util.Properties;
 
 @Path("dorm")
-@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 public class DormResource {
 
     @Inject
     private DormService service;
 
-    @GET
-    @Path("bar")
-    @Produces("text/plain")
-    public Response foo() {
+    @POST
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    @Path("{name}/{version}/{filename}")
+    public Response createArtifactFromPath(@PathParam("name") String name,
+                                           @PathParam("version") String version,
+                                           @FormParam("file") File file,
+                                           @PathParam("filename") String filename) {
 
-        File file = new File("foobar");
-
-        try {
-            file.createNewFile();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        createArtifact("foo", "bar", "yoyo.jar", file);
+        DormMetadata<MetadataExtension> metadata = new DormMetadata<MetadataExtension>(name, version);
+        service.pushArtifact(metadata, file, filename);
 
         return Response.status(Response.Status.OK).build();
     }
 
+    @POST
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    @Path("/from-properties")
+    public Response createArtifactFromProperties(@FormParam("properties") File propertiesFile,
+                                                 @FormParam("file") File file) {
 
-	@POST
-	@Consumes(MediaType.MULTIPART_FORM_DATA)
-	@Path("{name}/{version}/{filename}")
-	public Response createArtifactFromPath(@FormParam("file") File file,
-			@PathParam("name") String name,
-			@PathParam("version") String version,
-			@PathParam("filename") String filename) {
+        Properties properties = getPropertiesFromFile(propertiesFile);
 
-		createArtifact(name, version, filename, file);
+        String name;
+        String version;
+        String filename;
 
-		return Response.status(Response.Status.OK).build();
-	}
+        try {
+            name = properties.getProperty("name").toString();
+            version = properties.getProperty("version").toString();
+            filename = properties.getProperty("filename").toString();
+        } catch (NullPointerException e) {
+            throw new ArtifactException("Missing artifact metadata").type(ArtifactException.Type.NULL);
+        }
 
-	@POST
-	@Consumes(MediaType.MULTIPART_FORM_DATA)
-	@Path("/from-properties")
-	public Response createArtifactFromProperties(@FormParam("file") File file,
-			@FormParam("properties") File propertiesFile) {
+        DormMetadata<MetadataExtension> metadata = new DormMetadata<MetadataExtension>(name, version);
+        service.pushArtifact(metadata, file, filename);
 
-		Properties properties = getPropertiesFromFile(propertiesFile);
+        return Response.status(Response.Status.OK).build();
+    }
 
-		String name;
-		String version;
-		String filename;
+    @GET
+    @Path("{name}/{version}")
+    public DormArtifact<MetadataExtension> getArtifactByMetadata(
+            @PathParam("name") String name, @PathParam("version") String version) {
 
-		try {
-			name = properties.getProperty("name").toString();
-			version = properties.getProperty("version").toString();
-			filename = properties.getProperty("filename").toString();
-		} catch (NullPointerException e) {
-			throw new ArtifactException("Missing artifact metadata")
-					.type(ArtifactException.Type.NULL);
-		}
+        DormMetadata<MetadataExtension> metadata = new DormMetadata<MetadataExtension>(name, version);
+        DormArtifact<MetadataExtension> artifact = service.getArtifact(metadata);
 
-		createArtifact(name, version, filename, file);
+        return null;
+    }
 
-		return Response.status(Response.Status.OK).build();
-	}
+    @DELETE
+    @Path("{name}/{version}/{filename}")
+    public Response removeArtifactByMetadata(@PathParam("name") String name,
+                                             @PathParam("version") String version) {
 
-	@GET
-	@Path("{name}/{version}")
-	public DormArtifact<MetadataExtension> getArtifactByMetadata(
-			@PathParam("name") String name, @PathParam("version") String version) {
+        DormMetadata<MetadataExtension> metadata = new DormMetadata<MetadataExtension>(name, version);
+        service.removeArtifact(metadata);
 
-		DormMetadata<MetadataExtension> metadata = new DormMetadata<MetadataExtension>(
-				name, version);
+        return Response.status(Response.Status.OK).build();
+    }
 
-		DormArtifact<MetadataExtension> artifact = service.getArtifact(metadata);
+    @PUT
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    @Path("{name}/{version}/{filename}")
+    public Response updateArtifact(@PathParam("name") String name,
+                                   @PathParam("version") String version,
+                                   @FormParam("file") File file,
+                                   @PathParam("filename") String filename) {
 
-		return null;
-	}
+        DormMetadata<MetadataExtension> metadata = new DormMetadata<MetadataExtension>(name, version);
+        service.updateArtifact(metadata, file, filename);
 
-	@DELETE
-	@Path("{name}/{version}")
-	public Response removeArtifactByMetadata(@PathParam("name") String name,
-			@PathParam("version") String version) {
+        return Response.status(Response.Status.OK).build();
+    }
 
-		DormMetadata<MetadataExtension> metadata = new DormMetadata<MetadataExtension>(
-				name, version);
+    @PUT
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    @Path("{name}/{version}/{filename}")
+    public Response updateArtifact(@FormParam("properties") File propertiesFile,
+                                   @FormParam("file") File file) {
 
-		service.removeArtifact(metadata);
+        Properties properties = getPropertiesFromFile(propertiesFile);
 
-		return Response.status(Response.Status.OK).build();
-	}
+        String name;
+        String version;
+        String filename;
 
-	// @PUT
-	// @Consumes(MediaType.MULTIPART_FORM_DATA)
-	// @Path("update/{name}/{version}")
-	// public Response updateArtifact(@PathParam("name") String name,
-	// @PathParam("version") String version, @FormParam("file") File file) {
-	//
-	// DormArtifact artifact = new DormArtifact(name, version, file);
-	//
-	// getService().getDormArtifactManager().update(artifact);
-	//
-	// return Response.status(Response.Status.OK).build();
-	// }
-	//
+        try {
+            name = properties.getProperty("name").toString();
+            version = properties.getProperty("version").toString();
+            filename = properties.getProperty("filename").toString();
+        } catch (NullPointerException e) {
+            throw new ArtifactException("Missing artifact metadata").type(ArtifactException.Type.NULL);
+        }
 
-	//
-	// @GET
-	// public List<DormArtifact> getArtifacts() {
-	//
-	// List<DormArtifact> artifacts = getService().getDormArtifactManager()
-	// .getArtifacts();
-	//
-	// return artifacts;
-	// }
-	//
-	// @GET
-	// @Path("{name}")
-	// public List<DormArtifact> getArtifactsByName(@PathParam("name") String
-	// name)
-	// throws Exception {
-	//
-	// List<DormArtifact> artifacts = getService().getDormArtifactManager()
-	// .getArtifactsByName(name);
-	//
-	// if (artifacts.isEmpty()) {
-	// throw new ArtifactException("No artifacts found for name : " + name)
-	// .type(ArtifactException.Type.NULL);
-	// }
-	//
-	// return artifacts;
-	// }
-	//
+        DormMetadata<MetadataExtension> metadata = new DormMetadata<MetadataExtension>(name, version);
+        service.updateArtifact(metadata, file, filename);
 
-	protected void createArtifact(String name, String version, String filename,
-			File file) {
+        return Response.status(Response.Status.OK).build();
+    }
 
-		DormMetadata<MetadataExtension> metadata = new DormMetadata<MetadataExtension>(
-				name, version);
+    protected Properties getPropertiesFromFile(File file) {
 
-		String extension = DormFileHelper.getExtensionFromFilename(filename);
-		DormFile dormFile = new DormFile(filename, extension, file);
+        Properties properties = new Properties();
+        FileInputStream stream = null;
 
-        service.pushArtifact(metadata, dormFile, null, null);
-	}
+        try {
+            stream = new FileInputStream(file);
+            properties.load(stream);
+        } catch (Exception e) {
+            throw new ArtifactException("Properties invalid")
+                    .type(ArtifactException.Type.NULL);
+        } finally {
+            if (null != stream) {
+                try {
+                    stream.close();
+                } catch (IOException e) {
 
-	protected Properties getPropertiesFromFile(File file) {
+                }
+            }
+        }
 
-		Properties properties = new Properties();
-		FileInputStream stream = null;
-
-		try {
-			stream = new FileInputStream(file);
-			properties.load(stream);
-		} catch (Exception e) {
-			throw new ArtifactException("Properties invalid")
-					.type(ArtifactException.Type.NULL);
-		} finally {
-			if (null != stream) {
-				try {
-					stream.close();
-				} catch (IOException e) {
-
-				}
-			}
-		}
-
-		return properties;
-	}
+        return properties;
+    }
 }

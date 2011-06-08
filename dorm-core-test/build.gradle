@@ -1,0 +1,10 @@
+// this is not working :
+//repositories {
+//    mavenRepo name: 'morphia repository', urls: "http://morphia.googlecode.com/svn/mavenrepo"
+//}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.8.2'
+    testCompile group: 'org.mockito', name: 'mockito-all', version: '1.8.5'
+    testCompile group: 'org.easytesting', name: 'fest-assert', version: '1.4'
+}

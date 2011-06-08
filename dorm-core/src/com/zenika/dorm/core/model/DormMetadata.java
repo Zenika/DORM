@@ -4,70 +4,85 @@ import com.zenika.dorm.core.service.DormService;
 
 public final class DormMetadata<T extends MetadataExtension> {
 
-	private String id;
-	private String name;
-	private String version;
-	private String origin;
+    private String name;
+    private String version;
+    private String origin;
 
-	private T extension;
+    private T extension;
 
-	public DormMetadata() {
+    public DormMetadata(String name, String version, String origin) {
+        this.name = name;
+        this.version = version;
+        this.origin = origin;
+    }
 
-	}
+    public DormMetadata(String name, String version) {
+        this(name, version, DormService.ORIGIN);
+    }
 
-	public DormMetadata(String name, String version) {
-		this.name = name;
-		this.version = version;
-		this.origin = DormService.ORIGIN;
-	}
+    public String getFullQualifier() {
+        return name + ":" + version + ":" + origin;
+    }
 
-	public DormMetadata(String name, String version, String origin) {
-		this(name, version);
-		this.origin = origin;
-	}
+    @Override
+    public boolean equals(Object o) {
 
-	public DormMetadata(String id, String name, String version, String origin) {
-		this(name, version, origin);
-		this.id = id;
-	}
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
 
-	public String getId() {
-		return id;
-	}
+        DormMetadata that = (DormMetadata) o;
 
-	public void setId(String id) {
-		this.id = id;
-	}
+        if (!name.equals(that.name)) return false;
+        if (!origin.equals(that.origin)) return false;
+        if (!version.equals(that.version)) return false;
 
-	public String getName() {
-		return name;
-	}
+        return true;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    @Override
+    public int hashCode() {
 
-	public String getVersion() {
-		return version;
-	}
+        int result = name.hashCode();
+        result = 31 * result + version.hashCode();
+        result = 31 * result + origin.hashCode();
 
-	public void setVersion(String version) {
-		this.version = version;
-	}
+        return result;
+    }
 
-	public T getExtension() {
-		return extension;
-	}
+    @Override
+    public String toString() {
+        return getFullQualifier();
+    }
 
-	public void setExtension(T extension) {
-		this.extension = extension;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public String getOrigin() {
-		return origin;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public void setOrigin(String origin) {
-		this.origin = origin;
-	}
+    public String getVersion() {
+        return version;
+    }
+
+    public void setVersion(String version) {
+        this.version = version;
+    }
+
+    public T getExtension() {
+        return extension;
+    }
+
+    public void setExtension(T extension) {
+        this.extension = extension;
+    }
+
+    public String getOrigin() {
+        return origin;
+    }
+
+    public void setOrigin(String origin) {
+        this.origin = origin;
+    }
 }

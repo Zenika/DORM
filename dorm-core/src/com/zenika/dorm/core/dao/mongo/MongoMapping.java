@@ -68,19 +68,10 @@ public class MongoMapping {
 
     public static <T extends MetadataExtension> DormArtifact<T> getArtifactFromDocument(DBObject document) {
 
-        // create the new dorm artifact that will contain the newly mapped
-        // metadata
-        DormArtifact<T> artifact = new DormArtifact<T>();
 
-        //DormMetadata<T> metadata = new DormMetadata<T>();
-
-        // create the new dorm metadata that will be mapped with the document
-        // model
         DormMetadata<T> metadata = mapDocumentToDormMetadata(document);
-        artifact.setMetadata(metadata);
 
         DormFile file = mapDocumentModelToDormFile(document);
-        artifact.setFile(file);
 
         // create and map metadata extension if exists
         if (null != metadata.getExtension()) {
@@ -98,23 +89,22 @@ public class MongoMapping {
             }
         }
 
+        DormArtifact<T> artifact = new DormArtifact<T>(metadata, file);
+
         return artifact;
     }
 
     protected static <T extends MetadataExtension> DormMetadata<T> mapDocumentToDormMetadata(
             DBObject document) {
 
-        DormMetadata<T> mappedMetadata = new DormMetadata<T>();
+        DormMetadata<T> mappedMetadata = null;
 
         try {
-            // dorm schema mapping
-            mappedMetadata.setId(document.get("_id").toString());
-            mappedMetadata
-                    .setName(document.get("name").toString());
-            mappedMetadata.setVersion(document.get("version")
-                    .toString());
-            mappedMetadata.setOrigin(document.get("origin")
-                    .toString());
+            String name = document.get("name").toString();
+            String version = document.get("version").toString();
+            String origin = document.get("origin").toString();
+
+            mappedMetadata = new DormMetadata<T>(name, version, origin);
 
         } catch (NullPointerException e) {
             throw new CoreException(

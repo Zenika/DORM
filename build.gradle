@@ -24,6 +24,7 @@ subprojects {
 
     jerseyVersion = '1.7'
     guiceVersion = '3.0'
+    junitVersion = '4.8.2'
 
     repositories {
         mavenCentral()
@@ -46,6 +47,12 @@ project(':dorm') {
 }
 
 project(':dorm-maven') {
+    dependencies {
+        compile project(':dorm-core')
+    }
+}
+
+project(':dorm-core-test') {
     dependencies {
         compile project(':dorm-core')
     }
