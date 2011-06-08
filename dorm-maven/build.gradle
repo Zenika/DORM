@@ -1,22 +1,8 @@
-apply plugin: 'java'
-apply plugin: 'idea'
-
-version = '0.1-SNAPSHOT'
-
-repositories {
-    mavenCentral()
-    mavenRepo name: 'java.net repository', urls: "http://download.java.net/maven/2"
-}
-
-jerseyVersion = '1.7'
 aetherVersion = '1.12'
 mavenVersion = '3.0.2'
 wagonVersion = '1.0-beta-7'
 
 dependencies {
-    compile group: 'com.sun.jersey', name: 'jersey-server', version: jerseyVersion
-    compile group: 'com.sun.jersey', name: 'jersey-core', version: jerseyVersion
-
     compile group: 'org.sonatype.aether', name: 'aether-api', version : aetherVersion
     compile group: 'org.sonatype.aether', name: 'aether-spi', version : aetherVersion
     compile group: 'org.sonatype.aether', name: 'aether-util', version : aetherVersion
@@ -31,16 +17,4 @@ dependencies {
 
     compile group: 'org.codehaus.plexus', name: 'plexus-container-default', version : '1.5.5'
     compile group: 'org.codehaus.plexus', name: 'plexus-utils', version : '2.0.5'
-}
-
-ideaModule {
-    beforeConfigured { module ->
-        module.dependencies.clear()
-    }
-}
-
-ideaProject {
-    beforeConfigured { project ->
-        project.modulePaths.clear()
-    }
 }

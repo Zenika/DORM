@@ -1,0 +1,52 @@
+allprojects {
+    apply plugin: 'java'
+    apply plugin: 'idea'
+
+    version = '1.0.0-SNAPSHOT'
+    group = 'com.zenika.dorm'
+
+    ideaModule {
+        beforeConfigured { module ->
+            module.dependencies.clear()
+        }
+    }
+
+//ideaProject {
+    //    beforeConfigured { project ->
+    //        project.modulePaths.clear()
+    //    }
+    //}
+}
+
+subprojects {
+
+    configurations.compile.transitive = true
+
+    jerseyVersion = '1.7'
+    guiceVersion = '3.0'
+
+    repositories {
+        mavenCentral()
+        mavenRepo name: 'java.net repository', urls: "http://download.java.net/maven/2"
+    }
+
+    dependencies {
+        compile group: 'com.sun.jersey', name: 'jersey-server', version: jerseyVersion
+        compile group: 'com.sun.jersey', name: 'jersey-core', version: jerseyVersion
+        compile group: 'com.google.inject', name: 'guice', version: guiceVersion
+    }
+}
+
+project(':dorm') {
+    apply plugin: 'war'
+
+    dependencies {
+        compile project(':dorm-core'), project(':dorm-maven')
+    }
+}
+
+project(':dorm-maven') {
+    dependencies {
+        compile project(':dorm-core')
+    }
+}
