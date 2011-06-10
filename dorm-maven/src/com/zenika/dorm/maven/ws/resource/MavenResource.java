@@ -1,6 +1,7 @@
-package com.zenika.dorm.maven.rs.resource;
+package com.zenika.dorm.maven.ws.resource;
 
 import com.google.inject.Inject;
+import com.sun.jersey.multipart.FormDataParam;
 import com.zenika.dorm.core.helper.DormFileHelper;
 import com.zenika.dorm.core.model.DormArtifact;
 import com.zenika.dorm.core.model.DormFile;
@@ -22,16 +23,15 @@ public class MavenResource {
     @POST
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Path("{groupid}/{artifactid}/{version}/{filename}")
-    public Response createArtifact(@FormParam("file") File file, @PathParam("groupid") String groupId,
+    public Response createArtifact(@FormDataParam("file") File file, @PathParam("groupid") String groupId,
                                    @PathParam("artifactid") String artifactId, @PathParam("version") String version,
                                    @PathParam("filename") String filename) {
 
         DormMavenMetadata metadata = new DormMavenMetadata(groupId, artifactId, version);
 
         String extension = DormFileHelper.getExtensionFromFilename(filename);
-        DormFile dormFile = new DormFile(filename, extension, file);
 
-        service.pushArtifact(metadata, dormFile);
+        service.pushArtifact(metadata, file, filename);
 
         return Response.status(Response.Status.OK).build();
     }

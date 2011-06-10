@@ -1,7 +1,9 @@
 package com.zenika.dorm.core.ws.resource;
 
 import com.google.inject.Inject;
+import com.sun.jersey.multipart.FormDataParam;
 import com.zenika.dorm.core.exception.ArtifactException;
+import com.zenika.dorm.core.exception.CoreException;
 import com.zenika.dorm.core.model.DormArtifact;
 import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.core.model.MetadataExtension;
@@ -10,9 +12,8 @@ import com.zenika.dorm.core.service.DormService;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
+import javax.ws.rs.core.StreamingOutput;
+import java.io.*;
 import java.util.Properties;
 
 @Path("dorm")
@@ -20,15 +21,25 @@ import java.util.Properties;
 public class DormResource {
 
     @Inject
-    private DormService service;
+    private DormService<MetadataExtension> service;
+
+    @GET
+    @Path("foo")
+    @Produces("text/plain")
+    public String foo() {
+        DormArtifact<MetadataExtension> artifact = service.getArtifact(new DormMetadata<MetadataExtension>("foo", "1.0", "dorm"));
+        return artifact.toString();
+    }
 
     @POST
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Path("{name}/{version}/{filename}")
     public Response createArtifactFromPath(@PathParam("name") String name,
                                            @PathParam("version") String version,
-                                           @FormParam("file") File file,
+                                           @FormDataParam("file") File file,
                                            @PathParam("filename") String filename) {
+
+        System.out.println("push artifact from path");
 
         DormMetadata<MetadataExtension> metadata = new DormMetadata<MetadataExtension>(name, version);
         service.pushArtifact(metadata, file, filename);
@@ -39,8 +50,8 @@ public class DormResource {
     @POST
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Path("/from-properties")
-    public Response createArtifactFromProperties(@FormParam("properties") File propertiesFile,
-                                                 @FormParam("file") File file) {
+    public Response createArtifactFromProperties(@FormDataParam("properties") File propertiesFile,
+                                                 @FormDataParam("file") File file) {
 
         Properties properties = getPropertiesFromFile(propertiesFile);
 
@@ -63,14 +74,27 @@ public class DormResource {
     }
 
     @GET
+    @Produces("application/octet-stream")
     @Path("{name}/{version}")
-    public DormArtifact<MetadataExtension> getArtifactByMetadata(
+    public StreamingOutput getArtifactByMetadata(
             @PathParam("name") String name, @PathParam("version") String version) {
 
         DormMetadata<MetadataExtension> metadata = new DormMetadata<MetadataExtension>(name, version);
-        DormArtifact<MetadataExtension> artifact = service.getArtifact(metadata);
+        final DormArtifact<MetadataExtension> artifact = service.getArtifact(metadata);
 
-        return null;
+        return new StreamingOutput() {
+            @Override
+            public void write(OutputStream output) throws IOException, WebApplicationException {
+
+                try {
+                    InputStream is = new FileInputStream(artifact.getFile().getFile());
+                    output.write(is.read());
+                } catch (IOException e) {
+                    throw new CoreException("Cannot read / write artifact stream", e);
+                }
+
+            }
+        };
     }
 
     @DELETE
@@ -89,7 +113,7 @@ public class DormResource {
     @Path("{name}/{version}/{filename}")
     public Response updateArtifact(@PathParam("name") String name,
                                    @PathParam("version") String version,
-                                   @FormParam("file") File file,
+                                   @FormDataParam("file") File file,
                                    @PathParam("filename") String filename) {
 
         DormMetadata<MetadataExtension> metadata = new DormMetadata<MetadataExtension>(name, version);
@@ -100,9 +124,9 @@ public class DormResource {
 
     @PUT
     @Consumes(MediaType.MULTIPART_FORM_DATA)
-    @Path("{name}/{version}/{filename}")
-    public Response updateArtifact(@FormParam("properties") File propertiesFile,
-                                   @FormParam("file") File file) {
+    @Path("from-properties")
+    public Response updateArtifact(@FormDataParam("properties") File propertiesFile,
+                                   @FormDataParam("file") File file) {
 
         Properties properties = getPropertiesFromFile(propertiesFile);
 

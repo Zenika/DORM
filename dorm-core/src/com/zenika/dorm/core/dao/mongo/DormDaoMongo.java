@@ -2,52 +2,65 @@ package com.zenika.dorm.core.dao.mongo;
 
 import com.google.inject.Inject;
 import com.mongodb.BasicDBObject;
-import com.mongodb.DB;
 import com.mongodb.DBObject;
 import com.mongodb.Mongo;
+import com.sun.research.ws.wadl.Resource;
 import com.zenika.dorm.core.dao.DormDao;
 import com.zenika.dorm.core.exception.RepositoryException;
 import com.zenika.dorm.core.model.DormArtifact;
 import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.core.model.MetadataExtension;
 
-import java.net.UnknownHostException;
-
 /**
  * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>
  */
-public class DormDaoMongo implements DormDao {
+public class DormDaoMongo<T extends MetadataExtension> implements DormDao<T> {
 
     @Inject
-    private MongoDB db;
+    private MongoInstance instance;
 
     @Override
-    public <T extends MetadataExtension> DormArtifact<T> save(DormArtifact<T> artifact) {
+    public DormArtifact<T> save(DormArtifact<T> artifact) {
 
-        BasicDBObject object = MongoMapping.getDocumentFromArtifact(artifact);
+        BasicDBObject document = MongoMapping.getDocumentFromArtifact(artifact);
 
-        db.getArtifactsCollection().save(object);
+        instance.getArtifacts().save(document);
 
         return artifact;
     }
 
     @Override
-    public <T extends MetadataExtension> DormArtifact<T> getByMetadata(DormMetadata<T> metadata) {
+    public DormArtifact<T> getByMetadata(DormMetadata<T> metadata) {
 
         BasicDBObject query = MongoMapping.getDocumentFromMetadata(metadata);
 
-        DBObject res = db.getArtifactsCollection().findOne(query);
+        DBObject res = instance.getArtifacts().findOne(query);
 
-        DormArtifact<T> artifact = MongoMapping.getArtifactFromDocument(res);
+        if (null == res) {
+            throw new RepositoryException("Artifact not found with metadata : " + metadata).type(RepositoryException.Type.NULL);
+        }
 
-        return artifact;
+        return MongoMapping.getArtifactFromDocument(res, metadata.getExtension().getClass());
     }
 
     @Override
-    public <T extends MetadataExtension> void removeByMetadata(DormMetadata<T> metadata) {
+    public void removeByMetadata(DormMetadata<T> metadata) {
 
         BasicDBObject query = MongoMapping.getDocumentFromMetadata(metadata);
 
-        db.getArtifactsCollection().remove(query);
+        DBObject res = instance.getArtifacts().findOne(query);
+
+        if(null == res) {
+            throw new RepositoryException("Artifact not found with metadata : " + metadata).type(RepositoryException.Type.NULL);
+        }
+
+        instance.getArtifacts().remove(res);
+
+//        Query query = ds.createQuery(DormMetadata.class);
+//        query.field("name").equal(metadata.getName());
+//        query.field("version").equal(metadata.getVersion());
+//        query.field("origin").equal(metadata.getOrigin());
+//
+//        deleteByQuery(query);
     }
 }

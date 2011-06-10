@@ -1,13 +1,18 @@
 package com.zenika.dorm.core.model;
 
-import com.zenika.dorm.core.service.DormService;
+import com.google.code.morphia.annotations.Embedded;
+import com.google.code.morphia.annotations.Entity;
 
+@Embedded
 public final class DormMetadata<T extends MetadataExtension> {
+
+    public final static String ORIGIN = "Dorm";
 
     private String name;
     private String version;
     private String origin;
 
+    @Embedded
     private T extension;
 
     public DormMetadata(String name, String version, String origin) {
@@ -17,7 +22,7 @@ public final class DormMetadata<T extends MetadataExtension> {
     }
 
     public DormMetadata(String name, String version) {
-        this(name, version, DormService.ORIGIN);
+        this(name, version, DormMetadata.ORIGIN);
     }
 
     public String getFullQualifier() {

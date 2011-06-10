@@ -11,4 +11,6 @@ Installation from sources :
 
 Web service :
 - Dorm :
+    - Push artifact : curl -X POST -F"file=artifact.jar" http://localhost:8080/dorm/foo/1.0/foo-1.0.jar
+    - Get artifact : curl -X GET http://localhost:8080/dorm/foo/1.0/foo-1.0.jar
 - Maven :

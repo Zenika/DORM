@@ -15,22 +15,25 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DormServiceImpl implements DormService {
+public class DormServiceImpl<T extends MetadataExtension> implements DormService<T> {
 
     @Inject
-    private DormDao dao;
+    private DormDao<T> dao;
 
     @Override
-    public <T extends MetadataExtension> DormArtifact<T> pushArtifact(DormArtifact<T> artifact) {
+    public DormArtifact<T> pushArtifact(DormArtifact<T> artifact) {
 
         validateArtifact(artifact);
 
         try {
             DormArtifact<T> existing = getArtifact(artifact.getMetadata());
+
         } catch (RepositoryException e) {
+
+            // artifact not found exception, it means we can push new artifact in the repo
             if (e.getType().equals(RepositoryException.Type.NULL)) {
-                // artifact not found exception, it means we can push new artifact in the repo
-                return dao.save(artifact);
+//                return dao.save(artifact);
+                return null;
             }
 
             throw e;
@@ -40,29 +43,29 @@ public class DormServiceImpl implements DormService {
     }
 
     @Override
-    public <T extends MetadataExtension> DormArtifact<T> pushArtifact(DormMetadata<T> metadata, DormFile file, List<DormArtifact<T>> dependencies) {
+    public DormArtifact<T> pushArtifact(DormMetadata<T> metadata, DormFile file, List<DormArtifact<T>> dependencies) {
         DormArtifact<T> artifact = new DormArtifact<T>(metadata, file, dependencies);
         return pushArtifact(artifact);
     }
 
     @Override
-    public <T extends MetadataExtension> DormArtifact<T> pushArtifact(DormMetadata<T> metadata, DormFile file) {
+    public DormArtifact<T> pushArtifact(DormMetadata<T> metadata, DormFile file) {
         return pushArtifact(new DormArtifact<T>(metadata, file));
     }
 
     @Override
-    public <T extends MetadataExtension> DormArtifact<T> pushArtifact(DormMetadata<T> metadata, File file, String filename) {
+    public DormArtifact<T> pushArtifact(DormMetadata<T> metadata, File file, String filename) {
         DormFile dormFile = DormFileHelper.createDormFileFromFilename(metadata, file, filename);
         return pushArtifact(metadata, dormFile);
     }
 
     @Override
-    public <T extends MetadataExtension> DormArtifact<T> getArtifact(DormMetadata<T> metadata) {
+    public DormArtifact<T> getArtifact(DormMetadata<T> metadata) {
         return dao.getByMetadata(metadata);
     }
 
     @Override
-    public <T extends MetadataExtension> DormArtifact<T> updateArtifact(DormArtifact<T> artifact) {
+    public DormArtifact<T> updateArtifact(DormArtifact<T> artifact) {
 
 
         if (null == artifact.getFile() || null == artifact.getFile().getFile() || null == artifact.getFile().getName() || null == artifact.getFile().getExtension()) {
@@ -79,11 +82,12 @@ public class DormServiceImpl implements DormService {
             throw e;
         }
 
-        return dao.save(artifact);
+//        return dao.save(artifact);
+        return null;
     }
 
     @Override
-    public <T extends MetadataExtension> DormArtifact<T> updateArtifact(DormMetadata<T> metadata, File file, String filename) {
+    public DormArtifact<T> updateArtifact(DormMetadata<T> metadata, File file, String filename) {
 
         DormFile dormFile = DormFileHelper.createDormFileFromFilename(metadata, file, filename);
         DormArtifact<T> artifact = new DormArtifact<T>(metadata, dormFile);
@@ -92,16 +96,16 @@ public class DormServiceImpl implements DormService {
     }
 
     @Override
-    public <T extends MetadataExtension> void removeArtifact(DormMetadata<T> metadata) {
+    public void removeArtifact(DormMetadata<T> metadata) {
         dao.removeByMetadata(metadata);
     }
 
     @Override
-    public <T extends MetadataExtension> void removeArtifact(DormArtifact<T> artifact) {
+    public void removeArtifact(DormArtifact<T> artifact) {
         removeArtifact(artifact.getMetadata());
     }
 
-    private <T extends MetadataExtension> void validateArtifact(DormArtifact<T> artifact) {
+    private void validateArtifact(DormArtifact<T> artifact) {
 
         DormMetadata<T> metadata = artifact.getMetadata();
 

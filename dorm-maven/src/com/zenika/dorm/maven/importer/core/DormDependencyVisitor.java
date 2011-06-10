@@ -13,7 +13,7 @@ import org.sonatype.aether.resolution.ArtifactResult;
 
 import com.zenika.dorm.core.model.DormArtifact;
 import com.zenika.dorm.maven.exception.MavenException;
-import com.zenika.dorm.maven.helper.MavenArtifactHelper;
+import com.zenika.dorm.maven.helper.MavenHelper;
 import com.zenika.dorm.maven.model.impl.DormMavenMetadata;
 
 public class DormDependencyVisitor implements DependencyVisitor {
@@ -47,7 +47,7 @@ public class DormDependencyVisitor implements DependencyVisitor {
 			throw new MavenException("Resolve artifact exception");
 		}
 
-		DormArtifact<DormMavenMetadata> current = MavenArtifactHelper.createDormArtifact(mavenArtifact);
+		DormArtifact<DormMavenMetadata> current = MavenHelper.createDormArtifact(mavenArtifact);
 
 		if (!tree.isEmpty()) {
 			tree.getLast().getDependencies().add(current);

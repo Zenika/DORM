@@ -8,43 +8,23 @@ import com.zenika.dorm.core.model.DormFile;
 import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.core.service.DormService;
 import com.zenika.dorm.maven.exception.MavenException;
-import com.zenika.dorm.maven.helper.MavenArtifactHelper;
+import com.zenika.dorm.maven.helper.MavenHelper;
 import com.zenika.dorm.maven.importer.core.MavenImporterService;
 import com.zenika.dorm.maven.model.impl.DormMavenMetadata;
 import com.zenika.dorm.maven.service.MavenService;
 
+import java.io.File;
+
 public class MavenServiceImpl implements MavenService {
 
     @Inject
-    private DormService dormService;
+    private DormService<DormMavenMetadata> dormService;
 
     @Override
-    public DormArtifact<DormMavenMetadata> pushArtifact(DormMavenMetadata mavenMetadata, DormFile file) {
+    public DormArtifact<DormMavenMetadata> pushArtifact(DormMavenMetadata mavenMetadata, File file, String filename) {
 
-        String extension = file.getExtension();
-
-        // maven jar
-        if (extension.equalsIgnoreCase("jar")) {
-            // TODO: some jar logic
-        }
-
-        // maven pom
-        else if (extension.equalsIgnoreCase("pom")) {
-
-
-        } else {
-            throw new MavenException("Incorrect file type").type(ArtifactException.Type.NULL);
-        }
-
-        // set extension as the maven metadata type
-        mavenMetadata.setExtension(extension.toLowerCase());
-
-        DormMetadata<DormMavenMetadata> metadata = MavenArtifactHelper.createDormMetadata(mavenMetadata);
-
-//		DormArtifact<DormMavenMetadata> artifact = DormEcrComponentHelper.getComponent().getDormService()
-//				.pushArtifact(metadata, file, null, null);
-
-        return null;
+        DormArtifact<DormMavenMetadata> artifact = createDormArtifact(mavenMetadata, file, filename);
+        return dormService.pushArtifact(artifact);
     }
 
     @Override
@@ -54,7 +34,7 @@ public class MavenServiceImpl implements MavenService {
         mavenMetadata.setExtension(extension);
 
         // get dorm metadata with maven
-        DormMetadata<DormMavenMetadata> metadata = MavenArtifactHelper.createDormMetadata(mavenMetadata);
+//        DormMetadata<DormMavenMetadata> metadata = MavenHelper.createDormMetadata(mavenMetadata);
 
 //		return DormEcrComponentHelper.getComponent().getDormService().getArtifact(metadata);
         return null;
@@ -67,7 +47,7 @@ public class MavenServiceImpl implements MavenService {
         mavenMetadata.setExtension(extension);
 
         // get dorm metadata with maven
-        DormMetadata<DormMavenMetadata> metadata = MavenArtifactHelper.createDormMetadata(mavenMetadata);
+//        DormMetadata<DormMavenMetadata> metadata = MavenHelper.createDormMetadata(mavenMetadata);
 
 //		DormEcrComponentHelper.getComponent().getDormService().removeArtifact(metadata);
     }
@@ -82,6 +62,52 @@ public class MavenServiceImpl implements MavenService {
 
     private void mapMavenFile(DormMavenMetadata metadata, DormFile file) {
 
+    }
+
+    private DormFile createDormFile(DormMetadata<DormMavenMetadata> metadata, File file, String filename) {
+
+        String extension = DormFileHelper.getExtensionFromFilename(filename);
+
+        // maven jar
+        if (extension.equalsIgnoreCase("jar")) {
+            // TODO: some jar logic
+        }
+
+        // maven pom
+        else if (extension.equalsIgnoreCase("pom")) {
+
+
+        } else {
+            throw new MavenException("Incorrect file type").type(ArtifactException.Type.NULL);
+        }
+
+        metadata.getExtension().setExtension(extension);
+
+        return new DormFile(metadata.getFullQualifier(), extension, file);
+    }
+
+    private DormMetadata<DormMavenMetadata> createDormMetadata(DormMavenMetadata mavenMetadata) {
+
+        // define the mapping between dorm and maven metadatas
+        String name = mavenMetadata.getGroupId() + ":" + mavenMetadata.getArtifactId() + ":"
+                + mavenMetadata.getVersion() + ":" + mavenMetadata.getExtension();
+
+        // create new dorm metadata from maven
+        DormMetadata<DormMavenMetadata> metadata = new DormMetadata<DormMavenMetadata>(name, mavenMetadata.getVersion(),
+                DormMavenMetadata.ORIGIN);
+
+        // set the maven extension
+        metadata.setExtension(mavenMetadata);
+
+        return metadata;
+    }
+
+    private DormArtifact<DormMavenMetadata> createDormArtifact(DormMavenMetadata mavenMetadata, File file, String filename) {
+
+        DormMetadata<DormMavenMetadata> metadata = createDormMetadata(mavenMetadata);
+        DormFile dormFile = createDormFile(metadata, file, filename);
+
+        return new DormArtifact<DormMavenMetadata>(metadata, dormFile);
     }
 
 }

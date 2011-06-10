@@ -1,12 +1,27 @@
 package com.zenika.dorm.core.model;
 
+import com.google.code.morphia.annotations.Embedded;
+import com.google.code.morphia.annotations.Entity;
+import com.google.code.morphia.annotations.Id;
+import com.google.code.morphia.annotations.Transient;
+import org.bson.types.ObjectId;
+
 import java.util.ArrayList;
 import java.util.List;
 
+@Entity
 public final class DormArtifact<T extends MetadataExtension> {
 
+    @Id
+    private ObjectId id;
+
+    @Embedded
     private DormMetadata<T> metadata;
+
+    @Embedded
     private DormFile file;
+
+    @Transient
     private List<DormArtifact<T>> dependencies = new ArrayList<DormArtifact<T>>();
 
     public DormArtifact(DormMetadata<T> metadata) {
@@ -51,6 +66,14 @@ public final class DormArtifact<T extends MetadataExtension> {
     @Override
     public String toString() {
         return metadata.getFullQualifier();
+    }
+
+    public ObjectId getId() {
+        return id;
+    }
+
+    public void setId(ObjectId id) {
+        this.id = id;
     }
 
     public DormMetadata<T> getMetadata() {
