@@ -1,17 +1,14 @@
 package com.zenika.dorm.core.unit;
 
-import com.zenika.dorm.core.helper.DormFileHelper;
+import com.zenika.dorm.core.model.DormArtifact;
 import com.zenika.dorm.core.model.DormFile;
 import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.core.model.MetadataExtension;
 import com.zenika.dorm.core.service.DormService;
 import com.zenika.dorm.core.ws.resource.DormResource;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -24,7 +21,7 @@ import static org.mockito.Mockito.verify;
 /**
  * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>
  */
-public class DormResourceUnitTest {
+public class DormResourceUnitTest extends DormCoreUnitTest {
 
     @Mock
     private DormService service;
@@ -32,48 +29,35 @@ public class DormResourceUnitTest {
     @InjectMocks
     private DormResource resource = new DormResource();
 
-    private File file;
-    private File properties;
-
-    private String name;
-    private String version;
-    private String filename;
-    private DormMetadata<MetadataExtension> metadata;
-    private DormFile dormFile;
-
-    @Before
-    public void before() {
-        MockitoAnnotations.initMocks(this);
-        createModels();
+    /**
+     * Proxy method to getPropertiesFile with name, version and filename
+     * These informations are taken from artifact
+     *
+     * @param artifact the artifact from which extract the name, version and filename
+     * @return the properties file
+     */
+    private File getPropertiesFile(DormArtifact<MetadataExtension> artifact) {
+        return getPropertiesFile(artifact.getMetadata().getName(), artifact.getMetadata().getVersion(), artifact.getFile().getFilename());
     }
 
-    @After
-    public void after() {
-        file.delete();
-        properties.delete();
-    }
+    /**
+     * Create new properties file based on the given name, version and filename
+     *
+     * @param name the artifact name
+     * @param version the artifact version
+     * @param filename the artifact's file name
+     * @return the properties file
+     */
+    private File getPropertiesFile(String name, String version, String filename) {
 
-    private void createModels() {
-
-        name = "Foo";
-        version = "1.0";
-        filename = "foo-1.0.jar";
-
+        File propertiesFile = null;
         try {
-            file = File.createTempFile("/tmp", filename);
-            properties = getPropertiesFile(name, version, filename);
+            propertiesFile = File.createTempFile(name + "-" + version, ".properties");
+            propertiesFile.deleteOnExit();
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        metadata = new DormMetadata<MetadataExtension>(name, version, DormService.ORIGIN);
-        dormFile = DormFileHelper.createDormFileFromFilename(metadata, file, filename);
-
-    }
-
-    private File getPropertiesFile(String name, String version, String filename) {
-
-        File propertiesFile = new File("/tmp", name + "-" + version);
         Properties properties = new Properties();
         properties.put("name", name);
         properties.put("version", version);
@@ -90,40 +74,42 @@ public class DormResourceUnitTest {
 
     @Test
     public void createArtifact() {
-        resource.createArtifactFromPath(name, version, file, filename);
-        resource.createArtifactFromProperties(properties, file);
-        verify(service, times(2)).pushArtifact(metadata, file, filename);
+        DormMetadata<MetadataExtension> metadata = artifact1.getMetadata();
+        DormFile file = artifact1.getFile();
+        File properties = getPropertiesFile(artifact1);
+
+        resource.createArtifactFromPath(metadata.getName(), metadata.getVersion(), file.getFile(), file.getFilename());
+        resource.createArtifactFromProperties(properties, file.getFile());
+
+        verify(service, times(2)).pushArtifact(metadata, file.getFile(), file.getFilename());
     }
 
     @Test
     public void getArtifact() {
-        resource.getArtifactByMetadata(name, version);
-        verify(service).getArtifact(metadata);
+        resource.getArtifactByMetadata(artifact1.getMetadata().getName(), artifact1.getMetadata().getVersion());
+        verify(service).getArtifact(artifact1.getMetadata());
     }
 
     @Test
     public void removeArtifact() {
-        resource.removeArtifactByMetadata(name, version);
-        verify(service).removeArtifact(metadata);
+        resource.removeArtifactByMetadata(artifact1.getMetadata().getName(), artifact1.getMetadata().getVersion());
+        verify(service).removeArtifact(artifact1.getMetadata());
     }
 
+    /**
+     * Update artifact should only update artifact file not metadata
+     */
     @Test
     public void updateArtifact() {
 
-        File file2 = null;
-        String filename2 = "foo2-1.0.jar";
+        DormMetadata<MetadataExtension> metadata = artifact1.getMetadata();
+        DormFile file = artifact2.getFile();
 
-        try {
-            file2 = File.createTempFile("/tmp", filename2);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        File properties2 = getPropertiesFile(metadata.getName(), metadata.getVersion(), file.getFilename());
 
-        File properties2 = getPropertiesFile(name, version, filename2);
+        resource.updateArtifact(metadata.getName(), metadata.getVersion(), file.getFile(), file.getFilename());
+        resource.updateArtifact(properties2, file.getFile());
 
-        resource.updateArtifact(name, version, file2, filename2);
-        resource.updateArtifact(properties2, file2);
-
-        verify(service, times(2)).updateArtifact(metadata, file2, filename2);
+        verify(service, times(2)).updateArtifact(metadata, file.getFile(), file.getFilename());
     }
 }
