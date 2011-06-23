@@ -5,8 +5,8 @@ Zenika DORM :
 - Dorm core test : Tests from core.
 
 Installation from sources :
-- Build main project with gradle : ./gradle build
-- Launch the war from dorm subproject : ./dorm/build/libs/dorm-xxx.war
+- Build main project with gradle : gradle build
+- Install the war from dorm subproject : ./dorm/build/libs/dorm-xxx.war
 - Install and launch MongoDB instance on default port
 
 Web service :
