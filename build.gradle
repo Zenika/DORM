@@ -9,13 +9,9 @@ allprojects {
         beforeConfigured { module ->
             module.dependencies.clear()
         }
-    }
 
-//ideaProject {
-    //    beforeConfigured { project ->
-    //        project.modulePaths.clear()
-    //    }
-    //}
+        downloadSources = false
+    }
 }
 
 subprojects {

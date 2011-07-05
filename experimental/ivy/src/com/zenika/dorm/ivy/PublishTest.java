@@ -1,8 +1,8 @@
 package com.zenika.dorm.ivy;
 
+import org.apache.ivy.Ivy;
 import org.apache.ivy.core.event.EventManager;
-import org.apache.ivy.core.module.descriptor.DefaultModuleDescriptor;
-import org.apache.ivy.core.module.descriptor.ModuleDescriptor;
+import org.apache.ivy.core.module.descriptor.*;
 import org.apache.ivy.core.module.id.ModuleId;
 import org.apache.ivy.core.module.id.ModuleRevisionId;
 import org.apache.ivy.core.publish.PublishEngine;
@@ -15,13 +15,16 @@ import org.apache.ivy.plugins.resolver.FileSystemResolver;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collection;
 
 /**
- * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>
+ * @author Antoine Rouaze <antoine.rouaze AT zenika.com>
  */
-public class RepositoryPublishTest {
+public class PublishTest {
 
     private File base = new File("tmp/tests").getAbsoluteFile();
 
@@ -39,7 +42,20 @@ public class RepositoryPublishTest {
     private ModuleId moduleId;
 
     public void init() {
+//        try {
+//            URL url = ClassLoader.getSystemResource("com/zenika/dorm/resources/ivy.xml");
+//            File file = new File(url.toURI());
         ivySettings = new IvySettings();
+//            ivySettings.load(file);
+//            System.out.println(ivySettings.getVariable("info"));
+//            System.out.println("Get variable");
+//        } catch (URISyntaxException e) {
+//            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+//        } catch (ParseException e) {
+//            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+//        } catch (IOException e) {
+//            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+//        }
     }
 
     public void configureRepository() {
@@ -93,9 +109,9 @@ public class RepositoryPublishTest {
     public void publish() {
 
         try {
-            new File(base, "topublish").mkdir();
-            new File(base, "topublish/A.jar").createNewFile();
-            new File(base, "topublish/B.jar").createNewFile();
+//            new File(base, "topublish").mkdir();
+//            new File(base, "topublish/A.jar").createNewFile();
+//            new File(base, "topublish/B.jar").createNewFile();
 
             Collection searchPattern = new ArrayList();
             searchPattern.add(base.getAbsoluteFile() + "/topublish/[artifact].[ext]");
@@ -109,18 +125,33 @@ public class RepositoryPublishTest {
         }
     }
 
+    public void resolve() {
+        try {
+            URL url = ClassLoader.getSystemResource("com/zenika/dorm/resources/ivy.xml");
+            File file = new File(url.toURI());
+            Ivy ivy = Ivy.newInstance(ivySettings);
+            ivy.resolve(file);
+        } catch (URISyntaxException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        } catch (ParseException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        } catch (IOException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+    }
+
     public void workflow1() {
         init();
         configureModule();
         configureRepository();
         configureResolver();
         configurePublisher();
-
+        //resolve();
         publish();
     }
 
     public static void main(String[] args) {
-        RepositoryPublishTest repositoryPublishTest = new RepositoryPublishTest();
+        PublishTest repositoryPublishTest = new PublishTest();
         repositoryPublishTest.workflow1();
     }
 
