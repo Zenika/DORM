@@ -2,7 +2,9 @@ package com.zenika.dorm.ivy;
 
 import org.apache.ivy.Ivy;
 import org.apache.ivy.core.event.EventManager;
-import org.apache.ivy.core.module.descriptor.*;
+import org.apache.ivy.core.module.descriptor.Artifact;
+import org.apache.ivy.core.module.descriptor.DefaultModuleDescriptor;
+import org.apache.ivy.core.module.descriptor.MDArtifact;
 import org.apache.ivy.core.module.id.ModuleId;
 import org.apache.ivy.core.module.id.ModuleRevisionId;
 import org.apache.ivy.core.publish.PublishEngine;
@@ -22,7 +24,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 /**
- * @author Antoine Rouaze <antoine.rouaze AT zenika.com>
+ * @author Antoine Rouaze <lukasz.piliszczuk AT zenika.com>
  */
 public class PublishTest {
 
@@ -37,11 +39,15 @@ public class PublishTest {
 
     private IvySettings ivySettings;
 
-    private ModuleDescriptor moduleDescriptor;
+    private DefaultModuleDescriptor moduleDescriptor;
     private ModuleRevisionId moduleRevisionId;
     private ModuleId moduleId;
 
+    private File file;
+
     public void init() {
+
+        Helper.deleteDirectory(base);
 //        try {
 //            URL url = ClassLoader.getSystemResource("com/zenika/dorm/resources/ivy.xml");
 //            File file = new File(url.toURI());
@@ -59,7 +65,7 @@ public class PublishTest {
     }
 
     public void configureRepository() {
-        File file = new File(base, "repo").getAbsoluteFile();
+        file = new File(base, "repo").getAbsoluteFile();
         file.mkdirs();
 
         fileRepository = new FileRepository(file);
@@ -79,11 +85,12 @@ public class PublishTest {
 
 
         ivyPattern = new IvyPattern();
-        ivyPattern.setPattern(base.getAbsolutePath() + "/[module]/[revision]/[artifact].[ext]");
+        ivyPattern.setPattern(file.getAbsolutePath() + "[module]/[revision]/[artifact].[ext]");
 
         artifactPattern = new IvyPattern();
-        artifactPattern.setPattern(base.getAbsolutePath() + "/[module]/[revision]/[artifact].[ext]");
+        artifactPattern.setPattern(file.getAbsolutePath() + "/[module]/[revision]/[artifact].[ext]");
 
+        fileSystemResolver.setChecksums("md5");
         fileSystemResolver.addConfiguredIvy(ivyPattern);
         fileSystemResolver.addConfiguredArtifact(artifactPattern);
 
@@ -95,6 +102,12 @@ public class PublishTest {
         moduleRevisionId = new ModuleRevisionId(moduleId, "1.0.0");
 
         moduleDescriptor = DefaultModuleDescriptor.newDefaultInstance(moduleRevisionId);
+
+        Artifact artifactA = new MDArtifact(moduleDescriptor, "A", "jar", "jar");
+        Artifact artifactB = new MDArtifact(moduleDescriptor, "B", "jar", "jar");
+
+        moduleDescriptor.addArtifact("default", artifactA);
+        moduleDescriptor.addArtifact("default", artifactB);
 
         try {
             // generate ivy.xml
@@ -109,15 +122,16 @@ public class PublishTest {
     public void publish() {
 
         try {
-//            new File(base, "topublish").mkdir();
-//            new File(base, "topublish/A.jar").createNewFile();
-//            new File(base, "topublish/B.jar").createNewFile();
+            new File(base, "topublish").mkdir();
+            new File(base, "topublish/A.jar").createNewFile();
+            new File(base, "topublish/B.jar").createNewFile();
 
             Collection searchPattern = new ArrayList();
             searchPattern.add(base.getAbsoluteFile() + "/topublish/[artifact].[ext]");
 
             PublishOptions publishOptions = new PublishOptions();
-            publishOptions.setSrcIvyPattern(base.getAbsoluteFile() + "/topublish/[artifact].[ext]");
+//            publishOptions.set
+            publishOptions.setSrcIvyPattern(base.getAbsoluteFile() + "\\topublish\\[artifact].[ext]");
             publishEngine.publish(moduleDescriptor, searchPattern, fileSystemResolver, publishOptions);
 
         } catch (IOException e) {
