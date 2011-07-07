@@ -5,6 +5,7 @@ import java.util.List;
 
 /**
  * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>
+ * @deprecated since dorm will represent artifacts in more generic way, like graphs and nodes
  */
 final public class DormArtifact {
 

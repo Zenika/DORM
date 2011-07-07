@@ -1,12 +1,20 @@
 package com.zenika.dorm.maven.service;
 
 import com.zenika.dorm.core.model.DormArtifact;
+import com.zenika.dorm.core.model.DormFile;
+import com.zenika.dorm.core.modelnew.impl.DormModule;
 import com.zenika.dorm.maven.model.impl.DormMavenMetadata;
+import com.zenika.dorm.maven.model.impl.MavenOrigin;
 
 import java.io.File;
 
 public interface MavenService {
 
+    public DormModule pushArtifact(MavenOrigin origin, DormFile file);
+
+    /**
+     * @deprecated
+     */
     public DormArtifact<DormMavenMetadata> pushArtifact(DormMavenMetadata mavenMetadata, File file, String filename);
 
     public DormArtifact<DormMavenMetadata> getArtifact(DormMavenMetadata mavenMetadata,

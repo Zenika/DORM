@@ -2,6 +2,7 @@ package com.zenika.dorm.core.modelnew.impl;
 
 /**
  * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>
+ * @deprecated remplaced by Usage
  */
 public class DormScope {
 

@@ -119,9 +119,9 @@ public class MongoMapping {
      */
     protected static DormFile mapDocumentToDormFile(DBObject document) {
 
-        DormFile dormFile = new DormFile();
+//        DormFile dormFile = new DormFile();
 
-        return dormFile;
+        return null;
     }
 
     protected static <T extends MetadataExtension> T mapDocumentToMetadataExtension(DBObject document, Class<T> extensionClass)

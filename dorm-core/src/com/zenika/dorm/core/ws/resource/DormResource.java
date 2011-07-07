@@ -10,9 +10,7 @@ import com.zenika.dorm.core.model.MetadataExtension;
 import com.zenika.dorm.core.service.DormService;
 
 import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.StreamingOutput;
+import javax.ws.rs.core.*;
 import java.io.*;
 import java.util.Properties;
 
@@ -27,8 +25,21 @@ public class DormResource {
     @Path("foo")
     @Produces("text/plain")
     public String foo() {
-        DormArtifact<MetadataExtension> artifact = service.getArtifact(new DormMetadata<MetadataExtension>("foo", "1.0", "dorm"));
-        return artifact.toString();
+        return "foo";
+//        DormArtifact<MetadataExtension> artifact = service.getArtifact(new DormMetadata<MetadataExtension>("foo", "1.0", "dorm"));
+//        return artifact.toString();
+    }
+
+    @POST
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    @Path("test/{origin}/*")
+    public Response createArtifactFromUri(@PathParam("origin") String origin, @Context UriInfo info) {
+
+        System.out.println("push from origin : " + origin);
+        MultivaluedMap<String, String> map = info.getPathParameters();
+        System.out.println(map);
+
+        return Response.status(Response.Status.OK).build();
     }
 
     @POST

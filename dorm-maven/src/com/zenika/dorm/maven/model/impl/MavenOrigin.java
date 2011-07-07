@@ -1,4 +1,4 @@
-package com.zenika.dorm.core.modelnew.impl;
+package com.zenika.dorm.maven.model.impl;
 
 /**
  * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>
@@ -7,7 +7,8 @@ package com.zenika.dorm.core.modelnew.impl;
 import com.zenika.dorm.core.modelnew.DormOrigin;
 
 /**
- * Should be moved to the dorm-maven project
+ * Maven extension point to the dorm model
+ * Add maven specific metadatas
  */
 public class MavenOrigin implements DormOrigin {
 
@@ -15,10 +16,12 @@ public class MavenOrigin implements DormOrigin {
 
     private String groupId;
     private String artifactId;
+    private String versionId;
 
-    public MavenOrigin(String groupId, String artifactId) {
+    public MavenOrigin(String groupId, String artifactId, String versionId) {
         this.groupId = groupId;
         this.artifactId = artifactId;
+        this.versionId = versionId;
     }
 
     @Override

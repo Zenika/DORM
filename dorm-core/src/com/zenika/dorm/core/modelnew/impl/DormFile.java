@@ -2,6 +2,9 @@ package com.zenika.dorm.core.modelnew.impl;
 
 import java.io.File;
 
+/**
+ * Represents an artifact file stored on the file system
+ */
 public final class DormFile {
 
     private String name;

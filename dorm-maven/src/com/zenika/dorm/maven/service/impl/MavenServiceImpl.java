@@ -6,11 +6,13 @@ import com.zenika.dorm.core.helper.DormFileHelper;
 import com.zenika.dorm.core.model.DormArtifact;
 import com.zenika.dorm.core.model.DormFile;
 import com.zenika.dorm.core.model.DormMetadata;
+import com.zenika.dorm.core.modelnew.impl.DormModule;
 import com.zenika.dorm.core.service.DormService;
 import com.zenika.dorm.maven.exception.MavenException;
 import com.zenika.dorm.maven.helper.MavenHelper;
 import com.zenika.dorm.maven.importer.core.MavenImporterService;
 import com.zenika.dorm.maven.model.impl.DormMavenMetadata;
+import com.zenika.dorm.maven.model.impl.MavenOrigin;
 import com.zenika.dorm.maven.service.MavenService;
 
 import java.io.File;
@@ -19,6 +21,13 @@ public class MavenServiceImpl implements MavenService {
 
     @Inject
     private DormService<DormMavenMetadata> dormService;
+
+    @Override
+    public DormModule pushArtifact(MavenOrigin origin, DormFile file) {
+
+//        DormModule
+        return null;
+    }
 
     @Override
     public DormArtifact<DormMavenMetadata> pushArtifact(DormMavenMetadata mavenMetadata, File file, String filename) {

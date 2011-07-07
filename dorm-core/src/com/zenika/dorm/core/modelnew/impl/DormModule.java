@@ -10,6 +10,7 @@ import java.util.Map;
 
 /**
  * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>
+ * @deprecated since dorm will represent artifacts in more generic way, like graphs and nodes
  */
 final public class DormModule {
 
@@ -18,8 +19,9 @@ final public class DormModule {
     private DormOrigin origin;
 
     private List<DormArtifact> artifacts = new ArrayList<DormArtifact>();
-    private Map<DormScope, DormArtifact> artifactsByScope = new HashMap<DormScope, DormArtifact>();
     private Map<String, DormScope> scopes = new HashMap<String, DormScope>();
+    private Map<DormScope, List<DormArtifact>> artifactsByScope = new HashMap<DormScope,
+            List<DormArtifact>>();
 
     public DormModule(String version, DormOrigin origin) {
         this.version = version;
@@ -56,7 +58,13 @@ final public class DormModule {
             artifacts.add(artifact);
         }
 
-        artifactsByScope.put(scope, artifact);
+        List<DormArtifact> scopeArtifacts = artifactsByScope.get(scope);
+        if (null == scopeArtifacts) {
+            scopeArtifacts = new ArrayList<DormArtifact>();
+            artifactsByScope.put(scope, scopeArtifacts);
+        }
+
+        scopeArtifacts.add(artifact);
     }
 
     public void addArtifact(DormArtifact artifact) {
@@ -101,7 +109,11 @@ final public class DormModule {
         return artifacts;
     }
 
-    public Map<DormScope, DormArtifact> getArtifactsByScope() {
-        return artifactsByScope;
+    public List<DormArtifact> getArtifactsByScope(String scope) {
+        return artifactsByScope.get(getScope(scope));
+    }
+
+    public List<DormArtifact> getArtifactsByScope(DormScope scope) {
+        return artifactsByScope.get(scope);
     }
 }
