@@ -3,6 +3,10 @@ package com.zenika.dorm.core.model;
 import com.google.code.morphia.annotations.Embedded;
 import com.google.code.morphia.annotations.Entity;
 
+/**
+ * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>
+ * @deprecated see package core.modelnew or core.model.graph
+ */
 @Embedded
 public final class DormMetadata<T extends MetadataExtension> {
 

@@ -9,6 +9,10 @@ import org.bson.types.ObjectId;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>
+ * @deprecated see package core.modelnew or core.model.graph
+ */
 @Entity
 public final class DormArtifact<T extends MetadataExtension> {
 
