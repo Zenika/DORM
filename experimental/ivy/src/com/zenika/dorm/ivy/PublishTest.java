@@ -131,7 +131,7 @@ public class PublishTest {
 
             PublishOptions publishOptions = new PublishOptions();
 //            publishOptions.set
-            publishOptions.setSrcIvyPattern(base.getAbsoluteFile() + "\\topublish\\[artifact].[ext]");
+            publishOptions.setSrcIvyPattern(base.getAbsoluteFile() + "/topublish/[artifact].[ext]");
             publishEngine.publish(moduleDescriptor, searchPattern, fileSystemResolver, publishOptions);
 
         } catch (IOException e) {
