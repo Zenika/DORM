@@ -3,8 +3,19 @@
 //    mavenRepo name: 'morphia repository', urls: "http://morphia.googlecode.com/svn/mavenrepo"
 //}
 
+apply from: 'https://raw.github.com/breskeby/gradleplugins/0.9-upgrade/aspectjPlugin/aspectJ.gradle'
+
+repositories {
+    mavenRepo name: 'tinkerpop', urls: 'http://tinkerpop.com/maven2'
+}
+
 dependencies {
     compile group: 'org.mongodb', name: 'mongo-java-driver', version: '2.6.1'
+    compile group: 'com.tinkerpop', name: 'gremlin', version: '1.1'
     compile group: 'jgrapht', name: 'jgrapht', version: '0.7.3'
+    compile group: 'org.neo4j', name: 'neo4j', version: '1.4'
 //    compile group: 'com.google.code.morphia', name: 'morphia', version: '1.00-SNAPSHOT'
+
+    ajc group: 'org.aspectj', name: 'aspectjtools', version: '1.6.11'
+    compile group: 'org.aspectj', name: 'aspectjrt', version: '1.6.11'
 }

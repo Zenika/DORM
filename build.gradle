@@ -5,6 +5,8 @@ allprojects {
     version = '1.0.0-SNAPSHOT'
     group = 'com.zenika.dorm'
 
+    sourceCompatibility = '1.6'
+
     ideaModule {
         beforeConfigured { module ->
             module.dependencies.clear()
