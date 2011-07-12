@@ -6,13 +6,12 @@ allprojects {
     group = 'com.zenika.dorm'
 
     sourceCompatibility = '1.6'
-
+    targetCompatibility = '1.6'
+    
     ideaModule {
         beforeConfigured { module ->
             module.dependencies.clear()
         }
-
-        downloadSources = false
     }
 }
 
