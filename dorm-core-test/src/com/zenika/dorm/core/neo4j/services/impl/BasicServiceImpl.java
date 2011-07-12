@@ -6,11 +6,10 @@ import com.zenika.dorm.core.neo4j.domain.DormNode;
 import com.zenika.dorm.core.neo4j.domain.impl.DormDependencyImpl;
 import com.zenika.dorm.core.neo4j.domain.impl.DormNodeImpl;
 import com.zenika.dorm.core.neo4j.services.BasicService;
+import com.zenika.dorm.core.neo4j.util.BasicSearchEngine;
+import com.zenika.dorm.core.neo4j.util.BasicSearchEngineImpl;
 import org.neo4j.graphalgo.PathFinder;
-import org.neo4j.graphdb.GraphDatabaseService;
-import org.neo4j.graphdb.Node;
-import org.neo4j.graphdb.Relationship;
-import org.neo4j.graphdb.Transaction;
+import org.neo4j.graphdb.*;
 import org.neo4j.index.IndexService;
 import org.neo4j.index.lucene.LuceneIndexService;
 
@@ -30,23 +29,37 @@ public class BasicServiceImpl implements BasicService {
 
     private GraphDatabaseService graphDbService;
     private IndexService indexService;
+    private BasicSearchEngine searchEngine;
     private PathFinder pathFinder;
 
     public BasicServiceImpl(GraphDatabaseService graph) {
         graphDbService = graph;
         indexService = new LuceneIndexService(graphDbService);
+        searchEngine = new BasicSearchEngineImpl(graphDbService);
+        Relationship rel = graph.getReferenceNode().getSingleRelationship(NodeRelationShip.DEPEND, Direction.OUTGOING);
+
     }
 
-    public DormNode createNode(String qualifier) {
+    public DormNode createNode(String qualifier, String version) {
         Transaction tx = graphDbService.beginTx();
         final Node node;
         DormNode dormNode = null;
         try {
-            node = graphDbService.createNode();
-            dormNode = new DormNodeImpl(node);
-            dormNode.setQualifier(qualifier);
-            indexService.index(node, NAME_INDEX, qualifier);
-            tx.success();
+            Node alreadyExist = indexService.getSingleNode(NAME_INDEX, qualifier);
+            if (alreadyExist == null) {
+                node = graphDbService.createNode();
+                dormNode = new DormNodeImpl(node);
+                dormNode.setQualifier(qualifier);
+                dormNode.setVersion(version);
+//            searchEngine.indexNode(dormNode);
+                indexService.index(node, NAME_INDEX, qualifier);
+                tx.success();
+            } else {
+                System.out.println("Node with this qualifier already exists !");
+                dormNode = new DormNodeImpl(alreadyExist);
+                return dormNode;
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -56,26 +69,42 @@ public class BasicServiceImpl implements BasicService {
 
     }
 
-    public DormDependency createDependency(DormNode parent, DormNode child, String name) {
+    public DormDependency createDependency(DormNode parent, DormNode child, String name, String relationName) {
         Transaction tx = graphDbService.beginTx();
         final Node parentNode;
         final Node childNode;
-        final Relationship rel;
+        Relationship rel;
         DormDependency dependency = null;
         try {
-            if (parent == null) {
-                throw new IllegalArgumentException("Null parent");
+        if (parent == null) {
+            throw new IllegalArgumentException("Null parent");
+        }
+        if (child == null) {
+            throw new IllegalArgumentException("Null child");
+        }
+        parentNode = ((DormNodeImpl) parent).getUnderlyingNode();
+        childNode = ((DormNodeImpl) child).getUnderlyingNode();
+        boolean canCreate = true;
+        if (!parentNode.getRelationships().iterator().hasNext()) {
+            canCreate = true;
+        } else {
+            for (Relationship relationship : parentNode.getRelationships()) {//
+                if (relationship.getStartNode().equals(parentNode) && relationship.getEndNode().equals(childNode)) {
+                    dependency = new DormDependencyImpl(relationship);
+                    tx.finish();
+                    return dependency;
+                }
             }
-            if (child == null) {
-                throw new IllegalArgumentException("Null child");
-            }
-            parentNode = ((DormNodeImpl) parent).getUnderlyingNode();
-            childNode = ((DormNodeImpl) child).getUnderlyingNode();
-            rel = parentNode.createRelationshipTo(childNode, NodeRelationShip.DEPEND);
+        }
+        if (canCreate) {
+            rel = parentNode.createRelationshipTo(childNode, DynamicRelationshipType.withName(relationName));
             dependency = new DormDependencyImpl(rel);
             if (name != null) {
                 dependency.setName(name);
             }
+        }
+        tx.success();
+        return dependency;
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -85,11 +114,34 @@ public class BasicServiceImpl implements BasicService {
 
     }
 
+    public void deleteNode(String qualifier) {
+        Transaction tx = graphDbService.beginTx();
+        try {
+            Node node = indexService.getSingleNode(NAME_INDEX, qualifier);
+            indexService.removeIndex(node, NAME_INDEX, qualifier);
+            DormNode dormNode = new DormNodeImpl(node);
+            for (DormNode currentNode : dormNode.getNodes()){
+                if (!dormNode.equals(currentNode)){
+                    for (Relationship rel : ((DormNodeImpl)dormNode).getUnderlyingNode().getRelationships()){
+                        rel.delete();
+                    }
+                }
+            }
+            node.delete();
+            tx.success();
+        } catch (Exception e){
+            e.printStackTrace();
+        } finally {
+            tx.finish();
+        }
+    }
+
     public DormNode getNode(String qualifier) {
         Node dormNode = indexService.getSingleNode(NAME_INDEX, qualifier);
-        if (dormNode == null) {
-//                  TODO : dormNode = searchEngine.searchNode(qualifier);
-        }
+//        Node dormNode = null;
+//        if (dormNode == null) {
+//            dormNode = searchEngine.searchNode(qualifier);
+//        }
         DormNode node = null;
         if (dormNode != null) {
             node = new DormNodeImpl(dormNode);

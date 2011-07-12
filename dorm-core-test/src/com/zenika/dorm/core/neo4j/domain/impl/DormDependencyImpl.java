@@ -26,7 +26,7 @@ public class DormDependencyImpl implements DormDependency{
     }
 
     public String getName() {
-        return (String) underlyingRel.getProperty(NAME_PROPERTY);
+        return (String) underlyingRel.getProperty(NAME_PROPERTY, null);
     }
 
     public void setName(String name) {

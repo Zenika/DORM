@@ -18,7 +18,10 @@ public interface DormNode {
 
     void setVersion(String version);
 
-    Iterable<DormNode> getNodes();
+    Iterable<DormNode> getNodes(String relationName);
+    
+    public Iterable<DormNode> getNodes();
 
 //    void setNodes(List<DormNode> nodes);
+
 }

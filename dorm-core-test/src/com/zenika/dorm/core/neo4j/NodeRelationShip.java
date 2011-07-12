@@ -11,5 +11,5 @@ import org.neo4j.graphdb.RelationshipType;
  * To change this template use File | Settings | File Templates.
  */
 public enum NodeRelationShip implements RelationshipType{
-    DEPEND
+    DEFAULT
 }

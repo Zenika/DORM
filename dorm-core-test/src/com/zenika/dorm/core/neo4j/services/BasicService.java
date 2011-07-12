@@ -14,9 +14,10 @@ import java.util.List;
  */
 public interface BasicService {
 
-    DormNode createNode(String qualifier);
-    DormDependency createDependency(DormNode parent, DormNode child, String name);
+    DormNode createNode(String qualifier, String version);
+    DormDependency createDependency(DormNode parent, DormNode child, String name, String relationName);
     DormNode getNode(String qualifier);
+    void deleteNode(String qualifier);
     List<?> getBaconPath(DormNode node);
     void setupReferenceRelationship();
 }

@@ -2,10 +2,12 @@ package com.zenika.dorm.core.neo4j.util;
 
 import com.zenika.dorm.core.neo4j.domain.DormNode;
 import com.zenika.dorm.core.neo4j.domain.impl.DormNodeImpl;
+import com.zenika.dorm.core.neo4j.services.BasicServiceFactory;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.index.IndexService;
+import org.neo4j.index.lucene.LuceneIndexService;
 
 import java.util.*;
 
@@ -25,12 +27,17 @@ public class BasicSearchEngineImpl implements BasicSearchEngine{
 
     private IndexService indexService;
 
+    public BasicSearchEngineImpl(GraphDatabaseService graphDatabaseService){
+        graphDbService = graphDatabaseService;
+        indexService = new LuceneIndexService(graphDatabaseService);
+    }
+
     public void indexNode(DormNode node) {
         index(node.getQualifier(), ((DormNodeImpl)node).getUnderlyingNode(), NAME_PART_INDEX, SearchRelType.PART_OF_NAME);
     }
 
     public Node searchNode(String qualifier) {
-        return null;
+        return searchSingle(qualifier, NAME_PART_INDEX, SearchRelType.PART_OF_NAME);
     }
 
     private void index(final String value, final Node node, final String partIndexName, final SearchRelType relType){
