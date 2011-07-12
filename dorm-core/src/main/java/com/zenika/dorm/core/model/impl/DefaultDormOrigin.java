@@ -9,7 +9,7 @@ import com.zenika.dorm.core.model.DormOrigin;
  */
 public class DefaultDormOrigin implements DormOrigin {
 
-    private static final String ORIGIN = "dorm";
+    public static final String ORIGIN = "dorm";
 
     private String name;
 

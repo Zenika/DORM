@@ -9,7 +9,8 @@ import com.zenika.dorm.core.model.impl.DefaultDormFile;
 import com.zenika.dorm.core.model.impl.DefaultDormMetadata;
 import com.zenika.dorm.core.model.impl.DefaultDormOrigin;
 import com.zenika.dorm.core.model.old.MetadataExtension;
-import com.zenika.dorm.core.service.DormService;
+import com.zenika.dorm.core.processor.Processor;
+import com.zenika.dorm.core.service.DormServiceOld;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -43,7 +44,10 @@ import java.util.Properties;
 public class DormResource {
 
     @Inject
-    private DormService<MetadataExtension> service;
+    private DormServiceOld<MetadataExtension> serviceOld;
+
+    @Inject
+    private Processor processor;
 
     /**
      * Push metadata
@@ -59,6 +63,10 @@ public class DormResource {
                                           @PathParam("version") String version) {
 
         DormMetadata metadata = getMetadata(qualifier, version);
+        
+        if (!processor.push(metadata)) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+        }
 
         return Response.status(Response.Status.OK).build();
     }
@@ -163,7 +171,7 @@ public class DormResource {
         }
 
 //        DormMetadata<MetadataExtension> metadata = new DormMetadata<MetadataExtension>(name, version);
-//        service.pushArtifact(metadata, file, filename);
+//        serviceOld.pushArtifact(metadata, file, filename);
 
         return Response.status(Response.Status.OK).build();
     }
@@ -181,7 +189,7 @@ public class DormResource {
             @PathParam("name") String name, @PathParam("version") String version) {
 
 //        DormMetadata<MetadataExtension> metadata = new DormMetadata<MetadataExtension>(name, version);
-//        final DormArtifact<MetadataExtension> artifact = service.getArtifact(metadata);
+//        final DormArtifact<MetadataExtension> artifact = serviceOld.getArtifact(metadata);
 
 //        return new StreamingOutput() {
 //            @Override
@@ -212,7 +220,7 @@ public class DormResource {
                                              @PathParam("version") String version) {
 
 //        DormMetadata<MetadataExtension> metadata = new DormMetadata<MetadataExtension>(name, version);
-//        service.removeArtifact(metadata);
+//        serviceOld.removeArtifact(metadata);
 
         return Response.status(Response.Status.OK).build();
     }
@@ -234,7 +242,7 @@ public class DormResource {
                                    @PathParam("filename") String filename) {
 
 //        DormMetadata<MetadataExtension> metadata = new DormMetadata<MetadataExtension>(name, version);
-//        service.updateArtifact(metadata, file, filename);
+//        serviceOld.updateArtifact(metadata, file, filename);
 
         return Response.status(Response.Status.OK).build();
     }
@@ -266,7 +274,7 @@ public class DormResource {
         }
 
 //        DormMetadata<MetadataExtension> metadata = new DormMetadata<MetadataExtension>(name, version);
-//        service.updateArtifact(metadata, file, filename);
+//        serviceOld.updateArtifact(metadata, file, filename);
 
         return Response.status(Response.Status.OK).build();
     }

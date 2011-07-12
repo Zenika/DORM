@@ -4,7 +4,7 @@ import com.zenika.dorm.core.model.old.DormArtifact;
 import com.zenika.dorm.core.model.old.DormFile;
 import com.zenika.dorm.core.model.old.DormMetadata;
 import com.zenika.dorm.core.model.old.MetadataExtension;
-import com.zenika.dorm.core.service.DormService;
+import com.zenika.dorm.core.service.DormServiceOld;
 import com.zenika.dorm.core.ws.resource.DormResource;
 import org.junit.Test;
 import org.mockito.InjectMocks;
@@ -25,7 +25,7 @@ import static org.mockito.Mockito.verify;
 public class DormResourceUnitTest extends DormCoreUnitTest {
 
     @Mock
-    private DormService service;
+    private DormServiceOld service;
 
     @InjectMocks
     private DormResource resource = new DormResource();

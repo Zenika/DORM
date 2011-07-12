@@ -7,7 +7,7 @@ import com.zenika.dorm.core.model.old.DormArtifact;
 import com.zenika.dorm.core.model.old.DormFile;
 import com.zenika.dorm.core.model.old.DormMetadata;
 import com.zenika.dorm.core.modelnew.impl.DormModule;
-import com.zenika.dorm.core.service.DormService;
+import com.zenika.dorm.core.service.DormServiceOld;
 import com.zenika.dorm.maven.exception.MavenException;
 import com.zenika.dorm.maven.importer.core.MavenImporterService;
 import com.zenika.dorm.maven.model.impl.DormMavenMetadata;
@@ -19,7 +19,7 @@ import java.io.File;
 public class MavenServiceImpl implements MavenService {
 
     @Inject
-    private DormService<DormMavenMetadata> dormService;
+    private DormServiceOld<DormMavenMetadata> dormService;
 
     @Override
     public DormModule pushArtifact(MavenOrigin origin, DormFile file) {

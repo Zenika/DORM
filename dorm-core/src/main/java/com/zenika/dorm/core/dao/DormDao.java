@@ -1,14 +1,14 @@
 package com.zenika.dorm.core.dao;
 
-import com.zenika.dorm.core.model.old.DormArtifact;
-import com.zenika.dorm.core.model.old.DormMetadata;
-import com.zenika.dorm.core.model.old.MetadataExtension;
+import com.zenika.dorm.core.model.graph.proposal1.DependencyNodeComposite;
+import com.zenika.dorm.core.model.graph.proposal1.DependencyNodeLeaf;
 
-public interface DormDao<T extends MetadataExtension> {
+/**
+ * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>
+ */
+public interface DormDao {
 
-    public DormArtifact<T> save(DormArtifact<T> artifact);
+    public Boolean push(DependencyNodeLeaf node);
 
-    public DormArtifact<T> getByMetadata(DormMetadata<T> metadata);
-
-    public void removeByMetadata(DormMetadata<T> metadata);
+    public Boolean push(DependencyNodeComposite node);
 }

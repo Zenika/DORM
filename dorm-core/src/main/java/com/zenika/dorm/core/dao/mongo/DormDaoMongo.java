@@ -3,7 +3,7 @@ package com.zenika.dorm.core.dao.mongo;
 import com.google.inject.Inject;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
-import com.zenika.dorm.core.dao.DormDao;
+import com.zenika.dorm.core.dao.DormDaoOld;
 import com.zenika.dorm.core.exception.RepositoryException;
 import com.zenika.dorm.core.model.old.DormArtifact;
 import com.zenika.dorm.core.model.old.DormMetadata;
@@ -12,7 +12,7 @@ import com.zenika.dorm.core.model.old.MetadataExtension;
 /**
  * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>
  */
-public class DormDaoMongo<T extends MetadataExtension> implements DormDao<T> {
+public class DormDaoMongo<T extends MetadataExtension> implements DormDaoOld<T> {
 
     @Inject
     private MongoInstance instance;

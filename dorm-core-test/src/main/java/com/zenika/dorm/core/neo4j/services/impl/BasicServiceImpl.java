@@ -36,7 +36,8 @@ public class BasicServiceImpl implements BasicService {
         graphDbService = graph;
         indexService = new LuceneIndexService(graphDbService);
         searchEngine = new BasicSearchEngineImpl(graphDbService);
-        Relationship rel = graph.getReferenceNode().getSingleRelationship(NodeRelationShip.DEPEND, Direction.OUTGOING);
+        Relationship rel = graph.getReferenceNode().getSingleRelationship(NodeRelationShip.DEFAULT,
+                Direction.OUTGOING);
 
     }
 
@@ -76,35 +77,35 @@ public class BasicServiceImpl implements BasicService {
         Relationship rel;
         DormDependency dependency = null;
         try {
-        if (parent == null) {
-            throw new IllegalArgumentException("Null parent");
-        }
-        if (child == null) {
-            throw new IllegalArgumentException("Null child");
-        }
-        parentNode = ((DormNodeImpl) parent).getUnderlyingNode();
-        childNode = ((DormNodeImpl) child).getUnderlyingNode();
-        boolean canCreate = true;
-        if (!parentNode.getRelationships().iterator().hasNext()) {
-            canCreate = true;
-        } else {
-            for (Relationship relationship : parentNode.getRelationships()) {//
-                if (relationship.getStartNode().equals(parentNode) && relationship.getEndNode().equals(childNode)) {
-                    dependency = new DormDependencyImpl(relationship);
-                    tx.finish();
-                    return dependency;
+            if (parent == null) {
+                throw new IllegalArgumentException("Null parent");
+            }
+            if (child == null) {
+                throw new IllegalArgumentException("Null child");
+            }
+            parentNode = ((DormNodeImpl) parent).getUnderlyingNode();
+            childNode = ((DormNodeImpl) child).getUnderlyingNode();
+            boolean canCreate = true;
+            if (!parentNode.getRelationships().iterator().hasNext()) {
+                canCreate = true;
+            } else {
+                for (Relationship relationship : parentNode.getRelationships()) {//
+                    if (relationship.getStartNode().equals(parentNode) && relationship.getEndNode().equals(childNode)) {
+                        dependency = new DormDependencyImpl(relationship);
+                        tx.finish();
+                        return dependency;
+                    }
                 }
             }
-        }
-        if (canCreate) {
-            rel = parentNode.createRelationshipTo(childNode, DynamicRelationshipType.withName(relationName));
-            dependency = new DormDependencyImpl(rel);
-            if (name != null) {
-                dependency.setName(name);
+            if (canCreate) {
+                rel = parentNode.createRelationshipTo(childNode, DynamicRelationshipType.withName(relationName));
+                dependency = new DormDependencyImpl(rel);
+                if (name != null) {
+                    dependency.setName(name);
+                }
             }
-        }
-        tx.success();
-        return dependency;
+            tx.success();
+            return dependency;
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -120,16 +121,16 @@ public class BasicServiceImpl implements BasicService {
             Node node = indexService.getSingleNode(NAME_INDEX, qualifier);
             indexService.removeIndex(node, NAME_INDEX, qualifier);
             DormNode dormNode = new DormNodeImpl(node);
-            for (DormNode currentNode : dormNode.getNodes()){
-                if (!dormNode.equals(currentNode)){
-                    for (Relationship rel : ((DormNodeImpl)dormNode).getUnderlyingNode().getRelationships()){
+            for (DormNode currentNode : dormNode.getNodes()) {
+                if (!dormNode.equals(currentNode)) {
+                    for (Relationship rel : ((DormNodeImpl) dormNode).getUnderlyingNode().getRelationships()) {
                         rel.delete();
                     }
                 }
             }
             node.delete();
             tx.success();
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         } finally {
             tx.finish();

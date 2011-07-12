@@ -6,16 +6,18 @@ import com.google.inject.TypeLiteral;
 import com.mongodb.Mongo;
 import com.sun.jersey.guice.JerseyServletModule;
 import com.sun.jersey.guice.spi.container.servlet.GuiceContainer;
-import com.zenika.dorm.core.dao.DormDao;
+import com.zenika.dorm.core.dao.DormDaoOld;
 import com.zenika.dorm.core.dao.mongo.DormDaoMongo;
 import com.zenika.dorm.core.dao.mongo.MongoInstance;
+import com.zenika.dorm.core.model.impl.DefaultDormOrigin;
 import com.zenika.dorm.core.model.old.MetadataExtension;
+import com.zenika.dorm.core.processor.Processor;
+import com.zenika.dorm.core.processor.impl.DefaultProcessor;
+import com.zenika.dorm.core.processor.impl.DormProcessor;
 import com.zenika.dorm.core.service.DormService;
-import com.zenika.dorm.core.service.impl.DormServiceImpl;
+import com.zenika.dorm.core.service.impl.DefaultDormService;
 import com.zenika.dorm.core.ws.resource.DormResource;
 import com.zenika.dorm.maven.model.impl.DormMavenMetadata;
-import com.zenika.dorm.maven.service.MavenService;
-import com.zenika.dorm.maven.service.impl.MavenServiceImpl;
 import com.zenika.dorm.maven.ws.resource.MavenResource;
 
 import java.net.UnknownHostException;
@@ -37,8 +39,16 @@ public class GuiceModule extends JerseyServletModule {
         bind(DormResource.class);
         bind(MavenResource.class);
 
-        bindDAO();
-        bindServices();
+//        bindDAO();
+//        bindServices();
+
+        // processor
+        DefaultProcessor processor = new DefaultProcessor();
+        processor.getExtensions().put(DefaultDormOrigin.ORIGIN, new DormProcessor());
+        bind(Processor.class).toInstance(processor);
+
+        // service
+        bind(DormService.class).to(DefaultDormService.class);
 
         serve("/*").with(GuiceContainer.class);
     }
@@ -86,17 +96,21 @@ public class GuiceModule extends JerseyServletModule {
 
         bind(MongoInstance.class).toInstance(mongoInstance);
 
-        bind(new TypeLiteral<DormDao<MetadataExtension>>() {}).to(new TypeLiteral<DormDaoMongo<MetadataExtension>>() {});
-        bind(new TypeLiteral<DormDao<DormMavenMetadata>>() {}).to(new TypeLiteral<DormDaoMongo<DormMavenMetadata>>() {});
+        bind(new TypeLiteral<DormDaoOld<MetadataExtension>>() {
+        }).to(new TypeLiteral<DormDaoMongo<MetadataExtension>>() {
+        });
+        bind(new TypeLiteral<DormDaoOld<DormMavenMetadata>>() {
+        }).to(new TypeLiteral<DormDaoMongo<DormMavenMetadata>>() {
+        });
     }
 
     private void bindServices() {
 
-        // dorm service
-        bind(new TypeLiteral<DormService<MetadataExtension>>() {}).to(new TypeLiteral<DormServiceImpl<MetadataExtension>>() {});
-        bind(new TypeLiteral<DormService<DormMavenMetadata>>() {}).to(new TypeLiteral<DormServiceImpl<DormMavenMetadata>>() {});
-
-        // maven service
-        bind(MavenService.class).to(MavenServiceImpl.class);
+//        // dorm service
+//        bind(new TypeLiteral<DormServiceOld<MetadataExtension>>() {}).to(new TypeLiteral<DormServiceOldImpl<MetadataExtension>>() {});
+//        bind(new TypeLiteral<DormServiceOld<DormMavenMetadata>>() {}).to(new TypeLiteral<DormServiceOldImpl<DormMavenMetadata>>() {});
+//
+//        // maven service
+//        bind(MavenService.class).to(MavenServiceImpl.class);
     }
 }

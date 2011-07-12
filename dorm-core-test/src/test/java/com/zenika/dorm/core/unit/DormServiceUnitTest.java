@@ -1,11 +1,11 @@
 package com.zenika.dorm.core.unit;
 
-import com.zenika.dorm.core.dao.DormDao;
+import com.zenika.dorm.core.dao.DormDaoOld;
 import com.zenika.dorm.core.exception.ArtifactException;
 import com.zenika.dorm.core.exception.RepositoryException;
 import com.zenika.dorm.core.model.old.DormArtifact;
 import com.zenika.dorm.core.model.old.MetadataExtension;
-import com.zenika.dorm.core.service.impl.DormServiceImpl;
+import com.zenika.dorm.core.service.impl.DormServiceOldImpl;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -24,10 +24,10 @@ import static org.mockito.Mockito.verify;
 public class DormServiceUnitTest extends DormCoreUnitTest {
 
     @Mock
-    private DormDao dao;
+    private DormDaoOld dao;
 
     @InjectMocks
-    private DormServiceImpl service = new DormServiceImpl();
+    private DormServiceOldImpl service = new DormServiceOldImpl();
 
     @Test(expected = ArtifactException.class)
     public void pushArtifactShouldFail() {

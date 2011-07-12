@@ -1,7 +1,7 @@
 package com.zenika.dorm.core.service.impl;
 
 import com.google.inject.Inject;
-import com.zenika.dorm.core.dao.DormDao;
+import com.zenika.dorm.core.dao.DormDaoOld;
 import com.zenika.dorm.core.exception.ArtifactException;
 import com.zenika.dorm.core.exception.RepositoryException;
 import com.zenika.dorm.core.helper.DormFileHelper;
@@ -9,16 +9,20 @@ import com.zenika.dorm.core.model.old.DormArtifact;
 import com.zenika.dorm.core.model.old.DormFile;
 import com.zenika.dorm.core.model.old.DormMetadata;
 import com.zenika.dorm.core.model.old.MetadataExtension;
-import com.zenika.dorm.core.service.DormService;
+import com.zenika.dorm.core.service.DormServiceOld;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DormServiceImpl<T extends MetadataExtension> implements DormService<T> {
+/**
+ * @param <T>
+ * @deprecated
+ */
+public class DormServiceOldImpl<T extends MetadataExtension> implements DormServiceOld<T> {
 
     @Inject
-    private DormDao<T> dao;
+    private DormDaoOld<T> dao;
 
     @Override
     public DormArtifact<T> pushArtifact(DormArtifact<T> artifact) {
