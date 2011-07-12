@@ -12,8 +12,6 @@ allprojects {
         beforeConfigured { module ->
             module.dependencies.clear()
         }
-
-        downloadSources = false
     }
 }
 
