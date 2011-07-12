@@ -1,4 +1,5 @@
 dependencies {
+	compile 'javax.servlet:servlet-api:2.5'
     compile group: 'com.sun.jersey.contribs', name: 'jersey-guice', version: jerseyVersion
     compile group: 'com.google.inject.extensions', name: 'guice-assistedinject', version: guiceVersion
 }
