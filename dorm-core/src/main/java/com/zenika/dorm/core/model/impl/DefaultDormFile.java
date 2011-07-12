@@ -1,5 +1,6 @@
-package com.zenika.dorm.core.model.graph.proposal1.impl;
+package com.zenika.dorm.core.model.impl;
 
+import com.zenika.dorm.core.model.DormFile;
 import org.apache.commons.io.FilenameUtils;
 
 import java.io.File;
@@ -7,27 +8,30 @@ import java.io.File;
 /**
  * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>
  */
-public final class DormFile {
+public final class DefaultDormFile implements DormFile {
 
     private String name;
     private String extension;
     private File file;
 
-    public DormFile() {
-    }
-
-    public DormFile(String filename, File file) {
+    public DefaultDormFile(String filename, File file) {
         this(FilenameUtils.getBaseName(filename), FilenameUtils.getExtension(filename), file);
     }
 
-    public DormFile(String name, String extension, File file) {
+    public DefaultDormFile(String name, String extension, File file) {
         this.name = name;
         this.extension = extension;
         this.file = file;
     }
 
+    @Override
     public String getFilename() {
         return name + "." + extension;
+    }
+
+    @Override
+    public File getFile() {
+        return file;
     }
 
     public String getName() {
@@ -44,10 +48,6 @@ public final class DormFile {
 
     public void setExtension(String extension) {
         this.extension = extension;
-    }
-
-    public File getFile() {
-        return file;
     }
 
     public void setFile(File file) {

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.zenika.dorm.core.helper.DormDependencyHelper;
-import com.zenika.dorm.core.model.DormArtifact;
+import com.zenika.dorm.core.model.old.DormArtifact;
 import com.zenika.dorm.maven.model.MavenDependency;
 import com.zenika.dorm.maven.model.MavenLicense;
 import com.zenika.dorm.maven.model.MavenProject;

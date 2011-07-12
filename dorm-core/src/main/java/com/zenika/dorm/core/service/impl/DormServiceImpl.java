@@ -5,10 +5,10 @@ import com.zenika.dorm.core.dao.DormDao;
 import com.zenika.dorm.core.exception.ArtifactException;
 import com.zenika.dorm.core.exception.RepositoryException;
 import com.zenika.dorm.core.helper.DormFileHelper;
-import com.zenika.dorm.core.model.DormArtifact;
-import com.zenika.dorm.core.model.DormFile;
-import com.zenika.dorm.core.model.DormMetadata;
-import com.zenika.dorm.core.model.MetadataExtension;
+import com.zenika.dorm.core.model.old.DormArtifact;
+import com.zenika.dorm.core.model.old.DormFile;
+import com.zenika.dorm.core.model.old.DormMetadata;
+import com.zenika.dorm.core.model.old.MetadataExtension;
 import com.zenika.dorm.core.service.DormService;
 
 import java.io.File;

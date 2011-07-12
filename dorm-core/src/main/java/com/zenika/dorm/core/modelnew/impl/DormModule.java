@@ -1,7 +1,7 @@
 package com.zenika.dorm.core.modelnew.impl;
 
 import com.zenika.dorm.core.exception.CoreException;
-import com.zenika.dorm.core.modelnew.DormOrigin;
+import com.zenika.dorm.core.model.DormOrigin;
 
 import java.util.ArrayList;
 import java.util.HashMap;

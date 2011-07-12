@@ -1,27 +1,30 @@
-package com.zenika.dorm.core.model.graph.proposal1.impl;
+package com.zenika.dorm.core.model.impl;
 
-import com.zenika.dorm.core.modelnew.DormOrigin;
+import com.zenika.dorm.core.model.DormMetadata;
+import com.zenika.dorm.core.model.DormOrigin;
 
 /**
  * Should be renamed as DormMetadata
  *
  * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>
  */
-public class DormMetadata {
+public class DefaultDormMetadata implements DormMetadata {
 
     private String qualifier;
     private String version;
     private DormOrigin origin;
 
-    public DormMetadata(String version, DormOrigin origin) {
+    public DefaultDormMetadata(String version, DormOrigin origin) {
         this.version = version;
         this.origin = origin;
     }
 
+    @Override
     public String getFullQualifier() {
         return getQualifier() + ":" + version + ":" + origin.getOrigin();
     }
 
+    @Override
     public String getQualifier() {
 
         if (null == qualifier) {
@@ -31,10 +34,12 @@ public class DormMetadata {
         return qualifier;
     }
 
+    @Override
     public String getVersion() {
         return version;
     }
 
+    @Override
     public DormOrigin getOrigin() {
         return origin;
     }
@@ -46,27 +51,5 @@ public class DormMetadata {
     @Override
     public String toString() {
         return getFullQualifier();
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        DormMetadata dormMetadata = (DormMetadata) o;
-
-        if (!origin.equals(dormMetadata.origin)) return false;
-        if (!qualifier.equals(dormMetadata.qualifier)) return false;
-        if (!version.equals(dormMetadata.version)) return false;
-
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = qualifier.hashCode();
-        result = 31 * result + version.hashCode();
-        result = 31 * result + origin.hashCode();
-        return result;
     }
 }

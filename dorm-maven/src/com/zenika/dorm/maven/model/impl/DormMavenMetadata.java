@@ -1,6 +1,6 @@
 package com.zenika.dorm.maven.model.impl;
 
-import com.zenika.dorm.core.model.MetadataExtension;
+import com.zenika.dorm.core.model.old.MetadataExtension;
 
 public class DormMavenMetadata extends MetadataExtension {
 

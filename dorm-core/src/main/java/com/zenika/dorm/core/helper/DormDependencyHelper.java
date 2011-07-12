@@ -3,8 +3,8 @@ package com.zenika.dorm.core.helper;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.zenika.dorm.core.model.DormArtifact;
-import com.zenika.dorm.core.model.MetadataExtension;
+import com.zenika.dorm.core.model.old.DormArtifact;
+import com.zenika.dorm.core.model.old.MetadataExtension;
 
 public class DormDependencyHelper {
 

@@ -1,14 +1,3 @@
-import com.zenika.dorm.core.dao.DormDao;
-import com.zenika.dorm.core.exception.CoreException;
-import com.zenika.dorm.core.model.DormArtifact;
-import com.zenika.dorm.core.model.DormMetadata;
-import com.zenika.dorm.core.model.MetadataExtension;
-
-import java.io.File;
-import java.lang.reflect.Field;
-import java.util.HashMap;
-import java.util.Map;
-
 //package com.zenika.dorm.dao.ecr;
 //
 //import java.io.File;

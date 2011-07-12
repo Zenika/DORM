@@ -1,9 +1,9 @@
 package com.zenika.dorm.core.helper;
 
 import com.zenika.dorm.core.exception.CoreException;
-import com.zenika.dorm.core.model.DormFile;
-import com.zenika.dorm.core.model.DormMetadata;
-import com.zenika.dorm.core.model.MetadataExtension;
+import com.zenika.dorm.core.model.old.DormFile;
+import com.zenika.dorm.core.model.old.DormMetadata;
+import com.zenika.dorm.core.model.old.MetadataExtension;
 
 import java.io.File;
 

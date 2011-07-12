@@ -1,6 +1,6 @@
 package com.zenika.dorm.maven.test;
 
-import com.zenika.dorm.core.model.DormFile;
+import com.zenika.dorm.core.model.old.DormFile;
 import com.zenika.dorm.maven.model.impl.MavenOrigin;
 import com.zenika.dorm.maven.service.MavenService;
 import com.zenika.dorm.maven.service.impl.MavenServiceImpl;

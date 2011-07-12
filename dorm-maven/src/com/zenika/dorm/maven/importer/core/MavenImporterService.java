@@ -18,7 +18,7 @@ import org.sonatype.aether.resolution.ArtifactResult;
 import org.sonatype.aether.util.artifact.DefaultArtifact;
 import org.sonatype.aether.util.artifact.JavaScopes;
 
-import com.zenika.dorm.core.model.DormArtifact;
+import com.zenika.dorm.core.model.old.DormArtifact;
 import com.zenika.dorm.maven.exception.MavenException;
 import com.zenika.dorm.maven.helper.MavenHelper;
 import com.zenika.dorm.maven.model.impl.DormMavenMetadata;

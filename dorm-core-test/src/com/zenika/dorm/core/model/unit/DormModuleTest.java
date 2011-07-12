@@ -1,6 +1,6 @@
 package com.zenika.dorm.core.model.unit;
 
-import com.zenika.dorm.core.modelnew.impl.DefaultDormOrigin;
+import com.zenika.dorm.core.model.impl.DefaultDormOrigin;
 import com.zenika.dorm.core.modelnew.impl.DormArtifact;
 import com.zenika.dorm.core.modelnew.impl.DormModule;
 import org.junit.Test;

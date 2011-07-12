@@ -25,7 +25,7 @@ public class DependencyVisitorCyclicCheck implements DependencyVisitorCheck {
 
         if (visitedNodes.contains(compositeNode)) {
             throw new DependencyVisitorCheckException("cyclic dependency detected on " +
-                    node.getDependency().getDormMetadata());
+                    node.getDependency().getMetadata());
         }
 
         visitedNodes.add(compositeNode);

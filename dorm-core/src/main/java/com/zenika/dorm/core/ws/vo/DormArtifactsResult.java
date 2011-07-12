@@ -1,6 +1,6 @@
 package com.zenika.dorm.core.ws.vo;
 
-import com.zenika.dorm.core.model.DormArtifact;
+import com.zenika.dorm.core.model.old.DormArtifact;
 
 import java.util.ArrayList;
 import java.util.List;

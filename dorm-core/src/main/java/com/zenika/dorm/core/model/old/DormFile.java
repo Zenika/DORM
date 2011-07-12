@@ -1,11 +1,12 @@
-package com.zenika.dorm.core.modelnew.impl;
+package com.zenika.dorm.core.model.old;
+
+import org.apache.commons.io.FilenameUtils;
 
 import java.io.File;
 
 /**
- * Represents an artifact file stored on the file system
- * @author Lukasz Piliszczuk
- * @deprecated
+ * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>
+ * @deprecated see package core.modelnew or core.model.graph
  */
 public final class DormFile {
 
@@ -14,7 +15,10 @@ public final class DormFile {
     private File file;
 
     public DormFile() {
+    }
 
+    public DormFile(String filename, File file) {
+        this(FilenameUtils.getBaseName(filename), FilenameUtils.getExtension(filename), file);
     }
 
     public DormFile(String name, String extension, File file) {

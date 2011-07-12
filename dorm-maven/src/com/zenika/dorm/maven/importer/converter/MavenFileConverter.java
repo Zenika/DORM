@@ -1,8 +1,7 @@
 package com.zenika.dorm.maven.importer.converter;
 
+import com.zenika.dorm.core.model.old.DormFile;
 import org.sonatype.aether.artifact.Artifact;
-
-import com.zenika.dorm.core.model.DormFile;
 
 public class MavenFileConverter {
 

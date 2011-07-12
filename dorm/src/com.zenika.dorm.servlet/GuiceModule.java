@@ -1,6 +1,5 @@
 package com.zenika.dorm.servlet;
 
-import com.google.code.morphia.Morphia;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.TypeLiteral;
@@ -10,8 +9,7 @@ import com.sun.jersey.guice.spi.container.servlet.GuiceContainer;
 import com.zenika.dorm.core.dao.DormDao;
 import com.zenika.dorm.core.dao.mongo.DormDaoMongo;
 import com.zenika.dorm.core.dao.mongo.MongoInstance;
-import com.zenika.dorm.core.dao.mongo.MongoProxy;
-import com.zenika.dorm.core.model.MetadataExtension;
+import com.zenika.dorm.core.model.old.MetadataExtension;
 import com.zenika.dorm.core.service.DormService;
 import com.zenika.dorm.core.service.impl.DormServiceImpl;
 import com.zenika.dorm.core.ws.resource.DormResource;

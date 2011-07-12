@@ -1,6 +1,7 @@
 package com.zenika.dorm.core.model.graph.proposal1;
 
-import com.zenika.dorm.core.model.graph.proposal1.impl.DormMetadata;
+import com.zenika.dorm.core.model.DormFile;
+import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.core.model.graph.proposal1.impl.Usage;
 
 /**
@@ -8,29 +9,15 @@ import com.zenika.dorm.core.model.graph.proposal1.impl.Usage;
  *
  * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>
  */
-public abstract class Dependency {
+public interface Dependency {
 
-    protected Usage usage;
-    protected DormMetadata dormMetadata;
+    public Usage getUsage();
 
-    public Dependency(DormMetadata dormMetadata, Usage usage) {
-        this.dormMetadata = dormMetadata;
-        this.usage = usage;
-    }
+    public DormMetadata getMetadata();
 
-    public Usage getUsage() {
-        return usage;
-    }
+    public DormFile getFile();
 
-    public void setUsage(Usage usage) {
-        this.usage = usage;
-    }
-
-    public DormMetadata getDormMetadata() {
-        return dormMetadata;
-    }
-
-    public void setDormMetadata(DormMetadata dormMetadata) {
-        this.dormMetadata = dormMetadata;
-    }
+    public Boolean hasFile();
 }
+
+

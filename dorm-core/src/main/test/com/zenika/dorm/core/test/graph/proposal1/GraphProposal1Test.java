@@ -1,11 +1,15 @@
 package com.zenika.dorm.core.test.graph.proposal1;
 
+import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.core.model.graph.proposal1.Dependency;
 import com.zenika.dorm.core.model.graph.proposal1.DependencyNode;
 import com.zenika.dorm.core.model.graph.proposal1.DependencyNodeComposite;
-import com.zenika.dorm.core.model.graph.proposal1.impl.*;
+import com.zenika.dorm.core.model.graph.proposal1.impl.DefaultDependency;
+import com.zenika.dorm.core.model.graph.proposal1.impl.DefaultDependencyNodeComposite;
+import com.zenika.dorm.core.model.graph.proposal1.impl.DefaultDependencyNodeLeaf;
 import com.zenika.dorm.core.model.graph.proposal1.visitor.impl.ConsoleVisitor;
-import com.zenika.dorm.core.modelnew.impl.DefaultDormOrigin;
+import com.zenika.dorm.core.model.impl.DefaultDormMetadata;
+import com.zenika.dorm.core.model.impl.DefaultDormOrigin;
 import org.junit.Test;
 
 /**
@@ -18,16 +22,16 @@ public class GraphProposal1Test {
     @Test
     public void test() {
         DefaultDormOrigin originA = new DefaultDormOrigin("foo");
-        DormMetadata a = new DormMetadata("1.0", originA);
+        DormMetadata a = new DefaultDormMetadata("1.0", originA);
 
         DefaultDormOrigin originB = new DefaultDormOrigin("bar");
-        DormMetadata b = new DormMetadata("1.0", originB);
+        DormMetadata b = new DefaultDormMetadata("1.0", originB);
 
         DefaultDormOrigin originC = new DefaultDormOrigin("toto");
-        DormMetadata c = new DormMetadata("1.0", originC);
+        DormMetadata c = new DefaultDormMetadata("1.0", originC);
 
-        Dependency d1 = new DependencyComposite(a, new Usage("foo"));
-        Dependency d2 = new DependencyLeaf(b, new DormFile(), new Usage("foo"));
+        Dependency d1 = new DefaultDependency(a);
+        Dependency d2 = new DefaultDependency(b);
 
         DependencyNode n1 = new DefaultDependencyNodeLeaf(d1);
         DependencyNodeComposite n2 = new DefaultDependencyNodeComposite(d2);

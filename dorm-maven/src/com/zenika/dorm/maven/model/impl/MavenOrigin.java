@@ -4,7 +4,7 @@ package com.zenika.dorm.maven.model.impl;
  * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>
  */
 
-import com.zenika.dorm.core.modelnew.DormOrigin;
+import com.zenika.dorm.core.model.DormOrigin;
 
 /**
  * Maven extension point to the dorm model

@@ -1,11 +1,8 @@
 package com.zenika.dorm.maven.helper;
 
+import com.zenika.dorm.core.model.old.DormArtifact;
 import org.sonatype.aether.artifact.Artifact;
 
-import com.zenika.dorm.core.helper.DormFileHelper;
-import com.zenika.dorm.core.model.DormArtifact;
-import com.zenika.dorm.core.model.DormFile;
-import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.maven.model.impl.DormMavenMetadata;
 
 public class MavenHelper {

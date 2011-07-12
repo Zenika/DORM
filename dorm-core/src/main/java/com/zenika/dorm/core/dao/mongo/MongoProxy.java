@@ -2,12 +2,7 @@ package com.zenika.dorm.core.dao.mongo;
 
 import com.google.code.morphia.Datastore;
 import com.google.code.morphia.Morphia;
-import com.google.code.morphia.dao.BasicDAO;
-import com.google.code.morphia.query.Query;
 import com.mongodb.Mongo;
-import com.zenika.dorm.core.model.DormArtifact;
-import com.zenika.dorm.core.model.MetadataExtension;
-import org.bson.types.ObjectId;
 
 import javax.inject.Inject;
 

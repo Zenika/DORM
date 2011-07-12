@@ -15,7 +15,7 @@ public class ConsoleVisitor extends AbstractDependencyVisitor {
 
     @Override
     public Boolean visitEnter(DependencyNodeComposite node) {
-        print("Enter composite node : " + node.getDependency().getDormMetadata().getFullQualifier());
+        print("Enter composite node : " + node.getDependency().getMetadata());
         print("Usage : " + node.getDependency().getUsage());
         counter++;
 
@@ -24,7 +24,7 @@ public class ConsoleVisitor extends AbstractDependencyVisitor {
 
     @Override
     public Boolean visitExit(DependencyNodeComposite node) {
-        print("Exit composite node : " + node.getDependency().getDormMetadata().getFullQualifier());
+        print("Exit composite node : " + node.getDependency().getMetadata());
         counter--;
 
         return true;
@@ -32,7 +32,7 @@ public class ConsoleVisitor extends AbstractDependencyVisitor {
 
     @Override
     public Boolean visit(DependencyNodeLeaf node) {
-        print("Visit leaf node : " + node.getDependency().getDormMetadata().getFullQualifier());
+        print("Visit leaf node : " + node.getDependency().getMetadata());
         return true;
     }
 

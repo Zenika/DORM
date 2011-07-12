@@ -1,9 +1,9 @@
 package com.zenika.dorm.core.unit;
 
-import com.zenika.dorm.core.model.DormArtifact;
-import com.zenika.dorm.core.model.DormFile;
-import com.zenika.dorm.core.model.DormMetadata;
-import com.zenika.dorm.core.model.MetadataExtension;
+import com.zenika.dorm.core.model.old.DormArtifact;
+import com.zenika.dorm.core.model.old.DormFile;
+import com.zenika.dorm.core.model.old.DormMetadata;
+import com.zenika.dorm.core.model.old.MetadataExtension;
 import com.zenika.dorm.core.service.DormService;
 import com.zenika.dorm.core.ws.resource.DormResource;
 import org.junit.Test;
@@ -20,6 +20,7 @@ import static org.mockito.Mockito.verify;
 
 /**
  * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>
+ * @deprecated test based on the old version of core model
  */
 public class DormResourceUnitTest extends DormCoreUnitTest {
 
@@ -43,8 +44,8 @@ public class DormResourceUnitTest extends DormCoreUnitTest {
     /**
      * Create new properties file based on the given name, version and filename
      *
-     * @param name the artifact name
-     * @param version the artifact version
+     * @param name     the artifact name
+     * @param version  the artifact version
      * @param filename the artifact's file name
      * @return the properties file
      */
@@ -78,7 +79,7 @@ public class DormResourceUnitTest extends DormCoreUnitTest {
         DormFile file = artifact1.getFile();
         File properties = getPropertiesFile(artifact1);
 
-        resource.createArtifactFromPath(metadata.getName(), metadata.getVersion(), file.getFile(), file.getFilename());
+//        resource.createArtifactFromPath(metadata.getName(), metadata.getVersion(), file.getFile(), file.getFilename());
         resource.createArtifactFromProperties(properties, file.getFile());
 
         verify(service, times(2)).pushArtifact(metadata, file.getFile(), file.getFilename());

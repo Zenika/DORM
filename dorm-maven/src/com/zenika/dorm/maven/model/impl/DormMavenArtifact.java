@@ -1,6 +1,6 @@
 package com.zenika.dorm.maven.model.impl;
 
-import com.zenika.dorm.core.model.DormArtifact;
+import com.zenika.dorm.core.model.old.DormArtifact;
 import com.zenika.dorm.maven.model.MavenArtifact;
 
 abstract class DormMavenArtifact implements MavenArtifact {

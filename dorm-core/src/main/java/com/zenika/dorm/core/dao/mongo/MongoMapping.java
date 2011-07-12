@@ -3,10 +3,10 @@ package com.zenika.dorm.core.dao.mongo;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import com.zenika.dorm.core.exception.CoreException;
-import com.zenika.dorm.core.model.DormArtifact;
-import com.zenika.dorm.core.model.DormFile;
-import com.zenika.dorm.core.model.DormMetadata;
-import com.zenika.dorm.core.model.MetadataExtension;
+import com.zenika.dorm.core.model.old.DormArtifact;
+import com.zenika.dorm.core.model.old.DormFile;
+import com.zenika.dorm.core.model.old.DormMetadata;
+import com.zenika.dorm.core.model.old.MetadataExtension;
 
 import java.lang.reflect.Field;
 

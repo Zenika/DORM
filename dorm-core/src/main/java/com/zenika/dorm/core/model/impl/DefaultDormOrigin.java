@@ -1,6 +1,6 @@
-package com.zenika.dorm.core.modelnew.impl;
+package com.zenika.dorm.core.model.impl;
 
-import com.zenika.dorm.core.modelnew.DormOrigin;
+import com.zenika.dorm.core.model.DormOrigin;
 
 /**
  * Default dorm origin

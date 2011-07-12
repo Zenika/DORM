@@ -3,8 +3,7 @@ package com.zenika.dorm.maven.ws.resource;
 import com.google.inject.Inject;
 import com.sun.jersey.multipart.FormDataParam;
 import com.zenika.dorm.core.helper.DormFileHelper;
-import com.zenika.dorm.core.model.DormArtifact;
-import com.zenika.dorm.core.model.DormFile;
+import com.zenika.dorm.core.model.old.DormArtifact;
 import com.zenika.dorm.maven.model.impl.DormMavenMetadata;
 import com.zenika.dorm.maven.service.MavenService;
 

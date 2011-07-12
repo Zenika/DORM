@@ -1,4 +1,4 @@
-package com.zenika.dorm.core.model;
+package com.zenika.dorm.core.model.old;
 
 import com.google.code.morphia.annotations.Embedded;
 
