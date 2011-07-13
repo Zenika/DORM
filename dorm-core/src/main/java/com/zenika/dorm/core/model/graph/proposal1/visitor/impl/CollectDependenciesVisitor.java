@@ -1,7 +1,7 @@
 package com.zenika.dorm.core.model.graph.proposal1.visitor.impl;
 
 import com.zenika.dorm.core.model.graph.proposal1.Dependency;
-import com.zenika.dorm.core.model.graph.proposal1.DependencyNodeComposite;
+import com.zenika.dorm.core.model.graph.proposal1.DependencyNode;
 import com.zenika.dorm.core.model.graph.proposal1.DependencyNodeLeaf;
 import com.zenika.dorm.core.model.graph.proposal1.impl.Usage;
 import com.zenika.dorm.core.model.graph.proposal1.visitor.AbstractDependencyVisitor;
@@ -27,13 +27,13 @@ public class CollectDependenciesVisitor extends AbstractDependencyVisitor {
     }
 
     @Override
-    public Boolean visitEnter(DependencyNodeComposite node) {
+    public Boolean visitEnter(DependencyNode node) {
         dependencies.add(node.getDependency());
         return true;
     }
 
     @Override
-    public Boolean visitExit(DependencyNodeComposite node) {
+    public Boolean visitExit(DependencyNode node) {
         return true;
     }
 

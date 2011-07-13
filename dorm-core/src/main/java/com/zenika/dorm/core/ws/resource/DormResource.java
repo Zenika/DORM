@@ -19,6 +19,8 @@ import javax.ws.rs.core.StreamingOutput;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
 /**
@@ -62,9 +64,11 @@ public class DormResource {
     public Response createArtifactFromUri(@PathParam("qualifier") String qualifier,
                                           @PathParam("version") String version) {
 
-        DormMetadata metadata = getMetadata(qualifier, version);
-        
-        if (!processor.push(metadata)) {
+        Map<String, String> properties = new HashMap<String, String>();
+        properties.put("qualifier", qualifier);
+        properties.put("version", version);
+
+        if (!processor.push(DefaultDormOrigin.ORIGIN, properties)) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
         }
 

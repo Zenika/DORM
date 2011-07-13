@@ -36,17 +36,9 @@ public class DefaultDependency implements Dependency {
         return usage;
     }
 
-    public void setUsage(Usage usage) {
-        this.usage = usage;
-    }
-
     @Override
     public DormMetadata getMetadata() {
         return metadata;
-    }
-
-    public void setMetadata(DormMetadata metadata) {
-        this.metadata = metadata;
     }
 
     @Override
@@ -54,12 +46,21 @@ public class DefaultDependency implements Dependency {
         return file;
     }
 
-    public void setFile(DormFile file) {
-        this.file = file;
-    }
-
     @Override
     public Boolean hasFile() {
         return null != file;
+    }
+
+    public void setUsage(Usage usage) {
+        this.usage = usage;
+    }
+
+    public void setMetadata(DormMetadata metadata) {
+        this.metadata = metadata;
+    }
+
+
+    public void setFile(DormFile file) {
+        this.file = file;
     }
 }

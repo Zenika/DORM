@@ -45,6 +45,7 @@ public class GuiceModule extends JerseyServletModule {
         // processor
         DefaultProcessor processor = new DefaultProcessor();
         processor.getExtensions().put(DefaultDormOrigin.ORIGIN, new DormProcessor());
+
         bind(Processor.class).toInstance(processor);
 
         // service

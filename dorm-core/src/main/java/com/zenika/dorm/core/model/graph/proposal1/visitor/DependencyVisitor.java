@@ -1,7 +1,6 @@
 package com.zenika.dorm.core.model.graph.proposal1.visitor;
 
 import com.zenika.dorm.core.model.graph.proposal1.DependencyNode;
-import com.zenika.dorm.core.model.graph.proposal1.DependencyNodeComposite;
 import com.zenika.dorm.core.model.graph.proposal1.DependencyNodeLeaf;
 import com.zenika.dorm.core.model.graph.proposal1.visitor.impl.DependencyVisitorCheckException;
 
@@ -20,9 +19,9 @@ public interface DependencyVisitor {
      * @param node the composite node
      * @return the visit's enter result
      */
-    Boolean visitEnter(DependencyNodeComposite node);
+    Boolean visitEnter(DependencyNode node);
 
-    Boolean visitExit(DependencyNodeComposite node);
+    Boolean visitExit(DependencyNode node);
 
     /**
      * The visitor enters to a leaf node

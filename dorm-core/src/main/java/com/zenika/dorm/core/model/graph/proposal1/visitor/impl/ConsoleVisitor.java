@@ -1,6 +1,6 @@
 package com.zenika.dorm.core.model.graph.proposal1.visitor.impl;
 
-import com.zenika.dorm.core.model.graph.proposal1.DependencyNodeComposite;
+import com.zenika.dorm.core.model.graph.proposal1.DependencyNode;
 import com.zenika.dorm.core.model.graph.proposal1.DependencyNodeLeaf;
 import com.zenika.dorm.core.model.graph.proposal1.visitor.AbstractDependencyVisitor;
 
@@ -14,7 +14,7 @@ public class ConsoleVisitor extends AbstractDependencyVisitor {
     private Integer counter = 0;
 
     @Override
-    public Boolean visitEnter(DependencyNodeComposite node) {
+    public Boolean visitEnter(DependencyNode node) {
         print("Enter composite node : " + node.getDependency().getMetadata());
         print("Usage : " + node.getDependency().getUsage());
         counter++;
@@ -23,7 +23,7 @@ public class ConsoleVisitor extends AbstractDependencyVisitor {
     }
 
     @Override
-    public Boolean visitExit(DependencyNodeComposite node) {
+    public Boolean visitExit(DependencyNode node) {
         print("Exit composite node : " + node.getDependency().getMetadata());
         counter--;
 

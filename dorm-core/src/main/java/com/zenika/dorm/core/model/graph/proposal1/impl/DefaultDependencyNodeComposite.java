@@ -1,18 +1,21 @@
 package com.zenika.dorm.core.model.graph.proposal1.impl;
 
-import com.zenika.dorm.core.model.graph.proposal1.*;
+import com.zenika.dorm.core.model.graph.proposal1.Dependency;
+import com.zenika.dorm.core.model.graph.proposal1.DependencyNode;
+import com.zenika.dorm.core.model.graph.proposal1.DependencyNodeComposite;
 import com.zenika.dorm.core.model.graph.proposal1.visitor.DependencyVisitor;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>
+ * @deprecated
  */
 public class DefaultDependencyNodeComposite extends DefaultDependencyNode implements
         DependencyNodeComposite {
 
-    private List<DependencyNode> childrens = new ArrayList<DependencyNode>();
+    private Set<DependencyNode> childrens = new HashSet<DependencyNode>();
 
     public DefaultDependencyNodeComposite(Dependency dependency) {
         super(dependency);
@@ -24,7 +27,7 @@ public class DefaultDependencyNodeComposite extends DefaultDependencyNode implem
     }
 
     @Override
-    public List<DependencyNode> getChildrens() {
+    public Set<DependencyNode> getChildrens() {
         return childrens;
     }
 

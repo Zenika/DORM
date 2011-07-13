@@ -6,6 +6,7 @@ import com.zenika.dorm.core.model.graph.proposal1.visitor.DependencyVisitor;
 
 /**
  * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>
+ * @deprecated
  */
 public class DefaultDependencyNodeLeaf extends DefaultDependencyNode implements DependencyNodeLeaf {
 

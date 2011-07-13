@@ -19,7 +19,7 @@ public class MavenServiceTest {
         String filename = "artifact.jar";
         File jar = new File("tmp/tests/" + filename);
 
-        MavenOrigin origin = new MavenOrigin("com.zenika", "maven-artifact", "1.0-SNAPSHOT");
+        MavenOrigin origin = new MavenOrigin("com.zenika", "maven-artifact", "1.0-SNAPSHOT", "jar");
         DormFile file = new DormFile(filename, jar);
 
         MavenService service = new MavenServiceImpl();

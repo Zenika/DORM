@@ -1,5 +1,6 @@
 package com.zenika.dorm.core.model.impl;
 
+import com.zenika.dorm.core.exception.CoreException;
 import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.core.model.DormOrigin;
 
@@ -11,17 +12,29 @@ import com.zenika.dorm.core.model.DormOrigin;
 public class DefaultDormMetadata implements DormMetadata {
 
     private String qualifier;
+    private String fullQualifier;
     private String version;
     private DormOrigin origin;
 
     public DefaultDormMetadata(String version, DormOrigin origin) {
+
+        // validate before create metadata
+        if (null == version || null == origin || null == origin.getQualifier() || null == origin.getOrigin()) {
+            throw new CoreException("properties are missing for metadata");
+        }
+
         this.version = version;
         this.origin = origin;
     }
 
     @Override
     public String getFullQualifier() {
-        return getQualifier() + ":" + version + ":" + origin.getOrigin();
+
+        if (null == fullQualifier) {
+            fullQualifier = getQualifier() + ":" + version + ":" + origin.getOrigin();
+        }
+
+        return fullQualifier;
     }
 
     @Override
@@ -42,10 +55,6 @@ public class DefaultDormMetadata implements DormMetadata {
     @Override
     public DormOrigin getOrigin() {
         return origin;
-    }
-
-    public void setOrigin(DormOrigin origin) {
-        this.origin = origin;
     }
 
     @Override

@@ -7,6 +7,7 @@ import com.zenika.dorm.core.model.graph.proposal1.DependencyNodeComposite;
 import com.zenika.dorm.core.model.graph.proposal1.impl.DefaultDependency;
 import com.zenika.dorm.core.model.graph.proposal1.impl.DefaultDependencyNodeComposite;
 import com.zenika.dorm.core.model.graph.proposal1.impl.DefaultDependencyNodeLeaf;
+import com.zenika.dorm.core.model.graph.proposal1.visitor.impl.CollectDependenciesVisitor;
 import com.zenika.dorm.core.model.graph.proposal1.visitor.impl.ConsoleVisitor;
 import com.zenika.dorm.core.model.impl.DefaultDormMetadata;
 import com.zenika.dorm.core.model.impl.DefaultDormOrigin;
@@ -39,6 +40,8 @@ public class GraphProposal1Test {
 
         ConsoleVisitor visitor = new ConsoleVisitor();
         n2.accept(visitor);
+
+//        CollectDependenciesVisitor cVisitor = new CollectDependenciesVisitor();
 
 //        Dependency dA = new Dependency(a, new Usage("Usage1"));
 //        Dependency dB = new Dependency(b, new Usage("Usage1"));

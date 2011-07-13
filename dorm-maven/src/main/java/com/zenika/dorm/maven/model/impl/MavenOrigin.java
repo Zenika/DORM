@@ -12,25 +12,43 @@ import com.zenika.dorm.core.model.DormOrigin;
  */
 public class MavenOrigin implements DormOrigin {
 
-    private static final String ORIGIN = "maven";
+    public static final String ORIGIN = "maven";
 
     private String groupId;
     private String artifactId;
     private String versionId;
+    private String type;
 
-    public MavenOrigin(String groupId, String artifactId, String versionId) {
+    public MavenOrigin(String groupId, String artifactId, String versionId, String type) {
         this.groupId = groupId;
         this.artifactId = artifactId;
         this.versionId = versionId;
+        this.type = type;
     }
 
     @Override
     public String getQualifier() {
-        return groupId + ":" + artifactId;
+        return groupId + ":" + artifactId + ":" + versionId + ":" + type;
     }
 
     @Override
     public String getOrigin() {
         return ORIGIN;
+    }
+
+    public String getGroupId() {
+        return groupId;
+    }
+
+    public String getArtifactId() {
+        return artifactId;
+    }
+
+    public String getVersionId() {
+        return versionId;
+    }
+
+    public String getType() {
+        return type;
     }
 }

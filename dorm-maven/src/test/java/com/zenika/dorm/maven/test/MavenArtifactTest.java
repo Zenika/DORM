@@ -16,7 +16,7 @@ public class MavenArtifactTest {
     @Test
     public void createModuleAndArtifact() {
 
-        MavenOrigin origin = new MavenOrigin("com.zenika", "art1", "1.0");
+        MavenOrigin origin = new MavenOrigin("com.zenika", "art1", "1.0", "jar");
         DormModule module = new DormModule("1.0", origin);
 
         DormArtifact artifact = new DormArtifact(module.getQualifier(), module.getVersion());

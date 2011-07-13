@@ -13,11 +13,13 @@ public interface Dependency {
 
     public Usage getUsage();
 
+    public void setUsage(Usage usage);
+
     public DormMetadata getMetadata();
 
     public DormFile getFile();
 
+    public void setFile(DormFile file);
+
     public Boolean hasFile();
 }
-
-
