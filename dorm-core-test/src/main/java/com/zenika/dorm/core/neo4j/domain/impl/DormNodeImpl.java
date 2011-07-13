@@ -3,6 +3,8 @@ package com.zenika.dorm.core.neo4j.domain.impl;
 import com.zenika.dorm.core.neo4j.NodeRelationShip;
 import com.zenika.dorm.core.neo4j.domain.DormNode;
 
+import org.neo4j.graphalgo.GraphAlgoFactory;
+import org.neo4j.graphalgo.PathFinder;
 import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.DynamicRelationshipType;
 import org.neo4j.graphdb.Node;
@@ -16,6 +18,7 @@ import org.neo4j.helpers.collection.IteratorUtil;
 import org.neo4j.kernel.Traversal;
 import org.neo4j.kernel.Uniqueness;
 
+import javax.management.relation.Relation;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -63,6 +66,44 @@ public class DormNodeImpl implements DormNode{
 
     public Iterable<DormNodeImpl> getDependencies(){
         return getDependenciesByDepth(1, NodeRelationShip.DEFAULT.toString());
+    }
+
+    public void removeDependency(DormNodeImpl otherDormNode){
+        Transaction tx = underlyingNode.getGraphDatabase().beginTx();
+        try {
+            if (!this.equals(otherDormNode)){
+                Relationship rel = getDependencyRelationshipTo(otherDormNode);
+                if (rel != null){
+                    rel.delete();
+                }
+            }
+            tx.success();
+        } catch (Exception e){
+            e.printStackTrace();
+        } finally {
+            tx.finish();
+        }
+    }
+
+    public void removeAllIncomingDependency(){
+        Transaction tx = underlyingNode.getGraphDatabase().beginTx();
+        try {
+            for (Relationship rel : getUnderlyingNode().getRelationships(Direction.INCOMING)){
+                if (rel != null){
+                    rel.delete();
+                }
+            }
+        } catch (Exception e){
+            e.printStackTrace();
+        } finally {
+            tx.finish();
+        }
+    }
+
+    public Iterable<DormNodeImpl> getShortestPathTo(DormNodeImpl otherDormNode, int maxDepth, String scope){
+        PathFinder<Path> finder = GraphAlgoFactory.shortestPath(Traversal.expanderForTypes(DynamicRelationshipType.withName(scope), Direction.BOTH), maxDepth);
+        Path path = finder.findSinglePath(underlyingNode, otherDormNode.getUnderlyingNode());
+        return createNodesFromNodes(path);
     }
 
     public String getQualifier() {
@@ -150,6 +191,16 @@ public class DormNodeImpl implements DormNode{
             @Override
             protected DormNodeImpl underlyingObjectToObject(Path path) {
                 return new DormNodeImpl(path.endNode());
+            }
+        };
+    }
+
+    private Iterable<DormNodeImpl> createNodesFromNodes(final Path path){
+        return new IterableWrapper<DormNodeImpl, Node>(path.nodes()) {
+
+            @Override
+            protected DormNodeImpl underlyingObjectToObject(Node node){
+                return new DormNodeImpl(node);
             }
         };
     }
