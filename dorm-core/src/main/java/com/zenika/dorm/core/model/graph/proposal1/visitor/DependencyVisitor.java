@@ -29,6 +29,7 @@ public interface DependencyVisitor {
      *
      * @param node the leaf node
      * @return the visit's result
+     * @deprecated
      */
     Boolean visit(DependencyNodeLeaf node);
 

@@ -13,6 +13,11 @@ public class DefaultDependency implements Dependency {
     private DormMetadata metadata;
     private DormFile file;
 
+    /**
+     * @deprecated soon
+     */
+    private Boolean mainDependency = false;
+
     public DefaultDependency(DormMetadata metadata) {
         this(metadata, new Usage(Usage.DEFAULT));
     }
@@ -51,6 +56,14 @@ public class DefaultDependency implements Dependency {
         return null != file;
     }
 
+    /**
+     * @deprecated
+     */
+    @Override
+    public Boolean isMainDependency() {
+        return mainDependency;
+    }
+
     public void setUsage(Usage usage) {
         this.usage = usage;
     }
@@ -62,5 +75,13 @@ public class DefaultDependency implements Dependency {
 
     public void setFile(DormFile file) {
         this.file = file;
+    }
+
+    /**
+     * @param mainDependency
+     * @deprecated
+     */
+    public void setMainDependency(Boolean mainDependency) {
+        this.mainDependency = mainDependency;
     }
 }

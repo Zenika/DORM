@@ -22,4 +22,9 @@ public interface Dependency {
     public void setFile(DormFile file);
 
     public Boolean hasFile();
+
+    /**
+     * @deprecated soon :p
+     */
+    public Boolean isMainDependency();
 }

@@ -2,8 +2,10 @@ package com.zenika.dorm.core.processor.impl;
 
 import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.core.model.DormOrigin;
-import com.zenika.dorm.core.model.graph.proposal1.Dependency;
+import com.zenika.dorm.core.model.graph.proposal1.DependencyNode;
 import com.zenika.dorm.core.model.graph.proposal1.impl.DefaultDependency;
+import com.zenika.dorm.core.model.graph.proposal1.impl.DefaultDependencyNode;
+import com.zenika.dorm.core.model.impl.DefaultDormMetadata;
 import com.zenika.dorm.core.model.impl.DefaultDormOrigin;
 import com.zenika.dorm.core.processor.ProcessorExtension;
 
@@ -16,15 +18,23 @@ import java.util.Set;
 public class DormProcessor implements ProcessorExtension {
 
     @Override
-    public Dependency push(DormMetadata metadata) {
-        Dependency dependency = new DefaultDependency(metadata);
-        return dependency;
+    public DependencyNode getOriginAsNode(Map<String, String> properties) {
+
+        DormMetadata metadata = new DefaultDormMetadata(properties.get("version"),
+                new DefaultDormOrigin(properties.get("name")));
+
+        DefaultDependency dependency = new DefaultDependency(metadata);
+        dependency.setMainDependency(true);
+
+        DependencyNode node = new DefaultDependencyNode(dependency);
+
+        return node;
     }
 
     @Override
-    public DormOrigin getOrigin(Map<String, String> properties) {
-        String name = properties.get("name");
-        return new DefaultDormOrigin(name);
+    public DormOrigin getParentOrigin(Map<String, String> properties) {
+
+        return null;
     }
 
     @Override

@@ -12,16 +12,16 @@ import java.util.Set;
 /**
  * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>
  */
-public class CollectDependenciesVisitor extends AbstractDependencyVisitor {
+public class DependenciesCollector extends AbstractDependencyVisitor {
 
     private Set<Dependency> dependencies;
     private Usage usage;
 
-    public CollectDependenciesVisitor(Usage usage) {
+    public DependenciesCollector(Usage usage) {
         this(new HashSet<Dependency>(), usage);
     }
 
-    public CollectDependenciesVisitor(Set<Dependency> dependencies, Usage usage) {
+    public DependenciesCollector(Set<Dependency> dependencies, Usage usage) {
         this.dependencies = dependencies;
         this.usage = usage;
     }

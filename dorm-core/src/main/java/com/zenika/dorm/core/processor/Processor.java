@@ -1,8 +1,8 @@
 package com.zenika.dorm.core.processor;
 
 import com.google.inject.Singleton;
-import com.zenika.dorm.core.model.DormMetadata;
 
+import java.io.File;
 import java.util.Map;
 
 /**
@@ -12,7 +12,6 @@ import java.util.Map;
  */
 @Singleton
 public interface Processor {
-    public Boolean push(DormMetadata metadata);
 
-    public Boolean push(String origin, Map<String, String> properties);
+    public Boolean push(String origin, Map<String, String> properties, File file);
 }

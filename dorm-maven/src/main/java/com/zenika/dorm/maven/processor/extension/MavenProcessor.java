@@ -6,6 +6,7 @@ import com.zenika.dorm.core.model.graph.proposal1.Dependency;
 import com.zenika.dorm.core.model.graph.proposal1.DependencyNode;
 import com.zenika.dorm.core.model.graph.proposal1.impl.DefaultDependency;
 import com.zenika.dorm.core.model.graph.proposal1.impl.DefaultDependencyNode;
+import com.zenika.dorm.core.model.graph.proposal1.impl.Usage;
 import com.zenika.dorm.core.model.impl.DefaultDormMetadata;
 import com.zenika.dorm.core.processor.ProcessorExtension;
 import com.zenika.dorm.maven.exception.MavenException;
@@ -23,32 +24,23 @@ import java.util.Set;
 public class MavenProcessor implements ProcessorExtension {
 
     public static final String ENTITY_TYPE = "entity";
-
-    private Dependency currentDependency;
+    public static final String INTERNAL_USAGE = "maven_internal";
 
     @Override
-    public Dependency push(DormMetadata metadata) {
-        return null;
-    }
+    public DependencyNode getOriginAsNode(Map<String, String> properties) {
 
-    /**
-     * Create maven entity that will englobe
-     *
-     * @param properties
-     * @return
-     */
-    @Override
-    public DormOrigin getOrigin(Map<String, String> properties) {
-
-        return null;
-    }
-
-    public DependencyNode getRootNode(Map<String, String> properties) {
         DormMetadata rootMetadata = new DefaultDormMetadata(properties.get("version"),
                 new MavenOrigin(properties.get("groupId"), properties.get("artifactId"),
                         properties.get("versionId"), MavenProcessor.ENTITY_TYPE));
 
-        DependencyNode rootNode = new DefaultDependencyNode(new DefaultDependency(rootMetadata));
+        Dependency rootDependency = new DefaultDependency(rootMetadata);
+
+        // the root dependency have the usage
+        if (null != properties.get("usage")) {
+            rootDependency.setUsage(new Usage(properties.get("usage")));
+        }
+
+        DependencyNode rootNode = new DefaultDependencyNode(rootDependency);
 
         // get the maven type from the filename
         String type = FilenameUtils.getExtension(properties.get("filename"));
@@ -61,19 +53,60 @@ public class MavenProcessor implements ProcessorExtension {
                 new MavenOrigin(properties.get("groupId"), properties.get("artifactId"),
                         properties.get("versionId"), type));
 
+        DefaultDependency dependency = new DefaultDependency(metadata);
+        dependency.setMainDependency(true);
+
+        // main dependency is an internal dependency
+        dependency.setUsage(new Usage(MavenProcessor.INTERNAL_USAGE));
+
+        DependencyNode node = new DefaultDependencyNode(dependency);
+        rootNode.getChildren().add(node);
+
+        return rootNode;
+    }
+
+    /**
+     * Maven artifact has no notion of parent
+     *
+     * @param properties
+     * @return
+     * @throws UnsupportedOperationException
+     */
+    @Override
+    public DormOrigin getParentOrigin(Map<String, String> properties) {
+//        return new MavenOrigin(properties.get("parent_groupId"), properties.get("parent_artifactId"),
+//                properties.get("parent_versionId"), MavenProcessor.ENTITY_TYPE);
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * @param properties
+     * @return
+     * @deprecated
+     */
+    public DependencyNode getRootNode(Map<String, String> properties) {
+        DormMetadata rootMetadata = new DefaultDormMetadata(properties.get("version"),
+                new MavenOrigin(properties.get("groupId"), properties.get("artifactId"),
+                        properties.get("versionId"), MavenProcessor.ENTITY_TYPE));
+
+        DependencyNode rootNode = new DefaultDependencyNode(new DefaultDependency(rootMetadata));
+
+        // get the maven type from the filename
+        String type = FilenameUtils.getExtension(properties.get("filename"));
+
+        if (type != "jar" && type != "pom" && type != "sha1") {
+            throw new MavenException("invalid maven type");
+        }
+
+        DormMetadata metadata = new DefaultDormMetadata(properties.get("version"),
+                new MavenOrigin(properties.get("groupId"), properties.get("artifactId"),
+                        properties.get("versionId"), type));
+
         DependencyNode node = new DefaultDependencyNode(new DefaultDependency(metadata));
-        rootNode.getChildrens().add(node);
+        rootNode.getChildren().add(node);
 
 
         return node;
-    }
-
-    public Dependency getCurrentDependency() {
-        if (null == currentDependency) {
-            throw new MavenException("there is no current dependency, you must call getRootNode() first");
-        }
-
-        return null;
     }
 
     /**
@@ -87,7 +120,9 @@ public class MavenProcessor implements ProcessorExtension {
      *
      * @param properties the properties to set to the root origin (all except type)
      * @return the root maven origin, also called "maven entity"
+     * @deprecated
      */
+    @Override
     public Map<DormOrigin, Set<DormOrigin>> getOrigins(Map<String, String> properties) {
 
         Map<DormOrigin, Set<DormOrigin>> origins = new HashMap<DormOrigin, Set<DormOrigin>>();
@@ -99,7 +134,7 @@ public class MavenProcessor implements ProcessorExtension {
         // get the maven type from the filename
         String type = FilenameUtils.getExtension(properties.get("filename"));
 
-        if (type != "jar" || type != "pom" || type != "sha1") {
+        if (type != "jar" && type != "pom" && type != "sha1") {
             throw new MavenException("invalid maven type");
         }
 

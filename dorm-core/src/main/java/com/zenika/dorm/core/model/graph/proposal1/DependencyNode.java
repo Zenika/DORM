@@ -18,7 +18,7 @@ public interface DependencyNode {
 
     public Dependency getDependency();
 
-    void addChildren(DependencyNode node);
+    void addChild(DependencyNode node);
 
-    Set<DependencyNode> getChildrens();
+    Set<DependencyNode> getChildren();
 }

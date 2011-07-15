@@ -12,6 +12,10 @@ public class Usage {
 
     private String name;
 
+    public Usage() {
+        this(Usage.DEFAULT);
+    }
+
     public Usage(String name) {
         this.name = name;
     }

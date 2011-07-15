@@ -7,6 +7,11 @@ import java.io.File;
  */
 public interface DormFile {
 
+    /**
+     * Rename this as user specific
+     * 
+     * @return
+     */
     public String getFilename();
 
     public File getFile();

@@ -29,7 +29,7 @@ import java.util.Properties;
  * Push (POST) :
  * - metadata (qualifier + version)
  * - metadata + file (filename + java.io.file)
- * - metadata + file + parent + usage (full qualifier @see DefaultDormOrigin#getF)
+ * - metadata + file + parent + usage (full qualifier)
  * - metadata + parent + usage
  *
  * Get (GET) :
@@ -40,6 +40,8 @@ import java.util.Properties;
  *
  * Remove (DELETE) :
  * -
+ *
+ * @see com.zenika.dorm.core.model.impl.DefaultDormOrigin#getQualifier() for the parent qualifier
  */
 @Path("dorm")
 @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
@@ -68,9 +70,9 @@ public class DormResource {
         properties.put("qualifier", qualifier);
         properties.put("version", version);
 
-        if (!processor.push(DefaultDormOrigin.ORIGIN, properties)) {
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
-        }
+//        if (!processor.push(DefaultDormOrigin.ORIGIN, properties)) {
+//            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+//        }
 
         return Response.status(Response.Status.OK).build();
     }

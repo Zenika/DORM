@@ -2,17 +2,23 @@ package com.zenika.dorm.core.processor.impl;
 
 import com.google.inject.Inject;
 import com.zenika.dorm.core.exception.CoreException;
+import com.zenika.dorm.core.model.DormFile;
 import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.core.model.DormOrigin;
+import com.zenika.dorm.core.model.graph.proposal1.Dependency;
 import com.zenika.dorm.core.model.graph.proposal1.DependencyNode;
 import com.zenika.dorm.core.model.graph.proposal1.DependencyNodeComposite;
 import com.zenika.dorm.core.model.graph.proposal1.impl.DefaultDependency;
 import com.zenika.dorm.core.model.graph.proposal1.impl.DefaultDependencyNodeComposite;
+import com.zenika.dorm.core.model.graph.proposal1.impl.Usage;
+import com.zenika.dorm.core.model.graph.proposal1.visitor.impl.MainDependencyCollector;
+import com.zenika.dorm.core.model.impl.DefaultDormFile;
 import com.zenika.dorm.core.model.impl.DefaultDormMetadata;
 import com.zenika.dorm.core.processor.Processor;
 import com.zenika.dorm.core.processor.ProcessorExtension;
 import com.zenika.dorm.core.service.DormService;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -34,15 +40,95 @@ public class DefaultProcessor implements Processor {
     @Inject
     private DormService service;
 
-    public Boolean push(DormMetadata metadata) {
-//        Dependency dependency = getExtension(metadata).push(metadata);
-//        return service.pushDependency(dependency);
-        return null;
+    /**
+     * @param origin
+     * @param properties
+     * @param file       may be null
+     * @return
+     */
+    @Override
+    public Boolean push(String origin, Map<String, String> properties, File file) {
+
+        ProcessorExtension extension = getExtension(origin);
+        DependencyNode root = extension.getOriginAsNode(properties);
+
+        // get the main dependency node
+        Dependency dependency = getMainDependencyFromNode(root);
+
+        if (null != file) {
+            DormFile dormFile = getFile(file, properties);
+            dependency.setFile(dormFile);
+        }
+
+        DependencyNode parent = getParentNode(properties, extension);
+
+        if (null != parent) {
+            parent.addChild(root);
+            root = parent;
+        }
+
+        return service.pushNode(root);
     }
 
-    @Override
-    public Boolean push(String origin, Map<String, String> properties) {
-        return null;
+    public Dependency getMainDependencyFromNode(DependencyNode node) {
+
+        MainDependencyCollector collector = new MainDependencyCollector();
+        node.accept(collector);
+
+        Dependency dependency = collector.getDependency();
+
+        if (null == dependency) {
+            throw new CoreException("Cannot find main dependency");
+        }
+
+        return dependency;
+    }
+
+    /**
+     * Not needed right now
+     *
+     * @param file
+     * @param properties
+     */
+//    public void mapMainProperties(Dependency dependency, DependencyNode root,
+//                                  Map<String, String> properties) {
+//
+//        // set usage for simple unique dependency
+//        if (null != properties.get("usage") && root.getChildren().isEmpty()) {
+//            dependency.setUsage(new Usage(properties.get("usage")));
+//        }
+//    }
+
+    /**
+     * @param file
+     * @param properties
+     */
+    public DormFile getFile(File file, Map<String, String> properties) {
+
+        if (null == properties.get("filename")) {
+            throw new CoreException("File exists but filename is missing");
+        }
+
+        return new DefaultDormFile(properties.get("filename"), file);
+    }
+
+    public DependencyNode getParentNode(Map<String, String> properties, ProcessorExtension extension) {
+
+        Usage usage = (null != properties.get("usage")) ? new Usage(properties.get("Usage")) : new Usage();
+
+        DormOrigin origin;
+
+        try {
+            origin = extension.getParentOrigin(properties);
+        } catch (UnsupportedOperationException e) {
+            return null;
+        }
+
+        DormMetadata metadata = new DefaultDormMetadata(properties.get("version"), origin);
+
+        DependencyNode root = service.getByMetadata(metadata, usage);
+
+        return root;
     }
 
     /**
@@ -89,7 +175,7 @@ public class DefaultProcessor implements Processor {
             currentNode = createNode(entry.getKey(), version);
 
             if (null != previousNode) {
-                for (DependencyNode node : previousNode.getChildrens()) {
+                for (DependencyNode node : previousNode.getChildren()) {
                     if (node.equals(currentNode)) {
                         currentNode = node;
                     }
@@ -99,7 +185,7 @@ public class DefaultProcessor implements Processor {
 //            DormMetadata metadata = new DefaultDormMetadata(ve)
 
             for (Iterator<DormOrigin> setIt = entry.getValue().iterator(); setIt.hasNext(); ) {
-                currentNode.addChildren(createNode(setIt.next(), version));
+                currentNode.addChild(createNode(setIt.next(), version));
             }
         }
 
@@ -156,16 +242,6 @@ public class DefaultProcessor implements Processor {
         }
 
         return extension;
-    }
-
-    private DormMetadata getMetadata(String origin, Map<String, String> properties) {
-
-        if (null == origin) {
-            throw new CoreException("origin is missing");
-        }
-
-        DormOrigin dormOrigin = getExtension(origin).getOrigin(properties);
-        return new DefaultDormMetadata(properties.get("version"), dormOrigin);
     }
 
     private DependencyNodeComposite createNode(DormOrigin origin, String version) {

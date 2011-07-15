@@ -7,7 +7,6 @@ import com.zenika.dorm.core.model.graph.proposal1.DependencyNodeComposite;
 import com.zenika.dorm.core.model.graph.proposal1.impl.DefaultDependency;
 import com.zenika.dorm.core.model.graph.proposal1.impl.DefaultDependencyNodeComposite;
 import com.zenika.dorm.core.model.graph.proposal1.impl.DefaultDependencyNodeLeaf;
-import com.zenika.dorm.core.model.graph.proposal1.visitor.impl.CollectDependenciesVisitor;
 import com.zenika.dorm.core.model.graph.proposal1.visitor.impl.ConsoleVisitor;
 import com.zenika.dorm.core.model.impl.DefaultDormMetadata;
 import com.zenika.dorm.core.model.impl.DefaultDormOrigin;
@@ -36,7 +35,7 @@ public class GraphProposal1Test {
 
         DependencyNode n1 = new DefaultDependencyNodeLeaf(d1);
         DependencyNodeComposite n2 = new DefaultDependencyNodeComposite(d2);
-        n2.addChildren(n1);
+        n2.addChild(n1);
 
         ConsoleVisitor visitor = new ConsoleVisitor();
         n2.accept(visitor);
@@ -51,10 +50,10 @@ public class GraphProposal1Test {
 //        DependencyNode nodeB = new DefaultDependencyNode(dB);
 //        DependencyNode nodeC = new DefaultDependencyNode(dC);
 //
-//        nodeA.getChildrens().add(nodeB);
-//        nodeB.getChildrens().add(nodeC);
-//        nodeC.getChildrens().add(nodeA);
-//        nodeC.getChildrens().add(nodeA);
+//        nodeA.getChildren().add(nodeB);
+//        nodeB.getChildren().add(nodeC);
+//        nodeC.getChildren().add(nodeA);
+//        nodeC.getChildren().add(nodeA);
 //
 //        ConsoleVisitor visitor = new ConsoleVisitor();
 //        nodeA.accept(visitor);

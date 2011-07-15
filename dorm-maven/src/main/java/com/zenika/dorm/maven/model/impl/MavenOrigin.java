@@ -9,6 +9,9 @@ import com.zenika.dorm.core.model.DormOrigin;
 /**
  * Maven extension point to the dorm model
  * Add maven specific metadatas
+ *
+ * todo: add packaging + classifier metadatas
+ *
  */
 public class MavenOrigin implements DormOrigin {
 

@@ -33,12 +33,12 @@ public class DefaultDependencyNode implements DependencyNode {
     }
 
     @Override
-    public void addChildren(DependencyNode node) {
+    public void addChild(DependencyNode node) {
         childrens.add(node);
     }
 
     @Override
-    public Set<DependencyNode> getChildrens() {
+    public Set<DependencyNode> getChildren() {
         return childrens;
     }
 

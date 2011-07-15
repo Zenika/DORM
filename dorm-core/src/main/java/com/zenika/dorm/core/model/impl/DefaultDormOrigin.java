@@ -13,6 +13,9 @@ public class DefaultDormOrigin implements DormOrigin {
 
     private String name;
 
+    public DefaultDormOrigin() {
+    }
+
     public DefaultDormOrigin(String name) {
         this.name = name;
     }
@@ -25,6 +28,14 @@ public class DefaultDormOrigin implements DormOrigin {
     @Override
     public String getOrigin() {
         return ORIGIN;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     @Override
