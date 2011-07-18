@@ -1,6 +1,7 @@
 package com.zenika.dorm.core.model.impl;
 
 import com.zenika.dorm.core.model.DormProperties;
+import com.zenika.dorm.core.model.graph.proposal1.impl.Usage;
 
 import java.io.File;
 import java.util.HashMap;

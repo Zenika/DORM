@@ -24,4 +24,6 @@ public interface Processor {
     public Boolean push(String origin, Map<String, String> properties, File file);
 
     public Boolean push(DormProperties properties);
+
+    public ProcessorHelper getHelper();
 }

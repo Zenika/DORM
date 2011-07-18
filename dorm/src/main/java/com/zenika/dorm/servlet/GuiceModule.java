@@ -12,7 +12,9 @@ import com.zenika.dorm.core.dao.mongo.MongoInstance;
 import com.zenika.dorm.core.model.impl.DefaultDormOrigin;
 import com.zenika.dorm.core.model.old.MetadataExtension;
 import com.zenika.dorm.core.processor.Processor;
+import com.zenika.dorm.core.processor.ProcessorHelper;
 import com.zenika.dorm.core.processor.impl.DefaultProcessor;
+import com.zenika.dorm.core.processor.impl.DefaultProcessorHelper;
 import com.zenika.dorm.core.processor.impl.DormProcessor;
 import com.zenika.dorm.core.service.DormService;
 import com.zenika.dorm.core.service.impl.DefaultDormService;
@@ -47,6 +49,7 @@ public class GuiceModule extends JerseyServletModule {
         processor.getExtensions().put(DefaultDormOrigin.ORIGIN, new DormProcessor());
 
         bind(Processor.class).toInstance(processor);
+        bind(ProcessorHelper.class).to(DefaultProcessorHelper.class);
 
         // service
         bind(DormService.class).to(DefaultDormService.class);

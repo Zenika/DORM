@@ -17,6 +17,7 @@ import com.zenika.dorm.core.model.impl.DefaultDormFile;
 import com.zenika.dorm.core.model.impl.DefaultDormMetadata;
 import com.zenika.dorm.core.processor.Processor;
 import com.zenika.dorm.core.processor.ProcessorExtension;
+import com.zenika.dorm.core.processor.ProcessorHelper;
 import com.zenika.dorm.core.service.DormService;
 
 import java.io.File;
@@ -37,6 +38,9 @@ public class DefaultProcessor implements Processor {
      * Extensions are injected in the guice module
      */
     private Map<String, ProcessorExtension> extensions = new HashMap<String, ProcessorExtension>();
+
+    @Inject
+    private ProcessorHelper helper;
 
     @Inject
     private DormService service;
@@ -260,5 +264,10 @@ public class DefaultProcessor implements Processor {
 
     public Map<String, ProcessorExtension> getExtensions() {
         return extensions;
+    }
+
+    @Override
+    public ProcessorHelper getHelper() {
+        return helper;
     }
 }
