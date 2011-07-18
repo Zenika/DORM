@@ -17,6 +17,9 @@ dependencies {
    // compile group: 'org.neo4j', name: 'neo4j', version: '1.4'
 //    compile group: 'com.google.code.morphia', name: 'morphia', version: '1.00-SNAPSHOT'
 
+    compile group: 'org.codehaus.jackson', name: 'jackson-jaxrs', version: '1.8.3'
+    compile group: 'com.sun.jersey', name: 'jersey-client', version: '1.8'
+
     ajc group: 'org.aspectj', name: 'aspectjtools', version: '1.6.11'
     compile group: 'org.aspectj', name: 'aspectjrt', version: '1.6.11'
 }
