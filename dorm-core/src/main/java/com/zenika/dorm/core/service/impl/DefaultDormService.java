@@ -23,7 +23,7 @@ public class DefaultDormService implements DormService {
     @Override
     public Boolean pushDependency(Dependency dependency) {
         DependencyNodeLeaf node = new DefaultDependencyNodeLeaf(dependency);
-        return dao.push(node);
+        return dao.push(dependency);
     }
 
     @Override
