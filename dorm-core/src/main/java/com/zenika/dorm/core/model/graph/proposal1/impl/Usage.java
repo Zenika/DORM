@@ -17,6 +17,10 @@ public class Usage {
     }
 
     public Usage(String name) {
+        if (null == name) {
+            name = Usage.DEFAULT;
+        }
+
         this.name = name;
     }
 
