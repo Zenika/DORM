@@ -5,6 +5,7 @@ import com.zenika.dorm.core.exception.CoreException;
 import com.zenika.dorm.core.model.DormFile;
 import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.core.model.DormOrigin;
+import com.zenika.dorm.core.model.DormProperties;
 import com.zenika.dorm.core.model.graph.proposal1.Dependency;
 import com.zenika.dorm.core.model.graph.proposal1.DependencyNode;
 import com.zenika.dorm.core.model.graph.proposal1.DependencyNodeComposite;
@@ -39,6 +40,14 @@ public class DefaultProcessor implements Processor {
 
     @Inject
     private DormService service;
+
+    @Override
+    public Boolean push(DormProperties properties) {
+
+        getExtension(properties.getOrigin()).push(properties);
+
+        return false;
+    }
 
     /**
      * @param origin

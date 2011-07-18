@@ -1,6 +1,7 @@
 package com.zenika.dorm.core.processor;
 
 import com.zenika.dorm.core.model.DormOrigin;
+import com.zenika.dorm.core.model.DormProperties;
 import com.zenika.dorm.core.model.graph.proposal1.DependencyNode;
 
 import java.util.Map;
@@ -21,4 +22,6 @@ public interface ProcessorExtension {
     public DependencyNode getOriginAsNode(Map<String, String> properties);
 
     public DormOrigin getParentOrigin(Map<String, String> properties);
+
+    public void push(DormProperties properties);
 }

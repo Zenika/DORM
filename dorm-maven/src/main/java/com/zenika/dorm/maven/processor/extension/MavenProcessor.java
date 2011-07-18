@@ -2,6 +2,7 @@ package com.zenika.dorm.maven.processor.extension;
 
 import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.core.model.DormOrigin;
+import com.zenika.dorm.core.model.DormProperties;
 import com.zenika.dorm.core.model.graph.proposal1.Dependency;
 import com.zenika.dorm.core.model.graph.proposal1.DependencyNode;
 import com.zenika.dorm.core.model.graph.proposal1.impl.DefaultDependency;
@@ -147,5 +148,10 @@ public class MavenProcessor implements ProcessorExtension {
         origins.put(root, childs);
 
         return origins;
+    }
+
+    @Override
+    public void push(DormProperties properties) {
+
     }
 }
