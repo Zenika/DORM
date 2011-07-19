@@ -48,9 +48,9 @@ public class DefaultProcessor implements Processor {
     @Override
     public Boolean push(DormProperties properties) {
 
-        getExtension(properties.getOrigin()).push(properties);
+        DependencyNode node = getExtension(properties.getOrigin()).push(properties);
 
-        return false;
+        return service.pushNode(node);
     }
 
     /**
@@ -58,6 +58,7 @@ public class DefaultProcessor implements Processor {
      * @param properties
      * @param file       may be null
      * @return
+     * @deprecated
      */
     @Override
     public Boolean push(String origin, Map<String, String> properties, File file) {

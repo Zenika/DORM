@@ -43,6 +43,12 @@ public class DormProcessor extends AbstractProcessorExtension {
         return null;
     }
 
+    /**
+     * Create a simple node with the file and the origin
+     *
+     * @param properties
+     * @return the node containing the file and the origin
+     */
     @Override
     public DependencyNode push(DormProperties properties) {
 
