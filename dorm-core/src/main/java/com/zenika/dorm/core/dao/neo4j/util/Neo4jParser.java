@@ -13,10 +13,14 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.logging.Logger;
 
-import static com.zenika.dorm.core.dao.neo4j.util.Neo4jRequestExecutor.METADATA_RELATIONSHIP;
-import static com.zenika.dorm.core.dao.neo4j.util.Neo4jRequestExecutor.ORIGIN_RELATIONSHIP;
+import static com.zenika.dorm.core.dao.neo4j.util.Neo4jRequestExecutor.*;
 
 /**
  * @author Antoine ROUAZE <antoine.rouaze AT zenika.com>
@@ -36,31 +40,48 @@ public class Neo4jParser {
         return mapper.writeValueAsString(properties);
     }
 
+    public static Map<String, String> parseOriginPropertyToMap(DormOrigin origin) throws IOException {
+        return OriginMapper.fromOrigin(origin);
+
+    }
+
     public static String parseMetaDataProperty(DormMetadata metadata) throws IOException {
+        return mapper.writeValueAsString(parseMetaDataPropertyToMap(metadata));
+    }
+
+    public static Map<String, String> parseMetaDataPropertyToMap(DormMetadata metadata) {
         Map<String, String> map = new HashMap<String, String>();
         map.put("qualifier", metadata.getQualifier());
         map.put("version", metadata.getVersion());
         map.put("fullQualifier", metadata.getFullQualifier());
-        return mapper.writeValueAsString(map);
+        return map;
     }
 
     public static String parseRelationship(String child, Usage usage) throws IOException {
+        return mapper.writeValueAsString(parseRelationshipToMap(child, usage));
+    }
+
+    public static Map<String, String> parseRelationshipToMap(String child, Usage usage) throws IOException {
         Map<String, String> map = new HashMap<String, String>();
         map.put("to", child);
         if (usage != null) {
             map.put("type", usage.getName());
         }
-        return mapper.writeValueAsString(map);
+        return map;
     }
 
     public static String parseIndexDependency() throws IOException {
+        return mapper.writeValueAsString(parseIndexDependencyToMap());
+    }
+
+    public static Map<String, Object> parseIndexDependencyToMap() throws IOException {
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("name", "dependency");
         Map<String, String> configMap = new LinkedHashMap<String, String>();
         configMap.put("type", "fulltext");
         configMap.put("provider", "lucene");
         map.put("config", configMap);
-        return mapper.writeValueAsString(map);
+        return map;
     }
 
     public static String parseTraverse(Usage usage) throws IOException {
@@ -131,7 +152,7 @@ public class Neo4jParser {
                         .getPropertiesNode((String) map.get("end"));
                 DormMetadata metadata = null;
                 try {
-                     metadata = new DefaultDormMetadata(dormMetadataMap.get("version"), dormOrigin);
+                    metadata = new DefaultDormMetadata(dormMetadataMap.get("version"), dormOrigin);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -158,6 +179,34 @@ public class Neo4jParser {
         return null;
     }
 
+    public static String parseDependencyToJson(Dependency dependency) throws IOException {
+        List<Map<String, Object>> requests = new ArrayList<Map<String, Object>>();
+        requests.add(createJsonRequest("POST", "/node", 0,
+                parseOriginPropertyToMap(dependency.getMetadata().getOrigin())));
+        requests.add(createJsonRequest("POST", "/node", 1,
+                parseMetaDataPropertyToMap(dependency.getMetadata())));
+        requests.add(createJsonRequest("POST", "/node", 2, new HashMap<String, String>()));
+        requests.add(createJsonRequest("POST", "{" + 1 + "}/relationships", 3,
+                parseRelationshipToMap("{" + 0 + "}", dependency.getUsage())));
+        requests.add(createJsonRequest("POST", "{" + 2 + "}/relationships", 4,
+                parseRelationshipToMap("{" + 1 + "}", dependency.getUsage())));
+        requests.add(createJsonRequest("POST", "/index/node", 5,
+                parseIndexDependencyToMap()));
+        requests.add(createJsonRequest("POST", "/index/node/dependency/fullqualifier/" +
+                dependency.getMetadata().getFullQualifier(), 6, "{" + 2 + "}"));
+        return mapper.writeValueAsString(requests);
+    }
+
+    public static String getDependencyUriFromBatchResponse(String response) throws IOException {
+        List<Map<String, Object>> list = mapper.readValue(response, List.class);
+        for (Map<String, Object> map : list) {
+            if ((Integer) map.get("id") == 2) {
+                return (String) map.get("location");
+            }
+        }
+        return null;
+    }
+
     public static String uriToJson(String uri) {
         StringBuilder str = new StringBuilder();
         str.append('\"');
@@ -167,7 +216,6 @@ public class Neo4jParser {
     }
 
     public static Map<String, Object> parseJsonToMap(String json) throws IOException {
-        System.out.println(json);
         if (json.length() < 4) {
             return null;
         } else if (json.charAt(0) != '[') {
@@ -177,7 +225,6 @@ public class Neo4jParser {
     }
 
     public static Map<String, String> parseJsonToMapString(String json) throws IOException {
-        System.out.println(json);
         if (json.length() < 4) {
             return null;
         }
@@ -198,6 +245,15 @@ public class Neo4jParser {
             }
         }
         return nodesMap;
+    }
+
+    public static Map<String, Object> createJsonRequest(String method, String uri, int id, Object body) {
+        Map<String, Object> request = new HashMap<String, Object>();
+        request.put("method", method);
+        request.put("to", uri);
+        request.put("id", id);
+        request.put("body", body);
+        return request;
     }
 
 }

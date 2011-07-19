@@ -6,20 +6,25 @@ import com.sun.jersey.api.client.WebResource;
 import com.zenika.dorm.core.graph.impl.Usage;
 
 import javax.ws.rs.core.MediaType;
+import javax.xml.ws.Response;
 import java.io.IOException;
 import java.net.URI;
 import java.util.Map;
+import java.util.logging.Logger;
 
 /**
  * @author Antoine ROUAZE <antoine.rouaze AT zenika.com>
  */
 public class Neo4jRequestExecutor {
 
+    private static Logger logger = Logger.getLogger(Neo4jRequestExecutor.class.getName());
+
     public static final String NODE_ENTRY_POINT_URI = "http://localhost:7474/db/data/node";
     public static final String DATA_ENTRY_POINT_URI = "http://localhost:7474/db/data";
     public static final String INDEX_ENTRY_POINT_URI = "http://localhost:7474/db/data/index";
     public static final String METADATA_RELATIONSHIP = "metadata_relationship";
     public static final String ORIGIN_RELATIONSHIP = "origin_relationship";
+    public static final String BATCH_URI = "http://localhost:7474/db/data/batch";
 
 
     public void createRelationship(String node, String child, Usage usage) throws IOException {
@@ -85,24 +90,32 @@ public class Neo4jRequestExecutor {
     public Map<String, String> getPropertiesNode(String nodeUri) throws IOException {
         WebResource resource = Client.create().resource(nodeUri + "/properties");
         ClientResponse response = resource.accept(MediaType.APPLICATION_JSON).get(ClientResponse.class);
-        System.out.println("GET to " + nodeUri + "/properties" + ", status code " +
-                response.getStatus() + ", location header " +
-                (response.getLocation() != null ? response.getLocation().toString() : " null"));
+        logRequest("GET", resource.getURI(), response);
         return Neo4jParser.parseJsonToMapString(response.getEntity(String.class));
     }
 
-    public String getDependencyNode(String dependencyUri, String traverseJson){
+    public String getDependencyNode(String dependencyUri, String traverseJson) {
         WebResource resource = Client.create().resource(dependencyUri + "/traverse/relationship");
         ClientResponse response = resource.accept(MediaType.APPLICATION_JSON).type(MediaType.APPLICATION_JSON)
                 .entity(traverseJson).post(ClientResponse.class);
-        System.out.println("POST to " + dependencyUri + "/traverse/relationship" + ", status code " +
-                response.getStatus() + ", location header " +
-                (response.getLocation() != null ? response.getLocation().toString() : " null"));
+        logRequest("POST", resource.getURI(), response);
         return response.getEntity(String.class);
     }
 
-    private void logRequest(String type, URI request, ClientResponse response) {
-        System.out.println(type + " to " + request + ", status code " + response.getStatus() + ", location header " +
+    public String executeBatchRequests(String jsonRequest) throws Exception {
+        WebResource resource = Client.create().resource(BATCH_URI);
+        ClientResponse response = resource.accept(MediaType.APPLICATION_JSON).type(MediaType.APPLICATION_JSON)
+                .entity(jsonRequest).post(ClientResponse.class);
+        logRequest("POST", resource.getURI(), response);
+        if (response.getStatus() == 400 || response.getStatus() == 404) {
+            throw new Exception(response.getEntity(String.class));
+        }
+        return response.getEntity(String.class);
+    }
+
+
+    public static void logRequest(String type, URI request, ClientResponse response) {
+        logger.info(type + " to " + request + ", status code " + response.getStatus() + ", location header " +
                 (response.getLocation() != null ? response.getLocation().toString() : " null"));
     }
 
