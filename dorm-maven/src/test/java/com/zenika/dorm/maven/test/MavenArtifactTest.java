@@ -4,6 +4,7 @@ import com.zenika.dorm.core.modelnew.impl.DormArtifact;
 import com.zenika.dorm.core.modelnew.impl.DormModule;
 import com.zenika.dorm.core.modelnew.impl.DormScope;
 import com.zenika.dorm.maven.model.impl.MavenOrigin;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.fest.assertions.Assertions.assertThat;
@@ -11,6 +12,7 @@ import static org.fest.assertions.Assertions.assertThat;
 /**
  * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>
  */
+@Ignore
 public class MavenArtifactTest {
 
     @Test

@@ -12,6 +12,7 @@ import java.io.IOException;
 
 /**
  * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>
+ * @deprecated
  */
 abstract public class DormCoreUnitTest {
 

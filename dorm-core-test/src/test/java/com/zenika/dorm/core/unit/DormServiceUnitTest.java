@@ -6,6 +6,7 @@ import com.zenika.dorm.core.exception.RepositoryException;
 import com.zenika.dorm.core.model.old.DormArtifact;
 import com.zenika.dorm.core.model.old.MetadataExtension;
 import com.zenika.dorm.core.service.impl.DormServiceOldImpl;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -19,8 +20,9 @@ import static org.mockito.Mockito.verify;
 
 /**
  * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>
+ * @deprecated
  */
-
+@Ignore
 public class DormServiceUnitTest extends DormCoreUnitTest {
 
     @Mock

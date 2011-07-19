@@ -9,6 +9,7 @@ import com.zenika.dorm.core.model.impl.DefaultDormFile;
 import com.zenika.dorm.core.model.impl.DefaultDormMetadata;
 import com.zenika.dorm.core.service.DormService;
 import com.zenika.dorm.maven.model.impl.MavenOrigin;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.File;
@@ -56,6 +57,7 @@ import java.io.File;
  *
  * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>
  */
+@Ignore
 public class MavenWorkflowTest {
 
     /**

@@ -3,11 +3,14 @@ package com.zenika.dorm.core.model.unit;
 import com.zenika.dorm.core.model.impl.DefaultDormOrigin;
 import com.zenika.dorm.core.modelnew.impl.DormArtifact;
 import com.zenika.dorm.core.modelnew.impl.DormModule;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
  * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>
+ * @deprecated
  */
+@Ignore
 public class DormModuleTest {
 
     @Test
