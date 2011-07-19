@@ -127,7 +127,7 @@ public class DefaultProcessor implements Processor {
 
     public DependencyNode getParentNode(Map<String, String> properties, ProcessorExtension extension) {
 
-        Usage usage = (null != properties.get("usage")) ? new Usage(properties.get("Usage")) : new Usage();
+        Usage usage = Usage.create(properties.get("usage"));
 
         DormOrigin origin;
 

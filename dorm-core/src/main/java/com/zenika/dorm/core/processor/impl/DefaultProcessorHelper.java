@@ -23,6 +23,11 @@ public class DefaultProcessorHelper implements ProcessorHelper {
 
     @Override
     public DormFile createFile(DormProperties properties) {
+
+        if (!properties.hasFile()) {
+            return null;
+        }
+
         return new DefaultDormFile(properties.getFilename(), properties.getFile());
     }
 
@@ -38,11 +43,30 @@ public class DefaultProcessorHelper implements ProcessorHelper {
 
     @Override
     public Dependency createDependency(DormMetadata metadata, DormFile file, DormProperties properties) {
-        return new DefaultDependency(metadata, new Usage(properties.getUsage()), file);
+        return new DefaultDependency(metadata, Usage.create(properties.getUsage()), file);
     }
 
     @Override
-    public DependencyNode createDependencyNode(Dependency dependency) {
+    public Dependency createDependency(DormOrigin origin, DormProperties properties) {
+        return createDependency(createMetadata(origin, properties), properties);
+    }
+
+    @Override
+    public Dependency createDependency(DormOrigin origin, DormFile file, DormProperties properties) {
+        return createDependency(createMetadata(origin, properties), file, properties);
+    }
+
+    @Override
+    public DependencyNode createNode(Dependency dependency) {
         return new DefaultDependencyNode(dependency);
+    }
+
+    @Override
+    public DependencyNode createNode(DormOrigin origin, DormProperties properties) {
+
+        Dependency dependency = createDependency(createMetadata(origin, properties), createFile(properties),
+                properties);
+
+        return createNode(dependency);
     }
 }

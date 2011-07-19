@@ -19,11 +19,11 @@ public class DefaultDependency implements Dependency {
     private Boolean mainDependency = false;
 
     public DefaultDependency(DormMetadata metadata) {
-        this(metadata, new Usage(Usage.DEFAULT));
+        this(metadata, Usage.create());
     }
 
     public DefaultDependency(DormMetadata metadata, DormFile file) {
-        this(metadata, new Usage(Usage.DEFAULT), file);
+        this(metadata, Usage.create(), file);
     }
 
     public DefaultDependency(DormMetadata metadata, Usage usage) {

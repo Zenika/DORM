@@ -20,5 +20,33 @@ public interface ProcessorHelper {
 
     public Dependency createDependency(DormMetadata metadata, DormFile file, DormProperties properties);
 
-    public DependencyNode createDependencyNode(Dependency dependency);
+    /**
+     * Create dependency direct from origin
+     *
+     * @param origin
+     * @param properties
+     * @return
+     */
+    public Dependency createDependency(DormOrigin origin, DormProperties properties);
+
+    /**
+     * Create dependency direct from origin
+     *
+     * @param origin
+     * @param file
+     * @param properties
+     * @return
+     */
+    public Dependency createDependency(DormOrigin origin, DormFile file, DormProperties properties);
+
+    public DependencyNode createNode(Dependency dependency);
+
+    /**
+     * Direct proxy for simple node
+     *
+     * @param origin
+     * @param properties
+     * @return
+     */
+    public DependencyNode createNode(DormOrigin origin, DormProperties properties);
 }

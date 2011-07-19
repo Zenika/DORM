@@ -19,6 +19,8 @@ public interface DormProperties {
 
     public File getFile();
 
+    public Boolean hasFile();
+
     public void setVersion(String version);
 
     public String getVersion();

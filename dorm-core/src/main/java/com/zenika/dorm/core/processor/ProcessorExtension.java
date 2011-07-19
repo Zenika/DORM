@@ -23,5 +23,5 @@ public interface ProcessorExtension {
 
     public DormOrigin getParentOrigin(Map<String, String> properties);
 
-    public void push(DormProperties properties);
+    public DependencyNode push(DormProperties properties);
 }

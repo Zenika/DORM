@@ -1,5 +1,6 @@
 package com.zenika.dorm.maven.processor.extension;
 
+import com.zenika.dorm.core.model.DormFile;
 import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.core.model.DormOrigin;
 import com.zenika.dorm.core.model.DormProperties;
@@ -9,7 +10,7 @@ import com.zenika.dorm.core.model.graph.proposal1.impl.DefaultDependency;
 import com.zenika.dorm.core.model.graph.proposal1.impl.DefaultDependencyNode;
 import com.zenika.dorm.core.model.graph.proposal1.impl.Usage;
 import com.zenika.dorm.core.model.impl.DefaultDormMetadata;
-import com.zenika.dorm.core.processor.ProcessorExtension;
+import com.zenika.dorm.core.processor.impl.AbstractProcessorExtension;
 import com.zenika.dorm.maven.exception.MavenException;
 import com.zenika.dorm.maven.model.impl.MavenOrigin;
 import org.apache.commons.io.FilenameUtils;
@@ -22,7 +23,7 @@ import java.util.Set;
 /**
  * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>
  */
-public class MavenProcessor implements ProcessorExtension {
+public class MavenProcessor extends AbstractProcessorExtension {
 
     public static final String ENTITY_TYPE = "entity";
     public static final String INTERNAL_USAGE = "maven_internal";
@@ -151,7 +152,36 @@ public class MavenProcessor implements ProcessorExtension {
     }
 
     @Override
-    public void push(DormProperties properties) {
+    public DependencyNode push(DormProperties properties) {
 
+        // get the maven type from the filename
+        String type = FilenameUtils.getExtension(properties.getFilename());
+
+        if (type != "jar" || type != "pom" || type != "sha1") {
+            throw new MavenException("invalid maven type");
+        }
+
+        MavenOrigin rootOrigin = new MavenOrigin(properties.getProperty("groupId"),
+                properties.getProperty("artifactId"), properties.getProperty("versionId"),
+                MavenProcessor.ENTITY_TYPE);
+
+        MavenOrigin origin = new MavenOrigin(properties.getProperty("groupId"),
+                properties.getProperty("artifactId"), properties.getProperty("versionId"), type);
+
+        Dependency rootDependency = getHelper().createDependency(rootOrigin, properties);
+
+        if (!properties.hasFile()) {
+            throw new MavenException("File is required");
+        }
+
+        DormFile file = getHelper().createFile(properties);
+        properties.setUsage(MavenProcessor.INTERNAL_USAGE);
+        Dependency dependency = getHelper().createDependency(origin, file, properties);
+
+        DependencyNode root = getHelper().createNode(dependency);
+        DependencyNode node = getHelper().createNode(dependency);
+        root.addChild(node);
+
+        return root;
     }
 }

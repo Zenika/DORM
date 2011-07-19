@@ -1,5 +1,7 @@
 package com.zenika.dorm.core.model.graph.proposal1.impl;
 
+import com.zenika.dorm.core.exception.CoreException;
+
 /**
  * Similar to Configuration in ivy or Scope in maven
  * Maybe find better name for that ?
@@ -8,15 +10,35 @@ package com.zenika.dorm.core.model.graph.proposal1.impl;
  */
 public class Usage {
 
-    public static final String DEFAULT = "default";
+    private static final String DEFAULT = "default";
+    private static final String INTERNAL_KEYWORD = "dorm_internal_";
 
     private String name;
 
-    public Usage() {
-        this(Usage.DEFAULT);
+    public static Usage create() {
+        return new Usage(Usage.DEFAULT);
     }
 
+    public static Usage create(String name) {
+
+        // check if name is not reserved for internal usages
+        if (name.substring(Usage.INTERNAL_KEYWORD.length()).equalsIgnoreCase(Usage.INTERNAL_KEYWORD)) {
+            throw new CoreException(name + " is reserved for internal usages. Use the factory methods.");
+        }
+
+        return new Usage(name);
+    }
+
+    public static Usage createInternal(String name) {
+        return new Usage(INTERNAL_KEYWORD + name);
+    }
+
+    /**
+     * @param name
+     * @deprecated use the factory methods
+     */
     public Usage(String name) {
+
         if (null == name) {
             name = Usage.DEFAULT;
         }
@@ -48,9 +70,5 @@ public class Usage {
 
     public String getName() {
         return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 }
