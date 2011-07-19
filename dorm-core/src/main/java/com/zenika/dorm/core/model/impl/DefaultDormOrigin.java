@@ -43,15 +43,15 @@ public class DefaultDormOrigin implements DormOrigin {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        DefaultDormOrigin that = (DefaultDormOrigin) o;
+        DefaultDormOrigin origin = (DefaultDormOrigin) o;
 
-        if (!name.equals(that.name)) return false;
+        if (name != null ? !name.equals(origin.name) : origin.name != null) return false;
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        return name.hashCode();
+        return name != null ? name.hashCode() : 0;
     }
 }

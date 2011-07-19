@@ -56,7 +56,12 @@ public class DormProcessor extends AbstractProcessorExtension {
             throw new CoreException("File is required");
         }
 
+        if (null == properties.getProperty("qualifier")) {
+            throw new CoreException("Qualifier is null");
+        }
+
         DormOrigin origin = new DefaultDormOrigin(properties.getProperty("qualifier"));
+
         return getHelper().createNode(origin, properties);
     }
 }

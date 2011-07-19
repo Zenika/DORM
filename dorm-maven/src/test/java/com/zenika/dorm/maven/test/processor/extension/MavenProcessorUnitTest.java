@@ -1,6 +1,7 @@
 package com.zenika.dorm.maven.test.processor.extension;
 
-import com.zenika.dorm.core.test.unit.AbstractUnitTest;
+
+import com.zenika.dorm.maven.test.unit.AbstractUnitTest;
 
 /**
  * Unit tests for the maven processor

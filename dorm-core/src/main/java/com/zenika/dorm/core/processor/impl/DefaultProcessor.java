@@ -48,6 +48,10 @@ public class DefaultProcessor implements Processor {
     @Override
     public Boolean push(DormProperties properties) {
 
+        if (null == properties) {
+            throw new CoreException("Properties are null or incomplete");
+        }
+
         DependencyNode node = getExtension(properties.getOrigin()).push(properties);
 
         return service.pushNode(node);

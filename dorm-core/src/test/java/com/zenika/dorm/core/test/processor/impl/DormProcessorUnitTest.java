@@ -47,6 +47,7 @@ public class DormProcessorUnitTest extends AbstractUnitTest {
 
         DormProperties properties = new DefaultDormProperties("1.0", DefaultDormOrigin.ORIGIN);
         properties.setFile(filename, file);
+        properties.setProperty("qualifier", qualifier);
 
         DependencyNode node = new DefaultDependencyNode(new DefaultDependency(
                 new DefaultDormMetadata("1.0", origin), dormFile));
@@ -55,7 +56,8 @@ public class DormProcessorUnitTest extends AbstractUnitTest {
 
         // test fails, have to fix this tomorrow !
         // todo: fix falling test
-        //Assertions.assertThat(processor.push(properties)).isEqualTo(node);
+//        Assertions.assertThat(processor.push(properties)).isNotEqualTo(node);
+        processor.push(properties);
 
         verify(helper).createNode(origin, properties);
     }
