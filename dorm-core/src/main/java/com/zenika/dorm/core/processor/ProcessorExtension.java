@@ -1,8 +1,8 @@
 package com.zenika.dorm.core.processor;
 
+import com.zenika.dorm.core.graph.DependencyNode;
 import com.zenika.dorm.core.model.DormOrigin;
 import com.zenika.dorm.core.model.DormProperties;
-import com.zenika.dorm.core.model.graph.proposal1.DependencyNode;
 
 import java.util.Map;
 import java.util.Set;

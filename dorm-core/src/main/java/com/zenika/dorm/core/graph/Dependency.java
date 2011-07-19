@@ -1,8 +1,8 @@
-package com.zenika.dorm.core.model.graph.proposal1;
+package com.zenika.dorm.core.graph;
 
+import com.zenika.dorm.core.graph.impl.Usage;
 import com.zenika.dorm.core.model.DormFile;
 import com.zenika.dorm.core.model.DormMetadata;
-import com.zenika.dorm.core.model.graph.proposal1.impl.Usage;
 
 /**
  * Represents a dependency on an artifact + an usage

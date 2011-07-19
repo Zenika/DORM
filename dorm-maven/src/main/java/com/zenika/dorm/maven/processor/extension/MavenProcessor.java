@@ -1,14 +1,14 @@
 package com.zenika.dorm.maven.processor.extension;
 
+import com.zenika.dorm.core.graph.Dependency;
+import com.zenika.dorm.core.graph.DependencyNode;
 import com.zenika.dorm.core.model.DormFile;
 import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.core.model.DormOrigin;
 import com.zenika.dorm.core.model.DormProperties;
-import com.zenika.dorm.core.model.graph.proposal1.Dependency;
-import com.zenika.dorm.core.model.graph.proposal1.DependencyNode;
-import com.zenika.dorm.core.model.graph.proposal1.impl.DefaultDependency;
-import com.zenika.dorm.core.model.graph.proposal1.impl.DefaultDependencyNode;
-import com.zenika.dorm.core.model.graph.proposal1.impl.Usage;
+import com.zenika.dorm.core.graph.impl.DefaultDependency;
+import com.zenika.dorm.core.graph.impl.DefaultDependencyNode;
+import com.zenika.dorm.core.graph.impl.Usage;
 import com.zenika.dorm.core.model.impl.DefaultDormMetadata;
 import com.zenika.dorm.core.processor.impl.AbstractProcessorExtension;
 import com.zenika.dorm.maven.exception.MavenException;

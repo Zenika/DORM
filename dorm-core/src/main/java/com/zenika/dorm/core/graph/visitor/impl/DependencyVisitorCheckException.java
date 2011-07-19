@@ -1,4 +1,4 @@
-package com.zenika.dorm.core.model.graph.proposal1.visitor.impl;
+package com.zenika.dorm.core.graph.visitor.impl;
 
 /**
  * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>

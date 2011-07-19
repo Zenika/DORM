@@ -1,24 +1,35 @@
-package com.zenika.dorm.core.model.graph.proposal1.impl;
+package com.zenika.dorm.core.graph.impl;
 
-import com.zenika.dorm.core.model.graph.proposal1.Dependency;
-import com.zenika.dorm.core.model.graph.proposal1.DependencyNode;
-import com.zenika.dorm.core.model.graph.proposal1.DependencyNodeComposite;
-import com.zenika.dorm.core.model.graph.proposal1.visitor.DependencyVisitor;
+import com.zenika.dorm.core.graph.Dependency;
+import com.zenika.dorm.core.graph.DependencyNode;
+import com.zenika.dorm.core.graph.visitor.DependencyVisitor;
 
 import java.util.HashSet;
 import java.util.Set;
 
 /**
+ * Default implementation of node dependency
+ *
  * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>
- * @deprecated
  */
-public class DefaultDependencyNodeComposite extends DefaultDependencyNode implements
-        DependencyNodeComposite {
+public class DefaultDependencyNode implements DependencyNode {
+
+    private Dependency dependency;
 
     private Set<DependencyNode> childrens = new HashSet<DependencyNode>();
 
-    public DefaultDependencyNodeComposite(Dependency dependency) {
-        super(dependency);
+    public DefaultDependencyNode(Dependency dependency) {
+        this.dependency = dependency;
+    }
+
+    @Override
+    public void setDependency(Dependency dependency) {
+        this.dependency = dependency;
+    }
+
+    @Override
+    public Dependency getDependency() {
+        return dependency;
     }
 
     @Override

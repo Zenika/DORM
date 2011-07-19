@@ -1,8 +1,8 @@
-package com.zenika.dorm.core.model.graph.proposal1.visitor.impl;
+package com.zenika.dorm.core.graph.visitor.impl;
 
-import com.zenika.dorm.core.model.graph.proposal1.DependencyNode;
+import com.zenika.dorm.core.graph.DependencyNode;
+import com.zenika.dorm.core.graph.visitor.AbstractDependencyVisitor;
 import com.zenika.dorm.core.model.graph.proposal1.DependencyNodeLeaf;
-import com.zenika.dorm.core.model.graph.proposal1.visitor.AbstractDependencyVisitor;
 
 /**
  * Graph visitor that prints dependencies in the console

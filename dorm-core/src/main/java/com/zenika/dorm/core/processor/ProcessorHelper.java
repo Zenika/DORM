@@ -1,11 +1,11 @@
 package com.zenika.dorm.core.processor;
 
+import com.zenika.dorm.core.graph.Dependency;
+import com.zenika.dorm.core.graph.DependencyNode;
 import com.zenika.dorm.core.model.DormFile;
 import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.core.model.DormOrigin;
 import com.zenika.dorm.core.model.DormProperties;
-import com.zenika.dorm.core.model.graph.proposal1.Dependency;
-import com.zenika.dorm.core.model.graph.proposal1.DependencyNode;
 
 /**
  * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>

@@ -3,7 +3,7 @@ package com.zenika.dorm.core.dao.neo4j.util;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
-import com.zenika.dorm.core.model.graph.proposal1.impl.Usage;
+import com.zenika.dorm.core.graph.impl.Usage;
 
 import javax.ws.rs.core.MediaType;
 import java.io.IOException;

@@ -1,8 +1,7 @@
-package com.zenika.dorm.core.model.graph.proposal1;
+package com.zenika.dorm.core.graph;
 
-import com.zenika.dorm.core.model.graph.proposal1.visitor.DependencyVisitor;
+import com.zenika.dorm.core.graph.visitor.DependencyVisitor;
 
-import java.util.List;
 import java.util.Set;
 
 /**

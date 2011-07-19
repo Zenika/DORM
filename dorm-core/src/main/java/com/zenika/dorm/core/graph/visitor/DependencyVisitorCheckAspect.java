@@ -1,8 +1,8 @@
-package com.zenika.dorm.core.model.graph.proposal1.visitor;
+package com.zenika.dorm.core.graph.visitor;
 
+import com.zenika.dorm.core.graph.visitor.impl.DependencyVisitorCheckException;
 import com.zenika.dorm.core.model.graph.proposal1.DependencyNodeComposite;
 import com.zenika.dorm.core.model.graph.proposal1.DependencyNodeLeaf;
-import com.zenika.dorm.core.model.graph.proposal1.visitor.impl.DependencyVisitorCheckException;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -20,7 +20,7 @@ public class DependencyVisitorCheckAspect {
      * @param node    the composite node
      * @param visitor the current visitor
      */
-    @Pointcut("execution(Boolean com.zenika.dorm.core.model.graph.proposal1.visitor.DependencyVisitor.visitEnter" +
+    @Pointcut("execution(Boolean com.zenika.dorm.core.graph.visitor.DependencyVisitor.visitEnter" +
             "(com.zenika.dorm.core.model.graph.proposal1.DependencyNodeComposite)) && args(node) " +
             "&& target(visitor)")
     public void visitComposite(DependencyNodeComposite node, DependencyVisitor visitor) {
@@ -32,7 +32,7 @@ public class DependencyVisitorCheckAspect {
      * @param node    the leaf node
      * @param visitor the current visitor
      */
-    @Pointcut("execution(Boolean com.zenika.dorm.core.model.graph.proposal1.visitor.DependencyVisitor.visit" +
+    @Pointcut("execution(Boolean com.zenika.dorm.core.graph.visitor.DependencyVisitor.visit" +
             "(com.zenika.dorm.core.model.graph.proposal1.DependencyNodeLeaf)) && args(node) " +
             "&& target(visitor)")
     public void visitLeaf(DependencyNodeLeaf node, DependencyVisitor visitor) {

@@ -1,4 +1,4 @@
-package com.zenika.dorm.core.model.graph.proposal1.impl;
+package com.zenika.dorm.core.graph.impl;
 
 import com.zenika.dorm.core.exception.CoreException;
 

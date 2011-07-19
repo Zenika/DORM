@@ -1,10 +1,10 @@
 package com.zenika.dorm.maven.test;
 
+import com.zenika.dorm.core.graph.Dependency;
+import com.zenika.dorm.core.graph.impl.DefaultDependency;
 import com.zenika.dorm.core.model.DormFile;
 import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.core.model.DormOrigin;
-import com.zenika.dorm.core.model.graph.proposal1.Dependency;
-import com.zenika.dorm.core.model.graph.proposal1.impl.DefaultDependency;
 import com.zenika.dorm.core.model.impl.DefaultDormFile;
 import com.zenika.dorm.core.model.impl.DefaultDormMetadata;
 import com.zenika.dorm.core.service.DormService;

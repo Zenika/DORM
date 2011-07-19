@@ -1,12 +1,12 @@
 package com.zenika.dorm.core.processor.impl;
 
 import com.zenika.dorm.core.exception.CoreException;
+import com.zenika.dorm.core.graph.DependencyNode;
+import com.zenika.dorm.core.graph.impl.DefaultDependency;
+import com.zenika.dorm.core.graph.impl.DefaultDependencyNode;
 import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.core.model.DormOrigin;
 import com.zenika.dorm.core.model.DormProperties;
-import com.zenika.dorm.core.model.graph.proposal1.DependencyNode;
-import com.zenika.dorm.core.model.graph.proposal1.impl.DefaultDependency;
-import com.zenika.dorm.core.model.graph.proposal1.impl.DefaultDependencyNode;
 import com.zenika.dorm.core.model.impl.DefaultDormMetadata;
 import com.zenika.dorm.core.model.impl.DefaultDormOrigin;
 

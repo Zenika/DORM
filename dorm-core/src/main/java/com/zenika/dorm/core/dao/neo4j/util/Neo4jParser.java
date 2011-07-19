@@ -1,26 +1,22 @@
 package com.zenika.dorm.core.dao.neo4j.util;
 
-import com.sun.jersey.api.client.ClientResponse;
+import com.zenika.dorm.core.graph.Dependency;
+import com.zenika.dorm.core.graph.DependencyNode;
+import com.zenika.dorm.core.graph.impl.DefaultDependency;
+import com.zenika.dorm.core.graph.impl.DefaultDependencyNode;
+import com.zenika.dorm.core.graph.impl.Usage;
 import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.core.model.DormOrigin;
-import com.zenika.dorm.core.model.graph.proposal1.Dependency;
-import com.zenika.dorm.core.model.graph.proposal1.DependencyNode;
-import com.zenika.dorm.core.model.graph.proposal1.impl.DefaultDependency;
-import com.zenika.dorm.core.model.graph.proposal1.impl.DefaultDependencyNode;
-import com.zenika.dorm.core.model.graph.proposal1.impl.Usage;
 import com.zenika.dorm.core.model.impl.DefaultDormMetadata;
 import com.zenika.dorm.core.model.mapper.OriginMapper;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
-import static com.zenika.dorm.core.dao.neo4j.util.Neo4jRequestExecutor.*;
+import static com.zenika.dorm.core.dao.neo4j.util.Neo4jRequestExecutor.METADATA_RELATIONSHIP;
+import static com.zenika.dorm.core.dao.neo4j.util.Neo4jRequestExecutor.ORIGIN_RELATIONSHIP;
 
 /**
  * @author Antoine ROUAZE <antoine.rouaze AT zenika.com>

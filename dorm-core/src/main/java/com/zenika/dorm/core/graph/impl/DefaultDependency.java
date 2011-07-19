@@ -1,8 +1,8 @@
-package com.zenika.dorm.core.model.graph.proposal1.impl;
+package com.zenika.dorm.core.graph.impl;
 
+import com.zenika.dorm.core.graph.Dependency;
 import com.zenika.dorm.core.model.DormFile;
 import com.zenika.dorm.core.model.DormMetadata;
-import com.zenika.dorm.core.model.graph.proposal1.Dependency;
 
 /**
  * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>
