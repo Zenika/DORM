@@ -1,4 +1,4 @@
-package com.zenika.dorm.maven.test;
+package com.zenika.dorm.maven.test.integration;
 
 import com.zenika.dorm.core.graph.Dependency;
 import com.zenika.dorm.core.graph.impl.DefaultDependency;
@@ -7,14 +7,16 @@ import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.core.model.DormOrigin;
 import com.zenika.dorm.core.model.impl.DefaultDormFile;
 import com.zenika.dorm.core.model.impl.DefaultDormMetadata;
-import com.zenika.dorm.core.service.DormService;
+import com.zenika.dorm.core.processor.Processor;
+import com.zenika.dorm.core.processor.impl.DefaultProcessor;
 import com.zenika.dorm.maven.model.impl.MavenOrigin;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.File;
 
 /**
+ * Integration test for maven extension
+ *
  * Test to represent a real use case of maven repository's import
  * This is a test on the model, to test it in a real use case et define if it's correct
  * We will not use and test web service, processor or services.
@@ -57,13 +59,9 @@ import java.io.File;
  *
  * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>
  */
-@Ignore
-public class MavenWorkflowTest {
+public class MavenImportTest {
 
-    /**
-     * Should be mocked with mockito
-     */
-    private DormService service;
+    private Processor processor = new DefaultProcessor();
 
     @Test
     public void test() {
@@ -85,7 +83,7 @@ public class MavenWorkflowTest {
         // store dependency
         // 1. create node com.zenika:a:1.0:1.0:maven
         // 2. store a.pom.xml in the FS
-        service.pushDependency(dependencyApom);
+//        service.pushDependency(dependencyApom);
 
         // import A.jar
 
@@ -103,6 +101,6 @@ public class MavenWorkflowTest {
         // store
         // 1. find node com.zenika:a:1.0:1.0:maven
         // 2. store a.jar in the FS
-        service.pushDependency(dependencyAjar);
+//        service.pushDependency(dependencyAjar);
     }
 }

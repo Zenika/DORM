@@ -12,7 +12,7 @@ import java.util.Map;
 /**
  * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>
  */
-public class OriginMapperTest {
+public class OriginMapperUnitTest {
 
     @Test
     public void fromOrigin() {
