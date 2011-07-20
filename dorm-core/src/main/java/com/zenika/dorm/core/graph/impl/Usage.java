@@ -22,7 +22,8 @@ public class Usage {
     public static Usage create(String name) {
 
         // check if name is not reserved for internal usages
-        if (name.substring(Usage.INTERNAL_KEYWORD.length()).equalsIgnoreCase(Usage.INTERNAL_KEYWORD)) {
+        if (name.length() >= Usage.INTERNAL_KEYWORD.length() &&
+                name.substring(Usage.INTERNAL_KEYWORD.length()).equalsIgnoreCase(Usage.INTERNAL_KEYWORD)) {
             throw new CoreException(name + " is reserved for internal usages. Use the factory methods.");
         }
 
