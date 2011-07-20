@@ -10,7 +10,7 @@ import com.zenika.dorm.core.model.impl.DefaultDormFile;
 import com.zenika.dorm.core.model.impl.DefaultDormMetadata;
 import com.zenika.dorm.core.model.impl.DefaultDormOrigin;
 import com.zenika.dorm.core.model.impl.DefaultDormRequest;
-import com.zenika.dorm.core.processor.ProcessorHelper;
+import com.zenika.dorm.core.processor.RequestProcessor;
 import com.zenika.dorm.core.processor.impl.DormProcessor;
 import com.zenika.dorm.core.test.unit.AbstractUnitTest;
 import org.junit.Test;
@@ -30,7 +30,7 @@ import static org.mockito.Mockito.verify;
 public class DormProcessorUnitTest extends AbstractUnitTest {
 
     @Mock
-    private ProcessorHelper helper;
+    private RequestProcessor requestProcessor;
 
     @InjectMocks
     private DormProcessor processor = new DormProcessor();
@@ -52,7 +52,7 @@ public class DormProcessorUnitTest extends AbstractUnitTest {
         DependencyNode node = new DefaultDependencyNode(new DefaultDependency(
                 new DefaultDormMetadata("1.0", origin), dormFile));
 
-        given(helper.createNode(origin, request)).willReturn(node);
+        given(requestProcessor.createNode(origin, request)).willReturn(node);
 
         // test fails, have to fix this tomorrow !
         // todo: fix falling test

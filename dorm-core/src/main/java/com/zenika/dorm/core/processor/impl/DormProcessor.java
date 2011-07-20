@@ -61,6 +61,6 @@ public class DormProcessor extends AbstractProcessorExtension {
 
         DormOrigin origin = new DefaultDormOrigin(request.getProperty("qualifier"));
 
-        return getHelper().createNode(origin, request);
+        return getRequestProcessor().createNode(origin, request);
     }
 }

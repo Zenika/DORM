@@ -11,15 +11,15 @@ import com.zenika.dorm.core.graph.impl.DefaultDependencyNode;
 import com.zenika.dorm.core.graph.impl.Usage;
 import com.zenika.dorm.core.model.impl.DefaultDormFile;
 import com.zenika.dorm.core.model.impl.DefaultDormMetadata;
-import com.zenika.dorm.core.processor.ProcessorHelper;
+import com.zenika.dorm.core.processor.RequestProcessor;
 
 /**
  * Default implementation
  *
  * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>
- * @see ProcessorHelper
+ * @see com.zenika.dorm.core.processor.RequestProcessor
  */
-public class DefaultProcessorHelper implements ProcessorHelper {
+public class DefaultRequestProcessor implements RequestProcessor {
 
     @Override
     public DormFile createFile(DormRequest request) {

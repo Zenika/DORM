@@ -2,7 +2,7 @@ package com.zenika.dorm.core.processor.impl;
 
 import com.google.inject.Inject;
 import com.zenika.dorm.core.processor.ProcessorExtension;
-import com.zenika.dorm.core.processor.ProcessorHelper;
+import com.zenika.dorm.core.processor.RequestProcessor;
 
 /**
  * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>
@@ -10,9 +10,9 @@ import com.zenika.dorm.core.processor.ProcessorHelper;
 public abstract class AbstractProcessorExtension implements ProcessorExtension {
 
     @Inject
-    private ProcessorHelper helper;
+    private RequestProcessor requestProcessor;
 
-    protected ProcessorHelper getHelper() {
-        return helper;
+    protected RequestProcessor getRequestProcessor() {
+        return requestProcessor;
     }
 }

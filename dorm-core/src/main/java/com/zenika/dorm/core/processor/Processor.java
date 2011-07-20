@@ -25,5 +25,5 @@ public interface Processor {
 
     public Boolean push(DormRequest request);
 
-    public ProcessorHelper getHelper();
+    public RequestProcessor getRequestProcessor();
 }

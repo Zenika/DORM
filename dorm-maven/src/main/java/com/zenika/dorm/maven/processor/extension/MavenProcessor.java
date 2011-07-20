@@ -168,18 +168,18 @@ public class MavenProcessor extends AbstractProcessorExtension {
         MavenOrigin origin = new MavenOrigin(request.getProperty("groupId"),
                 request.getProperty("artifactId"), request.getProperty("versionId"), type);
 
-        Dependency rootDependency = getHelper().createDependency(rootOrigin, request);
+        Dependency rootDependency = getRequestProcessor().createDependency(rootOrigin, request);
 
         if (!request.hasFile()) {
             throw new MavenException("File is required");
         }
 
-        DormFile file = getHelper().createFile(request);
+        DormFile file = getRequestProcessor().createFile(request);
         request.setUsage(MavenProcessor.INTERNAL_USAGE);
-        Dependency dependency = getHelper().createDependency(origin, file, request);
+        Dependency dependency = getRequestProcessor().createDependency(origin, file, request);
 
-        DependencyNode root = getHelper().createNode(dependency);
-        DependencyNode node = getHelper().createNode(dependency);
+        DependencyNode root = getRequestProcessor().createNode(dependency);
+        DependencyNode node = getRequestProcessor().createNode(dependency);
         root.addChild(node);
 
         return root;

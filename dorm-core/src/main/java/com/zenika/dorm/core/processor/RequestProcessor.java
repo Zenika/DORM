@@ -10,7 +10,7 @@ import com.zenika.dorm.core.model.DormRequest;
 /**
  * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>
  */
-public interface ProcessorHelper {
+public interface RequestProcessor {
 
     public DormFile createFile(DormRequest request);
 
@@ -42,7 +42,7 @@ public interface ProcessorHelper {
     public DependencyNode createNode(Dependency dependency);
 
     /**
-     * Direct proxy for simple node
+     * Create simple node from origin
      *
      * @param origin
      * @param request
