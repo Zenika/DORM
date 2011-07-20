@@ -6,7 +6,7 @@ import com.zenika.dorm.core.graph.impl.DefaultDependency;
 import com.zenika.dorm.core.graph.impl.DefaultDependencyNode;
 import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.core.model.DormOrigin;
-import com.zenika.dorm.core.model.DormProperties;
+import com.zenika.dorm.core.model.DormRequest;
 import com.zenika.dorm.core.model.impl.DefaultDormMetadata;
 import com.zenika.dorm.core.model.impl.DefaultDormOrigin;
 
@@ -46,22 +46,22 @@ public class DormProcessor extends AbstractProcessorExtension {
     /**
      * Create a simple node with the file and the origin
      *
-     * @param properties
+     * @param request
      * @return the node containing the file and the origin
      */
     @Override
-    public DependencyNode push(DormProperties properties) {
+    public DependencyNode push(DormRequest request) {
 
-        if (!properties.hasFile()) {
+        if (!request.hasFile()) {
             throw new CoreException("File is required");
         }
 
-        if (null == properties.getProperty("qualifier")) {
+        if (null == request.getProperty("qualifier")) {
             throw new CoreException("Qualifier is null");
         }
 
-        DormOrigin origin = new DefaultDormOrigin(properties.getProperty("qualifier"));
+        DormOrigin origin = new DefaultDormOrigin(request.getProperty("qualifier"));
 
-        return getHelper().createNode(origin, properties);
+        return getHelper().createNode(origin, request);
     }
 }

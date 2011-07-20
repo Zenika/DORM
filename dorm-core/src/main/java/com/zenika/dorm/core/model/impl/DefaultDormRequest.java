@@ -1,6 +1,6 @@
 package com.zenika.dorm.core.model.impl;
 
-import com.zenika.dorm.core.model.DormProperties;
+import com.zenika.dorm.core.model.DormRequest;
 
 import java.io.File;
 import java.util.HashMap;
@@ -13,7 +13,7 @@ import java.util.Set;
  *
  * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>
  */
-public class DefaultDormProperties implements DormProperties {
+public class DefaultDormRequest implements DormRequest {
 
     private final static String VERSION = "version";
     private final static String USAGE = "usage";
@@ -24,14 +24,14 @@ public class DefaultDormProperties implements DormProperties {
     private Map<String, String> properties = new HashMap<String, String>();
     private File file;
 
-    private DefaultDormProperties() {
-        reservedKeys.add(DefaultDormProperties.VERSION);
-        reservedKeys.add(DefaultDormProperties.USAGE);
-        reservedKeys.add(DefaultDormProperties.ORIGIN);
-        reservedKeys.add(DefaultDormProperties.FILENAME);
+    private DefaultDormRequest() {
+        reservedKeys.add(DefaultDormRequest.VERSION);
+        reservedKeys.add(DefaultDormRequest.USAGE);
+        reservedKeys.add(DefaultDormRequest.ORIGIN);
+        reservedKeys.add(DefaultDormRequest.FILENAME);
     }
 
-    public DefaultDormProperties(String version, String origin) {
+    public DefaultDormRequest(String version, String origin) {
         this();
         setVersion(version);
         setOrigin(origin);
@@ -39,23 +39,23 @@ public class DefaultDormProperties implements DormProperties {
 
     @Override
     public void setOrigin(String origin) {
-        properties.put(DefaultDormProperties.ORIGIN, origin);
+        properties.put(DefaultDormRequest.ORIGIN, origin);
     }
 
     @Override
     public String getOrigin() {
-        return properties.get(DefaultDormProperties.ORIGIN);
+        return properties.get(DefaultDormRequest.ORIGIN);
     }
 
     @Override
     public void setFile(String filename, File file) {
         this.file = file;
-        properties.put(DefaultDormProperties.FILENAME, filename);
+        properties.put(DefaultDormRequest.FILENAME, filename);
     }
 
     @Override
     public String getFilename() {
-        return properties.get(DefaultDormProperties.FILENAME);
+        return properties.get(DefaultDormRequest.FILENAME);
     }
 
     @Override
@@ -70,22 +70,22 @@ public class DefaultDormProperties implements DormProperties {
 
     @Override
     public void setVersion(String version) {
-        properties.put(DefaultDormProperties.VERSION, version);
+        properties.put(DefaultDormRequest.VERSION, version);
     }
 
     @Override
     public String getVersion() {
-        return properties.get(DefaultDormProperties.VERSION);
+        return properties.get(DefaultDormRequest.VERSION);
     }
 
     @Override
     public void setUsage(String usage) {
-        properties.put(DefaultDormProperties.USAGE, usage);
+        properties.put(DefaultDormRequest.USAGE, usage);
     }
 
     @Override
     public String getUsage() {
-        return properties.get(DefaultDormProperties.USAGE);
+        return properties.get(DefaultDormRequest.USAGE);
     }
 
     @Override

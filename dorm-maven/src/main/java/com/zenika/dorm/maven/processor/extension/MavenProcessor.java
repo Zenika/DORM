@@ -5,7 +5,7 @@ import com.zenika.dorm.core.graph.DependencyNode;
 import com.zenika.dorm.core.model.DormFile;
 import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.core.model.DormOrigin;
-import com.zenika.dorm.core.model.DormProperties;
+import com.zenika.dorm.core.model.DormRequest;
 import com.zenika.dorm.core.graph.impl.DefaultDependency;
 import com.zenika.dorm.core.graph.impl.DefaultDependencyNode;
 import com.zenika.dorm.core.graph.impl.Usage;
@@ -152,31 +152,31 @@ public class MavenProcessor extends AbstractProcessorExtension {
     }
 
     @Override
-    public DependencyNode push(DormProperties properties) {
+    public DependencyNode push(DormRequest request) {
 
         // get the maven type from the filename
-        String type = FilenameUtils.getExtension(properties.getFilename());
+        String type = FilenameUtils.getExtension(request.getFilename());
 
         if (type != "jar" || type != "pom" || type != "sha1") {
             throw new MavenException("invalid maven type");
         }
 
-        MavenOrigin rootOrigin = new MavenOrigin(properties.getProperty("groupId"),
-                properties.getProperty("artifactId"), properties.getProperty("versionId"),
+        MavenOrigin rootOrigin = new MavenOrigin(request.getProperty("groupId"),
+                request.getProperty("artifactId"), request.getProperty("versionId"),
                 MavenProcessor.ENTITY_TYPE);
 
-        MavenOrigin origin = new MavenOrigin(properties.getProperty("groupId"),
-                properties.getProperty("artifactId"), properties.getProperty("versionId"), type);
+        MavenOrigin origin = new MavenOrigin(request.getProperty("groupId"),
+                request.getProperty("artifactId"), request.getProperty("versionId"), type);
 
-        Dependency rootDependency = getHelper().createDependency(rootOrigin, properties);
+        Dependency rootDependency = getHelper().createDependency(rootOrigin, request);
 
-        if (!properties.hasFile()) {
+        if (!request.hasFile()) {
             throw new MavenException("File is required");
         }
 
-        DormFile file = getHelper().createFile(properties);
-        properties.setUsage(MavenProcessor.INTERNAL_USAGE);
-        Dependency dependency = getHelper().createDependency(origin, file, properties);
+        DormFile file = getHelper().createFile(request);
+        request.setUsage(MavenProcessor.INTERNAL_USAGE);
+        Dependency dependency = getHelper().createDependency(origin, file, request);
 
         DependencyNode root = getHelper().createNode(dependency);
         DependencyNode node = getHelper().createNode(dependency);

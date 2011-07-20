@@ -4,10 +4,10 @@ import com.zenika.dorm.core.exception.CoreException;
 import com.zenika.dorm.core.graph.DependencyNode;
 import com.zenika.dorm.core.graph.impl.DefaultDependency;
 import com.zenika.dorm.core.graph.impl.DefaultDependencyNode;
-import com.zenika.dorm.core.model.DormProperties;
+import com.zenika.dorm.core.model.DormRequest;
 import com.zenika.dorm.core.model.impl.DefaultDormMetadata;
 import com.zenika.dorm.core.model.impl.DefaultDormOrigin;
-import com.zenika.dorm.core.model.impl.DefaultDormProperties;
+import com.zenika.dorm.core.model.impl.DefaultDormRequest;
 import com.zenika.dorm.core.processor.Processor;
 import com.zenika.dorm.core.processor.ProcessorExtension;
 import com.zenika.dorm.core.processor.impl.DefaultProcessor;
@@ -53,24 +53,24 @@ public class ProcessorUnitTest extends AbstractUnitTest {
     @Test
     public void push() {
 
-        DormProperties properties = new DefaultDormProperties("1.0", "test");
+        DormRequest request = new DefaultDormRequest("1.0", "test");
 
         DependencyNode node = new DefaultDependencyNode(new DefaultDependency(
                 new DefaultDormMetadata("1.0", new DefaultDormOrigin("test"))));
 
-        given(extension.push(properties)).willReturn(node);
+        given(extension.push(request)).willReturn(node);
 
         given(service.pushNode(node)).willReturn(true);
-        Assertions.assertThat(processor.push(properties)).isTrue();
+        Assertions.assertThat(processor.push(request)).isTrue();
 
-        verify(extension).push(properties);
+        verify(extension).push(request);
         verify(service).pushNode(node);
     }
 
     @Test(expected = CoreException.class)
     public void pushWithUnkownExtension() {
-        DormProperties properties = new DefaultDormProperties("1.0", "foo");
-        processor.push(properties);
+        DormRequest request = new DefaultDormRequest("1.0", "foo");
+        processor.push(request);
     }
 
     @Test(expected = CoreException.class)

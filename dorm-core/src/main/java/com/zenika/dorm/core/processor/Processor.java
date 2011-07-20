@@ -1,7 +1,7 @@
 package com.zenika.dorm.core.processor;
 
 import com.google.inject.Singleton;
-import com.zenika.dorm.core.model.DormProperties;
+import com.zenika.dorm.core.model.DormRequest;
 
 import java.io.File;
 import java.util.Map;
@@ -23,7 +23,7 @@ public interface Processor {
      */
     public Boolean push(String origin, Map<String, String> properties, File file);
 
-    public Boolean push(DormProperties properties);
+    public Boolean push(DormRequest request);
 
     public ProcessorHelper getHelper();
 }

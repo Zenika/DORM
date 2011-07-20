@@ -10,7 +10,7 @@ import com.zenika.dorm.core.graph.visitor.impl.MainDependencyCollector;
 import com.zenika.dorm.core.model.DormFile;
 import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.core.model.DormOrigin;
-import com.zenika.dorm.core.model.DormProperties;
+import com.zenika.dorm.core.model.DormRequest;
 import com.zenika.dorm.core.model.graph.proposal1.DependencyNodeComposite;
 import com.zenika.dorm.core.model.graph.proposal1.impl.DefaultDependencyNodeComposite;
 import com.zenika.dorm.core.model.impl.DefaultDormFile;
@@ -46,13 +46,13 @@ public class DefaultProcessor implements Processor {
     private DormService service;
 
     @Override
-    public Boolean push(DormProperties properties) {
+    public Boolean push(DormRequest request) {
 
-        if (null == properties) {
+        if (null == request) {
             throw new CoreException("Properties are null or incomplete");
         }
 
-        DependencyNode node = getExtension(properties.getOrigin()).push(properties);
+        DependencyNode node = getExtension(request.getOrigin()).push(request);
 
         return service.pushNode(node);
     }

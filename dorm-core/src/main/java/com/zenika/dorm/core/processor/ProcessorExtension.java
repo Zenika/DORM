@@ -2,7 +2,7 @@ package com.zenika.dorm.core.processor;
 
 import com.zenika.dorm.core.graph.DependencyNode;
 import com.zenika.dorm.core.model.DormOrigin;
-import com.zenika.dorm.core.model.DormProperties;
+import com.zenika.dorm.core.model.DormRequest;
 
 import java.util.Map;
 import java.util.Set;
@@ -23,5 +23,5 @@ public interface ProcessorExtension {
 
     public DormOrigin getParentOrigin(Map<String, String> properties);
 
-    public DependencyNode push(DormProperties properties);
+    public DependencyNode push(DormRequest request);
 }

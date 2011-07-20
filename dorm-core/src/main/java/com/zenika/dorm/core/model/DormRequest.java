@@ -3,11 +3,11 @@ package com.zenika.dorm.core.model;
 import java.io.File;
 
 /**
- * Wrapper for properties with adding checking on required properties like version
+ * Wrapper for a dorm request with adding checking on required properties like version
  *
  * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>
  */
-public interface DormProperties {
+public interface DormRequest {
 
     public void setOrigin(String origin);
 

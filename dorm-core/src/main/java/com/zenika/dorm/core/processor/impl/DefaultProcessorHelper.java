@@ -5,7 +5,7 @@ import com.zenika.dorm.core.graph.DependencyNode;
 import com.zenika.dorm.core.model.DormFile;
 import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.core.model.DormOrigin;
-import com.zenika.dorm.core.model.DormProperties;
+import com.zenika.dorm.core.model.DormRequest;
 import com.zenika.dorm.core.graph.impl.DefaultDependency;
 import com.zenika.dorm.core.graph.impl.DefaultDependencyNode;
 import com.zenika.dorm.core.graph.impl.Usage;
@@ -22,38 +22,38 @@ import com.zenika.dorm.core.processor.ProcessorHelper;
 public class DefaultProcessorHelper implements ProcessorHelper {
 
     @Override
-    public DormFile createFile(DormProperties properties) {
+    public DormFile createFile(DormRequest request) {
 
-        if (!properties.hasFile()) {
+        if (!request.hasFile()) {
             return null;
         }
 
-        return new DefaultDormFile(properties.getFilename(), properties.getFile());
+        return new DefaultDormFile(request.getFilename(), request.getFile());
     }
 
     @Override
-    public DormMetadata createMetadata(DormOrigin origin, DormProperties properties) {
-        return new DefaultDormMetadata(properties.getVersion(), origin);
+    public DormMetadata createMetadata(DormOrigin origin, DormRequest request) {
+        return new DefaultDormMetadata(request.getVersion(), origin);
     }
 
     @Override
-    public Dependency createDependency(DormMetadata metadata, DormProperties properties) {
-        return createDependency(metadata, null, properties);
+    public Dependency createDependency(DormMetadata metadata, DormRequest request) {
+        return createDependency(metadata, null, request);
     }
 
     @Override
-    public Dependency createDependency(DormMetadata metadata, DormFile file, DormProperties properties) {
-        return new DefaultDependency(metadata, Usage.create(properties.getUsage()), file);
+    public Dependency createDependency(DormMetadata metadata, DormFile file, DormRequest request) {
+        return new DefaultDependency(metadata, Usage.create(request.getUsage()), file);
     }
 
     @Override
-    public Dependency createDependency(DormOrigin origin, DormProperties properties) {
-        return createDependency(createMetadata(origin, properties), properties);
+    public Dependency createDependency(DormOrigin origin, DormRequest request) {
+        return createDependency(createMetadata(origin, request), request);
     }
 
     @Override
-    public Dependency createDependency(DormOrigin origin, DormFile file, DormProperties properties) {
-        return createDependency(createMetadata(origin, properties), file, properties);
+    public Dependency createDependency(DormOrigin origin, DormFile file, DormRequest request) {
+        return createDependency(createMetadata(origin, request), file, request);
     }
 
     @Override
@@ -62,10 +62,10 @@ public class DefaultProcessorHelper implements ProcessorHelper {
     }
 
     @Override
-    public DependencyNode createNode(DormOrigin origin, DormProperties properties) {
+    public DependencyNode createNode(DormOrigin origin, DormRequest request) {
 
-        Dependency dependency = createDependency(createMetadata(origin, properties), createFile(properties),
-                properties);
+        Dependency dependency = createDependency(createMetadata(origin, request), createFile(request),
+                request);
 
         return createNode(dependency);
     }
