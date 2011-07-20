@@ -13,6 +13,7 @@ import com.zenika.dorm.core.model.impl.DefaultDormRequest;
 import com.zenika.dorm.core.processor.RequestProcessor;
 import com.zenika.dorm.core.processor.impl.DormProcessor;
 import com.zenika.dorm.core.test.unit.AbstractUnitTest;
+import org.fest.assertions.Assertions;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -38,7 +39,7 @@ public class DormProcessorUnitTest extends AbstractUnitTest {
     private DormProcessor processor = new DormProcessor();
 
     @Test
-    public void push() {
+    public void pushStandardArtifact() {
 
         String qualifier = "test-1.0";
         String version = "1.0";
@@ -61,10 +62,7 @@ public class DormProcessorUnitTest extends AbstractUnitTest {
 
         given(requestProcessor.createNode(origin, request)).willReturn(node);
 
-        // test fails, have to fix this tomorrow !
-        // todo: fix falling test
-//        Assertions.assertThat(processor.push(properties)).isNotEqualTo(node);
-        processor.push(request);
+        Assertions.assertThat(processor.push(request)).isEqualTo(node);
 
         verify(requestProcessor).createNode(origin, request);
     }
