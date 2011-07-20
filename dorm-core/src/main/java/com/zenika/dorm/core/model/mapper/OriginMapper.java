@@ -13,7 +13,11 @@ import java.util.Map;
  *
  * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>
  */
-public class OriginMapper {
+public final class OriginMapper {
+
+    private OriginMapper() {
+
+    }
 
     public static <T extends DormOrigin> Map<String, String> fromOrigin(T origin) {
 
