@@ -1,5 +1,6 @@
 package com.zenika.dorm.core.graph.impl;
 
+import com.zenika.dorm.core.exception.CoreException;
 import com.zenika.dorm.core.graph.Dependency;
 import com.zenika.dorm.core.model.DormFile;
 import com.zenika.dorm.core.model.DormMetadata;
@@ -13,19 +14,56 @@ public class DefaultDependency implements Dependency {
     private DormMetadata metadata;
     private DormFile file;
 
+    public static DefaultDependency create(DormMetadata metadata) {
+        return new DefaultDependency(metadata, Usage.create(), null);
+    }
+
+    public static DefaultDependency create(DormMetadata metadata, DormFile file) {
+        return new DefaultDependency(metadata, Usage.create(), file);
+    }
+
+    public static DefaultDependency create(DormMetadata metadata, Usage usage) {
+        return new DefaultDependency(metadata, usage, null);
+    }
+
+    public static DefaultDependency create(DormMetadata metadata, Usage usage, DormFile file) {
+        return new DefaultDependency(metadata, usage, file);
+    }
+
+    /**
+     * @see DefaultDependency#create(com.zenika.dorm.core.model.DormMetadata)
+     * @deprecated Use factory methods
+     */
     public DefaultDependency(DormMetadata metadata) {
         this(metadata, Usage.create());
     }
 
+    /**
+     * @see DefaultDependency#create(com.zenika.dorm.core.model.DormMetadata, com.zenika.dorm.core.model.DormFile)
+     * @deprecated Use factory methods
+     */
     public DefaultDependency(DormMetadata metadata, DormFile file) {
         this(metadata, Usage.create(), file);
     }
 
+    /**
+     * @see DefaultDependency#create(com.zenika.dorm.core.model.DormMetadata, Usage)
+     * @deprecated Use factory methods
+     */
     public DefaultDependency(DormMetadata metadata, Usage usage) {
         this(metadata, usage, null);
     }
 
+    /**
+     * @see DefaultDependency#create(com.zenika.dorm.core.model.DormMetadata, Usage, com.zenika.dorm.core.model.DormFile)
+     * @deprecated Use factory methods
+     */
     public DefaultDependency(DormMetadata metadata, Usage usage, DormFile file) {
+
+        if (null == metadata || null == usage) {
+            throw new CoreException("Metadata and usage are required.");
+        }
+
         this.metadata = metadata;
         this.usage = usage;
         this.file = file;
