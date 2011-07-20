@@ -6,7 +6,6 @@ import com.zenika.dorm.core.graph.Dependency;
 import com.zenika.dorm.core.graph.DependencyNode;
 import com.zenika.dorm.core.graph.impl.DefaultDependency;
 import com.zenika.dorm.core.graph.impl.Usage;
-import com.zenika.dorm.core.graph.visitor.impl.MainDependencyCollector;
 import com.zenika.dorm.core.model.DormFile;
 import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.core.model.DormOrigin;
@@ -71,7 +70,7 @@ public class DefaultProcessor implements Processor {
         DependencyNode root = extension.getOriginAsNode(properties);
 
         // get the main dependency node
-        Dependency dependency = getMainDependencyFromNode(root);
+        Dependency dependency = root.getDependency();
 
         if (null != file) {
             DormFile dormFile = getFile(file, properties);
@@ -86,20 +85,6 @@ public class DefaultProcessor implements Processor {
         }
 
         return service.pushNode(root);
-    }
-
-    public Dependency getMainDependencyFromNode(DependencyNode node) {
-
-        MainDependencyCollector collector = new MainDependencyCollector();
-        node.accept(collector);
-
-        Dependency dependency = collector.getDependency();
-
-        if (null == dependency) {
-            throw new CoreException("Cannot find main dependency");
-        }
-
-        return dependency;
     }
 
     /**

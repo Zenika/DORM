@@ -25,7 +25,6 @@ public class DormProcessor extends AbstractProcessorExtension {
                 new DefaultDormOrigin(properties.get("name")));
 
         DefaultDependency dependency = new DefaultDependency(metadata);
-        dependency.setMainDependency(true);
 
         DependencyNode node = new DefaultDependencyNode(dependency);
 

@@ -56,7 +56,7 @@ public class MavenProcessor extends AbstractProcessorExtension {
                         properties.get("versionId"), type));
 
         DefaultDependency dependency = new DefaultDependency(metadata);
-        dependency.setMainDependency(true);
+        //dependency.setMainDependency(true);
 
         // main dependency is an internal dependency
         dependency.setUsage(new Usage(MavenProcessor.INTERNAL_USAGE));
