@@ -9,27 +9,22 @@ import java.io.File;
  */
 public interface DormRequest {
 
-    public void setOrigin(String origin);
+    public final static String VERSION = "version";
+    public final static String USAGE = "usage";
+    public final static String ORIGIN = "origin";
+    public final static String FILENAME = "filename";
 
     public String getOrigin();
-
-    public void setFile(String filename, File file);
 
     public String getFilename();
 
     public File getFile();
 
-    public Boolean hasFile();
-
-    public void setVersion(String version);
+    public boolean hasFile();
 
     public String getVersion();
 
-    public void setUsage(String usage);
-
     public String getUsage();
-
-    public void setProperty(String key, String value);
 
     public String getProperty(String key);
 }

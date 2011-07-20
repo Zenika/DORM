@@ -1,24 +1,58 @@
 package com.zenika.dorm.core.model.impl;
 
+import com.zenika.dorm.core.exception.CoreException;
 import com.zenika.dorm.core.model.DormFile;
 import org.apache.commons.io.FilenameUtils;
 
 import java.io.File;
 
 /**
+ * Immutable class that represents a dorm file
+ *
  * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>
  */
 public final class DefaultDormFile implements DormFile {
 
-    private String name;
-    private String extension;
-    private File file;
+    private final String name;
+    private final String extension;
+    private final File file;
 
+    public static DefaultDormFile create(String filename, File file) {
+
+        String name = FilenameUtils.getBaseName(filename);
+        String extension = FilenameUtils.getExtension(filename);
+
+        return new DefaultDormFile(FilenameUtils.getBaseName(filename),
+                FilenameUtils.getExtension(filename), file);
+    }
+
+    public static DefaultDormFile create(String name, String extension, File file) {
+        return new DefaultDormFile(name, extension, file);
+    }
+
+    /**
+     * @param filename
+     * @param file
+     * @see DefaultDormFile#create(String, java.io.File)
+     * @deprecated Will be deleted, use factory methods
+     */
     public DefaultDormFile(String filename, File file) {
         this(FilenameUtils.getBaseName(filename), FilenameUtils.getExtension(filename), file);
     }
 
+    /**
+     * @param name
+     * @param extension
+     * @param file
+     * @see DefaultDormFile#create(String, String, java.io.File)
+     * @deprecated Will be private, use factory methods
+     */
     public DefaultDormFile(String name, String extension, File file) {
+
+        if (null == name || null == extension || null == file) {
+            throw new CoreException("Name, extension and file are required.");
+        }
+
         this.name = name;
         this.extension = extension;
         this.file = file;
@@ -38,20 +72,8 @@ public final class DefaultDormFile implements DormFile {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public String getExtension() {
         return extension;
-    }
-
-    public void setExtension(String extension) {
-        this.extension = extension;
-    }
-
-    public void setFile(File file) {
-        this.file = file;
     }
 
     @Override

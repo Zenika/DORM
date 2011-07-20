@@ -1,61 +1,75 @@
 package com.zenika.dorm.core.model.impl;
 
+import com.zenika.dorm.core.exception.CoreException;
 import com.zenika.dorm.core.model.DormRequest;
 
 import java.io.File;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 /**
- * Default implementation
+ * Default immutable dorm request
  *
  * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>
  */
-public class DefaultDormRequest implements DormRequest {
+public final class DefaultDormRequest implements DormRequest {
 
-    private final static String VERSION = "version";
-    private final static String USAGE = "usage";
-    private final static String ORIGIN = "origin";
-    private final static String FILENAME = "filename";
+//    private final Set<String> reservedKeys = new HashSet<String>();
 
-    private Set<String> reservedKeys = new HashSet<String>();
-    private Map<String, String> properties = new HashMap<String, String>();
-    private File file;
+    private final String version;
+    private final String origin;
+    private final String usage;
+    private final String filename;
+    private final File file;
 
-    private DefaultDormRequest() {
-        reservedKeys.add(DefaultDormRequest.VERSION);
-        reservedKeys.add(DefaultDormRequest.USAGE);
-        reservedKeys.add(DefaultDormRequest.ORIGIN);
-        reservedKeys.add(DefaultDormRequest.FILENAME);
+    /**
+     * Additionnal properties
+     */
+    private final Map<String, String> properties = new HashMap<String, String>();
+
+    public static DefaultDormRequest create(Map<String, String> properties) {
+        return new DefaultDormRequest(properties, null);
     }
 
-    public DefaultDormRequest(String version, String origin) {
-        this();
-        setVersion(version);
-        setOrigin(origin);
+    public static DefaultDormRequest create(Map<String, String> properties, File file) {
+        return new DefaultDormRequest(properties, file);
     }
 
-    @Override
-    public void setOrigin(String origin) {
-        properties.put(DefaultDormRequest.ORIGIN, origin);
+    /**
+     * @param properties
+     * @param file       optionnal, can be null
+     */
+    private DefaultDormRequest(Map<String, String> properties, File file) {
+
+        version = properties.get(DormRequest.VERSION);
+        origin = properties.get(DormRequest.ORIGIN);
+        usage = properties.get(DormRequest.USAGE);
+
+        if (null == version || null == origin) {
+            throw new CoreException("Version and origin are required.");
+        }
+
+        String filename = properties.get(DormRequest.FILENAME);
+
+        if (null != filename && null != file) {
+            this.filename = filename;
+            this.file = file;
+        } else {
+            this.filename = null;
+            this.file = null;
+        }
+
+        this.properties.putAll(properties);
     }
 
     @Override
     public String getOrigin() {
-        return properties.get(DefaultDormRequest.ORIGIN);
-    }
-
-    @Override
-    public void setFile(String filename, File file) {
-        this.file = file;
-        properties.put(DefaultDormRequest.FILENAME, filename);
+        return origin;
     }
 
     @Override
     public String getFilename() {
-        return properties.get(DefaultDormRequest.FILENAME);
+        return filename;
     }
 
     @Override
@@ -64,38 +78,18 @@ public class DefaultDormRequest implements DormRequest {
     }
 
     @Override
-    public Boolean hasFile() {
-        return getFile() != null && getFilename() != null;
-    }
-
-    @Override
-    public void setVersion(String version) {
-        properties.put(DefaultDormRequest.VERSION, version);
+    public boolean hasFile() {
+        return file != null && filename != null;
     }
 
     @Override
     public String getVersion() {
-        return properties.get(DefaultDormRequest.VERSION);
-    }
-
-    @Override
-    public void setUsage(String usage) {
-        properties.put(DefaultDormRequest.USAGE, usage);
+        return version;
     }
 
     @Override
     public String getUsage() {
-        return properties.get(DefaultDormRequest.USAGE);
-    }
-
-    @Override
-    public void setProperty(String key, String value) {
-
-        if (reservedKeys.contains(key)) {
-            throw new IllegalArgumentException(key + "is a reserved property, use defined setters");
-        }
-
-        properties.put(key, value);
+        return usage;
     }
 
     @Override

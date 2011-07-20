@@ -8,12 +8,12 @@ import com.zenika.dorm.core.exception.CoreException;
  *
  * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>
  */
-public class Usage {
+public final class Usage {
 
     private static final String DEFAULT = "default";
     private static final String INTERNAL_KEYWORD = "dorm_internal_";
 
-    private String name;
+    private final String name;
 
     public static Usage create() {
         return new Usage(Usage.DEFAULT);
@@ -36,7 +36,8 @@ public class Usage {
 
     /**
      * @param name
-     * @deprecated use the factory methods
+     * @see Usage#create(String)
+     * @deprecated Will be private, use the factory methods
      */
     public Usage(String name) {
 

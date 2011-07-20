@@ -18,6 +18,7 @@ import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import static org.mockito.BDDMockito.given;
@@ -53,7 +54,11 @@ public class ProcessorUnitTest extends AbstractUnitTest {
     @Test
     public void push() {
 
-        DormRequest request = new DefaultDormRequest("1.0", "test");
+        Map<String, String> properties = new HashMap<String, String>();
+        properties.put(DormRequest.ORIGIN, "test");
+        properties.put(DormRequest.VERSION, "1.0");
+
+        DormRequest request = DefaultDormRequest.create(properties);
 
         DependencyNode node = new DefaultDependencyNode(new DefaultDependency(
                 new DefaultDormMetadata("1.0", new DefaultDormOrigin("test"))));
@@ -69,7 +74,10 @@ public class ProcessorUnitTest extends AbstractUnitTest {
 
     @Test(expected = CoreException.class)
     public void pushWithUnkownExtension() {
-        DormRequest request = new DefaultDormRequest("1.0", "foo");
+        Map<String, String> properties = new HashMap<String, String>();
+        properties.put(DormRequest.ORIGIN, "foo");
+        properties.put(DormRequest.VERSION, "1.0");
+        DormRequest request = DefaultDormRequest.create(properties);
         processor.push(request);
     }
 

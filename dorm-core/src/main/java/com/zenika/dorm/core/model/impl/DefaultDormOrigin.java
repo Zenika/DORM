@@ -3,17 +3,18 @@ package com.zenika.dorm.core.model.impl;
 import com.zenika.dorm.core.model.DormOrigin;
 
 /**
- * Default dorm origin
+ * Default immutable dorm origin
  *
  * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>
  */
-public class DefaultDormOrigin implements DormOrigin {
+public final class DefaultDormOrigin implements DormOrigin {
 
     public static final String ORIGIN = "dorm";
 
-    private String name;
+    private final String name;
 
     public DefaultDormOrigin() {
+        this.name = null;
     }
 
     public DefaultDormOrigin(String name) {
@@ -32,10 +33,6 @@ public class DefaultDormOrigin implements DormOrigin {
 
     public String getName() {
         return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     @Override

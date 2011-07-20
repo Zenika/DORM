@@ -175,7 +175,9 @@ public class MavenProcessor extends AbstractProcessorExtension {
         }
 
         DormFile file = getRequestProcessor().createFile(request);
-        request.setUsage(MavenProcessor.INTERNAL_USAGE);
+
+        // todo: fix this
+//        request.setUsage(MavenProcessor.INTERNAL_USAGE);
         Dependency dependency = getRequestProcessor().createDependency(origin, file, request);
 
         DependencyNode root = getRequestProcessor().createNode(dependency);

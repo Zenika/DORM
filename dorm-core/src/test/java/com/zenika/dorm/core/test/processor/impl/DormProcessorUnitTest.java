@@ -18,6 +18,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
@@ -39,15 +41,20 @@ public class DormProcessorUnitTest extends AbstractUnitTest {
     public void push() {
 
         String qualifier = "test-1.0";
+        String version = "1.0";
         String filename = "testfile.jar";
         File file = new File("/tmp/testfile.jar");
 
-        DormOrigin origin = new DefaultDormOrigin(qualifier);
-        DormFile dormFile = new DefaultDormFile(filename, file);
+        Map<String, String> properties = new HashMap<String, String>();
+        properties.put(DormRequest.ORIGIN, DefaultDormOrigin.ORIGIN);
+        properties.put(DormRequest.VERSION, version);
+        properties.put(DormRequest.FILENAME, filename);
+        properties.put("qualifier", qualifier);
 
-        DormRequest request = new DefaultDormRequest("1.0", DefaultDormOrigin.ORIGIN);
-        request.setFile(filename, file);
-        request.setProperty("qualifier", qualifier);
+        DormOrigin origin = new DefaultDormOrigin(qualifier);
+        DormFile dormFile = DefaultDormFile.create(filename, file);
+
+        DormRequest request = DefaultDormRequest.create(properties, file);
 
         DependencyNode node = new DefaultDependencyNode(new DefaultDependency(
                 new DefaultDormMetadata("1.0", origin), dormFile));
@@ -59,6 +66,6 @@ public class DormProcessorUnitTest extends AbstractUnitTest {
 //        Assertions.assertThat(processor.push(properties)).isNotEqualTo(node);
         processor.push(request);
 
-        verify(helper).createNode(origin, request);
+        verify(requestProcessor).createNode(origin, request);
     }
 }
