@@ -63,4 +63,26 @@ public class DefaultDependency implements Dependency {
     public void setFile(DormFile file) {
         this.file = file;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof DefaultDependency)) return false;
+
+        DefaultDependency that = (DefaultDependency) o;
+
+        if (file != null ? !file.equals(that.file) : that.file != null) return false;
+        if (metadata != null ? !metadata.equals(that.metadata) : that.metadata != null) return false;
+        if (usage != null ? !usage.equals(that.usage) : that.usage != null) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = usage != null ? usage.hashCode() : 0;
+        result = 31 * result + (metadata != null ? metadata.hashCode() : 0);
+        result = 31 * result + (file != null ? file.hashCode() : 0);
+        return result;
+    }
 }

@@ -53,4 +53,26 @@ public final class DefaultDormFile implements DormFile {
     public void setFile(File file) {
         this.file = file;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof DefaultDormFile)) return false;
+
+        DefaultDormFile that = (DefaultDormFile) o;
+
+        if (extension != null ? !extension.equals(that.extension) : that.extension != null) return false;
+        if (file != null ? !file.equals(that.file) : that.file != null) return false;
+        if (name != null ? !name.equals(that.name) : that.name != null) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = name != null ? name.hashCode() : 0;
+        result = 31 * result + (extension != null ? extension.hashCode() : 0);
+        result = 31 * result + (file != null ? file.hashCode() : 0);
+        return result;
+    }
 }
