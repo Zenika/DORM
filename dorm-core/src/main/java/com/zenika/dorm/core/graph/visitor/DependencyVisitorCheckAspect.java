@@ -20,12 +20,11 @@ public class DependencyVisitorCheckAspect {
      * @param visitor the current visitor
      */
     @Pointcut("execution(Boolean com.zenika.dorm.core.graph.visitor.DependencyVisitor.visitEnter" +
-            "(com.zenika.dorm.core.model.graph.proposal1.DependencyNode)) && args(node) " +
-            "&& target(visitor)")
-    public void visitComposite(DependencyNode node, DependencyVisitor visitor) {
+            "(com.zenika.dorm.core.graph.visitor.DependencyVisitor)) && args(node) && target(visitor)")
+    public void visit(DependencyNode node, DependencyVisitor visitor) {
     }
 
-    @Around("visitComposite(node, visitor)")
+    @Around("visit(node, visitor)")
     public Object performChecksOnComposite(ProceedingJoinPoint joinPoint, DependencyNode node,
                                            DependencyVisitor visitor) throws Throwable {
 
