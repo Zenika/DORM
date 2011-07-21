@@ -124,15 +124,13 @@ public class Neo4jParser {
                 DependencyNode dependencyNodeChild = dependencyMap.get(map.get("end"));
                 if (dependencyNodeParent == null) {
                     DormMetadata metadata = getMetadataIntoListMap(nodesMap, (String) map.get("start"), dormOrigin);
-                    Dependency dependencyParent = new DefaultDependency(metadata);
-                    dependencyParent.setUsage(usage);
+                    Dependency dependencyParent = DefaultDependency.create(metadata, usage);
                     dependencyNodeParent = new DefaultDependencyNode(dependencyParent);
                     dependencyMap.put((String) map.get("start"), dependencyNodeParent);
                 }
                 if (dependencyNodeChild == null) {
                     DormMetadata metadata = getMetadataIntoListMap(nodesMap, (String) map.get("end"), dormOrigin);
-                    Dependency dependencyChild = new DefaultDependency(metadata);
-                    dependencyChild.setUsage(usage);
+                    Dependency dependencyChild = DefaultDependency.create(metadata, usage);
                     dependencyNodeChild = new DefaultDependencyNode(dependencyChild);
                     dependencyMap.put((String) map.get("end"), dependencyNodeChild);
                 }
