@@ -14,15 +14,6 @@ import java.util.Map;
 @Singleton
 public interface Processor {
 
-    /**
-     * @param origin
-     * @param properties
-     * @param file
-     * @return
-     * @deprecated Use push with dorm properties wrapper beside multiple objects and map
-     */
-    public Boolean push(String origin, Map<String, String> properties, File file);
-
     public Boolean push(DormRequest request);
 
     public RequestProcessor getRequestProcessor();
