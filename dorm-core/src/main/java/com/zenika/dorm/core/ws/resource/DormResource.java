@@ -7,7 +7,7 @@ import com.zenika.dorm.core.model.DormFile;
 import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.core.model.impl.DefaultDormFile;
 import com.zenika.dorm.core.model.impl.DefaultDormMetadata;
-import com.zenika.dorm.core.model.impl.DefaultDormOrigin;
+import com.zenika.dorm.core.model.impl.DefaultDormMetadataExtension;
 import com.zenika.dorm.core.model.old.MetadataExtension;
 import com.zenika.dorm.core.processor.Processor;
 import com.zenika.dorm.core.service.DormServiceOld;
@@ -41,7 +41,7 @@ import java.util.Properties;
  * Remove (DELETE) :
  * -
  *
- * @see com.zenika.dorm.core.model.impl.DefaultDormOrigin#getQualifier() for the parent qualifier
+ * @see com.zenika.dorm.core.model.impl.DefaultDormMetadataExtension#getQualifier() for the parent qualifier
  */
 @Path("dorm")
 @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
@@ -317,6 +317,6 @@ public class DormResource {
      * @return the dorm metadata which represents the name and the version
      */
     private DormMetadata getMetadata(String name, String version) {
-        return new DefaultDormMetadata(version, new DefaultDormOrigin(name));
+        return new DefaultDormMetadata(version, new DefaultDormMetadataExtension(name));
     }
 }

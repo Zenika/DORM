@@ -4,12 +4,12 @@ import com.zenika.dorm.core.graph.Dependency;
 import com.zenika.dorm.core.graph.impl.DefaultDependency;
 import com.zenika.dorm.core.model.DormFile;
 import com.zenika.dorm.core.model.DormMetadata;
-import com.zenika.dorm.core.model.DormOrigin;
+import com.zenika.dorm.core.model.DormMetadataExtension;
 import com.zenika.dorm.core.model.impl.DefaultDormFile;
 import com.zenika.dorm.core.model.impl.DefaultDormMetadata;
 import com.zenika.dorm.core.processor.Processor;
 import com.zenika.dorm.core.processor.impl.DefaultProcessor;
-import com.zenika.dorm.maven.model.impl.MavenOrigin;
+import com.zenika.dorm.maven.model.impl.MavenMetadataExtension;
 import org.junit.Test;
 
 import java.io.File;
@@ -71,7 +71,7 @@ public class MavenImportTest {
         // import A.pom.xml
 
         // metadata
-        DormOrigin originApom = new MavenOrigin("com.zenika", "a", "1.0", "pom");
+        DormMetadataExtension originApom = new MavenMetadataExtension("com.zenika", "a", "1.0", "pom");
         DormMetadata metadataApom = new DefaultDormMetadata("1.0", originApom);
 
         // file
@@ -89,7 +89,7 @@ public class MavenImportTest {
 
         // metadata
         // should be equals to previous pom metadata, because only file changes
-        DormOrigin originAjar = new MavenOrigin("com.zenika", "a", "1.0", "jar");
+        DormMetadataExtension originAjar = new MavenMetadataExtension("com.zenika", "a", "1.0", "jar");
         DormMetadata metadataAjar = new DefaultDormMetadata("1.0", originAjar);
 
         // file

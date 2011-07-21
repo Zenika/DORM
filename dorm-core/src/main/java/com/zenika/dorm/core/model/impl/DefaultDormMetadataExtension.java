@@ -1,23 +1,23 @@
 package com.zenika.dorm.core.model.impl;
 
-import com.zenika.dorm.core.model.DormOrigin;
+import com.zenika.dorm.core.model.DormMetadataExtension;
 
 /**
  * Default immutable dorm origin
  *
  * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>
  */
-public final class DefaultDormOrigin implements DormOrigin {
+public final class DefaultDormMetadataExtension implements DormMetadataExtension {
 
     public static final String ORIGIN = "dorm";
 
     private final String name;
 
-    public DefaultDormOrigin() {
+    public DefaultDormMetadataExtension() {
         this.name = null;
     }
 
-    public DefaultDormOrigin(String name) {
+    public DefaultDormMetadataExtension(String name) {
         this.name = name;
     }
 
@@ -40,7 +40,7 @@ public final class DefaultDormOrigin implements DormOrigin {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        DefaultDormOrigin origin = (DefaultDormOrigin) o;
+        DefaultDormMetadataExtension origin = (DefaultDormMetadataExtension) o;
 
         if (name != null ? !name.equals(origin.name) : origin.name != null) return false;
 

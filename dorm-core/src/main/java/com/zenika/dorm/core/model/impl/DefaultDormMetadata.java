@@ -2,7 +2,7 @@ package com.zenika.dorm.core.model.impl;
 
 import com.zenika.dorm.core.exception.CoreException;
 import com.zenika.dorm.core.model.DormMetadata;
-import com.zenika.dorm.core.model.DormOrigin;
+import com.zenika.dorm.core.model.DormMetadataExtension;
 
 /**
  * Immutable dorm metadata
@@ -18,27 +18,27 @@ public final class DefaultDormMetadata implements DormMetadata {
     /**
      * todo: Probem here, cannot be sure that all implementations will be immutable.
      */
-    private final DormOrigin origin;
+    private final DormMetadataExtension extension;
 
-    public static DefaultDormMetadata create(String version, DormOrigin origin) {
-        return new DefaultDormMetadata(version, origin);
+    public static DefaultDormMetadata create(String version, DormMetadataExtension extension) {
+        return new DefaultDormMetadata(version, extension);
     }
 
     /**
      * @param version
-     * @param origin
+     * @param extension
      * @deprecated Will be private, use the factory methods
      */
-    public DefaultDormMetadata(String version, DormOrigin origin) {
+    public DefaultDormMetadata(String version, DormMetadataExtension extension) {
 
-        if (null == version || null == origin || null == origin.getQualifier() || null == origin.getOrigin()) {
+        if (null == version || null == extension || null == extension.getQualifier() || null == extension.getOrigin()) {
             throw new CoreException("Properties are missing for metadata");
         }
 
         this.version = version;
-        this.origin = origin;
-        this.qualifier = origin.getQualifier();
-        this.fullQualifier = this.qualifier + ":" + version + ":" + origin.getOrigin();
+        this.extension = extension;
+        this.qualifier = extension.getQualifier();
+        this.fullQualifier = this.qualifier + ":" + version + ":" + extension.getOrigin();
     }
 
     @Override
@@ -57,8 +57,8 @@ public final class DefaultDormMetadata implements DormMetadata {
     }
 
     @Override
-    public DormOrigin getOrigin() {
-        return origin;
+    public DormMetadataExtension getExtension() {
+        return extension;
     }
 
     @Override
@@ -75,7 +75,7 @@ public final class DefaultDormMetadata implements DormMetadata {
 
         if (fullQualifier != null ? !fullQualifier.equals(metadata.fullQualifier) : metadata.fullQualifier != null)
             return false;
-        if (origin != null ? !origin.equals(metadata.origin) : metadata.origin != null) return false;
+        if (extension != null ? !extension.equals(metadata.extension) : metadata.extension != null) return false;
         if (qualifier != null ? !qualifier.equals(metadata.qualifier) : metadata.qualifier != null)
             return false;
         if (version != null ? !version.equals(metadata.version) : metadata.version != null) return false;
@@ -88,7 +88,7 @@ public final class DefaultDormMetadata implements DormMetadata {
         int result = qualifier != null ? qualifier.hashCode() : 0;
         result = 31 * result + (fullQualifier != null ? fullQualifier.hashCode() : 0);
         result = 31 * result + (version != null ? version.hashCode() : 0);
-        result = 31 * result + (origin != null ? origin.hashCode() : 0);
+        result = 31 * result + (extension != null ? extension.hashCode() : 0);
         return result;
     }
 }

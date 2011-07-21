@@ -1,7 +1,7 @@
 package com.zenika.dorm.core.modelnew.impl;
 
 import com.zenika.dorm.core.exception.CoreException;
-import com.zenika.dorm.core.model.DormOrigin;
+import com.zenika.dorm.core.model.DormMetadataExtension;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,14 +16,14 @@ final public class DormModule {
 
     private String qualifier;
     private String version;
-    private DormOrigin origin;
+    private DormMetadataExtension origin;
 
     private List<DormArtifact> artifacts = new ArrayList<DormArtifact>();
     private Map<String, DormScope> scopes = new HashMap<String, DormScope>();
     private Map<DormScope, List<DormArtifact>> artifactsByScope = new HashMap<DormScope,
             List<DormArtifact>>();
 
-    public DormModule(String version, DormOrigin origin) {
+    public DormModule(String version, DormMetadataExtension origin) {
         this.version = version;
         this.origin = origin;
     }
@@ -97,11 +97,11 @@ final public class DormModule {
         this.version = version;
     }
 
-    public DormOrigin getOrigin() {
+    public DormMetadataExtension getOrigin() {
         return origin;
     }
 
-    public void setOrigin(DormOrigin origin) {
+    public void setOrigin(DormMetadataExtension origin) {
         this.origin = origin;
     }
 

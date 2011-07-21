@@ -4,7 +4,7 @@ package com.zenika.dorm.maven.model.impl;
  * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>
  */
 
-import com.zenika.dorm.core.model.DormOrigin;
+import com.zenika.dorm.core.model.DormMetadataExtension;
 
 /**
  * Maven immutable extension point to the dorm model
@@ -12,7 +12,7 @@ import com.zenika.dorm.core.model.DormOrigin;
  *
  * todo: add packaging + classifier metadatas
  */
-public final class MavenOrigin implements DormOrigin {
+public final class MavenMetadataExtension implements DormMetadataExtension {
 
     public static final String ORIGIN = "maven";
 
@@ -21,7 +21,7 @@ public final class MavenOrigin implements DormOrigin {
     private final String versionId;
     private final String type;
 
-    public MavenOrigin(String groupId, String artifactId, String versionId, String type) {
+    public MavenMetadataExtension(String groupId, String artifactId, String versionId, String type) {
         this.groupId = groupId;
         this.artifactId = artifactId;
         this.versionId = versionId;

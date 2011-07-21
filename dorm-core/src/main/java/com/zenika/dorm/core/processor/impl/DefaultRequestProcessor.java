@@ -4,7 +4,7 @@ import com.zenika.dorm.core.graph.Dependency;
 import com.zenika.dorm.core.graph.DependencyNode;
 import com.zenika.dorm.core.model.DormFile;
 import com.zenika.dorm.core.model.DormMetadata;
-import com.zenika.dorm.core.model.DormOrigin;
+import com.zenika.dorm.core.model.DormMetadataExtension;
 import com.zenika.dorm.core.model.DormRequest;
 import com.zenika.dorm.core.graph.impl.DefaultDependency;
 import com.zenika.dorm.core.graph.impl.DefaultDependencyNode;
@@ -32,8 +32,8 @@ public class DefaultRequestProcessor implements RequestProcessor {
     }
 
     @Override
-    public DormMetadata createMetadata(DormOrigin origin, DormRequest request) {
-        return new DefaultDormMetadata(request.getVersion(), origin);
+    public DormMetadata createMetadata(DormMetadataExtension extension, DormRequest request) {
+        return new DefaultDormMetadata(request.getVersion(), extension);
     }
 
     @Override
@@ -47,13 +47,13 @@ public class DefaultRequestProcessor implements RequestProcessor {
     }
 
     @Override
-    public Dependency createDependency(DormOrigin origin, DormRequest request) {
-        return createDependency(createMetadata(origin, request), request);
+    public Dependency createDependency(DormMetadataExtension extension, DormRequest request) {
+        return createDependency(createMetadata(extension, request), request);
     }
 
     @Override
-    public Dependency createDependency(DormOrigin origin, DormFile file, DormRequest request) {
-        return createDependency(createMetadata(origin, request), file, request);
+    public Dependency createDependency(DormMetadataExtension extension, DormFile file, DormRequest request) {
+        return createDependency(createMetadata(extension, request), file, request);
     }
 
     @Override
@@ -62,9 +62,9 @@ public class DefaultRequestProcessor implements RequestProcessor {
     }
 
     @Override
-    public DependencyNode createNode(DormOrigin origin, DormRequest request) {
+    public DependencyNode createNode(DormMetadataExtension extension, DormRequest request) {
 
-        Dependency dependency = createDependency(createMetadata(origin, request), createFile(request),
+        Dependency dependency = createDependency(createMetadata(extension, request), createFile(request),
                 request);
 
         return createNode(dependency);

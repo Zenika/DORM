@@ -1,7 +1,7 @@
 package com.zenika.dorm.core.model.mapper;
 
 import com.zenika.dorm.core.exception.CoreException;
-import com.zenika.dorm.core.model.DormOrigin;
+import com.zenika.dorm.core.model.DormMetadataExtension;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -13,17 +13,17 @@ import java.util.Map;
  *
  * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>
  */
-public final class OriginMapper {
+public final class MetadataExtensionMapper {
 
-    private OriginMapper() {
+    private MetadataExtensionMapper() {
 
     }
 
-    public static <T extends DormOrigin> Map<String, String> fromOrigin(T origin) {
+    public static <T extends DormMetadataExtension> Map<String, String> fromOrigin(T origin) {
 
         Map<String, String> properties = new HashMap<String, String>();
 
-        Class<? extends DormOrigin> reflect = origin.getClass();
+        Class<? extends DormMetadataExtension> reflect = origin.getClass();
 
         for (Field field : reflect.getDeclaredFields()) {
 
@@ -42,9 +42,9 @@ public final class OriginMapper {
         return properties;
     }
 
-    public static <T extends DormOrigin> T toOrigin(T origin, Map<String, String> properties) {
+    public static <T extends DormMetadataExtension> T toOrigin(T origin, Map<String, String> properties) {
 
-        Class<? extends DormOrigin> reflect = origin.getClass();
+        Class<? extends DormMetadataExtension> reflect = origin.getClass();
 
         for (Field field : reflect.getDeclaredFields()) {
 

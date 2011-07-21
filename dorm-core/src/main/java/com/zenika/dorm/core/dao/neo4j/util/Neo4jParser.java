@@ -6,9 +6,9 @@ import com.zenika.dorm.core.graph.impl.DefaultDependency;
 import com.zenika.dorm.core.graph.impl.DefaultDependencyNode;
 import com.zenika.dorm.core.graph.impl.Usage;
 import com.zenika.dorm.core.model.DormMetadata;
-import com.zenika.dorm.core.model.DormOrigin;
+import com.zenika.dorm.core.model.DormMetadataExtension;
 import com.zenika.dorm.core.model.impl.DefaultDormMetadata;
-import com.zenika.dorm.core.model.mapper.OriginMapper;
+import com.zenika.dorm.core.model.mapper.MetadataExtensionMapper;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
@@ -18,7 +18,6 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Logger;
 
 import static com.zenika.dorm.core.dao.neo4j.util.Neo4jRequestExecutor.*;
 
@@ -35,13 +34,13 @@ public class Neo4jParser {
         mapper.getSerializationConfig().setSerializationInclusion(JsonSerialize.Inclusion.NON_NULL);
     }
 
-    public static String parseOriginProperty(DormOrigin origin) throws IOException {
-        Map<String, String> properties = OriginMapper.fromOrigin(origin);
+    public static String parseOriginProperty(DormMetadataExtension origin) throws IOException {
+        Map<String, String> properties = MetadataExtensionMapper.fromOrigin(origin);
         return mapper.writeValueAsString(properties);
     }
 
-    public static Map<String, String> parseOriginPropertyToMap(DormOrigin origin) throws IOException {
-        return OriginMapper.fromOrigin(origin);
+    public static Map<String, String> parseOriginPropertyToMap(DormMetadataExtension origin) throws IOException {
+        return MetadataExtensionMapper.fromOrigin(origin);
 
     }
 
@@ -116,7 +115,7 @@ public class Neo4jParser {
             throws Exception {
         List<Map<String, Object>> nodesMap = Neo4jParser.parseMultiJsonToMap(traverse);
         Map<String, DependencyNode> dependencyMap = new HashMap<String, DependencyNode>();
-        DormOrigin dormOrigin = dormMetadata.getOrigin();
+        DormMetadataExtension dormOrigin = dormMetadata.getExtension();
         for (Map<String, Object> map : nodesMap) {
             if (!map.get("type").equals(Neo4jRequestExecutor.ORIGIN_RELATIONSHIP) && !map.get("type")
                     .equals(Neo4jRequestExecutor.METADATA_RELATIONSHIP)) {
@@ -140,12 +139,12 @@ public class Neo4jParser {
         return dependencyMap;
     }
 
-    private static DormMetadata getMetadataIntoListMap(List<Map<String, Object>> listMap, String nodeUri, DormOrigin origin)
+    private static DormMetadata getMetadataIntoListMap(List<Map<String, Object>> listMap, String nodeUri, DormMetadataExtension origin)
             throws Exception {
         for (Map<String, Object> map : listMap) {
             if (map.get("start").equals(nodeUri) && map.get("type")
                     .equals(Neo4jRequestExecutor.METADATA_RELATIONSHIP)) {
-                DormOrigin dormOrigin = getOriginIntoListMap(listMap, (String) map.get("end"), origin);
+                DormMetadataExtension dormOrigin = getOriginIntoListMap(listMap, (String) map.get("end"), origin);
                 Map<String, String> dormMetadataMap = new Neo4jRequestExecutor()
                         .getPropertiesNode((String) map.get("end"));
                 DormMetadata metadata = null;
@@ -160,14 +159,14 @@ public class Neo4jParser {
         return null;
     }
 
-    private static DormOrigin getOriginIntoListMap(List<Map<String, Object>> listMap, String nodeUri, DormOrigin origin)
+    private static DormMetadataExtension getOriginIntoListMap(List<Map<String, Object>> listMap, String nodeUri, DormMetadataExtension origin)
             throws Exception {
         for (Map<String, Object> map : listMap) {
             if (map.get("start").equals(nodeUri) && map.get("type")
                     .equals(Neo4jRequestExecutor.ORIGIN_RELATIONSHIP)) {
                 Map<String, String> dormOriginProperties = new Neo4jRequestExecutor()
                         .getPropertiesNode((String) map.get("end"));
-                DormOrigin dormOrigin = OriginMapper.toOrigin(origin, dormOriginProperties);
+                DormMetadataExtension dormOrigin = MetadataExtensionMapper.toOrigin(origin, dormOriginProperties);
                 if (dormOrigin == null) {
                     throw new Exception();
                 }
@@ -180,7 +179,7 @@ public class Neo4jParser {
     public static String parseDependencyToJson(Dependency dependency) throws IOException {
         List<Map<String, Object>> requests = new ArrayList<Map<String, Object>>();
         requests.add(createJsonRequest("POST", "/node", 0,
-                parseOriginPropertyToMap(dependency.getMetadata().getOrigin())));
+                parseOriginPropertyToMap(dependency.getMetadata().getExtension())));
         requests.add(createJsonRequest("POST", "/node", 1,
                 parseMetaDataPropertyToMap(dependency.getMetadata())));
         requests.add(createJsonRequest("POST", "/node", 2, new HashMap<String, String>()));

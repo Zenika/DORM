@@ -9,7 +9,7 @@ import com.sun.jersey.guice.spi.container.servlet.GuiceContainer;
 import com.zenika.dorm.core.dao.DormDaoOld;
 import com.zenika.dorm.core.dao.mongo.DormDaoMongo;
 import com.zenika.dorm.core.dao.mongo.MongoInstance;
-import com.zenika.dorm.core.model.impl.DefaultDormOrigin;
+import com.zenika.dorm.core.model.impl.DefaultDormMetadataExtension;
 import com.zenika.dorm.core.model.old.MetadataExtension;
 import com.zenika.dorm.core.processor.Processor;
 import com.zenika.dorm.core.processor.RequestProcessor;
@@ -20,6 +20,8 @@ import com.zenika.dorm.core.service.DormService;
 import com.zenika.dorm.core.service.impl.DefaultDormService;
 import com.zenika.dorm.core.ws.resource.DormResource;
 import com.zenika.dorm.maven.model.impl.DormMavenMetadata;
+import com.zenika.dorm.maven.model.impl.MavenMetadataExtension;
+import com.zenika.dorm.maven.processor.extension.MavenProcessor;
 import com.zenika.dorm.maven.ws.resource.MavenResource;
 
 import java.net.UnknownHostException;
@@ -46,7 +48,8 @@ public class GuiceModule extends JerseyServletModule {
 
         // processor
         DefaultProcessor processor = new DefaultProcessor();
-        processor.getExtensions().put(DefaultDormOrigin.ORIGIN, new DormProcessor());
+        processor.getExtensions().put(DefaultDormMetadataExtension.ORIGIN, new DormProcessor());
+        processor.getExtensions().put(MavenMetadataExtension.ORIGIN, new MavenProcessor());
 
         bind(Processor.class).toInstance(processor);
         bind(RequestProcessor.class).to(DefaultRequestProcessor.class);

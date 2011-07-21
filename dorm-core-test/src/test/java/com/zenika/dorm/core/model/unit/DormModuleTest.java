@@ -1,6 +1,6 @@
 package com.zenika.dorm.core.model.unit;
 
-import com.zenika.dorm.core.model.impl.DefaultDormOrigin;
+import com.zenika.dorm.core.model.impl.DefaultDormMetadataExtension;
 import com.zenika.dorm.core.modelnew.impl.DormArtifact;
 import com.zenika.dorm.core.modelnew.impl.DormModule;
 import org.junit.Ignore;
@@ -16,7 +16,7 @@ public class DormModuleTest {
     @Test
     public void test() {
 
-        DefaultDormOrigin dormOrigin = new DefaultDormOrigin("zenika:foo");
+        DefaultDormMetadataExtension dormOrigin = new DefaultDormMetadataExtension("zenika:foo");
         DormModule moduleFromDorm = new DormModule("1.0.0", dormOrigin);
 
         DormArtifact artifact1 = new DormArtifact("zenika:foo:bar1", "1.0.0");

@@ -9,7 +9,7 @@ public interface DormMetadata {
 
     public String getVersion();
 
-    public DormOrigin getOrigin();
+    public DormMetadataExtension getExtension();
 
     /**
      * Represents the full and unique qualifier of an dependency : qualifier + version + origin

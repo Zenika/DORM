@@ -34,7 +34,7 @@ public class DormDaoNeo4j implements DormDao {
         String dependencyUri = executor.getDependencyUri(dependency.getMetadata().getFullQualifier());
         if (dependencyUri == null) {
             try {
-                originUri = executor.postNode(parseOriginProperty(dependency.getMetadata().getOrigin()));
+                originUri = executor.postNode(parseOriginProperty(dependency.getMetadata().getExtension()));
                 metadataUri = executor.postNode(parseMetaDataProperty(dependency.getMetadata()));
                 dependencyUri = executor.postNode("{}");
                 createInternalRelationship(metadataUri, originUri, executor.ORIGIN_RELATIONSHIP);

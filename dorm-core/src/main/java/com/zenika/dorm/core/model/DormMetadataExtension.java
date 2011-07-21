@@ -6,7 +6,7 @@ package com.zenika.dorm.core.model;
  *
  * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>
  */
-public interface DormOrigin {
+public interface DormMetadataExtension {
 
     /**
      * The internal qualifier of the origin which represents the unique composition of all origin's metadatas

@@ -6,7 +6,7 @@ import com.zenika.dorm.core.graph.impl.DefaultDependency;
 import com.zenika.dorm.core.graph.impl.DefaultDependencyNode;
 import com.zenika.dorm.core.model.DormRequest;
 import com.zenika.dorm.core.model.impl.DefaultDormMetadata;
-import com.zenika.dorm.core.model.impl.DefaultDormOrigin;
+import com.zenika.dorm.core.model.impl.DefaultDormMetadataExtension;
 import com.zenika.dorm.core.model.impl.DefaultDormRequest;
 import com.zenika.dorm.core.processor.Processor;
 import com.zenika.dorm.core.processor.ProcessorExtension;
@@ -61,7 +61,7 @@ public class ProcessorUnitTest extends AbstractUnitTest {
         DormRequest request = DefaultDormRequest.create(properties);
 
         DependencyNode node = DefaultDependencyNode.create(DefaultDependency.create(
-                DefaultDormMetadata.create("1.0", new DefaultDormOrigin("test"))));
+                DefaultDormMetadata.create("1.0", new DefaultDormMetadataExtension("test"))));
 
         given(extension.push(request)).willReturn(node);
 

@@ -4,11 +4,11 @@ import com.zenika.dorm.core.graph.DependencyNode;
 import com.zenika.dorm.core.graph.impl.DefaultDependency;
 import com.zenika.dorm.core.graph.impl.DefaultDependencyNode;
 import com.zenika.dorm.core.model.DormFile;
-import com.zenika.dorm.core.model.DormOrigin;
+import com.zenika.dorm.core.model.DormMetadataExtension;
 import com.zenika.dorm.core.model.DormRequest;
 import com.zenika.dorm.core.model.impl.DefaultDormFile;
 import com.zenika.dorm.core.model.impl.DefaultDormMetadata;
-import com.zenika.dorm.core.model.impl.DefaultDormOrigin;
+import com.zenika.dorm.core.model.impl.DefaultDormMetadataExtension;
 import com.zenika.dorm.core.model.impl.DefaultDormRequest;
 import com.zenika.dorm.core.processor.RequestProcessor;
 import com.zenika.dorm.core.processor.impl.DormProcessor;
@@ -47,23 +47,23 @@ public class DormProcessorUnitTest extends AbstractUnitTest {
         File file = new File("/tmp/testfile.jar");
 
         Map<String, String> properties = new HashMap<String, String>();
-        properties.put(DormRequest.ORIGIN, DefaultDormOrigin.ORIGIN);
+        properties.put(DormRequest.ORIGIN, DefaultDormMetadataExtension.ORIGIN);
         properties.put(DormRequest.VERSION, version);
         properties.put(DormRequest.FILENAME, filename);
         properties.put("qualifier", qualifier);
 
-        DormOrigin origin = new DefaultDormOrigin(qualifier);
+        DormMetadataExtension extension = new DefaultDormMetadataExtension(qualifier);
         DormFile dormFile = DefaultDormFile.create(filename, file);
 
         DormRequest request = DefaultDormRequest.create(properties, file);
 
         DependencyNode node = DefaultDependencyNode.create(DefaultDependency.create(
-                new DefaultDormMetadata("1.0", origin), dormFile));
+                new DefaultDormMetadata("1.0", extension), dormFile));
 
-        given(requestProcessor.createNode(origin, request)).willReturn(node);
+        given(requestProcessor.createNode(extension, request)).willReturn(node);
 
         Assertions.assertThat(processor.push(request)).isEqualTo(node);
 
-        verify(requestProcessor).createNode(origin, request);
+        verify(requestProcessor).createNode(extension, request);
     }
 }

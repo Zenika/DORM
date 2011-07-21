@@ -2,9 +2,9 @@ package com.zenika.dorm.core.processor.impl;
 
 import com.zenika.dorm.core.exception.CoreException;
 import com.zenika.dorm.core.graph.DependencyNode;
-import com.zenika.dorm.core.model.DormOrigin;
+import com.zenika.dorm.core.model.DormMetadataExtension;
 import com.zenika.dorm.core.model.DormRequest;
-import com.zenika.dorm.core.model.impl.DefaultDormOrigin;
+import com.zenika.dorm.core.model.impl.DefaultDormMetadataExtension;
 
 /**
  * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>
@@ -28,8 +28,8 @@ public class DormProcessor extends AbstractProcessorExtension {
             throw new CoreException("Qualifier is null");
         }
 
-        DormOrigin origin = new DefaultDormOrigin(request.getProperty("qualifier"));
+        DormMetadataExtension extension = new DefaultDormMetadataExtension(request.getProperty("qualifier"));
 
-        return getRequestProcessor().createNode(origin, request);
+        return getRequestProcessor().createNode(extension, request);
     }
 }

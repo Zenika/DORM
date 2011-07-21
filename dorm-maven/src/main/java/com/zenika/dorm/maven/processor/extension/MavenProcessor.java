@@ -6,7 +6,7 @@ import com.zenika.dorm.core.model.DormFile;
 import com.zenika.dorm.core.model.DormRequest;
 import com.zenika.dorm.core.processor.impl.AbstractProcessorExtension;
 import com.zenika.dorm.maven.exception.MavenException;
-import com.zenika.dorm.maven.model.impl.MavenOrigin;
+import com.zenika.dorm.maven.model.impl.MavenMetadataExtension;
 import org.apache.commons.io.FilenameUtils;
 
 /**
@@ -27,11 +27,11 @@ public class MavenProcessor extends AbstractProcessorExtension {
             throw new MavenException("invalid maven type");
         }
 
-        MavenOrigin rootOrigin = new MavenOrigin(request.getProperty("groupId"),
+        MavenMetadataExtension rootOrigin = new MavenMetadataExtension(request.getProperty("groupId"),
                 request.getProperty("artifactId"), request.getProperty("versionId"),
                 MavenProcessor.ENTITY_TYPE);
 
-        MavenOrigin origin = new MavenOrigin(request.getProperty("groupId"),
+        MavenMetadataExtension origin = new MavenMetadataExtension(request.getProperty("groupId"),
                 request.getProperty("artifactId"), request.getProperty("versionId"), type);
 
         Dependency rootDependency = getRequestProcessor().createDependency(rootOrigin, request);

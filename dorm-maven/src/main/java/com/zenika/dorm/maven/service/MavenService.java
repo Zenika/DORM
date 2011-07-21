@@ -4,13 +4,13 @@ import com.zenika.dorm.core.model.old.DormArtifact;
 import com.zenika.dorm.core.model.old.DormFile;
 import com.zenika.dorm.core.modelnew.impl.DormModule;
 import com.zenika.dorm.maven.model.impl.DormMavenMetadata;
-import com.zenika.dorm.maven.model.impl.MavenOrigin;
+import com.zenika.dorm.maven.model.impl.MavenMetadataExtension;
 
 import java.io.File;
 
 public interface MavenService {
 
-    public DormModule pushArtifact(MavenOrigin origin, DormFile file);
+    public DormModule pushArtifact(MavenMetadataExtension origin, DormFile file);
 
     /**
      * @deprecated
