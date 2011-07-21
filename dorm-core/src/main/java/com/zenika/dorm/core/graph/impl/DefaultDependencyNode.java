@@ -51,7 +51,6 @@ public class DefaultDependencyNode implements DependencyNode {
                     break;
                 }
 
-//                children.accept(visitor);
             }
         }
 

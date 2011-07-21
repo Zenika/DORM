@@ -4,7 +4,6 @@ import com.zenika.dorm.core.graph.Dependency;
 import com.zenika.dorm.core.graph.DependencyNode;
 import com.zenika.dorm.core.graph.impl.Usage;
 import com.zenika.dorm.core.graph.visitor.AbstractDependencyVisitor;
-import com.zenika.dorm.core.model.graph.proposal1.DependencyNodeLeaf;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -34,12 +33,6 @@ public class DependenciesCollector extends AbstractDependencyVisitor {
 
     @Override
     public Boolean visitExit(DependencyNode node) {
-        return true;
-    }
-
-    @Override
-    public Boolean visit(DependencyNodeLeaf node) {
-        dependencies.add(node.getDependency());
         return true;
     }
 

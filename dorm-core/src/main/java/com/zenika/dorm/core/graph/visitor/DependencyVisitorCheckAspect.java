@@ -1,8 +1,7 @@
 package com.zenika.dorm.core.graph.visitor;
 
+import com.zenika.dorm.core.graph.DependencyNode;
 import com.zenika.dorm.core.graph.visitor.impl.DependencyVisitorCheckException;
-import com.zenika.dorm.core.model.graph.proposal1.DependencyNodeComposite;
-import com.zenika.dorm.core.model.graph.proposal1.DependencyNodeLeaf;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -21,39 +20,14 @@ public class DependencyVisitorCheckAspect {
      * @param visitor the current visitor
      */
     @Pointcut("execution(Boolean com.zenika.dorm.core.graph.visitor.DependencyVisitor.visitEnter" +
-            "(com.zenika.dorm.core.model.graph.proposal1.DependencyNodeComposite)) && args(node) " +
+            "(com.zenika.dorm.core.model.graph.proposal1.DependencyNode)) && args(node) " +
             "&& target(visitor)")
-    public void visitComposite(DependencyNodeComposite node, DependencyVisitor visitor) {
-    }
-
-    /**
-     * pointcut on the method visit used to enter to an leaf node
-     *
-     * @param node    the leaf node
-     * @param visitor the current visitor
-     */
-    @Pointcut("execution(Boolean com.zenika.dorm.core.graph.visitor.DependencyVisitor.visit" +
-            "(com.zenika.dorm.core.model.graph.proposal1.DependencyNodeLeaf)) && args(node) " +
-            "&& target(visitor)")
-    public void visitLeaf(DependencyNodeLeaf node, DependencyVisitor visitor) {
+    public void visitComposite(DependencyNode node, DependencyVisitor visitor) {
     }
 
     @Around("visitComposite(node, visitor)")
-    public Object performChecksOnComposite(ProceedingJoinPoint joinPoint, DependencyNodeComposite node,
+    public Object performChecksOnComposite(ProceedingJoinPoint joinPoint, DependencyNode node,
                                            DependencyVisitor visitor) throws Throwable {
-
-        try {
-            visitor.performChecks(node);
-        } catch (DependencyVisitorCheckException e) {
-            return false;
-        }
-
-        return joinPoint.proceed();
-    }
-
-    @Around("visitLeaf(node, visitor)")
-    public Object performChecksOnLeaf(ProceedingJoinPoint joinPoint, DependencyNodeLeaf node,
-                                      DependencyVisitor visitor) throws Throwable {
 
         try {
             visitor.performChecks(node);

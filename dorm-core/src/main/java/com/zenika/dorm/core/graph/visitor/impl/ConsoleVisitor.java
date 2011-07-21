@@ -2,7 +2,6 @@ package com.zenika.dorm.core.graph.visitor.impl;
 
 import com.zenika.dorm.core.graph.DependencyNode;
 import com.zenika.dorm.core.graph.visitor.AbstractDependencyVisitor;
-import com.zenika.dorm.core.model.graph.proposal1.DependencyNodeLeaf;
 
 /**
  * Graph visitor that prints dependencies in the console
@@ -27,12 +26,6 @@ public class ConsoleVisitor extends AbstractDependencyVisitor {
         print("Exit composite node : " + node.getDependency().getMetadata());
         counter--;
 
-        return true;
-    }
-
-    @Override
-    public Boolean visit(DependencyNodeLeaf node) {
-        print("Visit leaf node : " + node.getDependency().getMetadata());
         return true;
     }
 

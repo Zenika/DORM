@@ -2,7 +2,6 @@ package com.zenika.dorm.core.graph.visitor;
 
 import com.zenika.dorm.core.graph.DependencyNode;
 import com.zenika.dorm.core.graph.visitor.impl.DependencyVisitorCheckException;
-import com.zenika.dorm.core.model.graph.proposal1.DependencyNodeLeaf;
 
 /**
  * Implementation of an hierarchical visitor pattern
@@ -22,16 +21,6 @@ public interface DependencyVisitor {
     Boolean visitEnter(DependencyNode node);
 
     Boolean visitExit(DependencyNode node);
-
-    /**
-     * The visitor enters to a leaf node
-     * Calls automatically performChecks in the DependencyVisitorCheckAspect
-     *
-     * @param node the leaf node
-     * @return the visit's result
-     * @deprecated
-     */
-    Boolean visit(DependencyNodeLeaf node);
 
     /**
      * Is called automatically by the DependencyVisitorCheckAspect

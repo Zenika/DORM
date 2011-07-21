@@ -10,8 +10,6 @@ import com.zenika.dorm.core.model.DormFile;
 import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.core.model.DormOrigin;
 import com.zenika.dorm.core.model.DormRequest;
-import com.zenika.dorm.core.model.graph.proposal1.DependencyNodeComposite;
-import com.zenika.dorm.core.model.graph.proposal1.impl.DefaultDependencyNodeComposite;
 import com.zenika.dorm.core.model.impl.DefaultDormFile;
 import com.zenika.dorm.core.model.impl.DefaultDormMetadata;
 import com.zenika.dorm.core.processor.Processor;
@@ -134,102 +132,6 @@ public class DefaultProcessor implements Processor {
         return root;
     }
 
-    /**
-     * Cannot make this working
-     *
-     * Initial target was to call external extension only to obtain the origin
-     * For example maven processor must only return the specific maven origin
-     * And next the default processor will add theses origins to metadata and then to the node.
-     *
-     * But an extension can return single origin or multiples.
-     * For example maven processor will always return 2 origins : the "entity / abstract" origin and the
-     * specific origin with the type.
-     * And processor X can return 10 origins with complex reliationship.
-     *
-     * But I can't modelize this.
-     * The new push method (this one was renamed to oldPush) will call extension and get back a complete
-     * DependencyNode.
-     *
-     * Required properties are at least :
-     * - version
-     *
-     * @param origin     the push request's origin
-     * @param properties the properties to push
-     * @return the push status, succeed or failed
-     */
-    public Boolean pushOld(String origin, Map<String, String> properties) {
-
-        ProcessorExtension extension = getExtension(origin);
-        String version = properties.get("version");
-
-        Map<DormOrigin, Set<DormOrigin>> origins = extension.getOrigins(properties);
-
-        DependencyNode currentNode = null;
-        DependencyNode previousNode = null;
-
-        for (Iterator<Map.Entry<DormOrigin, Set<DormOrigin>>> it = origins.entrySet().iterator();
-             it.hasNext(); ) {
-
-            if (null != currentNode) {
-                previousNode = currentNode;
-            }
-
-            Map.Entry<DormOrigin, Set<DormOrigin>> entry = it.next();
-            currentNode = createNode(entry.getKey(), version);
-
-            if (null != previousNode) {
-                for (DependencyNode node : previousNode.getChildren()) {
-                    if (node.equals(currentNode)) {
-                        currentNode = node;
-                    }
-                }
-            }
-
-//            DormMetadata metadata = new DefaultDormMetadata(ve)
-
-            for (Iterator<DormOrigin> setIt = entry.getValue().iterator(); setIt.hasNext(); ) {
-                currentNode.addChild(createNode(setIt.next(), version));
-            }
-        }
-
-
-//        DormOrigin rootOrigin = extension.getOrigins(properties);
-//        DormMetadata metadata = new DefaultDormMetadata(properties.get("version"), rootOrigin);
-//        Dependency dependency = new DefaultDependency(metadata);
-//        DependencyNodeComposite node = new DefaultDependencyNodeComposite(dependency);
-//
-//
-//
-//        DormOrigin lastOrigin = rootOrigin;
-//        DormOrigin childOrigin = null;
-//
-//        while ((childOrigin = extension.getOriginFromParent(properties, lastOrigin)) != null &&
-//                !lastOrigin.equals(childOrigin)) {
-//
-//            DormMetadata childMetadata = new DefaultDormMetadata(metadata.getVersion(), childOrigin);
-//            Dependency childDependency = new DefaultDependency(childMetadata);
-//
-//        }
-//
-//        // get metadata which will call getOrigin
-//        DormMetadata metadata = getMetadata(origin, properties);
-//
-//        // create dependency from the metadata
-//        Dependency dependency = new DefaultDependency(metadata);
-//
-//        // now he have metadata, we need the graph represented by the root node
-//        DependencyNode root = getExtension(origin).getNode();
-//
-//        // now he need to know on which node we have to set the dependency
-//        DependencyNode node = getExtension(origin).getDependencyNode();
-//        node.setDependency(dependency);
-
-
-//        return service.pushDependency(dependency);
-        return false;
-    }
-
-    /**
      * Get extension processor from the origin name
      * Extensions are injected to the processor in the guice module config
      *
@@ -245,11 +147,6 @@ public class DefaultProcessor implements Processor {
         }
 
         return extension;
-    }
-
-    private DependencyNodeComposite createNode(DormOrigin origin, String version) {
-        return new DefaultDependencyNodeComposite(new DefaultDependency(new
-                DefaultDormMetadata(version, origin)));
     }
 
     public Map<String, ProcessorExtension> getExtensions() {
