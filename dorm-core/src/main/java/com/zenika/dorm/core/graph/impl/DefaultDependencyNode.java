@@ -12,12 +12,20 @@ import java.util.Set;
  *
  * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>
  */
-public class DefaultDependencyNode implements DependencyNode {
+public final class DefaultDependencyNode implements DependencyNode {
 
     private Dependency dependency;
 
     private Set<DependencyNode> childrens = new HashSet<DependencyNode>();
 
+    public static DefaultDependencyNode create(Dependency dependency) {
+        return new DefaultDependencyNode(dependency);
+    }
+
+    /**
+     * @param dependency
+     * @deprecated Will be private, use factory methods
+     */
     public DefaultDependencyNode(Dependency dependency) {
         this.dependency = dependency;
     }
@@ -50,7 +58,6 @@ public class DefaultDependencyNode implements DependencyNode {
                 if (!children.accept(visitor)) {
                     break;
                 }
-
             }
         }
 

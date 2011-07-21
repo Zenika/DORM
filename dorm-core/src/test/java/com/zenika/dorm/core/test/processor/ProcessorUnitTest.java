@@ -60,8 +60,8 @@ public class ProcessorUnitTest extends AbstractUnitTest {
 
         DormRequest request = DefaultDormRequest.create(properties);
 
-        DependencyNode node = new DefaultDependencyNode(new DefaultDependency(
-                new DefaultDormMetadata("1.0", new DefaultDormOrigin("test"))));
+        DependencyNode node = DefaultDependencyNode.create(DefaultDependency.create(
+                DefaultDormMetadata.create("1.0", new DefaultDormOrigin("test"))));
 
         given(extension.push(request)).willReturn(node);
 

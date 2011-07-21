@@ -5,45 +5,49 @@ import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.core.model.DormOrigin;
 
 /**
- * Should be renamed as DormMetadata
+ * Immutable dorm metadata
  *
  * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>
  */
-public class DefaultDormMetadata implements DormMetadata {
+public final class DefaultDormMetadata implements DormMetadata {
 
-    private String qualifier;
-    private String fullQualifier;
-    private String version;
-    private DormOrigin origin;
+    private final String qualifier;
+    private final String fullQualifier;
+    private final String version;
 
+    /**
+     * todo: Probem here, cannot be sure that all implementations will be immutable.
+     */
+    private final DormOrigin origin;
+
+    public static DefaultDormMetadata create(String version, DormOrigin origin) {
+        return new DefaultDormMetadata(version, origin);
+    }
+
+    /**
+     * @param version
+     * @param origin
+     * @deprecated Will be private, use the factory methods
+     */
     public DefaultDormMetadata(String version, DormOrigin origin) {
 
-        // validate before create metadata
         if (null == version || null == origin || null == origin.getQualifier() || null == origin.getOrigin()) {
-            throw new CoreException("properties are missing for metadata");
+            throw new CoreException("Properties are missing for metadata");
         }
 
         this.version = version;
         this.origin = origin;
+        this.qualifier = origin.getQualifier();
+        this.fullQualifier = this.qualifier + ":" + version + ":" + origin.getOrigin();
     }
 
     @Override
     public String getFullQualifier() {
-
-        if (null == fullQualifier) {
-            fullQualifier = getQualifier() + ":" + version + ":" + origin.getOrigin();
-        }
-
         return fullQualifier;
     }
 
     @Override
     public String getQualifier() {
-
-        if (null == qualifier) {
-            qualifier = origin.getQualifier();
-        }
-
         return qualifier;
     }
 
@@ -87,6 +91,4 @@ public class DefaultDormMetadata implements DormMetadata {
         result = 31 * result + (origin != null ? origin.hashCode() : 0);
         return result;
     }
-
-
 }

@@ -57,7 +57,7 @@ public class DormProcessorUnitTest extends AbstractUnitTest {
 
         DormRequest request = DefaultDormRequest.create(properties, file);
 
-        DependencyNode node = new DefaultDependencyNode(new DefaultDependency(
+        DependencyNode node = DefaultDependencyNode.create(DefaultDependency.create(
                 new DefaultDormMetadata("1.0", origin), dormFile));
 
         given(requestProcessor.createNode(origin, request)).willReturn(node);

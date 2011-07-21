@@ -14,8 +14,6 @@ import java.util.Map;
  */
 public final class DefaultDormRequest implements DormRequest {
 
-//    private final Set<String> reservedKeys = new HashSet<String>();
-
     private final String version;
     private final String origin;
     private final String usage;

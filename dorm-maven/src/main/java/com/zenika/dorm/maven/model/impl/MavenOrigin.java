@@ -7,20 +7,19 @@ package com.zenika.dorm.maven.model.impl;
 import com.zenika.dorm.core.model.DormOrigin;
 
 /**
- * Maven extension point to the dorm model
+ * Maven immutable extension point to the dorm model
  * Add maven specific metadatas
  *
  * todo: add packaging + classifier metadatas
- *
  */
-public class MavenOrigin implements DormOrigin {
+public final class MavenOrigin implements DormOrigin {
 
     public static final String ORIGIN = "maven";
 
-    private String groupId;
-    private String artifactId;
-    private String versionId;
-    private String type;
+    private final String groupId;
+    private final String artifactId;
+    private final String versionId;
+    private final String type;
 
     public MavenOrigin(String groupId, String artifactId, String versionId, String type) {
         this.groupId = groupId;

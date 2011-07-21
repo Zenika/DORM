@@ -6,13 +6,15 @@ import com.zenika.dorm.core.model.DormFile;
 import com.zenika.dorm.core.model.DormMetadata;
 
 /**
+ * Immutable dorm dependency
+ *
  * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>
  */
-public class DefaultDependency implements Dependency {
+public final class DefaultDependency implements Dependency {
 
-    private Usage usage;
-    private DormMetadata metadata;
-    private DormFile file;
+    private final Usage usage;
+    private final DormMetadata metadata;
+    private final DormFile file;
 
     public static DefaultDependency create(DormMetadata metadata) {
         return new DefaultDependency(metadata, Usage.create(), null);
@@ -32,7 +34,7 @@ public class DefaultDependency implements Dependency {
 
     /**
      * @see DefaultDependency#create(com.zenika.dorm.core.model.DormMetadata)
-     * @deprecated Use factory methods
+     * @deprecated Will be removed, use factory methods
      */
     public DefaultDependency(DormMetadata metadata) {
         this(metadata, Usage.create());
@@ -40,7 +42,7 @@ public class DefaultDependency implements Dependency {
 
     /**
      * @see DefaultDependency#create(com.zenika.dorm.core.model.DormMetadata, com.zenika.dorm.core.model.DormFile)
-     * @deprecated Use factory methods
+     * @deprecated Will be removed, use factory methods
      */
     public DefaultDependency(DormMetadata metadata, DormFile file) {
         this(metadata, Usage.create(), file);
@@ -48,7 +50,7 @@ public class DefaultDependency implements Dependency {
 
     /**
      * @see DefaultDependency#create(com.zenika.dorm.core.model.DormMetadata, Usage)
-     * @deprecated Use factory methods
+     * @deprecated Will be removed, use factory methods
      */
     public DefaultDependency(DormMetadata metadata, Usage usage) {
         this(metadata, usage, null);
@@ -56,7 +58,7 @@ public class DefaultDependency implements Dependency {
 
     /**
      * @see DefaultDependency#create(com.zenika.dorm.core.model.DormMetadata, Usage, com.zenika.dorm.core.model.DormFile)
-     * @deprecated Use factory methods
+     * @deprecated Will be private, use factory methods
      */
     public DefaultDependency(DormMetadata metadata, Usage usage, DormFile file) {
 
@@ -87,19 +89,6 @@ public class DefaultDependency implements Dependency {
     @Override
     public Boolean hasFile() {
         return null != file;
-    }
-
-    public void setUsage(Usage usage) {
-        this.usage = usage;
-    }
-
-    public void setMetadata(DormMetadata metadata) {
-        this.metadata = metadata;
-    }
-
-
-    public void setFile(DormFile file) {
-        this.file = file;
     }
 
     @Override

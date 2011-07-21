@@ -14,7 +14,5 @@ public interface DormService {
 
     public Boolean pushDependency(Dependency dependency);
 
-    public Boolean pushDependency(Dependency dependency, Dependency parent);
-
     public DependencyNode getByMetadata(DormMetadata metadata, Usage usage);
 }
