@@ -7,9 +7,16 @@ import com.zenika.dorm.core.model.DormRequest;
 import com.zenika.dorm.core.model.impl.DefaultDormMetadataExtension;
 
 /**
+ * Processor for the dorm extension
+ *
  * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>
  */
 public class DormProcessor extends AbstractProcessorExtension {
+
+    /**
+     * Metadata names
+     */
+    public static final String METADATA_NAME = "name";
 
     /**
      * Create a simple node with the file and the origin
@@ -24,11 +31,13 @@ public class DormProcessor extends AbstractProcessorExtension {
             throw new CoreException("File is required");
         }
 
-        if (null == request.getProperty("qualifier")) {
-            throw new CoreException("Qualifier is null");
+        String name = request.getProperty(METADATA_NAME);
+
+        if (null == name || name.isEmpty()) {
+            throw new CoreException("Name is required.");
         }
 
-        DormMetadataExtension extension = new DefaultDormMetadataExtension(request.getProperty("qualifier"));
+        DormMetadataExtension extension = new DefaultDormMetadataExtension(name);
 
         return getRequestProcessor().createNode(extension, request);
     }

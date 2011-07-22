@@ -1,14 +1,9 @@
 package com.zenika.dorm.core.test.processor.impl;
 
+import com.zenika.dorm.core.exception.CoreException;
 import com.zenika.dorm.core.graph.DependencyNode;
-import com.zenika.dorm.core.graph.impl.DefaultDependency;
-import com.zenika.dorm.core.graph.impl.DefaultDependencyNode;
-import com.zenika.dorm.core.model.DormFile;
 import com.zenika.dorm.core.model.DormMetadataExtension;
 import com.zenika.dorm.core.model.DormRequest;
-import com.zenika.dorm.core.model.impl.DefaultDormFile;
-import com.zenika.dorm.core.model.impl.DefaultDormMetadata;
-import com.zenika.dorm.core.model.impl.DefaultDormMetadataExtension;
 import com.zenika.dorm.core.model.impl.DefaultDormRequest;
 import com.zenika.dorm.core.processor.RequestProcessor;
 import com.zenika.dorm.core.processor.impl.DormProcessor;
@@ -18,8 +13,6 @@ import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
-import java.io.File;
-import java.util.HashMap;
 import java.util.Map;
 
 import static org.mockito.BDDMockito.given;
@@ -39,31 +32,32 @@ public class DormProcessorUnitTest extends AbstractUnitTest {
     private DormProcessor processor = new DormProcessor();
 
     @Test
-    public void pushStandardArtifact() {
+    public void pushStandardDormArtifact() {
 
-        String qualifier = "test-1.0";
-        String version = "1.0";
-        String filename = "testfile.jar";
-        File file = new File("/tmp/testfile.jar");
-
-        Map<String, String> properties = new HashMap<String, String>();
-        properties.put(DormRequest.ORIGIN, DefaultDormMetadataExtension.ORIGIN);
-        properties.put(DormRequest.VERSION, version);
-        properties.put(DormRequest.FILENAME, filename);
-        properties.put("qualifier", qualifier);
-
-        DormMetadataExtension extension = new DefaultDormMetadataExtension(qualifier);
-        DormFile dormFile = DefaultDormFile.create(filename, file);
-
-        DormRequest request = DefaultDormRequest.create(properties, file);
-
-        DependencyNode node = DefaultDependencyNode.create(DefaultDependency.create(
-                new DefaultDormMetadata("1.0", extension), dormFile));
+        DependencyNode node = fixtures.getNodeWithFile();
+        DormMetadataExtension extension = fixtures.getMetadataExtension();
+        DormRequest request = fixtures.getRequestWithFile();
 
         given(requestProcessor.createNode(extension, request)).willReturn(node);
 
         Assertions.assertThat(processor.push(request)).isEqualTo(node);
 
         verify(requestProcessor).createNode(extension, request);
+    }
+
+    @Test(expected = CoreException.class)
+    public void pushDormArtifactWithoutFile() {
+        processor.push(fixtures.getRequestWithoutFile());
+    }
+
+    @Test(expected = CoreException.class)
+    public void pushDormArtifactWithoutRequiredMetadatas() {
+
+        Map<String, String> properties = fixtures.getRequestPropertiesWithFile();
+        properties.put(DormProcessor.METADATA_NAME, null);
+
+        DormRequest request = DefaultDormRequest.create(properties, fixtures.getFile());
+
+        processor.push(request);
     }
 }

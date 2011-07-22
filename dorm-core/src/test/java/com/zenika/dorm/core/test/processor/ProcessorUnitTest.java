@@ -2,11 +2,7 @@ package com.zenika.dorm.core.test.processor;
 
 import com.zenika.dorm.core.exception.CoreException;
 import com.zenika.dorm.core.graph.DependencyNode;
-import com.zenika.dorm.core.graph.impl.DefaultDependency;
-import com.zenika.dorm.core.graph.impl.DefaultDependencyNode;
 import com.zenika.dorm.core.model.DormRequest;
-import com.zenika.dorm.core.model.impl.DefaultDormMetadata;
-import com.zenika.dorm.core.model.impl.DefaultDormMetadataExtension;
 import com.zenika.dorm.core.model.impl.DefaultDormRequest;
 import com.zenika.dorm.core.processor.Processor;
 import com.zenika.dorm.core.processor.ProcessorExtension;
@@ -18,7 +14,6 @@ import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import static org.mockito.BDDMockito.given;
@@ -52,20 +47,19 @@ public class ProcessorUnitTest extends AbstractUnitTest {
     }
 
     @Test
-    public void push() {
+    public void pushValidArtifact() {
 
-        Map<String, String> properties = new HashMap<String, String>();
-        properties.put(DormRequest.ORIGIN, "test");
-        properties.put(DormRequest.VERSION, "1.0");
+        DormRequest request = getTestRequest();
 
-        DormRequest request = DefaultDormRequest.create(properties);
+        DependencyNode node = fixtures.getNodeWithFile();
 
-        DependencyNode node = DefaultDependencyNode.create(DefaultDependency.create(
-                DefaultDormMetadata.create("1.0", new DefaultDormMetadataExtension("test"))));
-
+        // extension return the correct node corresponding to the request
         given(extension.push(request)).willReturn(node);
 
+        // service stores the node successfully
         given(service.pushNode(node)).willReturn(true);
+
+        // if store was done successfully then processor should also return true
         Assertions.assertThat(processor.push(request)).isTrue();
 
         verify(extension).push(request);
@@ -74,15 +68,19 @@ public class ProcessorUnitTest extends AbstractUnitTest {
 
     @Test(expected = CoreException.class)
     public void pushWithUnkownExtension() {
-        Map<String, String> properties = new HashMap<String, String>();
+        Map<String, String> properties = fixtures.getRequestPropertiesWithoutFile();
         properties.put(DormRequest.ORIGIN, "foo");
-        properties.put(DormRequest.VERSION, "1.0");
-        DormRequest request = DefaultDormRequest.create(properties);
-        processor.push(request);
+        processor.push(DefaultDormRequest.create(properties));
     }
 
-    @Test(expected = CoreException.class)
-    public void pushNullProperty() {
-        processor.push(null);
+    /**
+     * Return request from fixture with the test extension
+     *
+     * @return the test dorm request
+     */
+    private DormRequest getTestRequest() {
+        Map<String, String> properties = fixtures.getRequestPropertiesWithoutFile();
+        properties.put(DormRequest.ORIGIN, "test");
+        return DefaultDormRequest.create(properties);
     }
 }
