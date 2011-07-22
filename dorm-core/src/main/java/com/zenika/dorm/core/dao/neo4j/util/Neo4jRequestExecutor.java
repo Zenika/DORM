@@ -3,7 +3,12 @@ package com.zenika.dorm.core.dao.neo4j.util;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
+import com.sun.jersey.api.client.config.ClientConfig;
+import com.sun.jersey.api.client.config.DefaultClientConfig;
+import com.zenika.dorm.core.dao.neo4j.Neo4jNode;
+import com.zenika.dorm.core.dao.neo4j.Neo4jResponse;
 import com.zenika.dorm.core.graph.impl.Usage;
+import org.codehaus.jackson.map.ObjectMapper;
 
 import javax.ws.rs.core.MediaType;
 import javax.xml.ws.Response;
@@ -27,9 +32,30 @@ public class Neo4jRequestExecutor {
     public static final String BATCH_URI = "http://localhost:7474/db/data/batch";
 
     private Neo4jParser parser;
+    private WebResource resource;
+    private ObjectMapper mapper;
 
-    public Neo4jRequestExecutor(){
+    public Neo4jRequestExecutor() {
         parser = new Neo4jParser();
+
+        ClientConfig config = new DefaultClientConfig();
+        config.getClasses().add(JAXBContentResolver.class);
+        Client client = Client.create(config);
+        resource = client.resource(DATA_ENTRY_POINT_URI);
+    }
+
+    public <T extends Neo4jNode> T post(T node) {
+        node.setResponse(resource.path("node").accept(MediaType.APPLICATION_JSON).type(MediaType.APPLICATION_JSON)
+                .entity(node).post(Neo4jResponse.class));
+        return node;
+    }
+
+    public <T extends Neo4jNode> T get(URI uri){
+        Neo4jResponse response = resource.uri(uri).accept(MediaType.APPLICATION_JSON).get(Neo4jResponse.class);
+        ClientResponse clientResponse = resource.uri(uri).accept(MediaType.APPLICATION_JSON).get(ClientResponse.class);
+        System.out.println(response);
+        System.out.println(clientResponse.getEntity(String.class));
+        return null;
     }
 
     public void createRelationship(String node, String child, Usage usage) throws IOException {
@@ -72,6 +98,7 @@ public class Neo4jRequestExecutor {
         }
         return response.getLocation().toString();
     }
+
 
     public String getDependencyUri(String fullQualifier) throws IOException {
         WebResource resource = Client.create().resource(INDEX_ENTRY_POINT_URI + "/node/dependency/fullqualifier/" +

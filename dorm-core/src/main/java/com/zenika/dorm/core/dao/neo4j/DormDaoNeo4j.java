@@ -22,6 +22,8 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 import javax.ws.rs.core.MediaType;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 import static com.zenika.dorm.core.dao.neo4j.util.Neo4jParser.*;
 
@@ -34,12 +36,23 @@ public class DormDaoNeo4j implements DormDao {
     private Neo4jRequestExecutor executor;
     private Neo4jParser parser;
 
+
     public DormDaoNeo4j() {
         mapper = new ObjectMapper();
         mapper.getSerializationConfig().setSerializationInclusion(JsonSerialize.Inclusion.NON_NULL);
         executor = new Neo4jRequestExecutor();
         parser = new Neo4jParser();
     }
+
+    public void newPush(Dependency dependency) throws URISyntaxException {
+        Neo4jMetadataExtension extension = new Neo4jMetadataExtension();
+        Neo4jMetadata metadata = new Neo4jMetadata(dependency.getMetadata());
+        extension = executor.post(extension);
+        metadata = executor.post(metadata);
+        executor.get(new URI(metadata.getResponse().getSelf()));
+    }
+
+
 
     private String storeDependency(Dependency dependency) throws IOException {
         String originUri = null;
@@ -61,17 +74,6 @@ public class DormDaoNeo4j implements DormDao {
         return dependencyUri;
     }
 
-    public void newPush(Dependency dependency) {
-        DormMetadataExtension origin = new DefaultDormMetadataExtension("dorm");
-        DormMetadata metadata = new DefaultDormMetadata("1.0.0", origin);
-        Neo4jMetadata neo4jMetadata = new Neo4jMetadata(metadata);
-        ClientConfig config = new DefaultClientConfig();
-        config.getClasses().add(JAXBContentResolver.class);
-        Client client = Client.create(config);
-        WebResource resource = client.resource(Neo4jRequestExecutor.DATA_ENTRY_POINT_URI);
-        resource.path("node").accept(MediaType.APPLICATION_JSON).type(MediaType.APPLICATION_JSON)
-                .put(Neo4jMetadata.class, neo4jMetadata);
-    }
 
     private void createInternalRelationship(String node, String child, String name) throws IOException {
         executor.createRelationship(node, child, new Usage(name));

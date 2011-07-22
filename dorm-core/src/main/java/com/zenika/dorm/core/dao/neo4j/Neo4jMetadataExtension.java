@@ -4,18 +4,25 @@ import com.zenika.dorm.core.model.DormMetadataExtension;
 import com.zenika.dorm.core.model.mapper.MetadataExtensionMapper;
 import org.codehaus.jackson.annotate.JsonProperty;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.util.Map;
 
 /**
  * @author Antoine ROUAZE <antoine.rouaze AT zenika.com>
  */
+@XmlAccessorType(XmlAccessType.PROPERTY)
 @XmlRootElement
-public class Neo4jOrigin implements DormMetadataExtension {
+public class Neo4jMetadataExtension extends Neo4jNode implements DormMetadataExtension {
 
     private DormMetadataExtension extension;
 
-    public Neo4jOrigin(DormMetadataExtension extension) {
+    public Neo4jMetadataExtension(){
+
+    }
+
+    public Neo4jMetadataExtension(DormMetadataExtension extension) {
         this.extension = extension;
     }
 
@@ -29,11 +36,6 @@ public class Neo4jOrigin implements DormMetadataExtension {
         return extension.getExtension();  //To change body of implemented methods use File | Settings | File Templates.
     }
 
-//
-    @JsonProperty()
-    public Map<String, String> getProperties(){
-        return MetadataExtensionMapper.fromOrigin(extension);
-    }
 
 
 }
