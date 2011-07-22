@@ -7,7 +7,6 @@ dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.8.2'
     testCompile group: 'org.mockito', name: 'mockito-all', version: '1.8.5'
     testCompile group: 'org.easytesting', name: 'fest-assert', version: '1.4'
-    testCompile group: 'org.codehaus.jackson', name: 'jackson-jaxrs', version: '1.8.3'
     testCompile group: 'com.sun.jersey', name: 'jersey-client', version: '1.8'
 
 
