@@ -1,6 +1,7 @@
 package com.zenika.dorm.core.model;
 
 import java.io.File;
+import java.util.Map;
 
 /**
  * Wrapper for a dorm request with adding checking on required properties like version
@@ -27,4 +28,11 @@ public interface DormRequest {
     public String getUsage();
 
     public String getProperty(String key);
+
+    /**
+     * The request properties in read only mode
+     *
+     * @return the request properties
+     */
+    public Map<String, String> getProperties();
 }

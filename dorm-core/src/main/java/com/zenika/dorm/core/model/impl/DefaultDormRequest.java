@@ -4,6 +4,7 @@ import com.zenika.dorm.core.exception.CoreException;
 import com.zenika.dorm.core.model.DormRequest;
 
 import java.io.File;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -31,6 +32,32 @@ public final class DefaultDormRequest implements DormRequest {
 
     public static DefaultDormRequest create(Map<String, String> properties, File file) {
         return new DefaultDormRequest(properties, file);
+    }
+
+    public static DefaultDormRequest createFromRequest(DormRequest request, Map<String, String> newProperties) {
+        return createFromRequest(request, newProperties, null);
+    }
+
+    public static DefaultDormRequest createFromRequest(DormRequest request, File newFile) {
+        return createFromRequest(request, null, newFile);
+    }
+
+    public static DefaultDormRequest createFromRequest(DormRequest request, Map<String,
+            String> newProperties, File newFile) {
+
+        Map<String, String> properties = new HashMap<String, String>(request.getProperties());
+
+        // override old properties which are given by the new properties
+        if (null != newProperties) {
+            properties.putAll(newProperties);
+        }
+
+        // if no new file given, use the old one
+        if (null == newFile) {
+            newFile = request.getFile();
+        }
+
+        return new DefaultDormRequest(properties, newFile);
     }
 
     /**
@@ -93,5 +120,38 @@ public final class DefaultDormRequest implements DormRequest {
     @Override
     public String getProperty(String key) {
         return properties.get(key);
+    }
+
+    @Override
+    public Map<String, String> getProperties() {
+        return Collections.unmodifiableMap(properties);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof DefaultDormRequest)) return false;
+
+        DefaultDormRequest that = (DefaultDormRequest) o;
+
+        if (file != null ? !file.equals(that.file) : that.file != null) return false;
+        if (filename != null ? !filename.equals(that.filename) : that.filename != null) return false;
+        if (origin != null ? !origin.equals(that.origin) : that.origin != null) return false;
+        if (properties != null ? !properties.equals(that.properties) : that.properties != null) return false;
+        if (usage != null ? !usage.equals(that.usage) : that.usage != null) return false;
+        if (version != null ? !version.equals(that.version) : that.version != null) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = version != null ? version.hashCode() : 0;
+        result = 31 * result + (origin != null ? origin.hashCode() : 0);
+        result = 31 * result + (usage != null ? usage.hashCode() : 0);
+        result = 31 * result + (filename != null ? filename.hashCode() : 0);
+        result = 31 * result + (file != null ? file.hashCode() : 0);
+        result = 31 * result + (properties != null ? properties.hashCode() : 0);
+        return result;
     }
 }
