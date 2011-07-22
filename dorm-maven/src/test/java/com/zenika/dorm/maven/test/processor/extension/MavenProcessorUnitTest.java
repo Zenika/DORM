@@ -10,4 +10,5 @@ import com.zenika.dorm.maven.test.unit.AbstractUnitTest;
  */
 public class MavenProcessorUnitTest extends AbstractUnitTest {
 
+
 }
