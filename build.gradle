@@ -7,11 +7,24 @@ allprojects {
 
     sourceCompatibility = '1.6'
     targetCompatibility = '1.6'
-    
+
     ideaModule {
         beforeConfigured { module ->
             module.dependencies.clear()
         }
+    }
+
+    configurations {
+        sharedTests
+    }
+
+    task testJar(type: Jar, dependsOn: testClasses) {
+        baseName = "test-${project.archivesBaseName}"
+        from sourceSets.test.classes
+    }
+
+    artifacts {
+        sharedTests testJar
     }
 }
 
@@ -55,6 +68,7 @@ project(':dorm') {
 project(':dorm-maven') {
     dependencies {
         compile project(':dorm-core')
+        testCompile project(path: ':dorm-core', configuration: 'sharedTests')
     }
 }
 
