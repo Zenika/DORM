@@ -18,38 +18,17 @@ public final class DefaultDormFile implements DormFile {
     private final File file;
 
     public static DefaultDormFile create(String filename, File file) {
-
-        String name = FilenameUtils.getBaseName(filename);
-        String extension = FilenameUtils.getExtension(filename);
-
-        return new DefaultDormFile(FilenameUtils.getBaseName(filename),
-                FilenameUtils.getExtension(filename), file);
+        return new DefaultDormFile(FilenameUtils.getBaseName(filename), FilenameUtils.getExtension(filename),
+                file);
     }
 
     public static DefaultDormFile create(String name, String extension, File file) {
         return new DefaultDormFile(name, extension, file);
     }
 
-    /**
-     * @param filename
-     * @param file
-     * @see DefaultDormFile#create(String, java.io.File)
-     * @deprecated Will be deleted, use factory methods
-     */
-    public DefaultDormFile(String filename, File file) {
-        this(FilenameUtils.getBaseName(filename), FilenameUtils.getExtension(filename), file);
-    }
+    private DefaultDormFile(String name, String extension, File file) {
 
-    /**
-     * @param name
-     * @param extension
-     * @param file
-     * @see DefaultDormFile#create(String, String, java.io.File)
-     * @deprecated Will be private, use factory methods
-     */
-    public DefaultDormFile(String name, String extension, File file) {
-
-        if (null == name || null == extension || null == file) {
+        if (null == name || null == extension || null == file || name.isEmpty() || extension.isEmpty()) {
             throw new CoreException("Name, extension and file are required.");
         }
 
@@ -68,10 +47,12 @@ public final class DefaultDormFile implements DormFile {
         return file;
     }
 
+    @Override
     public String getName() {
         return name;
     }
 
+    @Override
     public String getExtension() {
         return extension;
     }

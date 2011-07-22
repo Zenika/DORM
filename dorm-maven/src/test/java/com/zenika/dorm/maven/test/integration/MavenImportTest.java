@@ -75,7 +75,7 @@ public class MavenImportTest {
         DormMetadata metadataApom = new DefaultDormMetadata("1.0", originApom);
 
         // file
-        DormFile fileApom = new DefaultDormFile("a.pom.xml", new File("repo/a/a.pom.xml"));
+        DormFile fileApom = DefaultDormFile.create("a.pom.xml", new File("repo/a/a.pom.xml"));
 
         // dependency
         Dependency dependencyApom = new DefaultDependency(metadataApom, fileApom);
@@ -93,7 +93,7 @@ public class MavenImportTest {
         DormMetadata metadataAjar = new DefaultDormMetadata("1.0", originAjar);
 
         // file
-        DormFile fileAjar = new DefaultDormFile("a.jar", new File("repo/a/a.jar"));
+        DormFile fileAjar = DefaultDormFile.create("a.jar", new File("repo/a/a.jar"));
 
         // dependency
         Dependency dependencyAjar = new DefaultDependency(metadataAjar, fileAjar);

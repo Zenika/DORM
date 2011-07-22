@@ -95,7 +95,7 @@ public class DormResource {
                                           @FormDataParam("file") File file) {
 
         DormMetadata metadata = getMetadata(qualifier, version);
-        DormFile dormFile = new DefaultDormFile(filename, file);
+        DormFile dormFile = DefaultDormFile.create(filename, file);
 
         return Response.status(Response.Status.OK).build();
     }
@@ -122,7 +122,7 @@ public class DormResource {
                                           @FormDataParam("file") File file) {
 
         DormMetadata metadata = getMetadata(qualifier, version);
-        DormFile dormFile = new DefaultDormFile(filename, file);
+        DormFile dormFile = DefaultDormFile.create(filename, file);
 
         return Response.status(Response.Status.OK).build();
     }

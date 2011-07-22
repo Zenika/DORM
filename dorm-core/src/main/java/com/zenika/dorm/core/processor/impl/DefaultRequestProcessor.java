@@ -2,13 +2,13 @@ package com.zenika.dorm.core.processor.impl;
 
 import com.zenika.dorm.core.graph.Dependency;
 import com.zenika.dorm.core.graph.DependencyNode;
+import com.zenika.dorm.core.graph.impl.DefaultDependency;
+import com.zenika.dorm.core.graph.impl.DefaultDependencyNode;
+import com.zenika.dorm.core.graph.impl.Usage;
 import com.zenika.dorm.core.model.DormFile;
 import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.core.model.DormMetadataExtension;
 import com.zenika.dorm.core.model.DormRequest;
-import com.zenika.dorm.core.graph.impl.DefaultDependency;
-import com.zenika.dorm.core.graph.impl.DefaultDependencyNode;
-import com.zenika.dorm.core.graph.impl.Usage;
 import com.zenika.dorm.core.model.impl.DefaultDormFile;
 import com.zenika.dorm.core.model.impl.DefaultDormMetadata;
 import com.zenika.dorm.core.processor.RequestProcessor;
@@ -28,7 +28,7 @@ public class DefaultRequestProcessor implements RequestProcessor {
             return null;
         }
 
-        return new DefaultDormFile(request.getFilename(), request.getFile());
+        return DefaultDormFile.create(request.getFilename(), request.getFile());
     }
 
     @Override
