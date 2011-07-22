@@ -57,7 +57,7 @@ public class DormDaoMongo<T extends MetadataExtension> implements DormDaoOld<T> 
 //        Query query = ds.createQuery(DormMetadata.class);
 //        query.field("name").equal(metadata.getName());
 //        query.field("version").equal(metadata.getVersion());
-//        query.field("origin").equal(metadata.getOrigin());
+//        query.field("origin").equal(metadata.getExtension());
 //
 //        deleteByQuery(query);
     }

@@ -26,19 +26,24 @@ public class Neo4jRequestExecutor {
     public static final String ORIGIN_RELATIONSHIP = "origin_relationship";
     public static final String BATCH_URI = "http://localhost:7474/db/data/batch";
 
+    private Neo4jParser parser;
+
+    public Neo4jRequestExecutor(){
+        parser = new Neo4jParser();
+    }
 
     public void createRelationship(String node, String child, Usage usage) throws IOException {
         WebResource resource = Client.create().resource(NODE_ENTRY_POINT_URI + "/" + getNodeId(node) +
                 "/relationships");
         ClientResponse response = resource.accept(MediaType.APPLICATION_JSON).type(MediaType.APPLICATION_JSON)
-                .entity(Neo4jParser.parseRelationship(child, usage)).post(ClientResponse.class);
+                .entity(parser.parseRelationship(child, usage)).post(ClientResponse.class);
         logRequest("POST", resource.getURI(), response);
     }
 
     public String createIndexForDependency() throws Exception {
         WebResource resource = Client.create().resource(INDEX_ENTRY_POINT_URI + "/node");
         ClientResponse response = resource.accept(MediaType.APPLICATION_JSON).type(MediaType.APPLICATION_JSON)
-                .entity(Neo4jParser.parseIndexDependency()).post(ClientResponse.class);
+                .entity(parser.parseIndexDependency()).post(ClientResponse.class);
         logRequest("POST", resource.getURI(), response);
         if (response.getStatus() == 404 || response.getStatus() == 400) {
             throw new Exception(response.getEntity(String.class));
@@ -50,7 +55,7 @@ public class Neo4jRequestExecutor {
     public void attacheIndexToDependency(String dependencyUri, String fullQualifier, String indexUri) throws Exception {
         WebResource resource = Client.create().resource(indexUri + "fullqualifier/" + fullQualifier);
         ClientResponse response = resource.accept(MediaType.APPLICATION_JSON).type(MediaType.APPLICATION_JSON)
-                .entity(Neo4jParser.uriToJson(dependencyUri)).post(ClientResponse.class);
+                .entity(parser.uriToJson(dependencyUri)).post(ClientResponse.class);
         logRequest("POST", resource.getURI(), response);
         if (response.getStatus() == 404 || response.getStatus() == 400 || response.getStatus() == 405) {
             throw new Exception(response.getEntity(String.class));
@@ -79,7 +84,7 @@ public class Neo4jRequestExecutor {
             System.out.println(response.getEntity(String.class));
             return null;
         }
-        Map<String, Object> dependencyMap = Neo4jParser.parseJsonToMap(response.getEntity(String.class));
+        Map<String, Object> dependencyMap = parser.parseJsonToMap(response.getEntity(String.class));
         if (dependencyMap == null || dependencyMap.isEmpty()) {
             return null;
         } else {
@@ -91,7 +96,7 @@ public class Neo4jRequestExecutor {
         WebResource resource = Client.create().resource(nodeUri + "/properties");
         ClientResponse response = resource.accept(MediaType.APPLICATION_JSON).get(ClientResponse.class);
         logRequest("GET", resource.getURI(), response);
-        return Neo4jParser.parseJsonToMapString(response.getEntity(String.class));
+        return parser.parseJsonToMap(response.getEntity(String.class));
     }
 
     public String getDependencyNode(String dependencyUri, String traverseJson) {

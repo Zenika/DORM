@@ -50,10 +50,10 @@
 //			DormMetadata<T> metadata) {
 //
 //		// query the dorm metadata
-//		String query = "SELECT * FROM " + metadata.getOrigin()
+//		String query = "SELECT * FROM " + metadata.getExtension()
 //				+ " WHERE dm:name = '" + metadata.getName()
 //				+ "' AND dm:version = '" + metadata.getVersion()
-//				+ "' AND dm:origin = '" + metadata.getOrigin() + "'";
+//				+ "' AND dm:origin = '" + metadata.getExtension() + "'";
 //
 //		DormArtifact<T> artifact = getOneResult(query, metadata);
 //
@@ -137,7 +137,7 @@
 //
 //		try {
 //			model = session.createDocumentModel(artifact.getMetadata()
-//					.getOrigin());
+//					.getExtension());
 //		} catch (ClientException e) {
 //			throw new CoreException("Cannot create or map ECR document model");
 //		}
@@ -160,7 +160,7 @@
 //
 //		properties.put("name", artifact.getMetadata().getName());
 //		properties.put("version", artifact.getMetadata().getVersion());
-//		properties.put("origin", artifact.getMetadata().getOrigin());
+//		properties.put("origin", artifact.getMetadata().getExtension());
 //
 //		// get the file if exists
 //		if (null != artifact.getFile()) {

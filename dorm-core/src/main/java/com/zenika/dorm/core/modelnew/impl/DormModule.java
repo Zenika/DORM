@@ -81,7 +81,7 @@ final public class DormModule {
     }
 
     public String getFullQualifier() {
-        return getQualifier() + ":" + version + ":" + origin.getOrigin();
+        return getQualifier() + ":" + version + ":" + origin.getExtension();
     }
 
     @Override

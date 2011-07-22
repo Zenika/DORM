@@ -34,7 +34,7 @@ public final class MavenMetadataExtension implements DormMetadataExtension {
     }
 
     @Override
-    public String getOrigin() {
+    public String getExtension() {
         return ORIGIN;
     }
 

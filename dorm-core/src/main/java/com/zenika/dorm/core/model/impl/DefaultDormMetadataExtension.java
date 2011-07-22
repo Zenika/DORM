@@ -27,7 +27,7 @@ public final class DefaultDormMetadataExtension implements DormMetadataExtension
     }
 
     @Override
-    public String getOrigin() {
+    public String getExtension() {
         return ORIGIN;
     }
 

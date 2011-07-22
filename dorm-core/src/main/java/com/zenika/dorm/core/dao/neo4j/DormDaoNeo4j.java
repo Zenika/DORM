@@ -1,15 +1,26 @@
 package com.zenika.dorm.core.dao.neo4j;
 
 
+import com.sun.jersey.api.client.Client;
+import com.sun.jersey.api.client.ClientResponse;
+import com.sun.jersey.api.client.WebResource;
+import com.sun.jersey.api.client.config.ClientConfig;
+import com.sun.jersey.api.client.config.DefaultClientConfig;
 import com.zenika.dorm.core.dao.DormDao;
+import com.zenika.dorm.core.dao.neo4j.util.JAXBContentResolver;
+import com.zenika.dorm.core.dao.neo4j.util.Neo4jParser;
 import com.zenika.dorm.core.dao.neo4j.util.Neo4jRequestExecutor;
 import com.zenika.dorm.core.graph.Dependency;
 import com.zenika.dorm.core.graph.DependencyNode;
 import com.zenika.dorm.core.graph.impl.Usage;
 import com.zenika.dorm.core.model.DormMetadata;
+import com.zenika.dorm.core.model.DormMetadataExtension;
+import com.zenika.dorm.core.model.impl.DefaultDormMetadata;
+import com.zenika.dorm.core.model.impl.DefaultDormMetadataExtension;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
+import javax.ws.rs.core.MediaType;
 import java.io.IOException;
 
 import static com.zenika.dorm.core.dao.neo4j.util.Neo4jParser.*;
@@ -21,11 +32,13 @@ public class DormDaoNeo4j implements DormDao {
 
     private ObjectMapper mapper;
     private Neo4jRequestExecutor executor;
+    private Neo4jParser parser;
 
     public DormDaoNeo4j() {
         mapper = new ObjectMapper();
         mapper.getSerializationConfig().setSerializationInclusion(JsonSerialize.Inclusion.NON_NULL);
         executor = new Neo4jRequestExecutor();
+        parser = new Neo4jParser();
     }
 
     private String storeDependency(Dependency dependency) throws IOException {
@@ -34,8 +47,8 @@ public class DormDaoNeo4j implements DormDao {
         String dependencyUri = executor.getDependencyUri(dependency.getMetadata().getFullQualifier());
         if (dependencyUri == null) {
             try {
-                originUri = executor.postNode(parseOriginProperty(dependency.getMetadata().getExtension()));
-                metadataUri = executor.postNode(parseMetaDataProperty(dependency.getMetadata()));
+                originUri = executor.postNode(parser.parseOriginProperty(dependency.getMetadata().getExtension()));
+                metadataUri = executor.postNode(parser.parseMetaDataProperty(dependency.getMetadata()));
                 dependencyUri = executor.postNode("{}");
                 createInternalRelationship(metadataUri, originUri, executor.ORIGIN_RELATIONSHIP);
                 createInternalRelationship(dependencyUri, metadataUri, executor.METADATA_RELATIONSHIP);
@@ -48,6 +61,18 @@ public class DormDaoNeo4j implements DormDao {
         return dependencyUri;
     }
 
+    public void newPush(Dependency dependency) {
+        DormMetadataExtension origin = new DefaultDormMetadataExtension("dorm");
+        DormMetadata metadata = new DefaultDormMetadata("1.0.0", origin);
+        Neo4jMetadata neo4jMetadata = new Neo4jMetadata(metadata);
+        ClientConfig config = new DefaultClientConfig();
+        config.getClasses().add(JAXBContentResolver.class);
+        Client client = Client.create(config);
+        WebResource resource = client.resource(Neo4jRequestExecutor.DATA_ENTRY_POINT_URI);
+        resource.path("node").accept(MediaType.APPLICATION_JSON).type(MediaType.APPLICATION_JSON)
+                .put(Neo4jMetadata.class, neo4jMetadata);
+    }
+
     private void createInternalRelationship(String node, String child, String name) throws IOException {
         executor.createRelationship(node, child, new Usage(name));
     }
@@ -55,7 +80,7 @@ public class DormDaoNeo4j implements DormDao {
     @Override
     public Boolean push(Dependency dependency) {
         try {
-            String jsonRequest = parseDependencyToJson(dependency);
+            String jsonRequest = parser.parseDependencyToJson(dependency);
             executor.executeBatchRequests(jsonRequest);
             return true;
         } catch (Exception e) {
@@ -64,7 +89,7 @@ public class DormDaoNeo4j implements DormDao {
         return false;
     }
 
-    public boolean pushNoBatch(Dependency dependency){
+    public boolean pushNoBatch(Dependency dependency) {
         try {
             storeDependency(dependency);
             return true;
@@ -77,9 +102,9 @@ public class DormDaoNeo4j implements DormDao {
     @Override
     public DependencyNode getByMetadata(DormMetadata metadata, Usage usage) {
         try {
-            String traverseJson = parseTraverse(usage);
+            String traverseJson = parser.parseTraverse(usage);
             String dependencyUri = executor.getDependencyUri(metadata.getFullQualifier());
-            return parseTraverseToDependency(metadata, usage, executor.getDependencyNode(dependencyUri, traverseJson))
+            return parser.parseTraverseToDependency(metadata, usage, executor.getDependencyNode(dependencyUri, traverseJson))
                     .get(dependencyUri);
         } catch (IOException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
@@ -118,8 +143,8 @@ public class DormDaoNeo4j implements DormDao {
     public Boolean pushWithParent(Dependency dependency, Dependency parent) {
         String dependencyUri = null;
         try {
-            dependencyUri = getDependencyUriFromBatchResponse(executor.executeBatchRequests(
-                    parseDependencyToJson(dependency)));
+            dependencyUri = parser.getDependencyUriFromBatchResponse(executor.executeBatchRequests(
+                    parser.parseDependencyToJson(dependency)));
             if (dependencyUri != null) {
                 String parentUri = executor.getDependencyUri(parent.getMetadata().getFullQualifier());
                 executor.createRelationship(parentUri, dependencyUri, dependency.getUsage());
