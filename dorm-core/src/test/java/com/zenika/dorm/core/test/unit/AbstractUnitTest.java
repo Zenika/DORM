@@ -1,6 +1,6 @@
 package com.zenika.dorm.core.test.unit;
 
-import com.zenika.dorm.core.test.helper.DormTestFixtures;
+import com.zenika.dorm.core.test.helper.DormFixtures;
 import org.junit.Before;
 import org.mockito.MockitoAnnotations;
 
@@ -9,7 +9,7 @@ import org.mockito.MockitoAnnotations;
  */
 public abstract class AbstractUnitTest {
 
-    protected DormTestFixtures fixtures;
+    protected DormFixtures fixtures;
 
     @Before
     public void before() {
@@ -18,6 +18,6 @@ public abstract class AbstractUnitTest {
         MockitoAnnotations.initMocks(this);
 
         // reset fixtures before every test
-        fixtures = new DormTestFixtures();
+        fixtures = new DormFixtures();
     }
 }

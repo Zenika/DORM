@@ -12,14 +12,14 @@ import java.util.Map;
  *
  * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>
  */
-public class DormTestFixtures extends AbstractTestFixtures {
+public class DormFixtures extends ExtensionFixtures {
 
     /**
      * Dorm metadata extension
      */
     private String name = "testname";
     private String qualifier = "testname";
-    private String origin = "dorm";
+    private String origin = DefaultDormMetadataExtension.ORIGIN;
 
     @Override
     public DormMetadataExtension getMetadataExtension() {

@@ -20,7 +20,7 @@ import java.util.Map;
 /**
  * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>
  */
-public abstract class AbstractTestFixtures {
+public abstract class ExtensionFixtures {
 
     /**
      * Dorm file
