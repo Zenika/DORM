@@ -44,7 +44,7 @@ public class Neo4jDaoTest {
 //    //
     @Test
     public void push() throws Exception {
-        dao.newPush(dependency);
+//        dao.newPush(dependency);
     }
 
 

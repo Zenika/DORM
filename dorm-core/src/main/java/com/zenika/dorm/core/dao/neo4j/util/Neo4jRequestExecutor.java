@@ -14,6 +14,7 @@ import com.zenika.dorm.core.dao.neo4j.Neo4jMetadataExtension;
 import com.zenika.dorm.core.dao.neo4j.Neo4jMetadataExtensionResponse;
 import com.zenika.dorm.core.dao.neo4j.Neo4jMetadataResponse;
 import com.zenika.dorm.core.dao.neo4j.Neo4jNode;
+import com.zenika.dorm.core.dao.neo4j.Neo4jRelationship;
 import com.zenika.dorm.core.dao.neo4j.Neo4jResponse;
 import com.zenika.dorm.core.graph.impl.Usage;
 import org.codehaus.jackson.map.AnnotationIntrospector;
@@ -27,6 +28,7 @@ import javax.xml.ws.Response;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
@@ -70,6 +72,11 @@ public class Neo4jRequestExecutor {
         Neo4jResponse response = resource.path("node").accept(MediaType.APPLICATION_JSON).type(MediaType.APPLICATION_JSON)
                 .entity(node).post(Neo4jResponse.class);
         node.setResponse(response);
+    }
+
+    public void post(Neo4jRelationship relationship) throws URISyntaxException {
+        resource.uri(new URI(relationship.getFrom())).accept(MediaType.APPLICATION_JSON)
+                .type(MediaType.APPLICATION_JSON).post(relationship);
     }
 
     public <T extends Neo4jResponse> T get(URI uri, Class<T> type) {

@@ -51,6 +51,10 @@ public class DormDaoNeo4j implements DormDao {
         executor.post(extension);
         executor.post(metadata);
         executor.post(dependency);
+        Neo4jRelationship metadataRelationship = new Neo4jRelationship(metadata, extension, dependency.getUsage());
+        Neo4jRelationship dependencyRelationship = new Neo4jRelationship(dependency, metadata, dependency.getUsage());
+        executor.post(metadataRelationship);
+        executor.post(dependencyRelationship);
     }
 
 
