@@ -19,33 +19,39 @@ import static org.mockito.Mockito.verify;
  */
 public class Neo4jDaoTest {
     //
-    private Dependency dependency;
-    private DormMetadata metadata;
-    private DormMetadataExtension extension;
-    private Usage usage;
+//    private Dependency dependency;
+//    private DormMetadata metadata;
+//    private DormMetadataExtension extension;
+//    private Usage usage;
 
     //    //    @Mock
 ////    private Neo4jRequestExecutor executor;
 ////
 ////    @InjectMocks
-    private DormDaoNeo4j dao = new DormDaoNeo4j();
+//    private DormDaoNeo4j dao = new DormDaoNeo4j();
 
     //
 //    //
     @Before
     public void setUp() {
-        usage = Usage.create("DEFAULT");
-        extension = new DefaultDormMetadataExtension("dorm-test");
-        metadata = DefaultDormMetadata.create("1.0.0", extension);
-        dependency = DefaultDependency.create(metadata, usage);
+//        usage = Usage.create("DEFAULT");
+//        extension = new DefaultDormMetadataExtension("dorm-test");
+//        metadata = DefaultDormMetadata.create("1.0.0", extension);
+//        dependency = DefaultDependency.create(metadata, usage);
     }
 
     //
 //    //
     @Test
     public void push() throws Exception {
-//        dao.newPush(dependency);
+//            dao.newPush(dependency);
     }
 
 
 }
+
+
+
+
+
+

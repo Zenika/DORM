@@ -2,6 +2,7 @@ package com.zenika.dorm.core.dao.neo4j;
 
 
 import com.zenika.dorm.core.dao.DormDao;
+import com.zenika.dorm.core.dao.neo4j.exception.AlreadyExistException;
 import com.zenika.dorm.core.dao.neo4j.util.Neo4jParser;
 import com.zenika.dorm.core.dao.neo4j.util.Neo4jRequestExecutor;
 import com.zenika.dorm.core.graph.Dependency;
@@ -45,7 +46,13 @@ public class DormDaoNeo4j implements DormDao {
             executor.post(new Neo4jRelationship(metadata, extension, dependency.getUsage()));
             executor.post(new Neo4jRelationship(dependency, metadata, dependency.getUsage()));
             executor.post(dependency, dependency.getIndexURI(index));
+        } else {
+            throw new AlreadyExistException("The dependency already exist");
         }
+    }
+
+    public void getDependency(DormMetadata metadata, Usage usage){
+        
     }
 
     private String storeDependency(Dependency dependency) throws IOException {
