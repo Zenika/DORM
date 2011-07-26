@@ -1,5 +1,6 @@
 package com.zenika.dorm.core.dao.neo4j.util;
 
+import com.sun.jersey.api.json.JSONConfiguration;
 import com.sun.jersey.api.json.JSONJAXBContext;
 import com.zenika.dorm.core.dao.neo4j.Neo4jDependency;
 import com.zenika.dorm.core.dao.neo4j.Neo4jMetadata;
@@ -26,7 +27,7 @@ public class JAXBContentResolver implements ContextResolver<JAXBContext> {
 
     public JAXBContentResolver() throws JAXBException {
         this.types = new HashSet<Class>(Arrays.asList(cTypes));
-        this.context = new JSONJAXBContext(cTypes);
+        this.context = new JSONJAXBContext(JSONConfiguration.natural().build(), cTypes);
     }
 
     public JAXBContext getContext(Class<?> type) {

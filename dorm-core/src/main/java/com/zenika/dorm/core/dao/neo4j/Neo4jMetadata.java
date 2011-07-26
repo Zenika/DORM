@@ -16,37 +16,72 @@ import javax.xml.bind.annotation.XmlTransient;
 @XmlRootElement
 public class Neo4jMetadata extends Neo4jNode implements DormMetadata{
 
-    private DormMetadata metadata;
     private Neo4jMetadataExtension extension;
+
+    private String qualifier;
+    private String version;
+    private String fullQualifier;
 
     public Neo4jMetadata() {
     }
 
     public Neo4jMetadata(DormMetadata metadata) {
-        this.metadata = metadata;
+        qualifier = metadata.getQualifier();
+        version = metadata.getVersion();
+        fullQualifier = metadata.getFullQualifier();
         extension = new Neo4jMetadataExtension(metadata.getExtension());
     }
 
     @XmlElement
     @Override
     public String getQualifier() {
-        return metadata.getQualifier();
+        return qualifier;
     }
 
     @XmlElement
     public String getVersion() {
-        return metadata.getVersion();
+        return version;
     }
 
     @XmlTransient
     @Override
-    public DormMetadataExtension getExtension() {
-        return metadata.getExtension();
+    public Neo4jMetadataExtension getExtension() {
+        return extension;
     }
 
     @XmlElement
     @Override
     public String getFullQualifier() {
-        return metadata.getFullQualifier();
+        return fullQualifier;
+    }
+
+    @XmlElement
+    public void setQualifier(String qualifier){
+        this.qualifier = qualifier;
+    }
+
+    @XmlTransient
+    public void setExtension(Neo4jMetadataExtension extension) {
+        this.extension = extension;
+    }
+
+    @XmlElement
+    public void setVersion(String version) {
+        this.version = version;
+    }
+
+    @XmlElement
+    public void setFullQualifier(String fullQualifier) {
+        this.fullQualifier = fullQualifier;
+    }
+
+    @Override
+    public String toString() {
+        return "Neo4jMetadata{" +
+                "extension=" + extension +
+                ", qualifier='" + qualifier + '\'' +
+                ", version='" + version + '\'' +
+                ", fullQualifier='" + fullQualifier + '\'' +
+                '}';
     }
 }

@@ -44,14 +44,14 @@ public class DormDaoNeo4j implements DormDao {
         parser = new Neo4jParser();
     }
 
-    public void newPush(Dependency dependency) throws URISyntaxException {
-        Neo4jMetadataExtension extension = new Neo4jMetadataExtension();
-        Neo4jMetadata metadata = new Neo4jMetadata(dependency.getMetadata());
-        extension = executor.post(extension);
-        metadata = executor.post(metadata);
-        executor.get(new URI(metadata.getResponse().getSelf()));
+    public void newPush(Dependency dormDependency) throws URISyntaxException {
+        Neo4jDependency dependency = new Neo4jDependency(dormDependency);
+        Neo4jMetadata metadata = dependency.getMetadata();
+        Neo4jMetadataExtension extension = dependency.getMetadata().getExtension();
+        executor.post(extension);
+        executor.post(metadata);
+        executor.post(dependency);
     }
-
 
 
     private String storeDependency(Dependency dependency) throws IOException {

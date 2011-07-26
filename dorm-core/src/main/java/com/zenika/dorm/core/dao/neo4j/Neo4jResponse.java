@@ -1,9 +1,15 @@
 package com.zenika.dorm.core.dao.neo4j;
 
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+import org.codehaus.jackson.annotate.JsonProperty;
+import org.codehaus.jackson.map.annotate.JsonDeserialize;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -11,11 +17,10 @@ import java.util.Map;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement
+@JsonIgnoreProperties(ignoreUnknown=true)
 public class Neo4jResponse {
 
     private String self;
-    
-    private Map<String, Object> data;
     private String create_relationship;
     private String all_relationships;
     private String all_type_relationships;
@@ -33,14 +38,6 @@ public class Neo4jResponse {
 
     public void setSelf(String self) {
         this.self = self;
-    }
-
-    public Map<String, Object> getData() {
-        return data;
-    }
-
-    public void setData(Map<String, Object> data) {
-        this.data = data;
     }
 
     public String getCreate_relationship() {
@@ -127,7 +124,6 @@ public class Neo4jResponse {
     public String toString() {
         return "Neo4jResponse{" +
                 "self='" + self + '\'' +
-                ", data=" + data +
                 ", create_relationship='" + create_relationship + '\'' +
                 ", all_relationships='" + all_relationships + '\'' +
                 ", all_type_relationships='" + all_type_relationships + '\'' +
