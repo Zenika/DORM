@@ -7,6 +7,8 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 /**
  * @author Antoine ROUAZE <antoine.rouaze AT zenika.com>
@@ -25,6 +27,13 @@ public class Neo4jDependency extends Neo4jNode {
     public Neo4jDependency(Dependency dependency) {
         usage = dependency.getUsage();
         metadata = new Neo4jMetadata(dependency.getMetadata());
+    }
+
+    public URI getIndexURI(Neo4jIndex index) throws URISyntaxException {
+        String template = index.getTemplate();
+        template = template.replace("{key}", "fullqualifier");
+        template = template.replace("{value}", metadata.getFullQualifier());
+        return new URI(template);
     }
 
     @XmlTransient

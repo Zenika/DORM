@@ -1,31 +1,19 @@
 package com.zenika.dorm.core.dao.neo4j;
 
 
-import com.sun.jersey.api.client.Client;
-import com.sun.jersey.api.client.ClientResponse;
-import com.sun.jersey.api.client.WebResource;
-import com.sun.jersey.api.client.config.ClientConfig;
-import com.sun.jersey.api.client.config.DefaultClientConfig;
 import com.zenika.dorm.core.dao.DormDao;
-import com.zenika.dorm.core.dao.neo4j.util.JAXBContentResolver;
 import com.zenika.dorm.core.dao.neo4j.util.Neo4jParser;
 import com.zenika.dorm.core.dao.neo4j.util.Neo4jRequestExecutor;
 import com.zenika.dorm.core.graph.Dependency;
 import com.zenika.dorm.core.graph.DependencyNode;
 import com.zenika.dorm.core.graph.impl.Usage;
 import com.zenika.dorm.core.model.DormMetadata;
-import com.zenika.dorm.core.model.DormMetadataExtension;
-import com.zenika.dorm.core.model.impl.DefaultDormMetadata;
-import com.zenika.dorm.core.model.impl.DefaultDormMetadataExtension;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
-import javax.ws.rs.core.MediaType;
 import java.io.IOException;
-import java.net.URI;
 import java.net.URISyntaxException;
-
-import static com.zenika.dorm.core.dao.neo4j.util.Neo4jParser.*;
+import java.util.List;
 
 /**
  * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>
@@ -35,12 +23,14 @@ public class DormDaoNeo4j implements DormDao {
     private ObjectMapper mapper;
     private Neo4jRequestExecutor executor;
     private Neo4jParser parser;
-
+    private Neo4jIndex index;
 
     public DormDaoNeo4j() {
+        index = new Neo4jIndex();
         mapper = new ObjectMapper();
         mapper.getSerializationConfig().setSerializationInclusion(JsonSerialize.Inclusion.NON_NULL);
         executor = new Neo4jRequestExecutor();
+        index = executor.post(index);
         parser = new Neo4jParser();
     }
 
@@ -48,15 +38,15 @@ public class DormDaoNeo4j implements DormDao {
         Neo4jDependency dependency = new Neo4jDependency(dormDependency);
         Neo4jMetadata metadata = dependency.getMetadata();
         Neo4jMetadataExtension extension = dependency.getMetadata().getExtension();
-        executor.post(extension);
-        executor.post(metadata);
-        executor.post(dependency);
-        Neo4jRelationship metadataRelationship = new Neo4jRelationship(metadata, extension, dependency.getUsage());
-        Neo4jRelationship dependencyRelationship = new Neo4jRelationship(dependency, metadata, dependency.getUsage());
-        executor.post(metadataRelationship);
-        executor.post(dependencyRelationship);
+        if (executor.get(dependency.getIndexURI(index), List.class).isEmpty()) {
+            executor.post(extension);
+            executor.post(metadata);
+            executor.post(dependency);
+            executor.post(new Neo4jRelationship(metadata, extension, dependency.getUsage()));
+            executor.post(new Neo4jRelationship(dependency, metadata, dependency.getUsage()));
+            executor.post(dependency, dependency.getIndexURI(index));
+        }
     }
-
 
     private String storeDependency(Dependency dependency) throws IOException {
         String originUri = null;

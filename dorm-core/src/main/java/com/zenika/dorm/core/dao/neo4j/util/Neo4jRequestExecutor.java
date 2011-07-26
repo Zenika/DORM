@@ -9,6 +9,7 @@ import com.sun.jersey.api.client.config.DefaultClientConfig;
 import com.sun.jersey.api.json.JSONConfiguration;
 import com.zenika.dorm.core.dao.neo4j.Neo4jDependency;
 import com.zenika.dorm.core.dao.neo4j.Neo4jDependencyResponse;
+import com.zenika.dorm.core.dao.neo4j.Neo4jIndex;
 import com.zenika.dorm.core.dao.neo4j.Neo4jMetadata;
 import com.zenika.dorm.core.dao.neo4j.Neo4jMetadataExtension;
 import com.zenika.dorm.core.dao.neo4j.Neo4jMetadataExtensionResponse;
@@ -30,6 +31,7 @@ import java.lang.reflect.Type;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
@@ -53,7 +55,6 @@ public class Neo4jRequestExecutor {
 
     public Neo4jRequestExecutor() {
         parser = new Neo4jParser();
-
         ClientConfig config = new DefaultClientConfig();
         config.getClasses().add(ObjectMapperProvider.class);
         config.getClasses().add(Neo4jDependency.class);
@@ -63,6 +64,7 @@ public class Neo4jRequestExecutor {
         config.getClasses().add(Neo4jMetadataResponse.class);
         config.getClasses().add(Neo4jMetadataExtensionResponse.class);
         config.getClasses().add(Neo4jDependencyResponse.class);
+        config.getClasses().add(Neo4jIndex.class);
         config.getFeatures().put(JSONConfiguration.FEATURE_POJO_MAPPING, true);
         Client client = Client.create(config);
         resource = client.resource(DATA_ENTRY_POINT_URI);
@@ -79,7 +81,16 @@ public class Neo4jRequestExecutor {
                 .type(MediaType.APPLICATION_JSON).post(relationship);
     }
 
-    public <T extends Neo4jResponse> T get(URI uri, Class<T> type) {
+    public Neo4jIndex post(Neo4jIndex index){
+        return resource.path(Neo4jIndex.INDEX_PATH).accept(MediaType.APPLICATION_JSON)
+                .type(MediaType.APPLICATION_JSON).post(Neo4jIndex.class, index);
+    }
+
+    public void post(Neo4jNode node, URI indexUri){
+        resource.uri(indexUri).type(MediaType.APPLICATION_JSON).post("\"" + node.getResponse().getSelf() + "\"");
+    }
+
+    public <T> T get(URI uri, Class<T> type) {
         return resource.uri(uri).accept(MediaType.APPLICATION_JSON).get(type);
     }
 
