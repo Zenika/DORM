@@ -3,6 +3,7 @@ package com.zenika.dorm.core.dao.neo4j;
 import com.zenika.dorm.core.graph.impl.Usage;
 import com.zenika.dorm.core.model.DormMetadataExtension;
 import com.zenika.dorm.core.model.mapper.MetadataExtensionMapper;
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonProperty;
 
 import javax.sound.midi.VoiceStatus;
@@ -56,5 +57,12 @@ public class Neo4jMetadataExtension extends Neo4jNode implements DormMetadataExt
                 "qualifier='" + qualifier + '\'' +
                 ", extension='" + extension + '\'' +
                 '}';
+    }
+
+    @JsonIgnore
+    @Override
+    public void setProperties() {
+//        this.setExtension(getResponse().getData().getExtension());
+//        this.setQualifier(getResponse().getData().getQualifier());
     }
 }

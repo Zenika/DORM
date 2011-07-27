@@ -2,6 +2,8 @@ package com.zenika.dorm.core.dao.neo4j;
 
 import com.zenika.dorm.core.graph.Dependency;
 import com.zenika.dorm.core.graph.impl.Usage;
+import com.zenika.dorm.core.model.DormFile;
+import org.codehaus.jackson.annotate.JsonIgnore;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -15,7 +17,7 @@ import java.net.URISyntaxException;
  */
 @XmlAccessorType(XmlAccessType.PROPERTY)
 @XmlRootElement
-public class Neo4jDependency extends Neo4jNode {
+public class Neo4jDependency extends Neo4jNode implements Dependency{
 
     private Usage usage;
     private Neo4jMetadata metadata;
@@ -36,22 +38,34 @@ public class Neo4jDependency extends Neo4jNode {
         return new URI(template);
     }
 
-    @XmlTransient
+    @JsonIgnore
     public Usage getUsage() {
         return usage;
     }
 
-    @XmlTransient
+    @JsonIgnore
     public void setUsage(Usage usage) {
         this.usage = usage;
     }
 
-    @XmlTransient
+   @JsonIgnore
     public Neo4jMetadata getMetadata() {
         return metadata;
     }
 
-    @XmlTransient
+    @JsonIgnore
+    @Override
+    public DormFile getFile() {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @JsonIgnore
+    @Override
+    public Boolean hasFile() {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @JsonIgnore
     public void setMetadata(Neo4jMetadata metadata) {
         this.metadata = metadata;
     }
@@ -62,5 +76,11 @@ public class Neo4jDependency extends Neo4jNode {
                 "usage=" + usage +
                 ", metadata=" + metadata +
                 '}';
+    }
+
+    @JsonIgnore
+    @Override
+    public void setProperties() {
+
     }
 }

@@ -7,6 +7,8 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Map;
 
 /**
@@ -70,8 +72,8 @@ public class Neo4jRelationship {
     }
 
     @JsonIgnore
-    public String getStart() {
-        return start;
+    public URI getStart() throws URISyntaxException {
+        return new URI(start);
     }
 
     public void setStart(String start) {
@@ -115,8 +117,8 @@ public class Neo4jRelationship {
     }
 
     @JsonIgnore
-    public String getEnd() {
-        return end;
+    public URI getEnd() throws URISyntaxException {
+        return new URI(end);
     }
 
     public void setEnd(String end) {

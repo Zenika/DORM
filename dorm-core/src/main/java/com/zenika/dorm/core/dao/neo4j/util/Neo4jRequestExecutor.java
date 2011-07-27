@@ -14,13 +14,14 @@ import com.zenika.dorm.core.dao.neo4j.Neo4jMetadataExtension;
 import com.zenika.dorm.core.dao.neo4j.Neo4jNode;
 import com.zenika.dorm.core.dao.neo4j.Neo4jRelationship;
 import com.zenika.dorm.core.dao.neo4j.Neo4jResponse;
-import com.zenika.dorm.core.dao.neo4j.Neo4jResponse2;
 import com.zenika.dorm.core.graph.impl.Usage;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
 
 import javax.ws.rs.core.MediaType;
 import java.io.IOException;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Map;
@@ -60,7 +61,7 @@ public class Neo4jRequestExecutor {
 
     public <T extends Neo4jNode> void post(T node) {
         Neo4jResponse<T> response = resource.path("node").accept(MediaType.APPLICATION_JSON).type(MediaType.APPLICATION_JSON)
-                .entity(node).post(new GenericType<Neo4jResponse<T>>(new TypeReference<Neo4jResponse<T>>() {}.getType()));
+                .entity(node).post(new GenericType<Neo4jResponse<T>>() {});
         node.setResponse(response);
     }
 
@@ -69,12 +70,12 @@ public class Neo4jRequestExecutor {
                 .type(MediaType.APPLICATION_JSON).post(relationship);
     }
 
-    public Neo4jIndex post(Neo4jIndex index){
+    public Neo4jIndex post(Neo4jIndex index) {
         return resource.path(Neo4jIndex.INDEX_PATH).accept(MediaType.APPLICATION_JSON)
                 .type(MediaType.APPLICATION_JSON).post(Neo4jIndex.class, index);
     }
 
-    public void post(Neo4jNode node, URI indexUri){
+    public void post(Neo4jNode node, URI indexUri) {
         resource.uri(indexUri).type(MediaType.APPLICATION_JSON).post("\"" + node.getResponse().getSelf() + "\"");
     }
 
@@ -82,8 +83,24 @@ public class Neo4jRequestExecutor {
         return resource.uri(uri).accept(MediaType.APPLICATION_JSON).get(type);
     }
 
-    public <T> T get(URI uri, TypeReference<T> type){
-        return resource.uri(uri).accept(MediaType.APPLICATION_JSON).get(new GenericType<T>(type.getType()));
+    public <T> T get(URI uri, Type type) {
+        return resource.uri(uri).accept(MediaType.APPLICATION_JSON).get(new GenericType<T>(type));
+    }
+
+    public <T extends Neo4jNode> T getNode(URI uri, Type type) {
+        Neo4jResponse<T> response = resource.uri(uri).accept(MediaType.APPLICATION_JSON).get(new GenericType<Neo4jResponse<T>>(type));
+        T node = response.getData();
+        node.setResponse(response);
+        node.setProperties();
+        return node;
+    }
+
+    public <T extends Neo4jNode> T getNode(URI uri) {
+        Neo4jResponse<T> response = resource.uri(uri).accept(MediaType.APPLICATION_JSON).get(new GenericType<Neo4jResponse<T>>() {});
+        T node = response.getData();
+        node.setResponse(response);
+        node.setProperties();
+        return node;
     }
 
     public void createRelationship(String node, String child, Usage usage) throws IOException {

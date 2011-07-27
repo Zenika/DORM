@@ -29,4 +29,6 @@ public abstract class Neo4jNode {
         this.setUri(response.getSelf());
         this.response = response;
     }
+
+    public abstract void setProperties();
 }

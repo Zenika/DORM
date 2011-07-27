@@ -15,7 +15,5 @@ public interface DormDao {
 
     public Boolean push(DependencyNode node);
 
-    public Boolean pushWithParent(Dependency dependency, Dependency parent);
-
     public DependencyNode getByMetadata(DormMetadata metadata, Usage usage);
 }
