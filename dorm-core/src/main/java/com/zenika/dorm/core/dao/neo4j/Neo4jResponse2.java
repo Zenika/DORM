@@ -2,18 +2,12 @@ package com.zenika.dorm.core.dao.neo4j;
 
 import com.zenika.dorm.core.graph.impl.Usage;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
-import org.codehaus.jackson.annotate.JsonProperty;
-import org.codehaus.jackson.map.annotate.JsonDeserialize;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * @author Antoine ROUAZE <antoine.rouaze AT zenika.com>
@@ -21,7 +15,7 @@ import java.util.Map;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement
 @JsonIgnoreProperties(ignoreUnknown=true)
-public class Neo4jResponse<T> {
+public class Neo4jResponse2<T> {
 
     private T data;
 
@@ -36,14 +30,6 @@ public class Neo4jResponse<T> {
     private String properties;
     private String property;
     private String traverse;
-
-    public T getData() {
-        return data;
-    }
-
-    public void setData(T data) {
-        this.data = data;
-    }
 
     public String getSelf() {
         return self;
@@ -135,6 +121,14 @@ public class Neo4jResponse<T> {
 
     public void setTraverse(String traverse) {
         this.traverse = traverse;
+    }
+
+    public T getData() {
+        return data;
+    }
+
+    public void setData(T data) {
+        this.data = data;
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.zenika.dorm.core.dao.neo4j;
 
+import com.zenika.dorm.core.graph.impl.Usage;
 import com.zenika.dorm.core.model.DormMetadataExtension;
 import com.zenika.dorm.core.model.mapper.MetadataExtensionMapper;
 import org.codehaus.jackson.annotate.JsonProperty;
@@ -16,6 +17,8 @@ import java.util.Map;
 @XmlAccessorType(XmlAccessType.PROPERTY)
 @XmlRootElement
 public class Neo4jMetadataExtension extends Neo4jNode implements DormMetadataExtension {
+
+    public static final Usage RELATIONSHIP_TYPE = Usage.create("EXTENSION");
 
     private String qualifier;
     private String extension;

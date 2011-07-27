@@ -8,30 +8,21 @@ import com.sun.jersey.api.client.config.ClientConfig;
 import com.sun.jersey.api.client.config.DefaultClientConfig;
 import com.sun.jersey.api.json.JSONConfiguration;
 import com.zenika.dorm.core.dao.neo4j.Neo4jDependency;
-import com.zenika.dorm.core.dao.neo4j.Neo4jDependencyResponse;
 import com.zenika.dorm.core.dao.neo4j.Neo4jIndex;
 import com.zenika.dorm.core.dao.neo4j.Neo4jMetadata;
 import com.zenika.dorm.core.dao.neo4j.Neo4jMetadataExtension;
-import com.zenika.dorm.core.dao.neo4j.Neo4jMetadataExtensionResponse;
-import com.zenika.dorm.core.dao.neo4j.Neo4jMetadataResponse;
 import com.zenika.dorm.core.dao.neo4j.Neo4jNode;
 import com.zenika.dorm.core.dao.neo4j.Neo4jRelationship;
 import com.zenika.dorm.core.dao.neo4j.Neo4jResponse;
+import com.zenika.dorm.core.dao.neo4j.Neo4jResponse2;
 import com.zenika.dorm.core.graph.impl.Usage;
-import org.codehaus.jackson.map.AnnotationIntrospector;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
-import org.codehaus.jackson.xc.JaxbAnnotationIntrospector;
 
-import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
-import javax.xml.ws.Response;
 import java.io.IOException;
-import java.lang.reflect.Type;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
@@ -61,18 +52,15 @@ public class Neo4jRequestExecutor {
         config.getClasses().add(Neo4jMetadata.class);
         config.getClasses().add(Neo4jMetadataExtension.class);
         config.getClasses().add(Neo4jResponse.class);
-        config.getClasses().add(Neo4jMetadataResponse.class);
-        config.getClasses().add(Neo4jMetadataExtensionResponse.class);
-        config.getClasses().add(Neo4jDependencyResponse.class);
         config.getClasses().add(Neo4jIndex.class);
         config.getFeatures().put(JSONConfiguration.FEATURE_POJO_MAPPING, true);
         Client client = Client.create(config);
         resource = client.resource(DATA_ENTRY_POINT_URI);
     }
 
-    public void post(Neo4jNode node) {
-        Neo4jResponse response = resource.path("node").accept(MediaType.APPLICATION_JSON).type(MediaType.APPLICATION_JSON)
-                .entity(node).post(Neo4jResponse.class);
+    public <T extends Neo4jNode> void post(T node) {
+        Neo4jResponse<T> response = resource.path("node").accept(MediaType.APPLICATION_JSON).type(MediaType.APPLICATION_JSON)
+                .entity(node).post(new GenericType<Neo4jResponse<T>>(new TypeReference<Neo4jResponse<T>>() {}.getType()));
         node.setResponse(response);
     }
 
@@ -92,6 +80,10 @@ public class Neo4jRequestExecutor {
 
     public <T> T get(URI uri, Class<T> type) {
         return resource.uri(uri).accept(MediaType.APPLICATION_JSON).get(type);
+    }
+
+    public <T> T get(URI uri, TypeReference<T> type){
+        return resource.uri(uri).accept(MediaType.APPLICATION_JSON).get(new GenericType<T>(type.getType()));
     }
 
     public void createRelationship(String node, String child, Usage usage) throws IOException {

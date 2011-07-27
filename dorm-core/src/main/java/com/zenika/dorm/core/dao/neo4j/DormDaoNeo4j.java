@@ -11,8 +11,10 @@ import com.zenika.dorm.core.graph.impl.Usage;
 import com.zenika.dorm.core.model.DormMetadata;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
+import org.codehaus.jackson.type.TypeReference;
 
 import java.io.IOException;
+import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 
@@ -35,24 +37,8 @@ public class DormDaoNeo4j implements DormDao {
         parser = new Neo4jParser();
     }
 
-    public void newPush(Dependency dormDependency) throws URISyntaxException {
-        Neo4jDependency dependency = new Neo4jDependency(dormDependency);
-        Neo4jMetadata metadata = dependency.getMetadata();
-        Neo4jMetadataExtension extension = dependency.getMetadata().getExtension();
-        if (executor.get(dependency.getIndexURI(index), List.class).isEmpty()) {
-            executor.post(extension);
-            executor.post(metadata);
-            executor.post(dependency);
-            executor.post(new Neo4jRelationship(metadata, extension, dependency.getUsage()));
-            executor.post(new Neo4jRelationship(dependency, metadata, dependency.getUsage()));
-            executor.post(dependency, dependency.getIndexURI(index));
-        } else {
-            throw new AlreadyExistException("The dependency already exist");
-        }
-    }
+    public void getDependency(DormMetadata metadata, Usage usage) {
 
-    public void getDependency(DormMetadata metadata, Usage usage){
-        
     }
 
     private String storeDependency(Dependency dependency) throws IOException {
@@ -81,15 +67,35 @@ public class DormDaoNeo4j implements DormDao {
     }
 
     @Override
-    public Boolean push(Dependency dependency) {
+    public Boolean push(Dependency dormDependency) {
         try {
-            String jsonRequest = parser.parseDependencyToJson(dependency);
-            executor.executeBatchRequests(jsonRequest);
+            postDependency(dormDependency);
             return true;
         } catch (Exception e) {
             e.printStackTrace();
         }
         return false;
+    }
+
+    private Neo4jDependency postDependency(Dependency dormDependency){
+        try {
+            Neo4jDependency dependency = new Neo4jDependency(dormDependency);
+            Neo4jMetadata metadata = dependency.getMetadata();
+            Neo4jMetadataExtension extension = dependency.getMetadata().getExtension();
+            if (executor.get(dependency.getIndexURI(index), List.class).isEmpty()) {
+                executor.post(extension);
+                executor.post(metadata);
+                executor.post(dependency);
+                executor.post(new Neo4jRelationship(metadata, extension, Neo4jMetadataExtension.RELATIONSHIP_TYPE));
+                executor.post(new Neo4jRelationship(dependency, metadata, Neo4jMetadata.RELATIONSHIP_TYPE));
+                executor.post(dependency, dependency.getIndexURI(index));
+            } else {
+                throw new AlreadyExistException("The dependency already exist");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public boolean pushNoBatch(Dependency dependency) {
@@ -119,6 +125,12 @@ public class DormDaoNeo4j implements DormDao {
 
     @Override
     public Boolean push(DependencyNode node) {
+//        DependenciesNodeCollector visitor = new DependenciesNodeCollector(node.getDependency().getUsage());
+//        node.accept(visitor);
+//        Set<DependencyNode> nodes = visitor.getDependencies();
+//        for (DependencyNode currentNode : nodes){
+//            Neo4jDependency =
+//        }
         return null;
     }
 
