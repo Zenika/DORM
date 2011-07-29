@@ -32,10 +32,7 @@ public class Neo4jDependency extends Neo4jNode implements Dependency{
     }
 
     public URI getIndexURI(Neo4jIndex index) throws URISyntaxException {
-        String template = index.getTemplate();
-        template = template.replace("{key}", "fullqualifier");
-        template = template.replace("{value}", metadata.getFullQualifier());
-        return new URI(template);
+        return Neo4jMetadata.generateIndexURI(metadata.getFullQualifier(), index);
     }
 
     @JsonIgnore
@@ -79,8 +76,14 @@ public class Neo4jDependency extends Neo4jNode implements Dependency{
     }
 
     @JsonIgnore
+    public URI getTraverse(String type) throws URISyntaxException {
+        return new URI(getResponse().getTraverse().replace("{returnType}", type));
+    }
+    
+    @JsonIgnore
     @Override
     public void setProperties() {
 
     }
+
 }

@@ -10,6 +10,8 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 /**
  * @author Antoine ROUAZE <antoine.rouaze AT zenika.com>
@@ -34,6 +36,13 @@ public class Neo4jMetadata extends Neo4jNode implements DormMetadata {
         version = metadata.getVersion();
         fullQualifier = metadata.getFullQualifier();
         extension = new Neo4jMetadataExtension(metadata.getExtension());
+    }
+
+    public static URI generateIndexURI(String fullQualifier, Neo4jIndex index) throws URISyntaxException {
+        String template = index.getTemplate();
+        template = template.replace("{key}", "fullqualifier");
+        template = template.replace("{value}", fullQualifier);
+        return new URI(template);
     }
 
     @XmlElement
@@ -95,4 +104,5 @@ public class Neo4jMetadata extends Neo4jNode implements DormMetadata {
 //        this.setQualifier(getResponse().getData().getQualifier());
 //        this.setVersion(getResponse().getData().getVersion());
     }
+
 }

@@ -1,5 +1,20 @@
 package com.zenika.dorm.core.test.dao.neo4j;
 
+import com.zenika.dorm.core.dao.neo4j.DormDaoNeo4j;
+import com.zenika.dorm.core.graph.Dependency;
+import com.zenika.dorm.core.graph.DependencyNode;
+import com.zenika.dorm.core.graph.impl.DefaultDependency;
+import com.zenika.dorm.core.graph.impl.DefaultDependencyNode;
+import com.zenika.dorm.core.graph.impl.Usage;
+import com.zenika.dorm.core.model.DormMetadata;
+import com.zenika.dorm.core.model.DormMetadataExtension;
+import com.zenika.dorm.core.model.impl.DefaultDormMetadata;
+import com.zenika.dorm.core.model.impl.DefaultDormMetadataExtension;
+import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @author Antoine ROUAZE <antoine.rouaze AT zenika.com>
  */
@@ -15,29 +30,7 @@ public class TestRestServices {
 //        test.push(dependency);
 //    }
 //
-//    @Test
-//    public void testPushWithParentNoBatch() {
-//        long time = System.currentTimeMillis();
-//        DormDaoNeo4j test = new DormDaoNeo4j();
-//        DormOrigin origin;
-//        DormMetadata metadata;
-//        Dependency dependency = null;
-//        List<Dependency> dependencies = new ArrayList<Dependency>();
-//        for (int i = 2; i < 100; i++) {
-//            origin = new DefaultDormOrigin("maven" + i);
-//            metadata = new DefaultDormMetadata("1.0.0", origin);
-//            dependency = new DefaultDependency(metadata, new Usage("DEFAULT"));
-//            dependencies.add(dependency);
-//        }
-//        for (int i = 0; i < dependencies.size(); i++) {
-//            if (i == 0) {
-//                test.pushNoBatch(dependencies.get(0));
-//            } else {
-//                test.pushWithParentNoBatch(dependencies.get(i), dependencies.get(i - 1));
-//            }
-//        }
-//        System.out.println("Times to standard push : " + (System.currentTimeMillis() - time));
-//    }
+
 //
 //    @Test
 //    public void testPushWithParent() {

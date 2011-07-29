@@ -34,6 +34,10 @@ public class Neo4jRelationship {
 
     }
 
+    public Neo4jRelationship(Usage usage){
+        this.type = usage.getName();
+    }
+
     public Neo4jRelationship(String from, String to, String type) {
         this.from = from;
         this.to = to;

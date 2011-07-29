@@ -2,12 +2,7 @@ package com.zenika.dorm.core.dao.neo4j;
 
 import org.codehaus.jackson.annotate.JsonAutoDetect;
 import org.codehaus.jackson.annotate.JsonIgnore;
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import java.util.HashMap;
 import java.util.Map;
@@ -18,13 +13,13 @@ import java.util.Map;
 @JsonAutoDetect
 public class Neo4jIndex {
 
-    private static final String name = "dependency";
-    private static final Map<String, String> config;
+    private static final String NAME = "dependency";
+    private static final Map<String, String> CONFIG;
 
     static {
-        config = new HashMap<String, String>();
-        config.put("provider", "lucene");
-        config.put("type", "fulltext");
+        CONFIG = new HashMap<String, String>();
+        CONFIG.put("provider", "lucene");
+        CONFIG.put("type", "fulltext");
     }
 
     public static final String INDEX_PATH = "/index/node";
@@ -34,11 +29,11 @@ public class Neo4jIndex {
     private String type;
 
     public String getName() {
-        return name;
+        return NAME;
     }
 
     public Map<String, String> getConfig() {
-        return config;
+        return CONFIG;
     }
 
     @JsonIgnore

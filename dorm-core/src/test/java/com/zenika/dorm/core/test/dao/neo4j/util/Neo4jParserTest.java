@@ -1,6 +1,5 @@
 package com.zenika.dorm.core.test.dao.neo4j.util;
 
-import com.zenika.dorm.core.dao.neo4j.util.Neo4jParser;
 import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.core.model.DormMetadataExtension;
 import com.zenika.dorm.core.model.impl.DefaultDormMetadata;
@@ -8,10 +7,7 @@ import com.zenika.dorm.core.model.impl.DefaultDormMetadataExtension;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.Map;
 import java.util.logging.Logger;
-
-import static org.junit.Assert.*;
 
 /**
  * @author Antoine ROUAZE <antoine.rouaze AT zenika.com>
