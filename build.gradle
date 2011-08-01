@@ -28,6 +28,17 @@ allprojects {
     }
 }
 
+ideaProject {
+    // Setting Java version to use in IDEA
+    javaVersion = "1.6"
+    // Setting GIT as VCS
+    withXml { provider ->
+        def node = provider.asNode()
+        def vcsConfig = node.component.find { it.'@name' == 'VcsDirectoryMappings' }
+        vcsConfig.mapping[0].'@vcs' = 'Git'
+    }
+}
+
 subprojects {
 
     configurations.compile.transitive = true
