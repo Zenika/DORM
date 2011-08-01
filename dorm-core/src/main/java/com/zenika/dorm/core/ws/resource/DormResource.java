@@ -8,9 +8,7 @@ import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.core.model.impl.DefaultDormFile;
 import com.zenika.dorm.core.model.impl.DefaultDormMetadata;
 import com.zenika.dorm.core.model.impl.DefaultDormMetadataExtension;
-import com.zenika.dorm.core.model.old.MetadataExtension;
 import com.zenika.dorm.core.processor.Processor;
-import com.zenika.dorm.core.service.DormServiceOld;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -46,9 +44,6 @@ import java.util.Properties;
 @Path("dorm")
 @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 public class DormResource {
-
-    @Inject
-    private DormServiceOld<MetadataExtension> serviceOld;
 
     @Inject
     private Processor processor;
