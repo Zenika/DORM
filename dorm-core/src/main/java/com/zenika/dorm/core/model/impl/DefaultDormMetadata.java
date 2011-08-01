@@ -31,14 +31,14 @@ public final class DefaultDormMetadata implements DormMetadata {
      */
     public DefaultDormMetadata(String version, DormMetadataExtension extension) {
 
-        if (null == version || null == extension || null == extension.getQualifier() || null == extension.getExtension()) {
+        if (null == version || null == extension || null == extension.getQualifier() || null == extension.getExtensionName()) {
             throw new CoreException("Properties are missing for metadata");
         }
 
         this.version = version;
         this.extension = extension;
         this.qualifier = extension.getQualifier();
-        this.fullQualifier = this.qualifier + ":" + version + ":" + extension.getExtension();
+        this.fullQualifier = this.qualifier + ":" + version + ":" + extension.getExtensionName();
     }
 
     @Override

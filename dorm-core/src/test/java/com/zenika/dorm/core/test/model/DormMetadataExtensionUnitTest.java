@@ -18,6 +18,6 @@ public class DormMetadataExtensionUnitTest extends AbstractUnitTest {
 
         // dorm extension qualifier is only the name
         Assertions.assertThat(extension.getQualifier()).isEqualTo(fixtures.getName());
-        Assertions.assertThat(extension.getExtension()).isEqualTo(fixtures.getOrigin());
+        Assertions.assertThat(extension.getExtensionName()).isEqualTo(fixtures.getOrigin());
     }
 }

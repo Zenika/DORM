@@ -51,7 +51,7 @@ public abstract class ExtensionFixtures {
 
     public Map<String, String> getRequestPropertiesWithoutFile() {
         Map<String, String> properties = new HashMap<String, String>();
-        properties.put(DormRequest.ORIGIN, DefaultDormMetadataExtension.ORIGIN);
+        properties.put(DormRequest.ORIGIN, DefaultDormMetadataExtension.NAME);
         properties.put(DormRequest.VERSION, version);
 
         Map<String, String> extensionProperties = getRequestPropertiesForExtension();
@@ -65,7 +65,7 @@ public abstract class ExtensionFixtures {
 
     public Map<String, String> getRequestPropertiesWithFile() {
         Map<String, String> properties = getRequestPropertiesWithoutFile();
-        properties.put(DormRequest.FILENAME, filename);
+        properties.put(DormRequest.FILENAME, filenameWithExtension);
         return properties;
     }
 

@@ -9,7 +9,7 @@ import com.zenika.dorm.core.model.DormMetadataExtension;
  */
 public final class DefaultDormMetadataExtension implements DormMetadataExtension {
 
-    public static final String ORIGIN = "dorm";
+    public static final String NAME = "dorm";
 
     private final String name;
 
@@ -27,8 +27,8 @@ public final class DefaultDormMetadataExtension implements DormMetadataExtension
     }
 
     @Override
-    public String getExtension() {
-        return ORIGIN;
+    public String getExtensionName() {
+        return NAME;
     }
 
     public String getName() {

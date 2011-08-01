@@ -21,5 +21,5 @@ public interface DormMetadataExtension {
      *
      * @return the origin identifier
      */
-    public String getExtension();
+    public String getExtensionName();
 }

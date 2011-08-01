@@ -42,8 +42,8 @@ public class GuiceModule extends JerseyServletModule {
 
         // processor
         DefaultProcessor processor = new DefaultProcessor();
-        processor.getExtensions().put(DefaultDormMetadataExtension.ORIGIN, new DormProcessor());
-        processor.getExtensions().put(MavenMetadataExtension.ORIGIN, new MavenProcessor());
+        processor.getExtensions().put(DefaultDormMetadataExtension.NAME, new DormProcessor());
+        processor.getExtensions().put(MavenMetadataExtension.NAME, new MavenProcessor());
 
         bind(Processor.class).toInstance(processor);
         bind(RequestProcessor.class).to(DefaultRequestProcessor.class);

@@ -14,7 +14,7 @@ import com.zenika.dorm.core.model.DormMetadataExtension;
  */
 public final class MavenMetadataExtension implements DormMetadataExtension {
 
-    public static final String ORIGIN = "maven";
+    public static final String NAME = "maven";
 
     private final String groupId;
     private final String artifactId;
@@ -34,8 +34,8 @@ public final class MavenMetadataExtension implements DormMetadataExtension {
     }
 
     @Override
-    public String getExtension() {
-        return ORIGIN;
+    public String getExtensionName() {
+        return NAME;
     }
 
     public String getGroupId() {

@@ -21,7 +21,7 @@ public class MavenFixtures extends ExtensionFixtures {
     private String artifactId = "testartifact";
     private String versionId = "testversion";
     private String type = "jar";
-    private String origin = MavenMetadataExtension.ORIGIN;
+    private String origin = MavenMetadataExtension.NAME;
 
     @Override
     public DormMetadataExtension getMetadataExtension() {
