@@ -1,6 +1,8 @@
 package com.zenika.dorm.maven.test.helper;
 
+import com.zenika.dorm.core.graph.DependencyNode;
 import com.zenika.dorm.core.model.DormMetadataExtension;
+import com.zenika.dorm.core.model.helper.DormFactoryHelper;
 import com.zenika.dorm.core.test.helper.ExtensionFixtures;
 import com.zenika.dorm.maven.model.impl.MavenMetadataExtension;
 import com.zenika.dorm.maven.processor.extension.MavenProcessor;
@@ -35,5 +37,16 @@ public class MavenFixtures extends ExtensionFixtures {
         properties.put(MavenProcessor.METADATA_ARTIFACTID, artifactId);
         properties.put(MavenProcessor.METADATA_VERSIONID, versionId);
         return properties;
+    }
+
+    public MavenMetadataExtension getEntityExtension() {
+        return new MavenMetadataExtension(groupId, artifactId, versionId,
+                MavenProcessor.ENTITY_TYPE);
+    }
+
+    public DependencyNode getEntityNodeWithChildAndFile() {
+        DependencyNode node = DormFactoryHelper.createSimpleNode(getVersion(), getEntityExtension());
+        node.addChild(getNodeWithFile());
+        return node;
     }
 }
