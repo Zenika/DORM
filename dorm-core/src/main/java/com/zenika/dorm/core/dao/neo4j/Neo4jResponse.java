@@ -153,4 +153,51 @@ public class Neo4jResponse<T> {
                 ", traverse='" + traverse + '\'' +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Neo4jResponse)) return false;
+
+        Neo4jResponse response = (Neo4jResponse) o;
+
+        if (all_relationships != null ? !all_relationships.equals(response.all_relationships) : response.all_relationships != null)
+            return false;
+        if (all_type_relationships != null ? !all_type_relationships.equals(response.all_type_relationships) : response.all_type_relationships != null)
+            return false;
+        if (create_relationship != null ? !create_relationship.equals(response.create_relationship) : response.create_relationship != null)
+            return false;
+        if (data != null ? !data.equals(response.data) : response.data != null) return false;
+        if (incoming_relationships != null ? !incoming_relationships.equals(response.incoming_relationships) : response.incoming_relationships != null)
+            return false;
+        if (incoming_typed_relationships != null ? !incoming_typed_relationships.equals(response.incoming_typed_relationships) : response.incoming_typed_relationships != null)
+            return false;
+        if (outgoing_relationships != null ? !outgoing_relationships.equals(response.outgoing_relationships) : response.outgoing_relationships != null)
+            return false;
+        if (outgoing_typed_relationships != null ? !outgoing_typed_relationships.equals(response.outgoing_typed_relationships) : response.outgoing_typed_relationships != null)
+            return false;
+        if (properties != null ? !properties.equals(response.properties) : response.properties != null) return false;
+        if (property != null ? !property.equals(response.property) : response.property != null) return false;
+        if (self != null ? !self.equals(response.self) : response.self != null) return false;
+        if (traverse != null ? !traverse.equals(response.traverse) : response.traverse != null) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = data != null ? data.hashCode() : 0;
+        result = 31 * result + (self != null ? self.hashCode() : 0);
+        result = 31 * result + (create_relationship != null ? create_relationship.hashCode() : 0);
+        result = 31 * result + (all_relationships != null ? all_relationships.hashCode() : 0);
+        result = 31 * result + (all_type_relationships != null ? all_type_relationships.hashCode() : 0);
+        result = 31 * result + (incoming_relationships != null ? incoming_relationships.hashCode() : 0);
+        result = 31 * result + (incoming_typed_relationships != null ? incoming_typed_relationships.hashCode() : 0);
+        result = 31 * result + (outgoing_relationships != null ? outgoing_relationships.hashCode() : 0);
+        result = 31 * result + (outgoing_typed_relationships != null ? outgoing_typed_relationships.hashCode() : 0);
+        result = 31 * result + (properties != null ? properties.hashCode() : 0);
+        result = 31 * result + (property != null ? property.hashCode() : 0);
+        result = 31 * result + (traverse != null ? traverse.hashCode() : 0);
+        return result;
+    }
 }

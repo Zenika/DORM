@@ -1,7 +1,11 @@
 package com.zenika.dorm.core.test.dao.neo4j;
 
-import com.mongodb.gridfs.CLI;
 import com.zenika.dorm.core.dao.neo4j.DormDaoNeo4j;
+import com.zenika.dorm.core.dao.neo4j.Neo4jDependency;
+import com.zenika.dorm.core.dao.neo4j.Neo4jMetadata;
+import com.zenika.dorm.core.dao.neo4j.Neo4jResponse;
+import com.zenika.dorm.core.dao.neo4j.util.ObjectMapperProvider;
+import com.zenika.dorm.core.dao.neo4j.util.RequestExecutor;
 import com.zenika.dorm.core.graph.Dependency;
 import com.zenika.dorm.core.graph.DependencyNode;
 import com.zenika.dorm.core.graph.impl.DefaultDependency;
@@ -11,48 +15,61 @@ import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.core.model.DormMetadataExtension;
 import com.zenika.dorm.core.model.impl.DefaultDormMetadata;
 import com.zenika.dorm.core.model.impl.DefaultDormMetadataExtension;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.type.TypeReference;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
-import java.util.ArrayList;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.List;
 
-import static org.fest.assertions.Assertions.assertThat;
-import static org.mockito.Mockito.verify;
+
+import static org.mockito.Mockito.*;
+import static org.junit.Assert.*;
+import static org.fest.assertions.Assertions.*;
 
 /**
  * @author Antoine ROUAZE <antoine.rouaze AT zenika.com>
  */
 public class Neo4jDaoTest {
-    //
-//    private Dependency dependency;
-//    private DependencyNode dependencyNode;
-//    private DormMetadata metadata;
-//    private DormMetadataExtension extension;
-//    private Usage usage;
+
+    private static final String INDEX_DEPENDENCY_RESPONSE_JSON = "/com/zenika/dorm/core/test/resources/index_dependency_response.json";
+    private static final String INDEX_DEPENDENCY_URI = "http://localhost:7474/db/data/index/node/dependency/fullqualifier/xercesImpl:2.4.0:dorm";
+
+    private Dependency dependency;
+    private DependencyNode dependencyNode;
+    private DormMetadata metadata;
+    private DormMetadataExtension extension;
+    private Usage usage;
+    private ObjectMapper mapper;
+
+    @Mock
+    private RequestExecutor executor;
+
+    @InjectMocks
+    private DormDaoNeo4j dao = new DormDaoNeo4j();
+
+    @Before
+    public void setUp() {
+        
+        MockitoAnnotations.initMocks(this);
+        usage = Usage.create("DEFAULT");
+        extension = new DefaultDormMetadataExtension("habi-base");
+        metadata = DefaultDormMetadata.create("0.6", extension);
+        dependency = DefaultDependency.create(metadata, usage);
+        dependencyNode = DefaultDependencyNode.create(dependency);
+        mapper = ObjectMapperProvider.createDefaultMapper();
+    }
 //
-//    //    //    @Mock
-//////    private Neo4jRequestExecutor executor;
-//////
-//////    @InjectMocks
-//    private DormDaoNeo4j dao = new DormDaoNeo4j();
-//
-//    //
-////    //
-//    @Before
-//    public void setUp() {
-//        usage = Usage.create("DEFAULT");
-//        extension = new DefaultDormMetadataExtension("maven8");
-//        metadata = DefaultDormMetadata.create("1.0.0", extension);
-//        dependency = DefaultDependency.create(metadata, usage);
-//        dependencyNode = DefaultDependencyNode.create(dependency);
-//    }
-//
-//    //
-////    //
 //    @Test
 //    public void push() throws Exception {
-//        //dao.push(dependency);
+//        dao.push(dependency);
 //    }
 //
 //    @Test
@@ -150,4 +167,21 @@ public class Neo4jDaoTest {
 //        return dependencyNode;
 //    }
 
+    @Test
+    public void testSearchNode() throws URISyntaxException {
+        URL file = getClass().getResource(INDEX_DEPENDENCY_RESPONSE_JSON);
+        URI uri = new URI(INDEX_DEPENDENCY_URI);
+        TypeReference<List<Neo4jResponse<Neo4jDependency>>> type = new TypeReference<List<Neo4jResponse<Neo4jDependency>>>() {
+        };
+        try {
+            List<Neo4jResponse<Neo4jDependency>> response = mapper.readValue(file, type);
+            when(executor.get(uri, type.getType())).thenReturn(response);
+            Neo4jDependency dependencyResult = dao.searchNode(uri, type.getType());
+            verify(executor).get(uri,type.getType());
+            assertThat(response.get(0)).isSameAs(dependencyResult.getResponse());
+            assertEquals("The Responses doesn't same", response.get(0), dependencyResult.getResponse());
+        } catch (IOException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+    }
 }

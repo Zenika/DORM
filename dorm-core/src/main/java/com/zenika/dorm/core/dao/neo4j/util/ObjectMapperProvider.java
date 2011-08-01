@@ -26,7 +26,7 @@ public class ObjectMapperProvider implements ContextResolver<ObjectMapper> {
         return defautltObjectMapper;
     }
 
-    private static ObjectMapper createDefaultMapper() {
+    public static ObjectMapper createDefaultMapper() {
         AnnotationIntrospector.Pair combinedIntrospector = createJaxbJacksonAnnotationIntrospector();
         ObjectMapper result = new ObjectMapper();
         result.getSerializationConfig().set(SerializationConfig.Feature.FAIL_ON_EMPTY_BEANS, false);

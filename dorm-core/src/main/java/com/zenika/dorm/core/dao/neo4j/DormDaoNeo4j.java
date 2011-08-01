@@ -3,17 +3,15 @@ package com.zenika.dorm.core.dao.neo4j;
 
 import com.zenika.dorm.core.dao.DormDao;
 import com.zenika.dorm.core.dao.neo4j.util.Neo4jRequestExecutor;
+import com.zenika.dorm.core.dao.neo4j.util.RequestExecutor;
 import com.zenika.dorm.core.graph.Dependency;
 import com.zenika.dorm.core.graph.DependencyNode;
 import com.zenika.dorm.core.graph.impl.DefaultDependencyNode;
 import com.zenika.dorm.core.graph.impl.Usage;
 import com.zenika.dorm.core.graph.visitor.impl.DependenciesNodeCollector;
 import com.zenika.dorm.core.model.DormMetadata;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.codehaus.jackson.type.TypeReference;
 
-import java.io.IOException;
 import java.lang.reflect.Type;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -27,14 +25,18 @@ import java.util.Set;
  */
 public class DormDaoNeo4j implements DormDao {
 
-    private Neo4jRequestExecutor executor;
+    private RequestExecutor executor;
     private Neo4jIndex index;
 
     public DormDaoNeo4j() {
+
+
+    }
+
+    public void init() {
         executor = new Neo4jRequestExecutor();
         index = new Neo4jIndex();
         index = executor.post(index);
-
     }
 
     @Override
@@ -75,7 +77,7 @@ public class DormDaoNeo4j implements DormDao {
         return dependency;
     }
 
-    private <T extends Neo4jNode> T searchNode(URI uri, Type type) throws URISyntaxException {
+    public <T extends Neo4jNode> T searchNode(URI uri, Type type) throws URISyntaxException {
         List<Neo4jResponse<T>> responses = executor.get(uri, type);
         Neo4jResponse<T> response = responses.get(0);
         T node = response.getData();
@@ -117,28 +119,32 @@ public class DormDaoNeo4j implements DormDao {
         Map<String, DependencyNode> dependencyNodeMap = new HashMap<String, DependencyNode>();
         Neo4jDependency dependency = null;
         try {
-            dependency = searchNode(Neo4jMetadata.generateIndexURI(metadata.getFullQualifier(), index),
-                    new TypeReference<List<Neo4jResponse<Neo4jDependency>>>() {
-                    }.getType());
+            TypeReference<List<Neo4jResponse<Neo4jDependency>>> type = new TypeReference<List<Neo4jResponse<Neo4jDependency>>>() {
+            };
+            dependency = searchNode(Neo4jMetadata.generateIndexURI(metadata.getFullQualifier(), index), type.getType());
             Neo4jTraverse traverse = new Neo4jTraverse(new Neo4jRelationship(usage));
             List<Neo4jRelationship> relationships = executor.post(dependency.getTraverse(Neo4jTraverse.RELATIONSHIP_TYPE), traverse);
-            for (Neo4jRelationship relationship : relationships) {
-                if (!(relationship.getType().equals(Neo4jMetadata.RELATIONSHIP_TYPE.getName()) || relationship.getType().equals(Neo4jMetadataExtension.RELATIONSHIP_TYPE.getName()))) {
-                    DependencyNode dependencyParent = dependencyNodeMap.get(relationship.getStart());
-                    DependencyNode dependencyChild = dependencyNodeMap.get(relationship.getEnd());
-                    if (dependencyParent == null) {
-                        dependencyParent = DefaultDependencyNode.create(getDependency(relationship.getStart(), usage));
-                    }
-                    if (dependencyChild == null) {
-                        dependencyChild = DefaultDependencyNode.create(getDependency(relationship.getEnd(), usage));
-                    }
-                    dependencyParent.addChild(dependencyChild);
-                }
-            }
+            putChild(usage, dependencyNodeMap, relationships);
         } catch (URISyntaxException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
         return dependencyNodeMap.get(dependency.getResponse().getSelf());
+    }
+
+    protected void putChild(Usage usage, Map<String, DependencyNode> dependencyNodeMap, List<Neo4jRelationship> relationships) throws URISyntaxException {
+        for (Neo4jRelationship relationship : relationships) {
+            DependencyNode dependencyParent = dependencyNodeMap.get(relationship.getStart());
+            DependencyNode dependencyChild = dependencyNodeMap.get(relationship.getEnd());
+            if (dependencyParent == null) {
+                dependencyParent = DefaultDependencyNode.create(getDependency(relationship.getStart(), usage));
+                dependencyNodeMap.put(relationship.getStart().toString(), dependencyParent);
+            }
+            if (dependencyChild == null) {
+                dependencyChild = DefaultDependencyNode.create(getDependency(relationship.getEnd(), usage));
+                dependencyNodeMap.put(relationship.getEnd().toString(), dependencyChild);
+            }
+            dependencyParent.addChild(dependencyChild);
+        }
     }
 
     @Override
@@ -148,17 +154,25 @@ public class DormDaoNeo4j implements DormDao {
             node.accept(visitor);
             Set<DependencyNode> nodes = visitor.getDependencies();
             for (DependencyNode currentNode : nodes) {
-                Neo4jDependency dependency = postDependency(currentNode.getDependency());
-                for (DependencyNode child : currentNode.getChildren()) {
-                    Neo4jDependency dependencyChild = postDependency(child.getDependency());
-                    executor.post(new Neo4jRelationship(dependency, dependencyChild, dependency.getUsage()));
-                }
+                postNodeWithChild(currentNode);
             }
             return true;
         } catch (URISyntaxException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
         return false;
+    }
+
+    private void postNodeWithChild(DependencyNode currentNode) throws URISyntaxException {
+        Neo4jDependency dependency = postDependency(currentNode.getDependency());
+        for (DependencyNode child : currentNode.getChildren()) {
+            Neo4jDependency dependencyChild = postDependency(child.getDependency());
+            executor.post(new Neo4jRelationship(dependency, dependencyChild, dependency.getUsage()));
+        }
+    }
+
+    public String test() {
+        return executor.test();
     }
 
 }
