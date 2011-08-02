@@ -5,18 +5,13 @@ import com.zenika.dorm.core.graph.DependencyNode;
 import com.zenika.dorm.core.model.DormMetadataExtension;
 import com.zenika.dorm.core.model.DormRequest;
 import com.zenika.dorm.core.model.impl.DefaultDormRequest;
-import com.zenika.dorm.core.processor.RequestProcessor;
 import com.zenika.dorm.core.processor.impl.DormProcessor;
 import com.zenika.dorm.core.test.unit.AbstractUnitTest;
 import org.fest.assertions.Assertions;
 import org.junit.Test;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
 
 import java.util.Map;
-
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.verify;
 
 /**
  * Unit tests for the dorm processor extension
@@ -25,8 +20,6 @@ import static org.mockito.Mockito.verify;
  */
 public class DormProcessorUnitTest extends AbstractUnitTest {
 
-    @Mock
-    private RequestProcessor requestProcessor;
 
     @InjectMocks
     private DormProcessor processor = new DormProcessor();
@@ -38,11 +31,11 @@ public class DormProcessorUnitTest extends AbstractUnitTest {
         DormMetadataExtension extension = fixtures.getMetadataExtension();
         DormRequest request = fixtures.getRequestWithFile();
 
-        given(requestProcessor.createNode(extension, request)).willReturn(node);
+//        given(factoryFromRequest.createNode(extension, request)).willReturn(node);
 
         Assertions.assertThat(processor.push(request)).isEqualTo(node);
 
-        verify(requestProcessor).createNode(extension, request);
+//        verify(factoryFromRequest).createNode(extension, request);
     }
 
     @Test(expected = CoreException.class)

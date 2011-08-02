@@ -8,9 +8,7 @@ import com.sun.jersey.guice.spi.container.servlet.GuiceContainer;
 import com.zenika.dorm.core.dao.mongo.MongoInstance;
 import com.zenika.dorm.core.model.impl.DefaultDormMetadataExtension;
 import com.zenika.dorm.core.processor.Processor;
-import com.zenika.dorm.core.processor.RequestProcessor;
 import com.zenika.dorm.core.processor.impl.DefaultProcessor;
-import com.zenika.dorm.core.processor.impl.DefaultRequestProcessor;
 import com.zenika.dorm.core.processor.impl.DormProcessor;
 import com.zenika.dorm.core.service.DormService;
 import com.zenika.dorm.core.service.impl.DefaultDormService;
@@ -46,7 +44,6 @@ public class GuiceModule extends JerseyServletModule {
         processor.getExtensions().put(MavenMetadataExtension.NAME, new MavenProcessor());
 
         bind(Processor.class).toInstance(processor);
-        bind(RequestProcessor.class).to(DefaultRequestProcessor.class);
 
         // service
         bind(DormService.class).to(DefaultDormService.class);

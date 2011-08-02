@@ -2,8 +2,11 @@ package com.zenika.dorm.maven.processor.extension;
 
 import com.zenika.dorm.core.graph.Dependency;
 import com.zenika.dorm.core.graph.DependencyNode;
+import com.zenika.dorm.core.graph.impl.DefaultDependencyNode;
 import com.zenika.dorm.core.model.DormFile;
 import com.zenika.dorm.core.model.DormRequest;
+import com.zenika.dorm.core.model.builder.DependencyBuilderFromRequest;
+import com.zenika.dorm.core.model.builder.DormFileBuilderFromRequest;
 import com.zenika.dorm.core.model.impl.DefaultDormRequest;
 import com.zenika.dorm.core.processor.impl.AbstractProcessorExtension;
 import com.zenika.dorm.maven.exception.MavenException;
@@ -40,8 +43,8 @@ public class MavenProcessor extends AbstractProcessorExtension {
         // get the maven type from the filename
         String type = FilenameUtils.getExtension(request.getFilename());
 
-        if (type != "jar" || type != "pom" || type != "sha1") {
-            throw new MavenException("Invalid maven type.");
+        if (!type.equalsIgnoreCase("jar") && type.equalsIgnoreCase("pom") && type.equalsIgnoreCase("sha1")) {
+            throw new MavenException("Invalid maven type : " + type);
         }
 
         // get the maven metadatas from the request
@@ -53,7 +56,7 @@ public class MavenProcessor extends AbstractProcessorExtension {
         MavenMetadataExtension rootExtension = new MavenMetadataExtension(groupId, artifactId, versionId,
                 MavenProcessor.ENTITY_TYPE);
 
-        Dependency rootDependency = getRequestProcessor().createDependency(rootExtension, request);
+        Dependency rootDependency = new DependencyBuilderFromRequest(request, rootExtension).build();
 
         // create the real maven dependency to push
         MavenMetadataExtension extension = new MavenMetadataExtension(groupId, artifactId, versionId, type);
@@ -67,12 +70,12 @@ public class MavenProcessor extends AbstractProcessorExtension {
         newProperties.put(DormRequest.USAGE, INTERNAL_USAGE);
         request = DefaultDormRequest.createFromRequest(request, newProperties);
 
-        DormFile file = getRequestProcessor().createFile(request);
+        DormFile file = new DormFileBuilderFromRequest(request).build();
 
-        Dependency dependency = getRequestProcessor().createDependency(extension, file, request);
+        Dependency dependency = new DependencyBuilderFromRequest(request, extension).file(file).build();
 
-        DependencyNode root = getRequestProcessor().createNode(rootDependency);
-        DependencyNode node = getRequestProcessor().createNode(dependency);
+        DependencyNode root = DefaultDependencyNode.create(rootDependency);
+        DependencyNode node = DefaultDependencyNode.create(dependency);
         root.addChild(node);
 
         return root;

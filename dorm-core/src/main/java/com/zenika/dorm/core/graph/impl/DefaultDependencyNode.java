@@ -63,4 +63,21 @@ public final class DefaultDependencyNode implements DependencyNode {
 
         return visitor.visitExit(this);
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof DefaultDependencyNode)) return false;
+
+        DefaultDependencyNode that = (DefaultDependencyNode) o;
+
+        if (dependency != null ? !dependency.equals(that.dependency) : that.dependency != null) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return dependency != null ? dependency.hashCode() : 0;
+    }
 }

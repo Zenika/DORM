@@ -21,6 +21,10 @@ public final class Usage {
 
     public static Usage create(String name) {
 
+        if (null == name) {
+            name = DEFAULT;
+        }
+
         // check if name is not reserved for internal usages
         if (name.length() >= Usage.INTERNAL_KEYWORD.length() &&
                 name.substring(Usage.INTERNAL_KEYWORD.length()).equalsIgnoreCase(Usage.INTERNAL_KEYWORD)) {

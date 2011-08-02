@@ -4,6 +4,7 @@ import com.zenika.dorm.core.exception.CoreException;
 import com.zenika.dorm.core.graph.DependencyNode;
 import com.zenika.dorm.core.model.DormMetadataExtension;
 import com.zenika.dorm.core.model.DormRequest;
+import com.zenika.dorm.core.model.builder.DependencyNodeBuilderFromRequest;
 import com.zenika.dorm.core.model.impl.DefaultDormMetadataExtension;
 
 /**
@@ -39,6 +40,6 @@ public class DormProcessor extends AbstractProcessorExtension {
 
         DormMetadataExtension extension = new DefaultDormMetadataExtension(name);
 
-        return getRequestProcessor().createNode(extension, request);
+        return new DependencyNodeBuilderFromRequest(request, extension).build();
     }
 }

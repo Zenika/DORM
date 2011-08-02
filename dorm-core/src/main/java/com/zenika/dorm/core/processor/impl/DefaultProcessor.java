@@ -6,7 +6,6 @@ import com.zenika.dorm.core.graph.DependencyNode;
 import com.zenika.dorm.core.model.DormRequest;
 import com.zenika.dorm.core.processor.Processor;
 import com.zenika.dorm.core.processor.ProcessorExtension;
-import com.zenika.dorm.core.processor.RequestProcessor;
 import com.zenika.dorm.core.service.DormService;
 
 import java.util.HashMap;
@@ -24,9 +23,6 @@ public class DefaultProcessor implements Processor {
      * Extensions are injected in the guice module
      */
     private Map<String, ProcessorExtension> extensions = new HashMap<String, ProcessorExtension>();
-
-    @Inject
-    private RequestProcessor requestProcessor;
 
     @Inject
     private DormService service;
@@ -63,10 +59,5 @@ public class DefaultProcessor implements Processor {
 
     public Map<String, ProcessorExtension> getExtensions() {
         return extensions;
-    }
-
-    @Override
-    public RequestProcessor getRequestProcessor() {
-        return requestProcessor;
     }
 }
