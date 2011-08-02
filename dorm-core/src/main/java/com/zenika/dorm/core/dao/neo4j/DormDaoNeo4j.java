@@ -100,7 +100,7 @@ public class DormDaoNeo4j implements DormDao {
         return dependency;
     }
 
-    private Dependency getDependency(URI uri, Usage usage) throws URISyntaxException {
+    public Dependency getDependency(URI uri, Usage usage) throws URISyntaxException {
         Neo4jDependency dependency = executor.getNode(uri, new TypeReference<Neo4jResponse<Neo4jDependency>>() {
         }.getType());
         fillNeo4jDependency(dependency);
