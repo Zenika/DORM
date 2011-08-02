@@ -11,6 +11,8 @@ import com.zenika.dorm.core.graph.impl.Usage;
 import com.zenika.dorm.core.graph.visitor.impl.DependenciesNodeCollector;
 import com.zenika.dorm.core.model.DormMetadata;
 import org.codehaus.jackson.type.TypeReference;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Type;
 import java.net.URI;
@@ -24,6 +26,8 @@ import java.util.Set;
  * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>
  */
 public class DormDaoNeo4j implements DormDao {
+
+    private static final Logger LOG = LoggerFactory.getLogger(DormDaoNeo4j.class);
 
     private RequestExecutor executor;
     private Neo4jIndex index;
@@ -131,7 +135,7 @@ public class DormDaoNeo4j implements DormDao {
         return dependencyNodeMap.get(dependency.getResponse().getSelf());
     }
 
-    protected void putChild(Usage usage, Map<String, DependencyNode> dependencyNodeMap, List<Neo4jRelationship> relationships) throws URISyntaxException {
+    public void putChild(Usage usage, Map<String, DependencyNode> dependencyNodeMap, List<Neo4jRelationship> relationships) throws URISyntaxException {
         for (Neo4jRelationship relationship : relationships) {
             DependencyNode dependencyParent = dependencyNodeMap.get(relationship.getStart());
             DependencyNode dependencyChild = dependencyNodeMap.get(relationship.getEnd());
