@@ -3,21 +3,15 @@ package com.zenika.dorm.core.test.dao.neo4j;
 import com.zenika.dorm.core.dao.neo4j.DormDaoNeo4j;
 import com.zenika.dorm.core.dao.neo4j.Neo4jDependency;
 import com.zenika.dorm.core.dao.neo4j.Neo4jMetadata;
+import com.zenika.dorm.core.dao.neo4j.Neo4jMetadataExtension;
+import com.zenika.dorm.core.dao.neo4j.Neo4jRelationship;
 import com.zenika.dorm.core.dao.neo4j.Neo4jResponse;
 import com.zenika.dorm.core.dao.neo4j.util.ObjectMapperProvider;
 import com.zenika.dorm.core.dao.neo4j.util.RequestExecutor;
-import com.zenika.dorm.core.graph.Dependency;
-import com.zenika.dorm.core.graph.DependencyNode;
-import com.zenika.dorm.core.graph.impl.DefaultDependency;
-import com.zenika.dorm.core.graph.impl.DefaultDependencyNode;
-import com.zenika.dorm.core.graph.impl.Usage;
-import com.zenika.dorm.core.model.DormMetadata;
-import com.zenika.dorm.core.model.DormMetadataExtension;
-import com.zenika.dorm.core.model.impl.DefaultDormMetadata;
-import com.zenika.dorm.core.model.impl.DefaultDormMetadataExtension;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -40,13 +34,42 @@ import static org.fest.assertions.Assertions.*;
 public class Neo4jDaoTest {
 
     private static final String INDEX_DEPENDENCY_RESPONSE_JSON = "/com/zenika/dorm/core/test/resources/index_dependency_response.json";
+    private static final String DEPENDENCY_RESPONSE_JSON = "/com/zenika/dorm/core/test/resources/dependency_response.json";
+    private static final String METADATA_RESPONSE_JSON = "/com/zenika/dorm/core/test/resources/metadata_response.json";
+    private static final String EXTENSION_RESPONSE_JSON = "/com/zenika/dorm/core/test/resources/extension_response.json";
+    private static final String RELATIONSHIP_DEPENDENCY_RESPONSE_JSON = "/com/zenika/dorm/core/test/resources/relationship_dependency_response.json";
+    private static final String RELATIONSHIP_METADATA_RESPONSE_JSON = "/com/zenika/dorm/core/test/resources/relationship_metadata_response.json";
     private static final String INDEX_DEPENDENCY_URI = "http://localhost:7474/db/data/index/node/dependency/fullqualifier/xercesImpl:2.4.0:dorm";
+    private static final String DEPENDENCY_URI = "http://localhost:7474/db/data/node/3";
+    private static final String RELATIONSHIP_DEPENDENCY_URI = "";
 
-    private Dependency dependency;
-    private DependencyNode dependencyNode;
-    private DormMetadata metadata;
-    private DormMetadataExtension extension;
-    private Usage usage;
+    private URL dependencyUrl;
+    private URL metadataUrl;
+    private URL extensionUrl;
+    private URL relationshipDependencyUrl;
+    private URL relationshipMetadataUrl;
+    private URL indexDependencyUrl;
+
+    private URI indexUri;
+
+    private TypeReference<Neo4jResponse<Neo4jDependency>> dependencyResponseType;
+    private TypeReference<Neo4jResponse<Neo4jMetadata>> metadataResponseType;
+    private TypeReference<Neo4jResponse<Neo4jMetadataExtension>> extensionResponseType;
+    private TypeReference<List<Neo4jRelationship>> listRelationshipType;
+    private TypeReference<List<Neo4jResponse<Neo4jDependency>>> listDependencyResponseType;
+
+    private Neo4jResponse<Neo4jDependency> dependencyResponse;
+    private Neo4jResponse<Neo4jMetadata> metadataResponse;
+    private Neo4jResponse<Neo4jMetadataExtension> extensionResponse;
+    private List<Neo4jRelationship> relationshipsDependency;
+    private List<Neo4jRelationship> relationshipsMetadata;
+    private List<Neo4jResponse<Neo4jDependency>> listDependencyResponse;
+
+    //    private Dependency dependencyResponse;
+//    private DependencyNode dependencyNode;
+//    private DormMetadata metadataResponse;
+//    private DormMetadataExtension extensionResponse;
+//    private Usage usage;
     private ObjectMapper mapper;
 
     @Mock
@@ -57,19 +80,24 @@ public class Neo4jDaoTest {
 
     @Before
     public void setUp() {
-        
-        MockitoAnnotations.initMocks(this);
-        usage = Usage.create("DEFAULT");
-        extension = new DefaultDormMetadataExtension("habi-base");
-        metadata = DefaultDormMetadata.create("0.6", extension);
-        dependency = DefaultDependency.create(metadata, usage);
-        dependencyNode = DefaultDependencyNode.create(dependency);
         mapper = ObjectMapperProvider.createDefaultMapper();
+        setUpUrl();
+        setUpUri();
+        setUpTypeReference();
+        MockitoAnnotations.initMocks(this);
+        setUpNeo4jResponseObject();
+        setUpMethod();
+//        usage = Usage.create("DEFAULT");
+//        extensionResponse = new DefaultDormMetadataExtension("habi-base");
+//        metadataResponse = DefaultDormMetadata.create("0.6", extensionResponse);
+//        dependencyResponse = DefaultDependency.create(metadataResponse, usage);
+//        dependencyNode = DefaultDependencyNode.create(dependencyResponse);
+
     }
 //
 //    @Test
 //    public void push() throws Exception {
-//        dao.push(dependency);
+//        dao.push(dependencyResponse);
 //    }
 //
 //    @Test
@@ -79,16 +107,16 @@ public class Neo4jDaoTest {
 //
 //    @Test
 //    public void testPushWithRecursiveChildren() {
-//        DormMetadataExtension extension;
-//        DormMetadata metadata;
-//        Dependency dependency;
+//        DormMetadataExtension extensionResponse;
+//        DormMetadata metadataResponse;
+//        Dependency dependencyResponse;
 //        DependencyNode dependencyNode;
 //        List<DependencyNode> dependencies = new ArrayList<DependencyNode>();
 //        for (int i = 0; i < 100; i++) {
-//            extension = new DefaultDormMetadataExtension("maven" + (i));
-//            metadata = DefaultDormMetadata.create("1.0.0", extension);
-//            dependency = DefaultDependency.create(metadata, Usage.create("DEFAULT"));
-//            dependencyNode = DefaultDependencyNode.create(dependency);
+//            extensionResponse = new DefaultDormMetadataExtension("maven" + (i));
+//            metadataResponse = DefaultDormMetadata.create("1.0.0", extensionResponse);
+//            dependencyResponse = DefaultDependency.create(metadataResponse, Usage.create("DEFAULT"));
+//            dependencyNode = DefaultDependencyNode.create(dependencyResponse);
 //            dependencies.add(dependencyNode);
 //            if (i != 0) {
 //                dependencies.get(i - 1).addChild(dependencies.get(i));
@@ -101,10 +129,10 @@ public class Neo4jDaoTest {
 //
 //    @Test
 //    public void testPushWithManyChildren() {
-//        DormMetadataExtension extension = new DefaultDormMetadataExtension("maven");
-//        DormMetadata metadata = DefaultDormMetadata.create("1.0.0", extension);
-//        Dependency dependency = DefaultDependency.create(metadata, Usage.create("DEFAULT"));
-//        DependencyNode dependencyNode = DefaultDependencyNode.create(dependency);
+//        DormMetadataExtension extensionResponse = new DefaultDormMetadataExtension("maven");
+//        DormMetadata metadataResponse = DefaultDormMetadata.create("1.0.0", extensionResponse);
+//        Dependency dependencyResponse = DefaultDependency.create(metadataResponse, Usage.create("DEFAULT"));
+//        DependencyNode dependencyNode = DefaultDependencyNode.create(dependencyResponse);
 //        for (int i = 1; i < 100; i++) {
 //            DormMetadataExtension extensionBis = new DefaultDormMetadataExtension("maven" + (i * 10));
 //            DormMetadata metadataBis = DefaultDormMetadata.create("1.0.0", extensionBis);
@@ -120,16 +148,16 @@ public class Neo4jDaoTest {
 //    @Test
 //    public void getByMetaData() {
 //        long time = System.currentTimeMillis();
-//        dao.getByMetadata(metadata, usage);
+//        dao.getByMetadata(metadataResponse, usage);
 //        System.out.println("Times to standard push : " + (System.currentTimeMillis() - time));
 //    }
 //
 //    @Test
 //    public void getOtherByMetadata() {
-//        DormMetadataExtension extension = new DefaultDormMetadataExtension("maven");
-//        DormMetadata metadata = DefaultDormMetadata.create("1.0.0", extension);
+//        DormMetadataExtension extensionResponse = new DefaultDormMetadataExtension("maven");
+//        DormMetadata metadataResponse = DefaultDormMetadata.create("1.0.0", extensionResponse);
 //        long time = System.currentTimeMillis();
-//        dao.getByMetadata(metadata, usage);
+//        dao.getByMetadata(metadataResponse, usage);
 //        System.out.println("Times to standard push : " + (System.currentTimeMillis() - time));
 //    }
 //
@@ -160,28 +188,84 @@ public class Neo4jDaoTest {
 //
 //
 //    private DependencyNode createDependencyNode(String name, String version) {
-//        DormMetadataExtension extension = new DefaultDormMetadataExtension(name);
-//        DormMetadata metadata = DefaultDormMetadata.create(version, extension);
-//        Dependency dependency = DefaultDependency.create(metadata, usage);
-//        DependencyNode dependencyNode = DefaultDependencyNode.create(dependency);
+//        DormMetadataExtension extensionResponse = new DefaultDormMetadataExtension(name);
+//        DormMetadata metadataResponse = DefaultDormMetadata.create(version, extensionResponse);
+//        Dependency dependencyResponse = DefaultDependency.create(metadataResponse, usage);
+//        DependencyNode dependencyNode = DefaultDependencyNode.create(dependencyResponse);
 //        return dependencyNode;
 //    }
 
     @Test
     public void testSearchNode() throws URISyntaxException {
-        URL file = getClass().getResource(INDEX_DEPENDENCY_RESPONSE_JSON);
-        URI uri = new URI(INDEX_DEPENDENCY_URI);
-        TypeReference<List<Neo4jResponse<Neo4jDependency>>> type = new TypeReference<List<Neo4jResponse<Neo4jDependency>>>() {
-        };
+        Neo4jDependency dependencyResult = dao.searchNode(indexUri, listDependencyResponseType.getType());
+        verify(executor).get(any(URI.class), eq(listDependencyResponseType.getType()));
+        assertThat(listDependencyResponse.get(0)).isSameAs(dependencyResult.getResponse());
+        assertEquals("The Responses doesn't same", listDependencyResponse.get(0), dependencyResult.getResponse());
+    }
+
+    @Test
+    public void testFillNeo4jDependency() throws URISyntaxException {
+        Neo4jDependency dependencyResponse = dao.fillNeo4jDependency(this.dependencyResponse.getData());
+        assertThat(dependencyResponse.getMetadata()).isSameAs(metadataResponse.getData());
+        assertThat(dependencyResponse.getMetadata().getExtension()).isSameAs(extensionResponse.getData());
+    }
+
+    private void setUpUrl() {
+        dependencyUrl = getClass().getResource(DEPENDENCY_RESPONSE_JSON);
+        metadataUrl = getClass().getResource(METADATA_RESPONSE_JSON);
+        extensionUrl = getClass().getResource(EXTENSION_RESPONSE_JSON);
+        relationshipDependencyUrl = getClass().getResource(RELATIONSHIP_DEPENDENCY_RESPONSE_JSON);
+        relationshipMetadataUrl = getClass().getResource(RELATIONSHIP_METADATA_RESPONSE_JSON);
+        indexDependencyUrl = getClass().getResource(INDEX_DEPENDENCY_RESPONSE_JSON);
+    }
+
+    private void setUpUri() {
         try {
-            List<Neo4jResponse<Neo4jDependency>> response = mapper.readValue(file, type);
-            when(executor.get(uri, type.getType())).thenReturn(response);
-            Neo4jDependency dependencyResult = dao.searchNode(uri, type.getType());
-            verify(executor).get(uri,type.getType());
-            assertThat(response.get(0)).isSameAs(dependencyResult.getResponse());
-            assertEquals("The Responses doesn't same", response.get(0), dependencyResult.getResponse());
-        } catch (IOException e) {
+            indexUri = new URI(INDEX_DEPENDENCY_URI);
+        } catch (URISyntaxException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
+    }
+
+    private void setUpTypeReference() {
+        dependencyResponseType = new TypeReference<Neo4jResponse<Neo4jDependency>>() {
+        };
+        metadataResponseType = new TypeReference<Neo4jResponse<Neo4jMetadata>>() {
+        };
+        extensionResponseType = new TypeReference<Neo4jResponse<Neo4jMetadataExtension>>() {
+        };
+        listRelationshipType = new TypeReference<List<Neo4jRelationship>>() {
+        };
+        listDependencyResponseType = new TypeReference<List<Neo4jResponse<Neo4jDependency>>>() {
+        };
+    }
+
+    private void setUpNeo4jResponseObject() {
+        try {
+            dependencyResponse = mapper.readValue(dependencyUrl, dependencyResponseType);
+            metadataResponse = mapper.readValue(metadataUrl, metadataResponseType);
+            extensionResponse = mapper.readValue(extensionUrl, extensionResponseType);
+            relationshipsDependency = mapper.readValue(relationshipDependencyUrl, listRelationshipType);
+            relationshipsMetadata = mapper.readValue(relationshipMetadataUrl, listRelationshipType);
+            listDependencyResponse = mapper.readValue(indexDependencyUrl, listDependencyResponseType);
+
+            dependencyResponse.getData().setResponse(dependencyResponse);
+            metadataResponse.getData().setResponse(metadataResponse);
+            extensionResponse.getData().setResponse(extensionResponse);
+        } catch (IOException e) {
+
+        }
+    }
+
+    private void setUpMethod() {
+        when(executor.get(any(URI.class), eq(listDependencyResponseType.getType()))).thenReturn(listDependencyResponse);
+        when(executor.<Neo4jMetadata>getNode(any(URI.class), eq(metadataResponseType.getType())))
+                .thenReturn(metadataResponse.getData());
+        when(executor.<Neo4jMetadataExtension>getNode(any(URI.class), eq(extensionResponseType.getType())))
+                .thenReturn(extensionResponse.getData());
+        when(executor.<List<Neo4jRelationship>>get(any(URI.class), eq(listRelationshipType.getType())))
+                .thenReturn(relationshipsDependency);
+        when(executor.<List<Neo4jRelationship>>get(any(URI.class), eq(listRelationshipType.getType())))
+                .thenReturn(relationshipsMetadata);
     }
 }

@@ -86,7 +86,7 @@ public class DormDaoNeo4j implements DormDao {
         return node;
     }
 
-    private Neo4jDependency fillNeo4jDependency(Neo4jDependency dependency) throws URISyntaxException {
+    public Neo4jDependency fillNeo4jDependency(Neo4jDependency dependency) throws URISyntaxException {
         Neo4jRelationship dependencyMetadata = getSingleRelationship(dependency.getResponse()
                 .getOutgoing_typed_relationships(Neo4jMetadata.RELATIONSHIP_TYPE));
         Neo4jMetadata metadata = executor.getNode(dependencyMetadata.getEnd(), new TypeReference<Neo4jResponse<Neo4jMetadata>>() {
