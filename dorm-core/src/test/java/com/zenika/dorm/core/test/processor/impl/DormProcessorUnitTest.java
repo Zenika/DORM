@@ -3,6 +3,7 @@ package com.zenika.dorm.core.test.processor.impl;
 import com.zenika.dorm.core.exception.CoreException;
 import com.zenika.dorm.core.graph.DependencyNode;
 import com.zenika.dorm.core.model.DormRequest;
+import com.zenika.dorm.core.model.impl.DefaultDormMetadataExtension;
 import com.zenika.dorm.core.model.impl.DefaultDormRequest;
 import com.zenika.dorm.core.processor.impl.DormProcessor;
 import com.zenika.dorm.core.test.unit.AbstractUnitTest;
@@ -41,7 +42,7 @@ public class DormProcessorUnitTest extends AbstractUnitTest {
     public void pushDormArtifactWithoutRequiredMetadatas() {
 
         Map<String, String> properties = fixtures.getRequestPropertiesWithFile();
-        properties.put(DormProcessor.METADATA_NAME, null);
+        properties.put(DefaultDormMetadataExtension.METADATA_NAME, null);
 
         DormRequest request = DefaultDormRequest.create(properties, fixtures.getFile());
 

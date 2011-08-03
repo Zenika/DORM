@@ -31,7 +31,7 @@ public class DormFixtures extends ExtensionFixtures {
     public Map<String, String> getRequestPropertiesForExtension() {
         Map<String, String> properties = new HashMap<String, String>();
         properties.put(DormRequest.ORIGIN, DefaultDormMetadataExtension.NAME);
-        properties.put(DormProcessor.METADATA_NAME, name);
+        properties.put(DefaultDormMetadataExtension.METADATA_NAME, name);
         return properties;
     }
 

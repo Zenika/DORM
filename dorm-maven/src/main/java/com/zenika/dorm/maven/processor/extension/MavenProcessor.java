@@ -32,13 +32,6 @@ public class MavenProcessor extends AbstractProcessorExtension {
 
     public static final String ENTITY_TYPE = "entity";
 
-    /**
-     * Metadata names
-     */
-    public static final String METADATA_GROUPID = "groupId";
-    public static final String METADATA_ARTIFACTID = "artifactId";
-    public static final String METADATA_VERSIONID = "versionId";
-
     @Override
     public DependencyNode push(DormRequest request) {
 
@@ -58,9 +51,9 @@ public class MavenProcessor extends AbstractProcessorExtension {
         }
 
         // get the maven metadatas from the request
-        String groupId = request.getProperty(METADATA_GROUPID);
-        String artifactId = request.getProperty(METADATA_ARTIFACTID);
-        String versionId = request.getProperty(METADATA_VERSIONID);
+        String groupId = request.getProperty(MavenMetadataExtension.METADATA_GROUPID);
+        String artifactId = request.getProperty(MavenMetadataExtension.METADATA_ARTIFACTID);
+        String versionId = request.getProperty(MavenMetadataExtension.METADATA_VERSIONID);
 
         // create the entity extension which is the same as the child with a different type
         MavenMetadataExtension entityExtension = new MavenMetadataExtension(groupId, artifactId, versionId,

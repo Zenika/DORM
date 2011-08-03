@@ -17,6 +17,13 @@ public final class MavenMetadataExtension implements DormMetadataExtension {
 
     public static final String NAME = "maven";
 
+    /**
+     * Metadata names
+     */
+    public static final String METADATA_GROUPID = "groupId";
+    public static final String METADATA_ARTIFACTID = "artifactId";
+    public static final String METADATA_VERSIONID = "versionId";
+
     private final String groupId;
     private final String artifactId;
     private final String versionId;

@@ -43,9 +43,9 @@ public class MavenFixtures extends ExtensionFixtures {
     public Map<String, String> getRequestPropertiesForExtension() {
         Map<String, String> properties = new HashMap<String, String>();
         properties.put(DormRequest.ORIGIN, origin);
-        properties.put(MavenProcessor.METADATA_GROUPID, groupId);
-        properties.put(MavenProcessor.METADATA_ARTIFACTID, artifactId);
-        properties.put(MavenProcessor.METADATA_VERSIONID, versionId);
+        properties.put(MavenMetadataExtension.METADATA_GROUPID, groupId);
+        properties.put(MavenMetadataExtension.METADATA_ARTIFACTID, artifactId);
+        properties.put(MavenMetadataExtension.METADATA_VERSIONID, versionId);
         return properties;
     }
 

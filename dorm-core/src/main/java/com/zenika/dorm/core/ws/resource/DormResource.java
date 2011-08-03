@@ -62,7 +62,7 @@ public class DormResource {
                                           @PathParam("version") String version) {
 
         Map<String, String> properties = new HashMap<String, String>();
-        properties.put("qualifier", qualifier);
+        properties.put(DefaultDormMetadataExtension.NAME, qualifier);
         properties.put("version", version);
 
 //        if (!processor.push(DefaultDormOrigin.ORIGIN, properties)) {

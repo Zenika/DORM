@@ -11,6 +11,11 @@ public final class DefaultDormMetadataExtension implements DormMetadataExtension
 
     public static final String NAME = "dorm";
 
+    /**
+     * Metadata names
+     */
+    public static final String METADATA_NAME = "name";
+
     private final String name;
 
     public DefaultDormMetadataExtension() {

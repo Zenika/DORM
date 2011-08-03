@@ -15,11 +15,6 @@ import com.zenika.dorm.core.model.impl.DefaultDormMetadataExtension;
 public class DormProcessor extends AbstractProcessorExtension {
 
     /**
-     * Metadata names
-     */
-    public static final String METADATA_NAME = "name";
-
-    /**
      * Create a simple node with the file and the origin
      *
      * @param request
@@ -32,7 +27,7 @@ public class DormProcessor extends AbstractProcessorExtension {
             throw new CoreException("File is required");
         }
 
-        String name = request.getProperty(METADATA_NAME);
+        String name = request.getProperty(DefaultDormMetadataExtension.METADATA_NAME);
 
         if (null == name || name.isEmpty()) {
             throw new CoreException("Name is required.");

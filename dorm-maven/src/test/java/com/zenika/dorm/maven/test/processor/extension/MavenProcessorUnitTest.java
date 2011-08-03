@@ -5,6 +5,7 @@ import com.zenika.dorm.core.graph.DependencyNode;
 import com.zenika.dorm.core.model.DormRequest;
 import com.zenika.dorm.core.model.impl.DefaultDormRequest;
 import com.zenika.dorm.maven.exception.MavenException;
+import com.zenika.dorm.maven.model.impl.MavenMetadataExtension;
 import com.zenika.dorm.maven.processor.extension.MavenProcessor;
 import com.zenika.dorm.maven.test.unit.AbstractUnitTest;
 import org.fest.assertions.Assertions;
@@ -54,7 +55,7 @@ public class MavenProcessorUnitTest extends AbstractUnitTest {
     public void pushDormArtifactWithoutRequiredMetadatas() {
 
         Map<String, String> properties = fixtures.getRequestPropertiesWithFile();
-        properties.put(MavenProcessor.METADATA_ARTIFACTID, null);
+        properties.put(MavenMetadataExtension.METADATA_ARTIFACTID, null);
 
         DormRequest request = DefaultDormRequest.create(properties, fixtures.getFile());
 
