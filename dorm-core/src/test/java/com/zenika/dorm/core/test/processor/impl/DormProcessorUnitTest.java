@@ -2,7 +2,6 @@ package com.zenika.dorm.core.test.processor.impl;
 
 import com.zenika.dorm.core.exception.CoreException;
 import com.zenika.dorm.core.graph.DependencyNode;
-import com.zenika.dorm.core.model.DormMetadataExtension;
 import com.zenika.dorm.core.model.DormRequest;
 import com.zenika.dorm.core.model.impl.DefaultDormRequest;
 import com.zenika.dorm.core.processor.impl.DormProcessor;
@@ -28,14 +27,9 @@ public class DormProcessorUnitTest extends AbstractUnitTest {
     public void pushStandardDormArtifact() {
 
         DependencyNode node = fixtures.getNodeWithFile();
-        DormMetadataExtension extension = fixtures.getMetadataExtension();
         DormRequest request = fixtures.getRequestWithFile();
 
-//        given(factoryFromRequest.createNode(extension, request)).willReturn(node);
-
         Assertions.assertThat(processor.push(request)).isEqualTo(node);
-
-//        verify(factoryFromRequest).createNode(extension, request);
     }
 
     @Test(expected = CoreException.class)

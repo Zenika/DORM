@@ -1,8 +1,10 @@
 package com.zenika.dorm.maven.test.processor.extension;
 
 
+import com.zenika.dorm.core.exception.CoreException;
 import com.zenika.dorm.core.graph.DependencyNode;
 import com.zenika.dorm.core.model.DormRequest;
+import com.zenika.dorm.core.model.impl.DefaultDormRequest;
 import com.zenika.dorm.maven.processor.extension.MavenProcessor;
 import com.zenika.dorm.maven.test.unit.AbstractUnitTest;
 import org.fest.assertions.Assertions;
@@ -10,6 +12,8 @@ import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.Map;
 
 /**
  * Unit tests for the maven processor
@@ -39,6 +43,22 @@ public class MavenProcessorUnitTest extends AbstractUnitTest {
         Assertions.assertThat(pushedNode).as("Entity node").isEqualTo(entityNode);
         Assertions.assertThat(pushedNode.getChildren()).as("Real dependency node").
                 isEqualTo(entityNode.getChildren());
+    }
+
+    @Test(expected = CoreException.class)
+    public void pushMaventArtifactWithoutFile() {
+        processor.push(fixtures.getRequestWithoutFile());
+    }
+
+    @Test(expected = CoreException.class)
+    public void pushDormArtifactWithoutRequiredMetadatas() {
+
+        Map<String, String> properties = fixtures.getRequestPropertiesWithFile();
+        properties.put(MavenProcessor.METADATA_ARTIFACTID, null);
+
+        DormRequest request = DefaultDormRequest.create(properties, fixtures.getFile());
+
+        processor.push(request);
     }
 
 }
