@@ -151,6 +151,12 @@ public class DormDaoNeo4j implements DormDao {
 
     @Override
     public Boolean push(DependencyNode node) {
+
+        // todo: fix this when dao is correct
+        if (node.getChildren().isEmpty()) {
+            return push(node.getDependency());
+        }
+
         try {
             DependenciesNodeCollector visitor = new DependenciesNodeCollector(node.getDependency().getUsage());
             node.accept(visitor);

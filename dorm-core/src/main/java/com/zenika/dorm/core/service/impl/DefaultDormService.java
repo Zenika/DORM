@@ -13,6 +13,18 @@ import com.zenika.dorm.core.service.DormService;
  */
 public class DefaultDormService implements DormService {
 
+    private boolean daoInitiated;
+
+    // todo: remove this when dao will be correct
+    private DormDao getDao() {
+        if (!daoInitiated) {
+            dao.init();
+            daoInitiated = true;
+        }
+
+        return dao;
+    }
+
     @Inject
     private DormDao dao;
 
@@ -23,11 +35,11 @@ public class DefaultDormService implements DormService {
 
     @Override
     public Boolean pushNode(DependencyNode node) {
-        return dao.push(node);
+        return getDao().push(node);
     }
 
     @Override
     public DependencyNode getByMetadata(DormMetadata metadata, Usage usage) {
-        return dao.getByMetadata(metadata, usage);
+        return getDao().getByMetadata(metadata, usage);
     }
 }
