@@ -8,7 +8,6 @@ import com.zenika.dorm.core.model.DormRequest;
  *
  * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>
  */
-@Singleton
 public interface Processor {
 
     public Boolean push(DormRequest request);

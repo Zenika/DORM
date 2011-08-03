@@ -1,11 +1,9 @@
 package com.zenika.dorm.servlet;
 
-import com.google.inject.AbstractModule;
-import com.google.inject.Guice;
-import com.mongodb.Mongo;
 import com.sun.jersey.guice.JerseyServletModule;
 import com.sun.jersey.guice.spi.container.servlet.GuiceContainer;
-import com.zenika.dorm.core.dao.mongo.MongoInstance;
+import com.zenika.dorm.core.dao.DormDao;
+import com.zenika.dorm.core.dao.neo4j.DormDaoNeo4j;
 import com.zenika.dorm.core.model.impl.DefaultDormMetadataExtension;
 import com.zenika.dorm.core.processor.Processor;
 import com.zenika.dorm.core.processor.impl.DefaultProcessor;
@@ -16,99 +14,39 @@ import com.zenika.dorm.core.ws.resource.DormResource;
 import com.zenika.dorm.maven.model.impl.MavenMetadataExtension;
 import com.zenika.dorm.maven.processor.extension.MavenProcessor;
 
-import java.net.UnknownHostException;
-
 /**
  * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>
  */
 public class GuiceModule extends JerseyServletModule {
 
-    // TODO: Externalize this
-    private static final String HOST = "localhost";
-    private static final String DATABASE = "dorm";
-    private static final String ARTIFACTS_COLLECTION = "artifacts";
-
     @Override
     protected void configureServlets() {
 
-        // jax rs resources
-        bind(DormResource.class);
-//        bind(MavenResource.class);
-
-//        bindDAO();
-//        bindServices();
-
-        // processor
-        DefaultProcessor processor = new DefaultProcessor();
-        processor.getExtensions().put(DefaultDormMetadataExtension.NAME, new DormProcessor());
-        processor.getExtensions().put(MavenMetadataExtension.NAME, new MavenProcessor());
-
-        bind(Processor.class).toInstance(processor);
-
-        // service
-        bind(DormService.class).to(DefaultDormService.class);
+        bindResources();
+        bindProcessor();
+        bindService();
+        bindDao();
 
         serve("/*").with(GuiceContainer.class);
     }
 
-    private void bindDAO() {
-
-//        MongoProxy mongoProxy = Guice.createInjector(new AbstractModule() {
-//
-//            @Override
-//            protected void configure() {
-//
-//                Mongo mongo;
-//                try {
-//                    mongo = new Mongo("localhost");
-//                } catch (UnknownHostException e) {
-//                    throw new RuntimeException("Unable to connect to mongo db at " + HOST);
-//                }
-//
-//                Morphia morphia = new Morphia();
-//
-//                bind(Mongo.class).toInstance(mongo);
-//                bind(Morphia.class).toInstance(morphia);
-//                bind(String.class).toInstance(DATABASE);
-//            }
-//        }).getInstance(MongoProxy.class);
-
-        MongoInstance mongoInstance = Guice.createInjector(new AbstractModule() {
-
-            @Override
-            protected void configure() {
-
-                Mongo mongo;
-                try {
-                    mongo = new Mongo("localhost");
-                } catch (UnknownHostException e) {
-                    throw new RuntimeException("Unable to connect to mongo db at " + HOST);
-                }
-
-                bind(Mongo.class).toInstance(mongo);
-                bindConstant().annotatedWith(MongoInstance.MongoDatabase.class).to(DATABASE);
-                bindConstant().annotatedWith(MongoInstance.ArtifactsCollection.class).to(ARTIFACTS_COLLECTION);
-
-            }
-        }).getInstance(MongoInstance.class);
-
-        bind(MongoInstance.class).toInstance(mongoInstance);
-
-//        bind(new TypeLiteral<DormDaoOld<MetadataExtension>>() {
-//        }).to(new TypeLiteral<DormDaoMongo<MetadataExtension>>() {
-//        });
-//        bind(new TypeLiteral<DormDaoOld<DormMavenMetadata>>() {
-//        }).to(new TypeLiteral<DormDaoMongo<DormMavenMetadata>>() {
-//        });
+    private void bindResources() {
+        bind(DormResource.class);
+//        bind(MavenResource.class);
     }
 
-    private void bindServices() {
+    private void bindProcessor() {
+        DefaultProcessor processor = new DefaultProcessor();
+        processor.getExtensions().put(DefaultDormMetadataExtension.NAME, new DormProcessor());
+        processor.getExtensions().put(MavenMetadataExtension.NAME, new MavenProcessor());
+        bind(Processor.class).toInstance(processor);
+    }
 
-//        // dorm service
-//        bind(new TypeLiteral<DormServiceOld<MetadataExtension>>() {}).to(new TypeLiteral<DormServiceOldImpl<MetadataExtension>>() {});
-//        bind(new TypeLiteral<DormServiceOld<DormMavenMetadata>>() {}).to(new TypeLiteral<DormServiceOldImpl<DormMavenMetadata>>() {});
-//
-//        // maven service
-//        bind(MavenService.class).to(MavenServiceImpl.class);
+    private void bindService() {
+        bind(DormService.class).to(DefaultDormService.class);
+    }
+
+    private void bindDao() {
+        bind(DormDao.class).to(DormDaoNeo4j.class);
     }
 }

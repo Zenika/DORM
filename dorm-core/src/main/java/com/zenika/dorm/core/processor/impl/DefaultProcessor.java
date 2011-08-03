@@ -1,6 +1,7 @@
 package com.zenika.dorm.core.processor.impl;
 
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import com.zenika.dorm.core.exception.CoreException;
 import com.zenika.dorm.core.graph.DependencyNode;
 import com.zenika.dorm.core.model.DormRequest;
@@ -17,6 +18,7 @@ import java.util.Map;
  *
  * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>
  */
+@Singleton
 public class DefaultProcessor implements Processor {
 
     /**
