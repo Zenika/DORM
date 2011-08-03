@@ -1,10 +1,10 @@
 package com.zenika.dorm.maven.test.processor.extension;
 
 
-import com.zenika.dorm.core.exception.CoreException;
 import com.zenika.dorm.core.graph.DependencyNode;
 import com.zenika.dorm.core.model.DormRequest;
 import com.zenika.dorm.core.model.impl.DefaultDormRequest;
+import com.zenika.dorm.maven.exception.MavenException;
 import com.zenika.dorm.maven.processor.extension.MavenProcessor;
 import com.zenika.dorm.maven.test.unit.AbstractUnitTest;
 import org.fest.assertions.Assertions;
@@ -45,12 +45,12 @@ public class MavenProcessorUnitTest extends AbstractUnitTest {
                 isEqualTo(entityNode.getChildren());
     }
 
-    @Test(expected = CoreException.class)
+    @Test(expected = MavenException.class)
     public void pushMaventArtifactWithoutFile() {
         processor.push(fixtures.getRequestWithoutFile());
     }
 
-    @Test(expected = CoreException.class)
+    @Test(expected = MavenException.class)
     public void pushDormArtifactWithoutRequiredMetadatas() {
 
         Map<String, String> properties = fixtures.getRequestPropertiesWithFile();

@@ -5,6 +5,7 @@ package com.zenika.dorm.maven.model.impl;
  */
 
 import com.zenika.dorm.core.model.DormMetadataExtension;
+import com.zenika.dorm.maven.exception.MavenException;
 
 /**
  * Maven immutable extension point to the dorm model
@@ -22,6 +23,11 @@ public final class MavenMetadataExtension implements DormMetadataExtension {
     private final String type;
 
     public MavenMetadataExtension(String groupId, String artifactId, String versionId, String type) {
+
+        if (null == groupId || null == artifactId || null == versionId || null == type) {
+            throw new MavenException("Following metadatas are required : groupId, artifactId, versionId, type");
+        }
+
         this.groupId = groupId;
         this.artifactId = artifactId;
         this.versionId = versionId;
