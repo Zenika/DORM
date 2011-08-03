@@ -2,6 +2,8 @@ package com.zenika.dorm.core.model.impl;
 
 import com.zenika.dorm.core.model.DormMetadataExtension;
 
+import java.util.Map;
+
 /**
  * Default immutable dorm origin
  *
@@ -55,5 +57,10 @@ public final class DefaultDormMetadataExtension implements DormMetadataExtension
     @Override
     public int hashCode() {
         return name != null ? name.hashCode() : 0;
+    }
+
+    @Override
+    public DormMetadataExtension createFromMap(Map<String, String> properties) {
+        return new DefaultDormMetadataExtension(properties.get(METADATA_NAME));
     }
 }

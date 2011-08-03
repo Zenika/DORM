@@ -7,6 +7,8 @@ package com.zenika.dorm.maven.model.impl;
 import com.zenika.dorm.core.model.DormMetadataExtension;
 import com.zenika.dorm.maven.exception.MavenException;
 
+import java.util.Map;
+
 /**
  * Maven immutable extension point to the dorm model
  * Add maven specific metadatas
@@ -23,6 +25,7 @@ public final class MavenMetadataExtension implements DormMetadataExtension {
     public static final String METADATA_GROUPID = "groupId";
     public static final String METADATA_ARTIFACTID = "artifactId";
     public static final String METADATA_VERSIONID = "versionId";
+    public static final String METADATA_TYPE = "type";
 
     private final String groupId;
     private final String artifactId;
@@ -91,5 +94,12 @@ public final class MavenMetadataExtension implements DormMetadataExtension {
         result = 31 * result + (versionId != null ? versionId.hashCode() : 0);
         result = 31 * result + (type != null ? type.hashCode() : 0);
         return result;
+    }
+
+    @Override
+    public DormMetadataExtension createFromMap(Map<String, String> properties) {
+        return new MavenMetadataExtension(properties.get(METADATA_GROUPID),
+                properties.get(METADATA_ARTIFACTID), properties.get(METADATA_VERSIONID),
+                properties.get(METADATA_TYPE));
     }
 }

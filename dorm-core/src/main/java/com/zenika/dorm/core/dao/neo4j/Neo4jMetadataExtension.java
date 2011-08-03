@@ -7,6 +7,7 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
+import java.util.Map;
 
 /**
  * @author Antoine ROUAZE <antoine.rouaze AT zenika.com>
@@ -20,7 +21,7 @@ public class Neo4jMetadataExtension extends Neo4jNode implements DormMetadataExt
     private String qualifier;
     private String extension;
 
-    public Neo4jMetadataExtension(){
+    public Neo4jMetadataExtension() {
 
     }
 
@@ -62,8 +63,10 @@ public class Neo4jMetadataExtension extends Neo4jNode implements DormMetadataExt
 
         Neo4jMetadataExtension extension1 = (Neo4jMetadataExtension) o;
 
-        if (extension != null ? !extension.equals(extension1.extension) : extension1.extension != null) return false;
-        if (qualifier != null ? !qualifier.equals(extension1.qualifier) : extension1.qualifier != null) return false;
+        if (extension != null ? !extension.equals(extension1.extension) : extension1.extension != null)
+            return false;
+        if (qualifier != null ? !qualifier.equals(extension1.qualifier) : extension1.qualifier != null)
+            return false;
 
         return true;
     }
@@ -82,4 +85,8 @@ public class Neo4jMetadataExtension extends Neo4jNode implements DormMetadataExt
 //        this.setQualifier(getResponse().getData().getQualifier());
     }
 
+    @Override
+    public DormMetadataExtension createFromMap(Map<String, String> properties) {
+        throw new UnsupportedOperationException();
+    }
 }

@@ -1,5 +1,7 @@
 package com.zenika.dorm.core.model;
 
+import java.util.Map;
+
 /**
  * Extension point on the model to add specific metadatas
  * These metadatas are identified by the qualifier
@@ -22,4 +24,11 @@ public interface DormMetadataExtension {
      * @return the origin identifier
      */
     public String getExtensionName();
+
+    /**
+     * Create new instance with a map of new attributes
+     *
+     * @return new instance mapped with the new attributes
+     */
+    public DormMetadataExtension createFromMap(Map<String, String> properties);
 }
