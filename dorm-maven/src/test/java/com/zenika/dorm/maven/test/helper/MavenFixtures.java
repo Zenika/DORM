@@ -87,4 +87,24 @@ public class MavenFixtures extends ExtensionFixtures {
         node.addChild(getNodeWithFile());
         return node;
     }
+
+    public String getGroupId() {
+        return groupId;
+    }
+
+    public String getArtifactId() {
+        return artifactId;
+    }
+
+    public String getVersionId() {
+        return versionId;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public String getOrigin() {
+        return origin;
+    }
 }

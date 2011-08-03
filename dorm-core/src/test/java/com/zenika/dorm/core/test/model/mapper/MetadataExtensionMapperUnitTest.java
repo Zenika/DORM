@@ -31,8 +31,8 @@ public class MetadataExtensionMapperUnitTest {
     @Test
     public void toOrigin() {
 
-        // create null origin with null attribute "name"
-        DormMetadataExtension extension = new DefaultDormMetadataExtension();
+        // create null origin with fake attribute "name"
+        DormMetadataExtension extension = new DefaultDormMetadataExtension("fake");
 
         Map<String, String> properties = new HashMap<String, String>();
         properties.put("name", "foo");

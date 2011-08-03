@@ -20,10 +20,6 @@ public final class DefaultDormMetadataExtension implements DormMetadataExtension
 
     private final String name;
 
-    public DefaultDormMetadataExtension() {
-        this.name = null;
-    }
-
     public DefaultDormMetadataExtension(String name) {
         this.name = name;
     }
