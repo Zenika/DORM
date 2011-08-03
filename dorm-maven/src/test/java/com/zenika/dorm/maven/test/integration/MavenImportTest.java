@@ -72,13 +72,13 @@ public class MavenImportTest {
 
         // metadata
         DormMetadataExtension originApom = new MavenMetadataExtension("com.zenika", "a", "1.0", "pom");
-        DormMetadata metadataApom = new DefaultDormMetadata("1.0", originApom);
+        DormMetadata metadataApom = DefaultDormMetadata.create("1.0", originApom);
 
         // file
         DormFile fileApom = DefaultDormFile.create("a.pom.xml", new File("repo/a/a.pom.xml"));
 
         // dependency
-        Dependency dependencyApom = new DefaultDependency(metadataApom, fileApom);
+        Dependency dependencyApom = DefaultDependency.create(metadataApom, fileApom);
 
         // store dependency
         // 1. create node com.zenika:a:1.0:1.0:maven
@@ -90,13 +90,13 @@ public class MavenImportTest {
         // metadata
         // should be equals to previous pom metadata, because only file changes
         DormMetadataExtension originAjar = new MavenMetadataExtension("com.zenika", "a", "1.0", "jar");
-        DormMetadata metadataAjar = new DefaultDormMetadata("1.0", originAjar);
+        DormMetadata metadataAjar = DefaultDormMetadata.create("1.0", originAjar);
 
         // file
         DormFile fileAjar = DefaultDormFile.create("a.jar", new File("repo/a/a.jar"));
 
         // dependency
-        Dependency dependencyAjar = new DefaultDependency(metadataAjar, fileAjar);
+        Dependency dependencyAjar = DefaultDependency.create(metadataAjar, fileAjar);
 
         // store
         // 1. find node com.zenika:a:1.0:1.0:maven

@@ -312,6 +312,6 @@ public class DormResource {
      * @return the dorm metadata which represents the name and the version
      */
     private DormMetadata getMetadata(String name, String version) {
-        return new DefaultDormMetadata(version, new DefaultDormMetadataExtension(name));
+        return DefaultDormMetadata.create(version, new DefaultDormMetadataExtension(name));
     }
 }

@@ -24,12 +24,7 @@ public final class DefaultDormMetadata implements DormMetadata {
         return new DefaultDormMetadata(version, extension);
     }
 
-    /**
-     * @param version
-     * @param extension
-     * @deprecated Will be private, use the factory methods
-     */
-    public DefaultDormMetadata(String version, DormMetadataExtension extension) {
+    private DefaultDormMetadata(String version, DormMetadataExtension extension) {
 
         if (null == version || null == extension || null == extension.getQualifier() || null == extension.getExtensionName()) {
             throw new CoreException("Properties are missing for metadata");

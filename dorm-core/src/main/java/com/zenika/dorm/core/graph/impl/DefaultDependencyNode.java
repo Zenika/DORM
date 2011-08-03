@@ -22,11 +22,7 @@ public final class DefaultDependencyNode implements DependencyNode {
         return new DefaultDependencyNode(dependency);
     }
 
-    /**
-     * @param dependency
-     * @deprecated Will be private, use factory methods
-     */
-    public DefaultDependencyNode(Dependency dependency) {
+    private DefaultDependencyNode(Dependency dependency) {
         this.dependency = dependency;
     }
 

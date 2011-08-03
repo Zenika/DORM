@@ -39,35 +39,7 @@ public final class DefaultDependency implements Dependency {
         return new DefaultDependency(metadata, usage, file);
     }
 
-    /**
-     * @see DefaultDependency#create(com.zenika.dorm.core.model.DormMetadata)
-     * @deprecated Will be removed, use factory methods
-     */
-    public DefaultDependency(DormMetadata metadata) {
-        this(metadata, Usage.create());
-    }
-
-    /**
-     * @see DefaultDependency#create(com.zenika.dorm.core.model.DormMetadata, com.zenika.dorm.core.model.DormFile)
-     * @deprecated Will be removed, use factory methods
-     */
-    public DefaultDependency(DormMetadata metadata, DormFile file) {
-        this(metadata, Usage.create(), file);
-    }
-
-    /**
-     * @see DefaultDependency#create(com.zenika.dorm.core.model.DormMetadata, Usage)
-     * @deprecated Will be removed, use factory methods
-     */
-    public DefaultDependency(DormMetadata metadata, Usage usage) {
-        this(metadata, usage, null);
-    }
-
-    /**
-     * @see DefaultDependency#create(com.zenika.dorm.core.model.DormMetadata, Usage, com.zenika.dorm.core.model.DormFile)
-     * @deprecated Will be private, use factory methods
-     */
-    public DefaultDependency(DormMetadata metadata, Usage usage, DormFile file) {
+    private DefaultDependency(DormMetadata metadata, Usage usage, DormFile file) {
 
         if (null == metadata || null == usage) {
             throw new CoreException("Metadata and usage are required.");
