@@ -20,7 +20,7 @@ public class MetadataExtensionMapperUnitTest {
         // DefaultDormOrigin has one attribute "name" which will contains "foo"
         DormMetadataExtension extension = new DefaultDormMetadataExtension("foo");
 
-        Map<String, String> properties = MetadataExtensionMapper.fromOrigin(extension);
+        Map<String, String> properties = MetadataExtensionMapper.fromExtension(extension);
 
         Assertions.assertThat(properties.get("name")).isEqualTo("foo");
     }
@@ -37,7 +37,7 @@ public class MetadataExtensionMapperUnitTest {
         Map<String, String> properties = new HashMap<String, String>();
         properties.put("name", "foo");
 
-        MetadataExtensionMapper.toOrigin(extension, properties);
+        MetadataExtensionMapper.toExtension(extension, properties);
 
         Assertions.assertThat(((DefaultDormMetadataExtension) extension).getName()).isEqualTo("foo");
     }
