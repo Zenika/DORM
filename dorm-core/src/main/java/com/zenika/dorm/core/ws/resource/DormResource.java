@@ -5,10 +5,14 @@ import com.sun.jersey.multipart.FormDataParam;
 import com.zenika.dorm.core.exception.ArtifactException;
 import com.zenika.dorm.core.model.DormFile;
 import com.zenika.dorm.core.model.DormMetadata;
+import com.zenika.dorm.core.model.DormRequest;
 import com.zenika.dorm.core.model.impl.DefaultDormFile;
 import com.zenika.dorm.core.model.impl.DefaultDormMetadata;
 import com.zenika.dorm.core.model.impl.DefaultDormMetadataExtension;
+import com.zenika.dorm.core.model.impl.DefaultDormRequest;
 import com.zenika.dorm.core.processor.Processor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -25,7 +29,7 @@ import java.util.Properties;
  * REST resource for dorm dependency
  *
  * Push (POST) :
- * - metadata (qualifier + version)
+ * - metadata (name + version)
  * - metadata + file (filename + java.io.file)
  * - metadata + file + parent + usage (full qualifier)
  * - metadata + parent + usage
@@ -45,29 +49,37 @@ import java.util.Properties;
 @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 public class DormResource {
 
+    private static final Logger LOG = LoggerFactory.getLogger(DormResource.class);
+
     @Inject
     private Processor processor;
 
     /**
      * Push metadata
      *
-     * @param qualifier the name of the dorm dependency
-     * @param version   the version of the dorm dependency
+     * @param name    the name of the dorm dependency
+     * @param version the version of the dorm dependency
      * @return the http response which represents the status of the push
      */
     @POST
     @Consumes(MediaType.MULTIPART_FORM_DATA)
-    @Path("{qualifier}/{version}")
-    public Response createArtifactFromUri(@PathParam("qualifier") String qualifier,
+    @Path("{name}/{version}")
+    public Response createArtifactFromUri(@PathParam("name") String name,
                                           @PathParam("version") String version) {
 
-        Map<String, String> properties = new HashMap<String, String>();
-        properties.put(DefaultDormMetadataExtension.NAME, qualifier);
-        properties.put("version", version);
+        LOG.trace("POST with params : name = " + name + "; version = " + version);
 
-//        if (!processor.push(DefaultDormOrigin.ORIGIN, properties)) {
-//            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
-//        }
+        Map<String, String> properties = new HashMap<String, String>();
+        properties.put(DormRequest.ORIGIN, DefaultDormMetadataExtension.NAME);
+        properties.put(DormRequest.VERSION, version);
+        properties.put(DefaultDormMetadataExtension.METADATA_NAME, name);
+
+        DormRequest request = DefaultDormRequest.create(properties);
+        LOG.debug("Request from POST = " + request);
+
+        if (!processor.push(request)) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+        }
 
         return Response.status(Response.Status.OK).build();
     }
@@ -75,21 +87,21 @@ public class DormResource {
     /**
      * Push metadata + file
      *
-     * @param qualifier the name of the dorm dependency
-     * @param version   the version of the dorm dependency
-     * @param filename  the filename of the pushed file
-     * @param file      the java representation of the pushed file
+     * @param name     the name of the dorm dependency
+     * @param version  the version of the dorm dependency
+     * @param filename the filename of the pushed file
+     * @param file     the java representation of the pushed file
      * @return the http response which represents the status of the push
      */
     @POST
     @Consumes(MediaType.MULTIPART_FORM_DATA)
-    @Path("{qualifier}/{version}/{filename}")
-    public Response createArtifactFromUri(@PathParam("qualifier") String qualifier,
+    @Path("{name}/{version}/{filename}")
+    public Response createArtifactFromUri(@PathParam("name") String name,
                                           @PathParam("version") String version,
                                           @PathParam("filename") String filename,
                                           @FormDataParam("file") File file) {
 
-        DormMetadata metadata = getMetadata(qualifier, version);
+        DormMetadata metadata = getMetadata(name, version);
         DormFile dormFile = DefaultDormFile.create(filename, file);
 
         return Response.status(Response.Status.OK).build();
@@ -98,25 +110,25 @@ public class DormResource {
     /**
      * Push metadata + file + parent + usage
      *
-     * @param qualifier the name of the dorm dependency
-     * @param version   the version of the dorm dependency
-     * @param filename  the filename of the pushed file
-     * @param file      the java representation of the pushed file
-     * @param parent    the parent of the dependency
-     * @param usage     the usage with the parent
+     * @param name     the name of the dorm dependency
+     * @param version  the version of the dorm dependency
+     * @param filename the filename of the pushed file
+     * @param file     the java representation of the pushed file
+     * @param parent   the parent of the dependency
+     * @param usage    the usage with the parent
      * @return the http response which represents the status of the push
      */
     @POST
     @Consumes(MediaType.MULTIPART_FORM_DATA)
-    @Path("{qualifier}/{version}/{filename}/{parent}/{usage}")
-    public Response createArtifactFromUri(@PathParam("qualifier") String qualifier,
+    @Path("{name}/{version}/{filename}/{parent}/{usage}")
+    public Response createArtifactFromUri(@PathParam("name") String name,
                                           @PathParam("version") String version,
                                           @PathParam("filename") String filename,
                                           @PathParam("parent") String parent,
                                           @PathParam("usage") String usage,
                                           @FormDataParam("file") File file) {
 
-        DormMetadata metadata = getMetadata(qualifier, version);
+        DormMetadata metadata = getMetadata(name, version);
         DormFile dormFile = DefaultDormFile.create(filename, file);
 
         return Response.status(Response.Status.OK).build();
@@ -125,21 +137,21 @@ public class DormResource {
     /**
      * Push metadata + parent + usage
      *
-     * @param qualifier the name of the dorm dependency
-     * @param version   the version of the dorm dependency
-     * @param parent    the parent of the dependency
-     * @param usage     the usage with the parent
+     * @param name    the name of the dorm dependency
+     * @param version the version of the dorm dependency
+     * @param parent  the parent of the dependency
+     * @param usage   the usage with the parent
      * @return the http response which represents the status of the push
      */
     @POST
     @Consumes(MediaType.MULTIPART_FORM_DATA)
-    @Path("{qualifier}/{version}/{parent}/{usage}")
-    public Response createArtifactFromUri(@PathParam("qualifier") String qualifier,
+    @Path("{name}/{version}/{parent}/{usage}")
+    public Response createArtifactFromUri(@PathParam("name") String name,
                                           @PathParam("version") String version,
                                           @PathParam("parent") String parent,
                                           @PathParam("usage") String usage) {
 
-        DormMetadata metadata = getMetadata(qualifier, version);
+        DormMetadata metadata = getMetadata(name, version);
 
         return Response.status(Response.Status.OK).build();
     }

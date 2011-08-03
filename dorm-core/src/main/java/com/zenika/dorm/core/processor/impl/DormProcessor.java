@@ -6,6 +6,8 @@ import com.zenika.dorm.core.model.DormMetadataExtension;
 import com.zenika.dorm.core.model.DormRequest;
 import com.zenika.dorm.core.model.builder.DependencyNodeBuilderFromRequest;
 import com.zenika.dorm.core.model.impl.DefaultDormMetadataExtension;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Processor for the dorm extension
@@ -14,18 +16,18 @@ import com.zenika.dorm.core.model.impl.DefaultDormMetadataExtension;
  */
 public class DormProcessor extends AbstractProcessorExtension {
 
+    private static final Logger LOG = LoggerFactory.getLogger(DormProcessor.class);
+
     /**
-     * Create a simple node with the file and the origin
+     * Create a simple node with the extension and file if exists
      *
      * @param request
-     * @return the node containing the file and the origin
+     * @return the node containing the extension and file if exists
      */
     @Override
     public DependencyNode push(DormRequest request) {
 
-        if (!request.hasFile()) {
-            throw new CoreException("File is required");
-        }
+        LOG.debug("Dorm request to push = " + request);
 
         String name = request.getProperty(DefaultDormMetadataExtension.METADATA_NAME);
 
@@ -35,6 +37,9 @@ public class DormProcessor extends AbstractProcessorExtension {
 
         DormMetadataExtension extension = new DefaultDormMetadataExtension(name);
 
-        return new DependencyNodeBuilderFromRequest(request, extension).build();
+        DependencyNode node = new DependencyNodeBuilderFromRequest(request, extension).build();
+        LOG.debug("Dorm dependency = " + node.getDependency());
+
+        return node;
     }
 }
