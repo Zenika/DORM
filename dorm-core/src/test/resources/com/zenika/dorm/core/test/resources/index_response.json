@@ -1,0 +1,5 @@
+{
+    "template" : "http://localhost:7474/db/data/index/node/dependency/{key}/{value}",
+    "provider" : "lucene",
+    "type" : "fulltext"
+}

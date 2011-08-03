@@ -144,4 +144,40 @@ public class Neo4jRelationship {
                 ", end='" + end + '\'' +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Neo4jRelationship)) return false;
+
+        Neo4jRelationship that = (Neo4jRelationship) o;
+
+        if (data != null ? !data.equals(that.data) : that.data != null) return false;
+        if (end != null ? !end.equals(that.end) : that.end != null) return false;
+        if (extensions != null ? !extensions.equals(that.extensions) : that.extensions != null) return false;
+        if (from != null ? !from.equals(that.from) : that.from != null) return false;
+        if (properties != null ? !properties.equals(that.properties) : that.properties != null) return false;
+        if (property != null ? !property.equals(that.property) : that.property != null) return false;
+        if (self != null ? !self.equals(that.self) : that.self != null) return false;
+        if (start != null ? !start.equals(that.start) : that.start != null) return false;
+        if (to != null ? !to.equals(that.to) : that.to != null) return false;
+        if (type != null ? !type.equals(that.type) : that.type != null) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = from != null ? from.hashCode() : 0;
+        result = 31 * result + (to != null ? to.hashCode() : 0);
+        result = 31 * result + (type != null ? type.hashCode() : 0);
+        result = 31 * result + (data != null ? data.hashCode() : 0);
+        result = 31 * result + (start != null ? start.hashCode() : 0);
+        result = 31 * result + (self != null ? self.hashCode() : 0);
+        result = 31 * result + (property != null ? property.hashCode() : 0);
+        result = 31 * result + (properties != null ? properties.hashCode() : 0);
+        result = 31 * result + (extensions != null ? extensions.hashCode() : 0);
+        result = 31 * result + (end != null ? end.hashCode() : 0);
+        return result;
+    }
 }

@@ -33,12 +33,10 @@ public class DormDaoNeo4j implements DormDao {
     private Neo4jIndex index;
 
     public DormDaoNeo4j() {
-
-
+        executor = new Neo4jRequestExecutor();
     }
 
     public void init() {
-        executor = new Neo4jRequestExecutor();
         index = new Neo4jIndex();
         index = executor.post(index);
     }
@@ -54,7 +52,7 @@ public class DormDaoNeo4j implements DormDao {
         return false;
     }
 
-    private Neo4jDependency postDependency(Dependency dormDependency) {
+    public Neo4jDependency postDependency(Dependency dormDependency) {
         Usage usage = dormDependency.getUsage();
         Neo4jDependency dependency = null;
         try {
@@ -173,10 +171,6 @@ public class DormDaoNeo4j implements DormDao {
             Neo4jDependency dependencyChild = postDependency(child.getDependency());
             executor.post(new Neo4jRelationship(dependency, dependencyChild, dependency.getUsage()));
         }
-    }
-
-    public String test() {
-        return executor.test();
     }
 
 }

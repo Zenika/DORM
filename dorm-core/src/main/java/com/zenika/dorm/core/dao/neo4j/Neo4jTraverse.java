@@ -56,4 +56,40 @@ public class Neo4jTraverse {
     public List<Map<String, String>> getRelationships() {
         return relationships;
     }
+
+    @Override
+    public String toString() {
+        return "Neo4jTraverse{" +
+                "order='" + order + '\'' +
+                ", uniqueness='" + uniqueness + '\'' +
+                ", prune_evaluator=" + prune_evaluator +
+                ", relationships=" + relationships +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Neo4jTraverse)) return false;
+
+        Neo4jTraverse traverse = (Neo4jTraverse) o;
+
+        if (order != null ? !order.equals(traverse.order) : traverse.order != null) return false;
+        if (prune_evaluator != null ? !prune_evaluator.equals(traverse.prune_evaluator) : traverse.prune_evaluator != null)
+            return false;
+        if (relationships != null ? !relationships.equals(traverse.relationships) : traverse.relationships != null)
+            return false;
+        if (uniqueness != null ? !uniqueness.equals(traverse.uniqueness) : traverse.uniqueness != null) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = order != null ? order.hashCode() : 0;
+        result = 31 * result + (uniqueness != null ? uniqueness.hashCode() : 0);
+        result = 31 * result + (prune_evaluator != null ? prune_evaluator.hashCode() : 0);
+        result = 31 * result + (relationships != null ? relationships.hashCode() : 0);
+        return result;
+    }
 }

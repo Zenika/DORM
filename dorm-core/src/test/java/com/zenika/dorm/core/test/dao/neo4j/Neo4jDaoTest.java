@@ -2,6 +2,7 @@ package com.zenika.dorm.core.test.dao.neo4j;
 
 import com.zenika.dorm.core.dao.neo4j.DormDaoNeo4j;
 import com.zenika.dorm.core.dao.neo4j.Neo4jDependency;
+import com.zenika.dorm.core.dao.neo4j.Neo4jIndex;
 import com.zenika.dorm.core.dao.neo4j.Neo4jMetadata;
 import com.zenika.dorm.core.dao.neo4j.Neo4jMetadataExtension;
 import com.zenika.dorm.core.dao.neo4j.Neo4jNode;
@@ -19,6 +20,9 @@ import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
+import org.neo4j.helpers.Args;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -49,20 +53,19 @@ public class Neo4jDaoTest {
 
     private Neo4jDaoTestProvider provider;
 
-    private Usage usage;
-
     @Mock
     private RequestExecutor executor;
 
     @InjectMocks
-    private DormDaoNeo4j dao = new DormDaoNeo4j();
+    private DormDaoNeo4j dao;
 
     @Before
     public void setUp() {
+        dao = new DormDaoNeo4j();
         MockitoAnnotations.initMocks(this);
         provider = new Neo4jDaoTestProvider();
         setUpMethod();
-        usage = Usage.create("DEFAULT");
+        dao.init();
 //        extension19Response = new DefaultDormMetadataExtension("habi-base");
 //        metadata20Response = DefaultDormMetadata.create("0.6", extension19Response);
 //        dependency21Response = DefaultDependency.create(metadata20Response, usage);
@@ -202,11 +205,11 @@ public class Neo4jDaoTest {
     public void testGetDependency() {
         LOG.trace("START testGetDependency");
         try {
-            Dependency dependency = dao.getDependency(provider.getDependency21Uri(), usage);
+            Dependency dependency = dao.getDependency(provider.getDependency21Uri(), provider.getUsage());
             assertThat(dependency).isInstanceOf(Neo4jDependency.class);
             assertThat(dependency.getMetadata()).isSameAs(provider.getMetadata20Response().getData());
             assertThat(dependency.getMetadata().getExtension()).isSameAs(provider.getExtension19Response().getData());
-            assertThat(dependency.getUsage()).isSameAs(usage);
+            assertThat(dependency.getUsage()).isSameAs(provider.getUsage());
         } catch (URISyntaxException e) {
             LOG.error("Bad URI", e);
         }
@@ -218,10 +221,52 @@ public class Neo4jDaoTest {
         LOG.trace("START testPutChild");
         try {
             Map<String, DependencyNode> map = new HashMap<String, DependencyNode>();
-            dao.putChild(usage, map, provider.getRelationships());
+            dao.putChild(provider.getUsage(), map, provider.getRelationships());
+            assertThat(map.get(provider.getDependency21Uri().toString()).getDependency())
+                    .isSameAs(provider.getDependency21Response().getData());
+            assertThat(map.get(provider.getDependency21Uri().toString()).getDependency().getMetadata())
+                    .isSameAs(provider.getMetadata20Response().getData());
+            assertThat(map.get(provider.getDependency21Uri().toString()).getDependency().getMetadata().getExtension())
+                    .isSameAs(provider.getExtension19Response().getData());
+            assertThat(map.get(provider.getDependency3Uri().toString()).getDependency())
+                    .isSameAs(provider.getDependency3Response().getData());
+            assertThat(map.get(provider.getDependency3Uri().toString()).getDependency().getMetadata())
+                    .isSameAs(provider.getMetadata2Response().getData());
+            assertThat(map.get(provider.getDependency3Uri().toString()).getDependency().getMetadata().getExtension())
+                    .isSameAs(provider.getExtension1Response().getData());
+            assertThat(map.get(provider.getDependency21Uri().toString()).getChildren().iterator().next())
+                    .isSameAs(map.get(provider.getDependency3Uri().toString()));
         } catch (URISyntaxException e) {
             LOG.error("Bad URI", e);
         }
+        LOG.trace("END testPutChild");
+    }
+
+    @Test
+    public void testPostNewDependency() {
+        LOG.trace("START testPostDependency");
+        try {
+            Neo4jDependency dependency = dao.postDependency(provider.getDependency());
+            assertThat(dependency.getResponse()).isSameAs(provider.getDependency21Response());
+            verify(executor).post(provider.getDependency());
+            verify(executor).post(provider.getMetadata());
+            verify(executor).post(provider.getExtension());
+            verify(executor).post(new Neo4jRelationship(provider.getMetadata20Response().getData(),
+                    provider.getExtension19Response().getData(), Neo4jMetadataExtension.RELATIONSHIP_TYPE));
+            verify(executor).post(new Neo4jRelationship(provider.getDependency21Response().getData(),
+                    provider.getMetadata20Response().getData(), Neo4jMetadata.RELATIONSHIP_TYPE));
+        } catch (URISyntaxException e) {
+            LOG.error("Bad URI", e);
+        }
+        LOG.trace("END testPostNewDependency");
+    }
+
+    @Test
+    public void testGetByMetadata(){
+        DependencyNode node = dao.getByMetadata(provider.getMetadata(), provider.getUsage());
+        assertThat(node.getDependency().getMetadata()).isEqualTo(provider.getMetadata());
+        assertThat(node.getDependency().getMetadata().getExtension()).isEqualTo(provider.getExtension());
+        assertThat(node.getChildren().iterator().next().getDependency()).isEqualTo(provider.getDependency3Response().getData());
     }
 
     private void setUpMethod() {
@@ -268,5 +313,42 @@ public class Neo4jDaoTest {
 
         when(executor.<List<Neo4jRelationship>>get(provider.getSearchRelationshipMetadata2Uri(), provider.getListRelationshipType().getType()))
                 .thenReturn(provider.getRelationshipsMetadata2());
+
+        when(executor.post(provider.getTraverseUri(), provider.getTraverse()))
+                .thenReturn(provider.getRelationships());
+
+        when(executor.get(any(URI.class), eq(List.class))).thenReturn(provider.getEmptyList());
+
+        when(executor.post(any(Neo4jIndex.class))).thenReturn(provider.getIndex());
+
+        doAnswer(new Answer<Neo4jDependency>() {
+            @Override
+            public Neo4jDependency answer(InvocationOnMock invocation) throws Throwable {
+                Neo4jDependency dependency = (Neo4jDependency) invocation.getArguments()[0];
+                dependency.setResponse(provider.getDependency21Response());
+                return null;  //To change body of implemented methods use File | Settings | File Templates.
+            }
+        }).when(executor).post(provider.getDependency());
+
+        doAnswer(new Answer<Neo4jMetadataExtension>() {
+
+            @Override
+            public Neo4jMetadataExtension answer(InvocationOnMock invocation) throws Throwable {
+                Neo4jMetadataExtension extension = (Neo4jMetadataExtension) invocation.getArguments()[0];
+                extension.setResponse(provider.getExtension19Response());
+                return null;  //To change body of implemented methods use File | Settings | File Templates.
+            }
+        }).when(executor).post(provider.getExtension());
+
+        doAnswer(new Answer<Neo4jMetadata>() {
+
+            @Override
+            public Neo4jMetadata answer(InvocationOnMock invocation) throws Throwable {
+                Neo4jMetadata metadata = (Neo4jMetadata) invocation.getArguments()[0];
+                metadata.setResponse(provider.getMetadata20Response());
+                return null;  //To change body of implemented methods use File | Settings | File Templates.
+            }
+        }).when(executor).post(provider.getMetadata());
+
     }
 }

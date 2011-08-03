@@ -1,11 +1,22 @@
 package com.zenika.dorm.core.test.dao.neo4j;
 
 import com.zenika.dorm.core.dao.neo4j.Neo4jDependency;
+import com.zenika.dorm.core.dao.neo4j.Neo4jIndex;
 import com.zenika.dorm.core.dao.neo4j.Neo4jMetadata;
 import com.zenika.dorm.core.dao.neo4j.Neo4jMetadataExtension;
 import com.zenika.dorm.core.dao.neo4j.Neo4jRelationship;
 import com.zenika.dorm.core.dao.neo4j.Neo4jResponse;
+import com.zenika.dorm.core.dao.neo4j.Neo4jTraverse;
 import com.zenika.dorm.core.dao.neo4j.util.ObjectMapperProvider;
+import com.zenika.dorm.core.graph.Dependency;
+import com.zenika.dorm.core.graph.DependencyNode;
+import com.zenika.dorm.core.graph.impl.DefaultDependency;
+import com.zenika.dorm.core.graph.impl.DefaultDependencyNode;
+import com.zenika.dorm.core.graph.impl.Usage;
+import com.zenika.dorm.core.model.DormMetadata;
+import com.zenika.dorm.core.model.DormMetadataExtension;
+import com.zenika.dorm.core.model.impl.DefaultDormMetadata;
+import com.zenika.dorm.core.model.impl.DefaultDormMetadataExtension;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
 import org.slf4j.Logger;
@@ -15,6 +26,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -24,6 +36,7 @@ public class Neo4jDaoTestProvider {
 
     private static final Logger LOG = LoggerFactory.getLogger(Neo4jDaoTestProvider.class);
 
+    private static final String INDEX_RESPONSE_JSON = "/com/zenika/dorm/core/test/resources/index_response.json";
     private static final String INDEX_DEPENDENCY_RESPONSE_JSON = "/com/zenika/dorm/core/test/resources/index_dependency_response.json";
     private static final String DEPENDENCY21_RESPONSE_JSON = "/com/zenika/dorm/core/test/resources/dependency_response.json";
     private static final String METADATA20_RESPONSE_JSON = "/com/zenika/dorm/core/test/resources/metadata_response.json";
@@ -37,7 +50,7 @@ public class Neo4jDaoTestProvider {
     private static final String RELATIONSHIP_METADATA20_RESPONSE_JSON = "/com/zenika/dorm/core/test/resources/relationship_metadata_response.json";
     private static final String RELATIONSHIP_METADATA2_RESPONSE_JSON = "/com/zenika/dorm/core/test/resources/relationship_metadata2_response.json";
 
-    private static final String INDEX_DEPENDENCY_URI = "http://localhost:7474/db/data/index/node/dependency/fullqualifier/xercesImpl:2.4.0:dorm";
+    private static final String INDEX_DEPENDENCY_URI = "http://localhost:7474/db/data/index/node/dependency/fullqualifier/habi-base:0.6:dorm";
     private static final String DEPENDENCY21_URI = "http://localhost:7474/db/data/node/21";
     private static final String DEPENDENCY3_URI = "http://localhost:7474/db/data/node/3";
     private static final String METADATA20_URI = "http://localhost:7474/db/data/node/20";
@@ -55,6 +68,8 @@ public class Neo4jDaoTestProvider {
     private static final String SEARCH_RELATIONSHIP_METADATA20_URI = "http://localhost:7474/db/data/node/20/relationships/out/EXTENSION";
     private static final String SEARCH_RELATIONSHIP_METADATA2_URI = "http://localhost:7474/db/data/node/2/relationships/out/EXTENSION";
 
+    private static final String POST_URI = "http://localhost:7474/db/data/node";
+
     private URL dependency21Url;
     private URL metadata20Url;
     private URL extension19Url;
@@ -67,6 +82,7 @@ public class Neo4jDaoTestProvider {
     private URL relationshipMetadata2Url;
     private URL indexDependencyUrl;
     private URL traverseUrl;
+    private URL indexResponse;
 
     private URI indexUri;
     private URI dependency21Uri;
@@ -86,18 +102,22 @@ public class Neo4jDaoTestProvider {
     private URI searchRelationshipMetadata20Uri;
     private URI searchRelationshipMetadata2Uri;
 
+    private URI postUri;
+
     private TypeReference<Neo4jResponse<Neo4jDependency>> dependencyResponseType;
     private TypeReference<Neo4jResponse<Neo4jMetadata>> metadataResponseType;
     private TypeReference<Neo4jResponse<Neo4jMetadataExtension>> extensionResponseType;
     private TypeReference<List<Neo4jRelationship>> listRelationshipType;
     private TypeReference<List<Neo4jResponse<Neo4jDependency>>> listDependencyResponseType;
 
+    private Neo4jIndex index;
     private Neo4jResponse<Neo4jDependency> dependency21Response;
     private Neo4jResponse<Neo4jMetadata> metadata20Response;
     private Neo4jResponse<Neo4jMetadataExtension> extension19Response;
     private Neo4jResponse<Neo4jDependency> dependency3Response;
     private Neo4jResponse<Neo4jMetadata> metadata2Response;
     private Neo4jResponse<Neo4jMetadataExtension> extension1Response;
+    private Neo4jTraverse traverse;
     private List<Neo4jRelationship> relationshipsDependency21;
     private List<Neo4jRelationship> relationshipsDependency3;
     private List<Neo4jRelationship> relationshipsMetadata20;
@@ -107,8 +127,15 @@ public class Neo4jDaoTestProvider {
 
     private ObjectMapper mapper;
 
+    private Usage usage;
+    private Neo4jDependency dependency;
+    private DependencyNode dependencyNode;
+    private Neo4jMetadata metadata;
+    private Neo4jMetadataExtension extension;
+
     public Neo4jDaoTestProvider() {
         mapper = ObjectMapperProvider.createDefaultMapper();
+        setUpDormDependency();
         setUpUrl();
         setUpUri();
         setUpTypeReference();
@@ -127,6 +154,7 @@ public class Neo4jDaoTestProvider {
         relationshipDependency3Url = getClass().getResource(RELATIONSHIP_DEPENDENCY3_RESPONSE_JSON);
         relationshipMetadata2Url = getClass().getResource(RELATIONSHIP_METADATA2_RESPONSE_JSON);
         indexDependencyUrl = getClass().getResource(INDEX_DEPENDENCY_RESPONSE_JSON);
+        indexResponse = getClass().getResource(INDEX_RESPONSE_JSON);
         traverseUrl = getClass().getResource(TRAVERSE_RESPONSE_JSON);
     }
 
@@ -149,6 +177,8 @@ public class Neo4jDaoTestProvider {
             searchRelationshipDependency3Uri = new URI(SEARCH_RELATIONSHIP_DEPENDENCY3_URI);
             searchRelationshipMetadata20Uri = new URI(SEARCH_RELATIONSHIP_METADATA20_URI);
             searchRelationshipMetadata2Uri = new URI(SEARCH_RELATIONSHIP_METADATA2_URI);
+
+            postUri = new URI(POST_URI);
         } catch (URISyntaxException e) {
             LOG.error("Bad URI", e);
         }
@@ -181,6 +211,8 @@ public class Neo4jDaoTestProvider {
             relationshipsMetadata2 = mapper.readValue(relationshipMetadata2Url, listRelationshipType);
             relationships = mapper.readValue(traverseUrl, listRelationshipType);
             listDependencyResponse = mapper.readValue(indexDependencyUrl, listDependencyResponseType);
+            index = mapper.readValue(indexResponse, Neo4jIndex.class);
+            traverse = new Neo4jTraverse(new Neo4jRelationship(usage));
 
             dependency21Response.getData().setResponse(dependency21Response);
             metadata20Response.getData().setResponse(metadata20Response);
@@ -191,6 +223,14 @@ public class Neo4jDaoTestProvider {
         } catch (IOException e) {
             LOG.error("Jackson mapper error", e);
         }
+    }
+
+    private void setUpDormDependency(){
+        usage = Usage.create("DEFAULT");
+        extension = new Neo4jMetadataExtension(new DefaultDormMetadataExtension("habi-base"));
+        metadata = new Neo4jMetadata(DefaultDormMetadata.create("0.6", extension));
+        dependency = new Neo4jDependency(DefaultDependency.create(metadata, usage));
+        dependencyNode = DefaultDependencyNode.create(dependency);
     }
 
     public TypeReference<Neo4jResponse<Neo4jDependency>> getDependencyResponseType() {
@@ -261,6 +301,14 @@ public class Neo4jDaoTestProvider {
         return listDependencyResponse;
     }
 
+    public Neo4jIndex getIndex() {
+        return index;
+    }
+
+    public Neo4jTraverse getTraverse() {
+        return traverse;
+    }
+
     public URI getDependency21Uri() {
         return dependency21Uri;
     }
@@ -323,5 +371,35 @@ public class Neo4jDaoTestProvider {
 
     public URI getSearchRelationshipDependency21Uri() {
         return searchRelationshipDependency21Uri;
+    }
+
+    public Usage getUsage() {
+        return usage;
+    }
+
+    public Neo4jDependency getDependency() {
+        return dependency;
+    }
+
+    public DependencyNode getDependencyNode() {
+        return dependencyNode;
+    }
+
+    public Neo4jMetadata getMetadata() {
+        return metadata;
+    }
+
+    public Neo4jMetadataExtension getExtension() {
+        return extension;
+    }
+
+    public List getEmptyList(){
+        return new ArrayList();
+    }
+
+    public List getNoEmptyList(){
+        List list =  new ArrayList();
+        list.add("empty");
+        return list;
     }
 }

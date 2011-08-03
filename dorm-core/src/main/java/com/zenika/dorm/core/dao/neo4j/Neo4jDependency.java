@@ -86,4 +86,23 @@ public class Neo4jDependency extends Neo4jNode implements Dependency{
 
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Neo4jDependency)) return false;
+
+        Neo4jDependency that = (Neo4jDependency) o;
+
+        if (metadata != null ? !metadata.equals(that.metadata) : that.metadata != null) return false;
+        if (usage != null ? !usage.equals(that.usage) : that.usage != null) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = usage != null ? usage.hashCode() : 0;
+        result = 31 * result + (metadata != null ? metadata.hashCode() : 0);
+        return result;
+    }
 }
