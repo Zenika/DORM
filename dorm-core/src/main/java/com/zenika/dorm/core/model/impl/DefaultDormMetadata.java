@@ -62,11 +62,6 @@ public final class DefaultDormMetadata implements DormMetadata {
     }
 
     @Override
-    public String toString() {
-        return getFullQualifier();
-    }
-
-    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof DefaultDormMetadata)) return false;
@@ -75,7 +70,8 @@ public final class DefaultDormMetadata implements DormMetadata {
 
         if (fullQualifier != null ? !fullQualifier.equals(metadata.fullQualifier) : metadata.fullQualifier != null)
             return false;
-        if (extension != null ? !extension.equals(metadata.extension) : metadata.extension != null) return false;
+        if (extension != null ? !extension.equals(metadata.extension) : metadata.extension != null)
+            return false;
         if (qualifier != null ? !qualifier.equals(metadata.qualifier) : metadata.qualifier != null)
             return false;
         if (version != null ? !version.equals(metadata.version) : metadata.version != null) return false;
@@ -90,5 +86,10 @@ public final class DefaultDormMetadata implements DormMetadata {
         result = 31 * result + (version != null ? version.hashCode() : 0);
         result = 31 * result + (extension != null ? extension.hashCode() : 0);
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return "DormMetadata { " + getFullQualifier() + " }";
     }
 }

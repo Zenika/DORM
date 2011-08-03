@@ -78,4 +78,10 @@ public final class DefaultDormFile implements DormFile {
         result = 31 * result + (file != null ? file.hashCode() : 0);
         return result;
     }
+
+    @Override
+    public String toString() {
+        return "DormFile { " +
+                getFilename() + " }";
+    }
 }

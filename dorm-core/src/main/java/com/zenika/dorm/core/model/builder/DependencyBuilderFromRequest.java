@@ -23,8 +23,12 @@ public class DependencyBuilderFromRequest {
     private Usage usage;
 
     private DependencyBuilderFromRequest(DormRequest request) {
+
+        // by default use the usage of the request if exists,
+        // but can be overriden by the usage() of the builder
         this.usage = Usage.create(request.getUsage());
 
+        // todo maybe some improvements can be done here
         if (request.hasFile()) {
             this.file = new DormFileBuilderFromRequest(request).build();
         }
@@ -47,6 +51,11 @@ public class DependencyBuilderFromRequest {
 
     public DependencyBuilderFromRequest file(String filename, File file) {
         this.file = DefaultDormFile.create(filename, file);
+        return this;
+    }
+
+    public DependencyBuilderFromRequest usage(Usage usage) {
+        this.usage = usage;
         return this;
     }
 

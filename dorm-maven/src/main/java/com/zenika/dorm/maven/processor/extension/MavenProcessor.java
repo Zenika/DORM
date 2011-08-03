@@ -3,15 +3,16 @@ package com.zenika.dorm.maven.processor.extension;
 import com.zenika.dorm.core.graph.Dependency;
 import com.zenika.dorm.core.graph.DependencyNode;
 import com.zenika.dorm.core.graph.impl.DefaultDependencyNode;
-import com.zenika.dorm.core.model.DormFile;
+import com.zenika.dorm.core.graph.impl.Usage;
 import com.zenika.dorm.core.model.DormRequest;
 import com.zenika.dorm.core.model.builder.DependencyBuilderFromRequest;
-import com.zenika.dorm.core.model.builder.DormFileBuilderFromRequest;
 import com.zenika.dorm.core.model.impl.DefaultDormRequest;
 import com.zenika.dorm.core.processor.impl.AbstractProcessorExtension;
 import com.zenika.dorm.maven.exception.MavenException;
 import com.zenika.dorm.maven.model.impl.MavenMetadataExtension;
 import org.apache.commons.io.FilenameUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -27,8 +28,9 @@ import java.util.Map;
  */
 public class MavenProcessor extends AbstractProcessorExtension {
 
+    private static final Logger LOG = LoggerFactory.getLogger(MavenProcessor.class);
+
     public static final String ENTITY_TYPE = "entity";
-    public static final String INTERNAL_USAGE = "maven_internal";
 
     /**
      * Metadata names
@@ -40,8 +42,16 @@ public class MavenProcessor extends AbstractProcessorExtension {
     @Override
     public DependencyNode push(DormRequest request) {
 
+        LOG.debug("Maven request to push = " + request);
+
+        if (!request.hasFile()) {
+            throw new MavenException("File is required.");
+        }
+
         // get the maven type from the filename
         String type = FilenameUtils.getExtension(request.getFilename());
+
+        LOG.debug("Type of the maven file = " + type);
 
         if (!type.equalsIgnoreCase("jar") && type.equalsIgnoreCase("pom") && type.equalsIgnoreCase("sha1")) {
             throw new MavenException("Invalid maven type : " + type);
@@ -52,27 +62,27 @@ public class MavenProcessor extends AbstractProcessorExtension {
         String artifactId = request.getProperty(METADATA_ARTIFACTID);
         String versionId = request.getProperty(METADATA_VERSIONID);
 
-        // create the root entity
-        MavenMetadataExtension rootExtension = new MavenMetadataExtension(groupId, artifactId, versionId,
+        // create the entity extension which is the same as the child with a different type
+        MavenMetadataExtension entityExtension = new MavenMetadataExtension(groupId, artifactId, versionId,
                 MavenProcessor.ENTITY_TYPE);
 
-        Dependency rootDependency = new DependencyBuilderFromRequest(request, rootExtension).build();
+        // entity dependencuy has no file
+        Map<String, String> entityProperties = new HashMap<String, String>();
+        entityProperties.put(DormRequest.FILENAME, null);
+        DormRequest entityRequest = DefaultDormRequest.createFromRequest(request, entityProperties);
+
+        Dependency rootDependency = new DependencyBuilderFromRequest(request,
+                entityExtension).file(null).build();
+        LOG.debug("Maven entity dependency = " + rootDependency);
 
         // create the real maven dependency to push
-        MavenMetadataExtension extension = new MavenMetadataExtension(groupId, artifactId, versionId, type);
+        MavenMetadataExtension childExtension = new MavenMetadataExtension(groupId, artifactId, versionId, type);
 
-        if (!request.hasFile()) {
-            throw new MavenException("File is required.");
-        }
+        // replace the default usage by the maven internal for the child dependency
+        Usage childUsage = Usage.createInternal(MavenMetadataExtension.NAME);
 
-        // add the internal usage to the child node
-        Map<String, String> newProperties = new HashMap<String, String>();
-        newProperties.put(DormRequest.USAGE, INTERNAL_USAGE);
-        request = DefaultDormRequest.createFromRequest(request, newProperties);
-
-        DormFile file = new DormFileBuilderFromRequest(request).build();
-
-        Dependency dependency = new DependencyBuilderFromRequest(request, extension).file(file).build();
+        Dependency dependency = new DependencyBuilderFromRequest(request, childExtension).usage(childUsage).build();
+        LOG.debug("Maven real dependency = " + dependency);
 
         DependencyNode root = DefaultDependencyNode.create(rootDependency);
         DependencyNode node = DefaultDependencyNode.create(dependency);

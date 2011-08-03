@@ -52,9 +52,13 @@ public final class Usage {
         this.name = name;
     }
 
+    public String getName() {
+        return name;
+    }
+
     @Override
     public String toString() {
-        return name;
+        return "Usage { " + name + " }";
     }
 
     @Override
@@ -72,9 +76,5 @@ public final class Usage {
     @Override
     public int hashCode() {
         return name.hashCode();
-    }
-
-    public String getName() {
-        return name;
     }
 }

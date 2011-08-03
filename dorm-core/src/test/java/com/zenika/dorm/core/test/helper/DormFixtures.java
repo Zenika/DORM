@@ -1,6 +1,7 @@
 package com.zenika.dorm.core.test.helper;
 
 import com.zenika.dorm.core.model.DormMetadataExtension;
+import com.zenika.dorm.core.model.DormRequest;
 import com.zenika.dorm.core.model.impl.DefaultDormMetadataExtension;
 import com.zenika.dorm.core.processor.impl.DormProcessor;
 
@@ -29,6 +30,7 @@ public class DormFixtures extends ExtensionFixtures {
     @Override
     public Map<String, String> getRequestPropertiesForExtension() {
         Map<String, String> properties = new HashMap<String, String>();
+        properties.put(DormRequest.ORIGIN, DefaultDormMetadataExtension.NAME);
         properties.put(DormProcessor.METADATA_NAME, name);
         return properties;
     }

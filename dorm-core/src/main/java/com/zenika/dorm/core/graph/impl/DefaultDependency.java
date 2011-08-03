@@ -12,8 +12,15 @@ import com.zenika.dorm.core.model.DormMetadata;
  */
 public final class DefaultDependency implements Dependency {
 
+    /**
+     * Always required
+     */
     private final Usage usage;
     private final DormMetadata metadata;
+
+    /**
+     * Optionnal, may be null
+     */
     private final DormFile file;
 
     public static DefaultDependency create(DormMetadata metadata) {
@@ -111,5 +118,14 @@ public final class DefaultDependency implements Dependency {
         result = 31 * result + (metadata != null ? metadata.hashCode() : 0);
         result = 31 * result + (file != null ? file.hashCode() : 0);
         return result;
+    }
+
+    @Override
+    public String toString() {
+        String fileAsString = (file == null) ? "null" : file.toString();
+        return "Dependency { " +
+                "Usage = " + usage + "; " +
+                "Metadata = " + metadata + "; " +
+                "File = " + fileAsString + " }";
     }
 }

@@ -51,13 +51,15 @@ public abstract class ExtensionFixtures {
 
     public Map<String, String> getRequestPropertiesWithoutFile() {
         Map<String, String> properties = new HashMap<String, String>();
-        properties.put(DormRequest.ORIGIN, DefaultDormMetadataExtension.NAME);
         properties.put(DormRequest.VERSION, version);
 
         Map<String, String> extensionProperties = getRequestPropertiesForExtension();
 
         if (null != extensionProperties) {
             properties.putAll(extensionProperties);
+        } else {
+            // if no extension properties given, set a default extension name
+            properties.put(DormRequest.ORIGIN, DefaultDormMetadataExtension.NAME);
         }
 
         return properties;

@@ -154,4 +154,18 @@ public final class DefaultDormRequest implements DormRequest {
         result = 31 * result + (properties != null ? properties.hashCode() : 0);
         return result;
     }
+
+    @Override
+    public String toString() {
+
+        String fileExists = (hasFile()) ? "yes" : "no";
+
+        return "DormRequest { " +
+                "version = " + version + "; " +
+                "origin = " + origin + "; " +
+                "usage = " + usage + "; " +
+                "filename = " + filename + "; " +
+                "java.io.file exists = " + fileExists + "; " +
+                "additionnal properties = " + properties + " }";
+    }
 }
