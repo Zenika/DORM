@@ -33,7 +33,7 @@ public class MavenProcessorUnitTest extends AbstractUnitTest {
 
         DependencyNode entityNode = fixtures.getEntityNodeWithChild();
         DependencyNode childNode = entityNode.getChildren().iterator().next();
-        DormRequest request = fixtures.getRequestWithFile();
+        DormRequest request = fixtures.getRequestWithFileOldWay();
 
         LOG.trace("Test entity node = " + entityNode.getDependency());
         LOG.trace("Test real dependency node = " + childNode.getDependency());
@@ -48,7 +48,7 @@ public class MavenProcessorUnitTest extends AbstractUnitTest {
 
     @Test(expected = MavenException.class)
     public void pushMaventArtifactWithoutFile() {
-        processor.push(fixtures.getRequestWithoutFile());
+        processor.push(fixtures.getRequestWithoutFileOldWay());
     }
 
     @Test(expected = MavenException.class)

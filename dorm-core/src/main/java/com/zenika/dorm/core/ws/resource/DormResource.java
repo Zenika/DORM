@@ -6,10 +6,10 @@ import com.zenika.dorm.core.exception.ArtifactException;
 import com.zenika.dorm.core.model.DormFile;
 import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.core.model.DormRequest;
+import com.zenika.dorm.core.model.builder.DormRequestBuilder;
 import com.zenika.dorm.core.model.impl.DefaultDormFile;
 import com.zenika.dorm.core.model.impl.DefaultDormMetadata;
 import com.zenika.dorm.core.model.impl.DefaultDormMetadataExtension;
-import com.zenika.dorm.core.model.impl.DefaultDormRequest;
 import com.zenika.dorm.core.processor.Processor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,8 +21,6 @@ import javax.ws.rs.core.StreamingOutput;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Properties;
 
 /**
@@ -73,19 +71,11 @@ public class DormResource {
 
         LOG.trace("POST with params : name = " + name + "; version = " + version);
 
-        Map<String, String> properties = new HashMap<String, String>();
-        properties.put(DormRequest.ORIGIN, DefaultDormMetadataExtension.NAME);
-        properties.put(DormRequest.VERSION, version);
-        properties.put(DefaultDormMetadataExtension.METADATA_NAME, name);
+        DormRequest request = new DormRequestBuilder(version, DefaultDormMetadataExtension.NAME)
+                .property(DefaultDormMetadataExtension.METADATA_NAME, name)
+                .build();
 
-        DormRequest request = DefaultDormRequest.create(properties);
-        LOG.debug("Request from POST = " + request);
-
-        if (!processor.push(request)) {
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
-        }
-
-        return Response.status(Response.Status.OK).build();
+        return pushRequest(request);
     }
 
     /**
@@ -105,10 +95,15 @@ public class DormResource {
                                           @PathParam("filename") String filename,
                                           @FormDataParam("file") File file) {
 
-        DormMetadata metadata = getMetadata(name, version);
-        DormFile dormFile = DefaultDormFile.create(filename, file);
+        LOG.trace("POST with params : name = " + name + "; version = " + version);
 
-        return Response.status(Response.Status.OK).build();
+        DormRequest request = new DormRequestBuilder(version, DefaultDormMetadataExtension.NAME)
+                .filename(filename)
+                .file(file)
+                .property(DefaultDormMetadataExtension.METADATA_NAME, name)
+                .build();
+
+        return pushRequest(request);
     }
 
     /**
@@ -156,6 +151,17 @@ public class DormResource {
                                           @PathParam("usage") String usage) {
 
         DormMetadata metadata = getMetadata(name, version);
+
+        return Response.status(Response.Status.OK).build();
+    }
+
+    private Response pushRequest(DormRequest request) {
+
+        LOG.debug("Request to push = " + request);
+
+        if (!processor.push(request)) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
 
         return Response.status(Response.Status.OK).build();
     }

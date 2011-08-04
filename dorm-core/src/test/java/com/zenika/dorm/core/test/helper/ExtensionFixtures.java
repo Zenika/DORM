@@ -8,6 +8,7 @@ import com.zenika.dorm.core.model.DormFile;
 import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.core.model.DormMetadataExtension;
 import com.zenika.dorm.core.model.DormRequest;
+import com.zenika.dorm.core.model.builder.DormRequestBuilder;
 import com.zenika.dorm.core.model.impl.DefaultDormFile;
 import com.zenika.dorm.core.model.impl.DefaultDormMetadata;
 import com.zenika.dorm.core.model.impl.DefaultDormMetadataExtension;
@@ -49,6 +50,18 @@ public abstract class ExtensionFixtures {
      */
     public abstract Map<String, String> getRequestPropertiesForExtension();
 
+    public DormRequestBuilder getRequestBuilder() {
+        return new DormRequestBuilder(version, getMetadataExtension().getExtensionName());
+    }
+
+    public DormRequestBuilder getRequestBuilderWithFile() {
+        return getRequestBuilder().filename(filenameWithExtension).file(file);
+    }
+
+    /**
+     * @return
+     * @deprecated
+     */
     public Map<String, String> getRequestPropertiesWithoutFile() {
         Map<String, String> properties = new HashMap<String, String>();
         properties.put(DormRequest.VERSION, version);
@@ -65,6 +78,10 @@ public abstract class ExtensionFixtures {
         return properties;
     }
 
+    /**
+     * @return
+     * @deprecated
+     */
     public Map<String, String> getRequestPropertiesWithFile() {
         Map<String, String> properties = getRequestPropertiesWithoutFile();
         properties.put(DormRequest.FILENAME, filenameWithExtension);
@@ -72,10 +89,18 @@ public abstract class ExtensionFixtures {
     }
 
     public DormRequest getRequestWithoutFile() {
-        return DefaultDormRequest.create(getRequestPropertiesWithoutFile());
+        return getRequestBuilder().build();
     }
 
     public DormRequest getRequestWithFile() {
+        return getRequestBuilderWithFile().build();
+    }
+
+    public DormRequest getRequestWithoutFileOldWay() {
+        return DefaultDormRequest.create(getRequestPropertiesWithoutFile());
+    }
+
+    public DormRequest getRequestWithFileOldWay() {
         return DefaultDormRequest.create(getRequestPropertiesWithFile(), file);
     }
 

@@ -39,7 +39,7 @@ public class DormRequestUnitTest extends AbstractUnitTest {
         DormRequest requestNewPropertiesAndFileModel = DefaultDormRequest.create(newProperties, newFile);
 
         // get the default request properties and edit the version
-        DormRequest request = fixtures.getRequestWithFile();
+        DormRequest request = fixtures.getRequestWithFileOldWay();
 
         // create new request with the new properties
         DormRequest requestNewProperties = DefaultDormRequest.createFromRequest(request, newProperties);

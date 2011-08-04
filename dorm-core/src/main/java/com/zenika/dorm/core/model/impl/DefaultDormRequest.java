@@ -2,6 +2,7 @@ package com.zenika.dorm.core.model.impl;
 
 import com.zenika.dorm.core.exception.CoreException;
 import com.zenika.dorm.core.model.DormRequest;
+import com.zenika.dorm.core.model.builder.DormRequestBuilder;
 
 import java.io.File;
 import java.util.Collections;
@@ -15,33 +16,52 @@ import java.util.Map;
  */
 public final class DefaultDormRequest implements DormRequest {
 
-    private final String version;
-    private final String origin;
-    private final String usage;
-    private final String filename;
-    private final File file;
-
     /**
-     * Additionnal properties
+     * @param properties
+     * @return
+     * @deprecated use the dorm request builder
      */
-    private final Map<String, String> properties = new HashMap<String, String>();
-
     public static DefaultDormRequest create(Map<String, String> properties) {
         return new DefaultDormRequest(properties, null);
     }
 
+    /**
+     * @param properties
+     * @param file
+     * @return
+     * @deprecated use the dorm request builder
+     */
     public static DefaultDormRequest create(Map<String, String> properties, File file) {
         return new DefaultDormRequest(properties, file);
     }
 
+    /**
+     * @param request
+     * @param newProperties
+     * @return
+     * @deprecated use the dorm request builder
+     */
     public static DefaultDormRequest createFromRequest(DormRequest request, Map<String, String> newProperties) {
         return createFromRequest(request, newProperties, null);
     }
 
+    /**
+     * @param request
+     * @param newFile
+     * @return
+     * @deprecated use the dorm request builder
+     */
     public static DefaultDormRequest createFromRequest(DormRequest request, File newFile) {
         return createFromRequest(request, null, newFile);
     }
 
+    /**
+     * @param request
+     * @param newProperties
+     * @param newFile
+     * @return
+     * @deprecated use the dorm request builder
+     */
     public static DefaultDormRequest createFromRequest(DormRequest request, Map<String,
             String> newProperties, File newFile) {
 
@@ -60,9 +80,47 @@ public final class DefaultDormRequest implements DormRequest {
         return new DefaultDormRequest(properties, newFile);
     }
 
+    private final String version;
+    private final String origin;
+    private final String usage;
+    private final String filename;
+    private final File file;
+
+    /**
+     * Additionnal properties
+     */
+    private final Map<String, String> properties = new HashMap<String, String>();
+
+    /**
+     * Build request from the builder
+     *
+     * @param builder
+     */
+    public DefaultDormRequest(DormRequestBuilder builder) {
+
+        this.version = builder.getVersion();
+        this.origin = builder.getOrigin();
+        this.usage = builder.getUsage();
+
+        if (null == version || null == origin) {
+            throw new CoreException("Version and origin are required.");
+        }
+
+        if (null != builder.getFilename() && null != builder.getFile()) {
+            this.filename = builder.getFilename();
+            this.file = builder.getFile();
+        } else {
+            this.filename = null;
+            this.file = null;
+        }
+
+        this.properties.putAll(builder.getProperties());
+    }
+
     /**
      * @param properties
      * @param file       optionnal, can be null
+     * @deprecated use the dorm request builder
      */
     private DefaultDormRequest(Map<String, String> properties, File file) {
 
