@@ -34,12 +34,11 @@ public class Neo4jExtensionReader implements MessageBodyReader<Neo4jMetadataExte
     public Neo4jMetadataExtension readFrom(Class<Neo4jMetadataExtension> type, Type genericType,
                                            Annotation[] annotations, MediaType mediaType,
                                            MultivaluedMap<String, String> httpHeaders, InputStream entityStream) throws IOException, WebApplicationException {
-//        ObjectMapper mapper = new ObjectMapper();
-//        Map<String, String> properties = mapper.readValue(entityStream, Map.class);
-//        Neo4jMetadataExtension extension = new Neo4jMetadataExtension();
+        ObjectMapper mapper = new ObjectMapper();
+        Map<String, String> properties = mapper.readValue(entityStream, Map.class);
+        Neo4jMetadataExtension extension = new Neo4jMetadataExtension();
 //        extension.setProperties(properties);
-//        return extension;  //To change body of implemented methods use File | Settings | File Templates.
-        return null;
+        return extension;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
     private String readAsString(InputStream stream) throws IOException {

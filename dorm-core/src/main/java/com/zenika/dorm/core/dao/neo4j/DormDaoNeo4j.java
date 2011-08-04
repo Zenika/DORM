@@ -34,13 +34,18 @@ public class DormDaoNeo4j implements DormDao {
     private Neo4jIndex index;
 
     public DormDaoNeo4j() {
-        executor = new Neo4jRequestExecutor();
+        this(new Neo4jRequestExecutor());
+    }
+
+    public DormDaoNeo4j(RequestExecutor executor) {
+        this.executor = executor;
+        index = new Neo4jIndex();
+        index = this.executor.post(index);
     }
 
     public void init() {
-        index = new Neo4jIndex();
-        index = executor.post(index);
     }
+
 
     @Override
     public Boolean push(Dependency dormDependency) {

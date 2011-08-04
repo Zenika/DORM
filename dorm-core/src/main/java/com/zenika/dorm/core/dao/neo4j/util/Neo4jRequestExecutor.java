@@ -15,6 +15,9 @@ import com.zenika.dorm.core.dao.neo4j.Neo4jRelationship;
 import com.zenika.dorm.core.dao.neo4j.Neo4jResponse;
 import com.zenika.dorm.core.dao.neo4j.Neo4jTraverse;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import sun.rmi.runtime.Log;
 
 import javax.ws.rs.core.MediaType;
 import java.lang.reflect.Type;
@@ -25,14 +28,13 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.logging.Logger;
 
 /**
  * @author Antoine ROUAZE <antoine.rouaze AT zenika.com>
  */
 public class Neo4jRequestExecutor implements RequestExecutor {
 
-    private static Logger logger = Logger.getLogger(Neo4jRequestExecutor.class.getName());
+    private static Logger logger = LoggerFactory.getLogger(Neo4jRequestExecutor.class.getName());
 
     public static final String NODE_ENTRY_POINT_URI = "http://localhost:7474/db/data/node";
     public static final String DATA_ENTRY_POINT_URI = "http://localhost:7474/db/data";
@@ -69,6 +71,7 @@ public class Neo4jRequestExecutor implements RequestExecutor {
 
     @Override
     public Neo4jIndex post(Neo4jIndex index) {
+        logger.trace(Neo4jIndex.INDEX_PATH);
         index = resource.path(Neo4jIndex.INDEX_PATH).accept(MediaType.APPLICATION_JSON)
                 .type(MediaType.APPLICATION_JSON).post(Neo4jIndex.class, index);
         logRequest("POST", resource);

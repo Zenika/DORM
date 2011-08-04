@@ -7,6 +7,7 @@ import com.zenika.dorm.core.dao.neo4j.Neo4jMetadata;
 import com.zenika.dorm.core.dao.neo4j.Neo4jMetadataExtension;
 import com.zenika.dorm.core.dao.neo4j.Neo4jRelationship;
 import com.zenika.dorm.core.dao.neo4j.Neo4jResponse;
+import com.zenika.dorm.core.dao.neo4j.util.Neo4jRequestExecutor;
 import com.zenika.dorm.core.dao.neo4j.util.RequestExecutor;
 import com.zenika.dorm.core.graph.Dependency;
 import com.zenika.dorm.core.graph.DependencyNode;
@@ -46,19 +47,18 @@ public class Neo4jDaoTest {
 
     private Neo4jDaoTestProvider provider;
 
-    @Mock
+
     private RequestExecutor executor;
 
-    @InjectMocks
     private DormDaoNeo4j dao;
 
     @Before
     public void setUp() {
-        dao = new DormDaoNeo4j();
-        MockitoAnnotations.initMocks(this);
         provider = new Neo4jDaoTestProvider();
+        executor = mock(Neo4jRequestExecutor.class);
         setUpMethod();
-        dao.init();
+        dao = new DormDaoNeo4j(executor);
+//        dao.init();
 //        extension19Response = new DefaultDormMetadataExtension("habi-base");
 //        metadata20Response = DefaultDormMetadata.create("0.6", extension19Response);
 //        dependency21Response = DefaultDependency.create(metadata20Response, usage);
