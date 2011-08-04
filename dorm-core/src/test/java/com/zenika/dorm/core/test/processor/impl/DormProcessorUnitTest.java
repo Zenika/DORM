@@ -34,11 +34,6 @@ public class DormProcessorUnitTest extends AbstractUnitTest {
     }
 
     @Test(expected = CoreException.class)
-    public void pushDormArtifactWithoutFile() {
-        processor.push(fixtures.getRequestWithoutFile());
-    }
-
-    @Test(expected = CoreException.class)
     public void pushDormArtifactWithoutRequiredMetadatas() {
 
         Map<String, String> properties = fixtures.getRequestPropertiesWithFile();
