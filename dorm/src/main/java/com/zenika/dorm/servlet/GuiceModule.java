@@ -13,14 +13,21 @@ import com.zenika.dorm.core.service.impl.DefaultDormService;
 import com.zenika.dorm.core.ws.resource.DormResource;
 import com.zenika.dorm.maven.model.impl.MavenMetadataExtension;
 import com.zenika.dorm.maven.processor.extension.MavenProcessor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>
  */
 public class GuiceModule extends JerseyServletModule {
 
+    private static final Logger LOG = LoggerFactory.getLogger(GuiceModule.class);
+
     @Override
     protected void configureServlets() {
+
+        LOG.info("Zenika DORM POC");
+        LOG.info("Init guice module");
 
         bindResources();
         bindProcessor();

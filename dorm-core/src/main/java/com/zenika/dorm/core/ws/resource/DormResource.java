@@ -54,6 +54,10 @@ public class DormResource {
     @Inject
     private Processor processor;
 
+    public DormResource() {
+        LOG.info("Init dorm resource as web service");
+    }
+
     /**
      * Push metadata
      *
