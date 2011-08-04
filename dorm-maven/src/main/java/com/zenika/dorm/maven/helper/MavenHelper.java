@@ -11,14 +11,14 @@
 //
 ////		// maven metadata
 ////		DormMavenMetadata mavenMetadata = new DormMavenMetadata(mavenArtifact.getGroupId(), mavenArtifact.getArtifactId(),
-////				mavenArtifact.getVersion(), mavenArtifact.getExtension());
+////				mavenArtifact.getVersion(), mavenArtifact.getNeo4jExtension());
 ////
 ////		// dorm metadata
 ////		DormMetadata<DormMavenMetadata> dormMetadata = createDormMetadata(mavenMetadata);
 ////
 ////		// dorm file
 ////		DormFile dormFile = DormFileHelper.createDormFile(dormMetadata, mavenArtifact.getFile(),
-////				mavenArtifact.getExtension());
+////				mavenArtifact.getNeo4jExtension());
 ////
 ////		// dorm artifact
 ////		DormArtifact<DormMavenMetadata> dormArtifact = new DormArtifact<DormMavenMetadata>(dormMetadata, dormFile);

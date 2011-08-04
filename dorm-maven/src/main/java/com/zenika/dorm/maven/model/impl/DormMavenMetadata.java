@@ -54,7 +54,7 @@
 //        this.version = version;
 //    }
 //
-//    public String getExtension() {
+//    public String getNeo4jExtension() {
 //        return extension;
 //    }
 //

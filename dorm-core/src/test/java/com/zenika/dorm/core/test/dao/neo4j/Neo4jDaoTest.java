@@ -5,16 +5,12 @@ import com.zenika.dorm.core.dao.neo4j.Neo4jDependency;
 import com.zenika.dorm.core.dao.neo4j.Neo4jIndex;
 import com.zenika.dorm.core.dao.neo4j.Neo4jMetadata;
 import com.zenika.dorm.core.dao.neo4j.Neo4jMetadataExtension;
-import com.zenika.dorm.core.dao.neo4j.Neo4jNode;
 import com.zenika.dorm.core.dao.neo4j.Neo4jRelationship;
 import com.zenika.dorm.core.dao.neo4j.Neo4jResponse;
-import com.zenika.dorm.core.dao.neo4j.util.ObjectMapperProvider;
 import com.zenika.dorm.core.dao.neo4j.util.RequestExecutor;
 import com.zenika.dorm.core.graph.Dependency;
 import com.zenika.dorm.core.graph.DependencyNode;
-import com.zenika.dorm.core.graph.impl.Usage;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.type.TypeReference;
+import com.zenika.dorm.core.model.impl.DefaultDormMetadataExtension;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
@@ -22,14 +18,11 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
-import org.neo4j.helpers.Args;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -192,9 +185,9 @@ public class Neo4jDaoTest {
     public void testFillNeo4jDependency() {
         LOG.trace("START testFillNeo4jDependency");
         try {
-            Neo4jDependency dependencyResponse = dao.fillNeo4jDependency(provider.getDependency21Response().getData());
+            Neo4jDependency dependencyResponse = dao.fillNeo4jDependency(provider.getDependency21Response().getData(), new DefaultDormMetadataExtension("test"));
             assertThat(dependencyResponse.getMetadata()).isSameAs(provider.getMetadata20Response().getData());
-            assertThat(dependencyResponse.getMetadata().getExtension()).isSameAs(provider.getExtension19Response().getData());
+            assertThat(dependencyResponse.getMetadata().getNeo4jExtension()).isSameAs(provider.getExtension19Response().getData());
         } catch (URISyntaxException e) {
             LOG.error("Bad URI", e);
         }
@@ -205,7 +198,7 @@ public class Neo4jDaoTest {
     public void testGetDependency() {
         LOG.trace("START testGetDependency");
         try {
-            Dependency dependency = dao.getDependency(provider.getDependency21Uri(), provider.getUsage());
+            Dependency dependency = dao.getDependency(provider.getDependency21Uri(), provider.getUsage(), new DefaultDormMetadataExtension("test"));
             assertThat(dependency).isInstanceOf(Neo4jDependency.class);
             assertThat(dependency.getMetadata()).isSameAs(provider.getMetadata20Response().getData());
             assertThat(dependency.getMetadata().getExtension()).isSameAs(provider.getExtension19Response().getData());
@@ -221,7 +214,7 @@ public class Neo4jDaoTest {
         LOG.trace("START testPutChild");
         try {
             Map<String, DependencyNode> map = new HashMap<String, DependencyNode>();
-            dao.putChild(provider.getUsage(), map, provider.getRelationships());
+            dao.putChild(provider.getUsage(), map, provider.getRelationships(), new DefaultDormMetadataExtension("test"));
             assertThat(map.get(provider.getDependency21Uri().toString()).getDependency())
                     .isSameAs(provider.getDependency21Response().getData());
             assertThat(map.get(provider.getDependency21Uri().toString()).getDependency().getMetadata())

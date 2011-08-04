@@ -89,7 +89,7 @@
 //            throw new MavenException("Incorrect file type").type(ArtifactException.Type.NULL);
 //        }
 //
-//        metadata.getExtension().setExtension(extension);
+//        metadata.getNeo4jExtension().setExtension(extension);
 //
 //        return new DormFile(metadata.getFullQualifier(), extension, file);
 //    }
@@ -98,7 +98,7 @@
 //
 //        // define the mapping between dorm and maven metadatas
 //        String name = mavenMetadata.getGroupId() + ":" + mavenMetadata.getArtifactId() + ":"
-//                + mavenMetadata.getVersion() + ":" + mavenMetadata.getExtension();
+//                + mavenMetadata.getVersion() + ":" + mavenMetadata.getNeo4jExtension();
 //
 //        // create new dorm metadata from maven
 //        DormMetadata<DormMavenMetadata> metadata = new DormMetadata<DormMavenMetadata>(name, mavenMetadata.getVersion(),

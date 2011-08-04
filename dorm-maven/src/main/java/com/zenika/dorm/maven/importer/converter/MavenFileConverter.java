@@ -9,7 +9,7 @@
 //
 //		DormFile file = new DormFile();
 //		file.setFile(artifact.getFile());
-//		file.setExtension(artifact.getExtension());
+//		file.setExtension(artifact.getNeo4jExtension());
 //		file.setName(artifact.getArtifactId());
 //
 //		return file;

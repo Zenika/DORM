@@ -110,7 +110,7 @@
 //	private Artifact getArtifactFromMetadata(DormMavenMetadata metadata, File file) {
 //
 //		Artifact artifact = new DefaultArtifact(metadata.getGroupId(), metadata.getArtifactId(), "",
-//				metadata.getExtension(), metadata.getVersion());
+//				metadata.getNeo4jExtension(), metadata.getVersion());
 //
 //		if (null != file) {
 //			return artifact.setFile(file);

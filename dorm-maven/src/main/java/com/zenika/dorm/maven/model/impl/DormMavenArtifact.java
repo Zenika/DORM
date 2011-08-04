@@ -13,17 +13,17 @@
 //
 //	@Override
 //	public String getArtifactId() {
-//		return artifact.getMetadata().getExtension().getArtifactId();
+//		return artifact.getMetadata().getNeo4jExtension().getArtifactId();
 //	}
 //
 //	@Override
 //	public String getGroupId() {
-//		return artifact.getMetadata().getExtension().getGroupId();
+//		return artifact.getMetadata().getNeo4jExtension().getGroupId();
 //	}
 //
 //	@Override
 //	public String getVersion() {
-//		return artifact.getMetadata().getExtension().getVersion();
+//		return artifact.getMetadata().getNeo4jExtension().getVersion();
 //	}
 //
 //}

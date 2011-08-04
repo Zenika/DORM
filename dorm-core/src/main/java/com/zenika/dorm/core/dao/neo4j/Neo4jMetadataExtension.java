@@ -18,6 +18,9 @@ public class Neo4jMetadataExtension extends Neo4jNode implements DormMetadataExt
 
     public static final Usage RELATIONSHIP_TYPE = Usage.create("EXTENSION");
 
+    @JsonIgnore
+    private Map<String, String> properties;
+
     private String qualifier;
     private String extension;
 
@@ -81,7 +84,7 @@ public class Neo4jMetadataExtension extends Neo4jNode implements DormMetadataExt
     @JsonIgnore
     @Override
     public void setProperties() {
-//        this.setExtension(getResponse().getData().getExtension());
+//        this.setExtension(getResponse().getData().getNeo4jExtension());
 //        this.setQualifier(getResponse().getData().getQualifier());
     }
 
@@ -89,4 +92,5 @@ public class Neo4jMetadataExtension extends Neo4jNode implements DormMetadataExt
     public DormMetadataExtension createFromMap(Map<String, String> properties) {
         throw new UnsupportedOperationException();
     }
+
 }

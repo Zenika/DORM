@@ -25,7 +25,7 @@
 //
 //        // map specific metadata
 //        try {
-//            mapSpecificMetadata(metadata.getExtension(), document);
+//            mapSpecificMetadata(metadata.getNeo4jExtension(), document);
 //        } catch (IllegalAccessException e) {
 //            throw new CoreException("Cannot map specific metadata by reflection", e);
 //        }
@@ -132,7 +132,7 @@
 ////        try {
 ////            // TODO: Correct this if possible ?
 ////            @SuppressWarnings("unchecked")
-////            Class<T> extensionClass = (Class<T>) metadata.getExtension()
+////            Class<T> extensionClass = (Class<T>) metadata.getNeo4jExtension()
 ////                    .getClass();
 ////
 ////            // create new instance of metadata extension by reflection

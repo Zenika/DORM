@@ -23,6 +23,7 @@ public class Neo4jMetadata extends Neo4jNode implements DormMetadata {
     public static final Usage RELATIONSHIP_TYPE = Usage.create("METADATA");
 
     private Neo4jMetadataExtension extension;
+    private DormMetadataExtension dormExtension;
 
     private String qualifier;
     private String version;
@@ -57,11 +58,15 @@ public class Neo4jMetadata extends Neo4jNode implements DormMetadata {
     }
 
     @JsonIgnore
-    @Override
-    public Neo4jMetadataExtension getExtension() {
+    public Neo4jMetadataExtension getNeo4jExtension() {
         return extension;
     }
 
+    @JsonIgnore
+    @Override
+    public Neo4jMetadataExtension getExtension(){
+        return extension;
+    }
 
     @Override
     public String getFullQualifier() {
@@ -77,6 +82,8 @@ public class Neo4jMetadata extends Neo4jNode implements DormMetadata {
     public void setExtension(Neo4jMetadataExtension extension) {
         this.extension = extension;
     }
+
+
 
     public void setVersion(String version) {
         this.version = version;

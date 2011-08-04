@@ -38,7 +38,7 @@
 //            throw new RepositoryException("Artifact not found with metadata : " + metadata).type(RepositoryException.Type.NULL);
 //        }
 //
-//        return MongoMapping.getArtifactFromDocument(res, metadata.getExtension().getClass());
+//        return MongoMapping.getArtifactFromDocument(res, metadata.getNeo4jExtension().getClass());
 //    }
 //
 //    @Override
@@ -57,7 +57,7 @@
 ////        Query query = ds.createQuery(DormMetadata.class);
 ////        query.field("name").equal(metadata.getName());
 ////        query.field("version").equal(metadata.getVersion());
-////        query.field("origin").equal(metadata.getExtension());
+////        query.field("origin").equal(metadata.getNeo4jExtension());
 ////
 ////        deleteByQuery(query);
 //    }

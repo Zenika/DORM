@@ -50,10 +50,10 @@
 //			DormMetadata<T> metadata) {
 //
 //		// query the dorm metadata
-//		String query = "SELECT * FROM " + metadata.getExtension()
+//		String query = "SELECT * FROM " + metadata.getNeo4jExtension()
 //				+ " WHERE dm:name = '" + metadata.getName()
 //				+ "' AND dm:version = '" + metadata.getVersion()
-//				+ "' AND dm:origin = '" + metadata.getExtension() + "'";
+//				+ "' AND dm:origin = '" + metadata.getNeo4jExtension() + "'";
 //
 //		DormArtifact<T> artifact = getOneResult(query, metadata);
 //
@@ -137,7 +137,7 @@
 //
 //		try {
 //			model = session.createDocumentModel(artifact.getMetadata()
-//					.getExtension());
+//					.getNeo4jExtension());
 //		} catch (ClientException e) {
 //			throw new CoreException("Cannot create or map ECR document model");
 //		}
@@ -160,7 +160,7 @@
 //
 //		properties.put("name", artifact.getMetadata().getName());
 //		properties.put("version", artifact.getMetadata().getVersion());
-//		properties.put("origin", artifact.getMetadata().getExtension());
+//		properties.put("origin", artifact.getMetadata().getNeo4jExtension());
 //
 //		// get the file if exists
 //		if (null != artifact.getFile()) {
@@ -184,11 +184,11 @@
 //			throws IllegalAccessException, IllegalArgumentException,
 //			NoSuchFieldException {
 //
-//		if (null == metadata.getExtension()) {
+//		if (null == metadata.getNeo4jExtension()) {
 //			return;
 //		}
 //
-//		T extension = metadata.getExtension();
+//		T extension = metadata.getNeo4jExtension();
 //
 //		Class<? extends MetadataExtension> reflect = extension.getClass();
 //
@@ -252,7 +252,7 @@
 //		artifact.setFile(file);
 //
 //		// create and map metadata extension if exists
-//		if (null != metadata.getExtension()) {
+//		if (null != metadata.getNeo4jExtension()) {
 //			try {
 //				// get the mapped metadata extension
 //				T metadataExtension = mapDocumentModelToMetadataExtension(
@@ -341,7 +341,7 @@
 //		try {
 //			// TODO: Correct this if possible ?
 //			@SuppressWarnings("unchecked")
-//			Class<T> extensionClass = (Class<T>) metadata.getExtension()
+//			Class<T> extensionClass = (Class<T>) metadata.getNeo4jExtension()
 //					.getClass();
 //
 //			// create new instance of metadata extension by reflection
