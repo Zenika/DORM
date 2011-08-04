@@ -45,26 +45,31 @@ ideaProject {
 // 1st step, introducing general properties
 versions = [
         slf4j           : '1.6.1',
-        logback         : '0.9.29'
+        logback         : '0.9.29',
+        jersey          : '1.8',
+        jackson         : '1.8.4'
 ]
 
 // 2nd step, introducing libraries
 libraries = [
-        slf4j_api:      'org.slf4j:slf4j-api:' + versions.slf4j,
-        slf4j_jcl:      'org.slf4j:jcl-over-slf4j:' + versions.slf4j,
-        slf4j_jul:      'org.slf4j:jul-to-slf4j:' + versions.slf4j,
-        slf4j_log4j:    'org.slf4j:log4j-over-slf4j:' + versions.slf4j,
-        logback_core:   'ch.qos.logback:logback-core:' + versions.logback,
-        logback_classic:'ch.qos.logback:logback-classic:' + versions.logback
+        slf4j_api           : 'org.slf4j:slf4j-api:' + versions.slf4j,
+        slf4j_jcl           : 'org.slf4j:jcl-over-slf4j:' + versions.slf4j,
+        slf4j_jul           : 'org.slf4j:jul-to-slf4j:' + versions.slf4j,
+        slf4j_log4j         : 'org.slf4j:log4j-over-slf4j:' + versions.slf4j,
+        logback_core        : 'ch.qos.logback:logback-core:' + versions.logback,
+        logback_classic     : 'ch.qos.logback:logback-classic:' + versions.logback,
+
+        jersey_server       : 'com.sun.jersey:jersey-server:' + versions.jersey,
+        jersey_json         : 'com.sun.jersey:jersey-json:' + versions.jersey,
+        jersey_client       : 'com.sun.jersey:jersey-client:' + versions.jersey,
+        jersey_multipart    : 'com.sun.jersey.contribs:jersey-multipart:' + versions.jersey,
+        jackson_mrbean      : 'org.codehaus.jackson:jackson-mrbean:' + versions.jackson
 ]
-
-
 
 subprojects {
 
     configurations.compile.transitive = true
 
-    jerseyVersion = '1.8'
     guiceVersion = '3.0'
     junitVersion = '4.8.2'
     morphiaVersion = '0.99'
@@ -83,11 +88,13 @@ subprojects {
         compile libraries.logback_core
         compile libraries.logback_classic
 
+        compile libraries.jersey_server
+        compile libraries.jersey_json
+        compile libraries.jersey_client
+        compile libraries.jersey_multipart
+        compile libraries.jackson_mrbean
+
         compile group: 'commons-io', name: 'commons-io', version: '2.0.1'
-        compile group: 'com.sun.jersey', name: 'jersey-server', version: jerseyVersion
-        compile group: 'com.sun.jersey', name: 'jersey-json', version: jerseyVersion
-        compile group: 'com.sun.jersey', name: 'jersey-client', version: jerseyVersion
-        compile group: 'com.sun.jersey.contribs', name: 'jersey-multipart', version: jerseyVersion
         compile group: 'com.google.inject', name: 'guice', version: guiceVersion
         compile group: 'com.google.code.morphia', name: 'morphia', version: morphiaVersion
 
