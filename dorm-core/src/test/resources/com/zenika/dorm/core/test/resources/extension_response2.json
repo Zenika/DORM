@@ -1,7 +1,7 @@
 {
     "outgoing_relationships" : "http://localhost:7474/db/data/node/1/relationships/out",
     "data" : {
-        "extension" : "dorm",
+        "extensionName" : "dorm",
         "qualifier" : "xercesImpl"
     },
     "traverse" : "http://localhost:7474/db/data/node/1/traverse/{returnType}",

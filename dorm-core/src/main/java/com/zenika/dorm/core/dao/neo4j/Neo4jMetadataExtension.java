@@ -44,7 +44,7 @@ public class Neo4jMetadataExtension extends Neo4jNode implements DormMetadataExt
         this.qualifier = qualifier;
     }
 
-    public void setExtension(String extension) {
+    public void setExtensionName(String extension) {
         this.extension = extension;
     }
 

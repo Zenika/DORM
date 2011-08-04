@@ -1,7 +1,7 @@
 {
     "outgoing_relationships" : "http://localhost:7474/db/data/node/19/relationships/out",
     "data" : {
-        "extension" : "dorm",
+        "extensionName" : "dorm",
         "qualifier" : "habi-base"
     },
     "traverse" : "http://localhost:7474/db/data/node/19/traverse/{returnType}",
