@@ -66,8 +66,8 @@ public class DormResource {
     @POST
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Path("{name}/{version}")
-    public Response createArtifactFromUri(@PathParam("name") String name,
-                                          @PathParam("version") String version) {
+    public Response pushMetadata(@PathParam("name") String name,
+                                 @PathParam("version") String version) {
 
         LOG.trace("POST with params : name = " + name + "; version = " + version);
 
@@ -90,10 +90,10 @@ public class DormResource {
     @POST
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Path("{name}/{version}/{filename}")
-    public Response createArtifactFromUri(@PathParam("name") String name,
-                                          @PathParam("version") String version,
-                                          @PathParam("filename") String filename,
-                                          @FormDataParam("file") File file) {
+    public Response pushMetadataAndFile(@PathParam("name") String name,
+                                        @PathParam("version") String version,
+                                        @PathParam("filename") String filename,
+                                        @FormDataParam("file") File file) {
 
         LOG.trace("POST with params : name = " + name + "; version = " + version);
 
@@ -120,12 +120,12 @@ public class DormResource {
     @POST
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Path("{name}/{version}/{filename}/{parent}/{usage}")
-    public Response createArtifactFromUri(@PathParam("name") String name,
-                                          @PathParam("version") String version,
-                                          @PathParam("filename") String filename,
-                                          @PathParam("parent") String parent,
-                                          @PathParam("usage") String usage,
-                                          @FormDataParam("file") File file) {
+    public Response pushMetadataAndFileWithParent(@PathParam("name") String name,
+                                                  @PathParam("version") String version,
+                                                  @PathParam("filename") String filename,
+                                                  @PathParam("parent") String parent,
+                                                  @PathParam("usage") String usage,
+                                                  @FormDataParam("file") File file) {
 
         DormMetadata metadata = getMetadata(name, version);
         DormFile dormFile = DefaultDormFile.create(filename, file);
