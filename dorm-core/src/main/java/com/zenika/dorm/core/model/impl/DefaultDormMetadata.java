@@ -33,7 +33,7 @@ public final class DefaultDormMetadata implements DormMetadata {
         this.version = version;
         this.extension = extension;
         this.qualifier = extension.getQualifier();
-        this.fullQualifier = this.qualifier + ":" + version + ":" + extension.getExtensionName();
+        this.fullQualifier = extension.getExtensionName() + "/" + this.qualifier + "/" + version;
     }
 
     @Override

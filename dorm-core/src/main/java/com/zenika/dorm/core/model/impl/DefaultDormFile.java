@@ -17,6 +17,10 @@ public final class DefaultDormFile implements DormFile {
     private final String extension;
     private final File file;
 
+    public static DormFile create(File file) {
+        return new DefaultDormFile(file);
+    }
+
     public static DefaultDormFile create(String filename, File file) {
         return new DefaultDormFile(FilenameUtils.getBaseName(filename), FilenameUtils.getExtension(filename),
                 file);
@@ -24,6 +28,17 @@ public final class DefaultDormFile implements DormFile {
 
     public static DefaultDormFile create(String name, String extension, File file) {
         return new DefaultDormFile(name, extension, file);
+    }
+
+    /**
+     * Temporary, do not use
+     *
+     * @param file
+     */
+    private DefaultDormFile(File file) {
+        this.name = file.getName();
+        this.file = file;
+        this.extension = null;
     }
 
     private DefaultDormFile(String name, String extension, File file) {

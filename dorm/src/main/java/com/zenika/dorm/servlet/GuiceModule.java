@@ -8,11 +8,14 @@ import com.zenika.dorm.core.model.impl.DefaultDormMetadataExtension;
 import com.zenika.dorm.core.processor.Processor;
 import com.zenika.dorm.core.processor.impl.DefaultProcessor;
 import com.zenika.dorm.core.processor.impl.DormProcessor;
+import com.zenika.dorm.core.repository.DormRepositoryManager;
+import com.zenika.dorm.core.repository.impl.IvyRepositoryManager;
 import com.zenika.dorm.core.service.DormService;
 import com.zenika.dorm.core.service.impl.DefaultDormService;
 import com.zenika.dorm.core.ws.resource.DormResource;
 import com.zenika.dorm.maven.model.impl.MavenMetadataExtension;
 import com.zenika.dorm.maven.processor.extension.MavenProcessor;
+import com.zenika.dorm.maven.ws.resource.MavenResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,13 +36,14 @@ public class GuiceModule extends JerseyServletModule {
         bindProcessor();
         bindService();
         bindDao();
+        bindRepository();
 
         serve("/*").with(GuiceContainer.class);
     }
 
     private void bindResources() {
         bind(DormResource.class);
-//        bind(MavenResource.class);
+        bind(MavenResource.class);
     }
 
     private void bindProcessor() {
@@ -55,5 +59,9 @@ public class GuiceModule extends JerseyServletModule {
 
     private void bindDao() {
         bind(DormDao.class).to(DormDaoNeo4j.class);
+    }
+
+    private void bindRepository() {
+//        bind(DormRepositoryManager.class).to(IvyRepositoryManager.class);
     }
 }
