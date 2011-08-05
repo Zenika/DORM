@@ -15,6 +15,7 @@ import org.codehaus.jackson.type.TypeReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.inject.Inject;
 import java.lang.reflect.Type;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -33,6 +34,7 @@ public class DormDaoNeo4j implements DormDao {
     private RequestExecutor executor;
     private Neo4jIndex index;
 
+    @Inject
     public DormDaoNeo4j() {
         this(new Neo4jRequestExecutor());
     }
