@@ -1,12 +1,8 @@
 package com.zenika.dorm.core.test.helper;
 
 import com.zenika.dorm.core.model.DormMetadataExtension;
-import com.zenika.dorm.core.model.DormRequest;
 import com.zenika.dorm.core.model.builder.DormRequestBuilder;
 import com.zenika.dorm.core.model.impl.DefaultDormMetadataExtension;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Fixtures for the dorm core model and the dorm extension
@@ -25,14 +21,6 @@ public class DormFixtures extends ExtensionFixtures {
     @Override
     public DormMetadataExtension getMetadataExtension() {
         return new DefaultDormMetadataExtension(name);
-    }
-
-    @Override
-    public Map<String, String> getRequestPropertiesForExtension() {
-        Map<String, String> properties = new HashMap<String, String>();
-        properties.put(DormRequest.ORIGIN, DefaultDormMetadataExtension.NAME);
-        properties.put(DefaultDormMetadataExtension.METADATA_NAME, name);
-        return properties;
     }
 
     @Override

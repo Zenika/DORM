@@ -44,6 +44,12 @@ public class MavenProcessorUnitTest extends AbstractUnitTest {
                 isEqualTo(entityNode.getChildren());
     }
 
+
+    @Test(expected = MavenException.class)
+    public void pushMaventArtifactWithoutFile() {
+        processor.push(fixtures.getRequestWithoutFile());
+    }
+
     @Test(expected = MavenException.class)
     public void pushDormArtifactWithoutRequiredMetadatas() {
 
