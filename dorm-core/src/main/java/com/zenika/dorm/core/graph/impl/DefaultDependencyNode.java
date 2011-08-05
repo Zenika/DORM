@@ -61,6 +61,12 @@ public final class DefaultDependencyNode implements DependencyNode {
     }
 
     @Override
+    public String toString() {
+        return "DefaultDependencyNode { " +
+                "Dependency = " + dependency + " }";
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof DefaultDependencyNode)) return false;

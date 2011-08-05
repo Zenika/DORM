@@ -7,16 +7,13 @@ import com.zenika.dorm.core.graph.impl.DefaultDependencyNode;
 import com.zenika.dorm.core.graph.impl.Usage;
 import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.core.model.DormMetadataExtension;
-import com.zenika.dorm.core.model.DormRequest;
+import com.zenika.dorm.core.model.builder.DormRequestBuilder;
 import com.zenika.dorm.core.model.impl.DefaultDormMetadata;
 import com.zenika.dorm.core.test.helper.ExtensionFixtures;
 import com.zenika.dorm.maven.model.impl.MavenMetadataExtension;
 import com.zenika.dorm.maven.processor.extension.MavenProcessor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>
@@ -40,13 +37,12 @@ public class MavenFixtures extends ExtensionFixtures {
     }
 
     @Override
-    public Map<String, String> getRequestPropertiesForExtension() {
-        Map<String, String> properties = new HashMap<String, String>();
-        properties.put(DormRequest.ORIGIN, origin);
-        properties.put(MavenMetadataExtension.METADATA_GROUPID, groupId);
-        properties.put(MavenMetadataExtension.METADATA_ARTIFACTID, artifactId);
-        properties.put(MavenMetadataExtension.METADATA_VERSIONID, versionId);
-        return properties;
+    public DormRequestBuilder getRequestBuilder() {
+        return super.getRequestBuilder()
+                .origin(origin)
+                .property(MavenMetadataExtension.METADATA_GROUPID, groupId)
+                .property(MavenMetadataExtension.METADATA_ARTIFACTID, artifactId)
+                .property(MavenMetadataExtension.METADATA_VERSIONID, versionId);
     }
 
     /**

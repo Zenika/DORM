@@ -6,16 +6,13 @@ import com.zenika.dorm.core.graph.impl.DefaultDependencyNode;
 import com.zenika.dorm.core.graph.impl.Usage;
 import com.zenika.dorm.core.model.DormRequest;
 import com.zenika.dorm.core.model.builder.DependencyBuilderFromRequest;
-import com.zenika.dorm.core.model.impl.DefaultDormRequest;
+import com.zenika.dorm.core.model.builder.DormRequestBuilder;
 import com.zenika.dorm.core.processor.impl.AbstractProcessorExtension;
 import com.zenika.dorm.maven.exception.MavenException;
 import com.zenika.dorm.maven.model.impl.MavenMetadataExtension;
 import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * The maven processor needs to create an abstract dependency node which will be the parent of the
@@ -60,13 +57,13 @@ public class MavenProcessor extends AbstractProcessorExtension {
                 MavenProcessor.ENTITY_TYPE);
 
         // entity dependencuy has no file
-        Map<String, String> entityProperties = new HashMap<String, String>();
-        entityProperties.put(DormRequest.FILENAME, null);
-        DormRequest entityRequest = DefaultDormRequest.createFromRequest(request, entityProperties);
+        DormRequest entityRequest = new DormRequestBuilder(request)
+                .file(null)
+                .filename(null)
+                .build();
 
-        Dependency rootDependency = new DependencyBuilderFromRequest(request,
-                entityExtension).file(null).build();
-        LOG.debug("Maven entity dependency = " + rootDependency);
+        Dependency entityDependency = new DependencyBuilderFromRequest(entityRequest, entityExtension).build();
+        LOG.debug("Maven entity dependency = " + entityDependency);
 
         // create the real maven dependency to push
         MavenMetadataExtension childExtension = new MavenMetadataExtension(groupId, artifactId, versionId, type);
@@ -77,7 +74,7 @@ public class MavenProcessor extends AbstractProcessorExtension {
         Dependency dependency = new DependencyBuilderFromRequest(request, childExtension).usage(childUsage).build();
         LOG.debug("Maven real dependency = " + dependency);
 
-        DependencyNode root = DefaultDependencyNode.create(rootDependency);
+        DependencyNode root = DefaultDependencyNode.create(entityDependency);
         DependencyNode node = DefaultDependencyNode.create(dependency);
         root.addChild(node);
 

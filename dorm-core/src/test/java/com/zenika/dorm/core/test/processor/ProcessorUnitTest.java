@@ -3,7 +3,6 @@ package com.zenika.dorm.core.test.processor;
 import com.zenika.dorm.core.exception.CoreException;
 import com.zenika.dorm.core.graph.DependencyNode;
 import com.zenika.dorm.core.model.DormRequest;
-import com.zenika.dorm.core.model.impl.DefaultDormRequest;
 import com.zenika.dorm.core.processor.Processor;
 import com.zenika.dorm.core.processor.ProcessorExtension;
 import com.zenika.dorm.core.processor.impl.DefaultProcessor;
@@ -49,7 +48,9 @@ public class ProcessorUnitTest extends AbstractUnitTest {
     @Test
     public void pushValidArtifact() {
 
-        DormRequest request = getTestRequest();
+        DormRequest request = fixtures.getRequestBuilder()
+                .origin("test")
+                .build();
 
         DependencyNode node = fixtures.getNodeWithFile();
 
@@ -68,19 +69,11 @@ public class ProcessorUnitTest extends AbstractUnitTest {
 
     @Test(expected = CoreException.class)
     public void pushWithUnkownExtension() {
-        Map<String, String> properties = fixtures.getRequestPropertiesWithoutFile();
-        properties.put(DormRequest.ORIGIN, "foo");
-        processor.push(DefaultDormRequest.create(properties));
-    }
 
-    /**
-     * Return request from fixture with the test extension
-     *
-     * @return the test dorm request
-     */
-    private DormRequest getTestRequest() {
-        Map<String, String> properties = fixtures.getRequestPropertiesWithoutFile();
-        properties.put(DormRequest.ORIGIN, "test");
-        return DefaultDormRequest.create(properties);
+        DormRequest request = fixtures.getRequestBuilder()
+                .origin("foo")
+                .build();
+
+        processor.push(request);
     }
 }

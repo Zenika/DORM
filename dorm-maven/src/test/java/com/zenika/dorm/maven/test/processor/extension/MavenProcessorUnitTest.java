@@ -3,7 +3,7 @@ package com.zenika.dorm.maven.test.processor.extension;
 
 import com.zenika.dorm.core.graph.DependencyNode;
 import com.zenika.dorm.core.model.DormRequest;
-import com.zenika.dorm.core.model.impl.DefaultDormRequest;
+import com.zenika.dorm.core.model.builder.DormRequestBuilder;
 import com.zenika.dorm.maven.exception.MavenException;
 import com.zenika.dorm.maven.model.impl.MavenMetadataExtension;
 import com.zenika.dorm.maven.processor.extension.MavenProcessor;
@@ -13,8 +13,6 @@ import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.Map;
 
 /**
  * Unit tests for the maven processor
@@ -33,7 +31,7 @@ public class MavenProcessorUnitTest extends AbstractUnitTest {
 
         DependencyNode entityNode = fixtures.getEntityNodeWithChild();
         DependencyNode childNode = entityNode.getChildren().iterator().next();
-        DormRequest request = fixtures.getRequestWithFileOldWay();
+        DormRequest request = fixtures.getRequestWithFile();
 
         LOG.trace("Test entity node = " + entityNode.getDependency());
         LOG.trace("Test real dependency node = " + childNode.getDependency());
@@ -47,17 +45,11 @@ public class MavenProcessorUnitTest extends AbstractUnitTest {
     }
 
     @Test(expected = MavenException.class)
-    public void pushMaventArtifactWithoutFile() {
-        processor.push(fixtures.getRequestWithoutFileOldWay());
-    }
-
-    @Test(expected = MavenException.class)
     public void pushDormArtifactWithoutRequiredMetadatas() {
 
-        Map<String, String> properties = fixtures.getRequestPropertiesWithFile();
-        properties.put(MavenMetadataExtension.METADATA_ARTIFACTID, null);
-
-        DormRequest request = DefaultDormRequest.create(properties, fixtures.getFile());
+        DormRequest request = new DormRequestBuilder(fixtures.getRequestWithFile())
+                .property(MavenMetadataExtension.METADATA_ARTIFACTID, null)
+                .build();
 
         processor.push(request);
     }

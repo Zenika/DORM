@@ -4,14 +4,11 @@ import com.zenika.dorm.core.exception.CoreException;
 import com.zenika.dorm.core.graph.DependencyNode;
 import com.zenika.dorm.core.model.DormRequest;
 import com.zenika.dorm.core.model.impl.DefaultDormMetadataExtension;
-import com.zenika.dorm.core.model.impl.DefaultDormRequest;
 import com.zenika.dorm.core.processor.impl.DormProcessor;
 import com.zenika.dorm.core.test.unit.AbstractUnitTest;
 import org.fest.assertions.Assertions;
 import org.junit.Test;
 import org.mockito.InjectMocks;
-
-import java.util.Map;
 
 /**
  * Unit tests for the dorm processor extension
@@ -28,7 +25,7 @@ public class DormProcessorUnitTest extends AbstractUnitTest {
     public void pushStandardDormArtifact() {
 
         DependencyNode node = fixtures.getNodeWithFile();
-        DormRequest request = fixtures.getRequestWithFileOldWay();
+        DormRequest request = fixtures.getRequestWithFile();
 
         Assertions.assertThat(processor.push(request)).isEqualTo(node);
     }
@@ -36,10 +33,9 @@ public class DormProcessorUnitTest extends AbstractUnitTest {
     @Test(expected = CoreException.class)
     public void pushDormArtifactWithoutRequiredMetadatas() {
 
-        Map<String, String> properties = fixtures.getRequestPropertiesWithFile();
-        properties.put(DefaultDormMetadataExtension.METADATA_NAME, null);
-
-        DormRequest request = DefaultDormRequest.create(properties, fixtures.getFile());
+        DormRequest request = fixtures.getRequestBuilderWithFile()
+                .property(DefaultDormMetadataExtension.METADATA_NAME, null)
+                .build();
 
         processor.push(request);
     }

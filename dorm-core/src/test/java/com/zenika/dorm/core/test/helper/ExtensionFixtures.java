@@ -43,13 +43,6 @@ public abstract class ExtensionFixtures {
      */
     public abstract DormMetadataExtension getMetadataExtension();
 
-    /**
-     * Return the request properties that are specific to the extension
-     *
-     * @return
-     */
-    public abstract Map<String, String> getRequestPropertiesForExtension();
-
     public DormRequestBuilder getRequestBuilder() {
         return new DormRequestBuilder(version, getMetadataExtension().getExtensionName());
     }
@@ -58,50 +51,12 @@ public abstract class ExtensionFixtures {
         return getRequestBuilder().filename(filenameWithExtension).file(file);
     }
 
-    /**
-     * @return
-     * @deprecated
-     */
-    public Map<String, String> getRequestPropertiesWithoutFile() {
-        Map<String, String> properties = new HashMap<String, String>();
-        properties.put(DormRequest.VERSION, version);
-
-        Map<String, String> extensionProperties = getRequestPropertiesForExtension();
-
-        if (null != extensionProperties) {
-            properties.putAll(extensionProperties);
-        } else {
-            // if no extension properties given, set a default extension name
-            properties.put(DormRequest.ORIGIN, DefaultDormMetadataExtension.NAME);
-        }
-
-        return properties;
-    }
-
-    /**
-     * @return
-     * @deprecated
-     */
-    public Map<String, String> getRequestPropertiesWithFile() {
-        Map<String, String> properties = getRequestPropertiesWithoutFile();
-        properties.put(DormRequest.FILENAME, filenameWithExtension);
-        return properties;
-    }
-
     public DormRequest getRequestWithoutFile() {
         return getRequestBuilder().build();
     }
 
     public DormRequest getRequestWithFile() {
         return getRequestBuilderWithFile().build();
-    }
-
-    public DormRequest getRequestWithoutFileOldWay() {
-        return DefaultDormRequest.create(getRequestPropertiesWithoutFile());
-    }
-
-    public DormRequest getRequestWithFileOldWay() {
-        return DefaultDormRequest.create(getRequestPropertiesWithFile(), file);
     }
 
     public DormMetadata getMetadata() {

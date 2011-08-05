@@ -16,70 +16,6 @@ import java.util.Map;
  */
 public final class DefaultDormRequest implements DormRequest {
 
-    /**
-     * @param properties
-     * @return
-     * @deprecated use the dorm request builder
-     */
-    public static DefaultDormRequest create(Map<String, String> properties) {
-        return new DefaultDormRequest(properties, null);
-    }
-
-    /**
-     * @param properties
-     * @param file
-     * @return
-     * @deprecated use the dorm request builder
-     */
-    public static DefaultDormRequest create(Map<String, String> properties, File file) {
-        return new DefaultDormRequest(properties, file);
-    }
-
-    /**
-     * @param request
-     * @param newProperties
-     * @return
-     * @deprecated use the dorm request builder
-     */
-    public static DefaultDormRequest createFromRequest(DormRequest request, Map<String, String> newProperties) {
-        return createFromRequest(request, newProperties, null);
-    }
-
-    /**
-     * @param request
-     * @param newFile
-     * @return
-     * @deprecated use the dorm request builder
-     */
-    public static DefaultDormRequest createFromRequest(DormRequest request, File newFile) {
-        return createFromRequest(request, null, newFile);
-    }
-
-    /**
-     * @param request
-     * @param newProperties
-     * @param newFile
-     * @return
-     * @deprecated use the dorm request builder
-     */
-    public static DefaultDormRequest createFromRequest(DormRequest request, Map<String,
-            String> newProperties, File newFile) {
-
-        Map<String, String> properties = new HashMap<String, String>(request.getProperties());
-
-        // override old properties which are given by the new properties
-        if (null != newProperties) {
-            properties.putAll(newProperties);
-        }
-
-        // if no new file given, use the old one
-        if (null == newFile) {
-            newFile = request.getFile();
-        }
-
-        return new DefaultDormRequest(properties, newFile);
-    }
-
     private final String version;
     private final String origin;
     private final String usage;
@@ -115,34 +51,6 @@ public final class DefaultDormRequest implements DormRequest {
         }
 
         this.properties.putAll(builder.getProperties());
-    }
-
-    /**
-     * @param properties
-     * @param file       optionnal, can be null
-     * @deprecated use the dorm request builder
-     */
-    private DefaultDormRequest(Map<String, String> properties, File file) {
-
-        version = properties.get(DormRequest.VERSION);
-        origin = properties.get(DormRequest.ORIGIN);
-        usage = properties.get(DormRequest.USAGE);
-
-        if (null == version || null == origin) {
-            throw new CoreException("Version and origin are required.");
-        }
-
-        String filename = properties.get(DormRequest.FILENAME);
-
-        if (null != filename && null != file) {
-            this.filename = filename;
-            this.file = file;
-        } else {
-            this.filename = null;
-            this.file = null;
-        }
-
-        this.properties.putAll(properties);
     }
 
     @Override
