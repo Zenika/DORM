@@ -6,25 +6,14 @@ import com.sun.jersey.api.client.WebResource;
 import com.sun.jersey.api.client.config.ClientConfig;
 import com.sun.jersey.api.client.config.DefaultClientConfig;
 import com.sun.jersey.api.json.JSONConfiguration;
-import com.zenika.dorm.core.dao.neo4j.Neo4jDependency;
-import com.zenika.dorm.core.dao.neo4j.Neo4jIndex;
-import com.zenika.dorm.core.dao.neo4j.Neo4jMetadata;
-import com.zenika.dorm.core.dao.neo4j.Neo4jMetadataExtension;
-import com.zenika.dorm.core.dao.neo4j.Neo4jNode;
-import com.zenika.dorm.core.dao.neo4j.Neo4jRelationship;
-import com.zenika.dorm.core.dao.neo4j.Neo4jResponse;
-import com.zenika.dorm.core.dao.neo4j.Neo4jTraverse;
-import org.codehaus.jackson.map.ObjectMapper;
+import com.zenika.dorm.core.dao.neo4j.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import sun.rmi.runtime.Log;
 
 import javax.ws.rs.core.MediaType;
 import java.lang.reflect.Type;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -72,8 +61,14 @@ public class Neo4jRequestExecutor implements RequestExecutor {
     @Override
     public Neo4jIndex post(Neo4jIndex index) {
         logger.trace(Neo4jIndex.INDEX_PATH);
-        index = resource.path(Neo4jIndex.INDEX_PATH).accept(MediaType.APPLICATION_JSON)
-                .type(MediaType.APPLICATION_JSON).post(Neo4jIndex.class, index);
+
+        try {
+            index = resource.path(Neo4jIndex.INDEX_PATH).accept(MediaType.APPLICATION_JSON)
+                    .type(MediaType.APPLICATION_JSON).post(Neo4jIndex.class, index);
+        } catch (Exception e) {
+            logger.info("Cannot establish connection to the neo4j server", e);
+        }
+
         logRequest("POST", resource);
         return index;
     }
@@ -122,7 +117,8 @@ public class Neo4jRequestExecutor implements RequestExecutor {
         Neo4jResponse<T> response = resource
                 .uri(uri)
                 .accept(MediaType.APPLICATION_JSON)
-                .get(new GenericType<Neo4jResponse<T>>() {});
+                .get(new GenericType<Neo4jResponse<T>>() {
+                });
         T node = response.getData();
         node.setResponse(response);
         node.setProperties();
@@ -130,7 +126,7 @@ public class Neo4jRequestExecutor implements RequestExecutor {
         return node;
     }
 
-    public String test(){
+    public String test() {
         return "1";
     }
 

@@ -1,6 +1,7 @@
 package com.zenika.dorm.core.dao.neo4j;
 
 
+import com.google.inject.Inject;
 import com.zenika.dorm.core.dao.DormDao;
 import com.zenika.dorm.core.dao.neo4j.util.Neo4jRequestExecutor;
 import com.zenika.dorm.core.dao.neo4j.util.RequestExecutor;
@@ -15,7 +16,6 @@ import org.codehaus.jackson.type.TypeReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.inject.Inject;
 import java.lang.reflect.Type;
 import java.net.URI;
 import java.net.URISyntaxException;

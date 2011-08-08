@@ -11,9 +11,6 @@ import com.zenika.dorm.core.model.DormMetadata;
  */
 public interface DormDao {
 
-    // todo: remove this when dao will be correct
-    public void init();
-
     public Boolean push(Dependency node);
 
     public Boolean push(DependencyNode node);

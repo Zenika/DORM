@@ -57,7 +57,7 @@ public class Neo4jDaoTest {
         provider = new Neo4jDaoTestProvider();
         executor = mock(Neo4jRequestExecutor.class);
         setUpMethod();
-        dao = new DormDaoNeo4j(executor);
+//        dao = new DormDaoNeo4j(executor);
 //        dao.init();
 //        extension19Response = new DefaultDormMetadataExtension("habi-base");
 //        metadata20Response = DefaultDormMetadata.create("0.6", extension19Response);
