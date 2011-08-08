@@ -35,14 +35,14 @@ public class Neo4jMetadata extends Neo4jNode implements DormMetadata {
     public Neo4jMetadata(DormMetadata metadata) {
         qualifier = metadata.getQualifier();
         version = metadata.getVersion();
-        fullQualifier = metadata.getFullQualifier();
+        fullQualifier = convertFullqualifier(metadata.getFullQualifier());
         extension = new Neo4jMetadataExtension(metadata.getExtension());
     }
 
     public static URI generateIndexURI(String fullQualifier, Neo4jIndex index) throws URISyntaxException {
         String template = index.getTemplate();
         template = template.replace("{key}", "fullqualifier");
-        template = template.replace("{value}", fullQualifier);
+        template = template.replace("{value}", convertFullqualifier(fullQualifier));
         return new URI(template);
     }
 
@@ -133,5 +133,9 @@ public class Neo4jMetadata extends Neo4jNode implements DormMetadata {
         result = 31 * result + (version != null ? version.hashCode() : 0);
         result = 31 * result + (fullQualifier != null ? fullQualifier.hashCode() : 0);
         return result;
+    }
+
+    public static String convertFullqualifier(String str){
+        return str.replace("/", ";");
     }
 }
