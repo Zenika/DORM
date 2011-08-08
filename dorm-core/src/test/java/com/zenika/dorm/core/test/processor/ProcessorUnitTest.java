@@ -58,13 +58,13 @@ public class ProcessorUnitTest extends AbstractUnitTest {
         given(extension.push(request)).willReturn(node);
 
         // service stores the node successfully
-        given(service.pushNode(node)).willReturn(true);
+        given(service.push(node)).willReturn(true);
 
         // if store was done successfully then processor should also return true
         Assertions.assertThat(processor.push(request)).isTrue();
 
         verify(extension).push(request);
-        verify(service).pushNode(node);
+        verify(service).push(node);
     }
 
     @Test(expected = CoreException.class)

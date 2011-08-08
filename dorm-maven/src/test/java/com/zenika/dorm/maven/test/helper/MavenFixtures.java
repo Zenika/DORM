@@ -7,6 +7,7 @@ import com.zenika.dorm.core.graph.impl.DefaultDependencyNode;
 import com.zenika.dorm.core.graph.impl.Usage;
 import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.core.model.DormMetadataExtension;
+import com.zenika.dorm.core.model.DormRequest;
 import com.zenika.dorm.core.model.builder.DormRequestBuilder;
 import com.zenika.dorm.core.model.impl.DefaultDormMetadata;
 import com.zenika.dorm.core.test.helper.ExtensionFixtures;
@@ -43,6 +44,12 @@ public class MavenFixtures extends ExtensionFixtures {
                 .property(MavenMetadataExtension.METADATA_GROUPID, groupId)
                 .property(MavenMetadataExtension.METADATA_ARTIFACTID, artifactId)
                 .property(MavenMetadataExtension.METADATA_VERSIONID, versionId);
+    }
+
+    public DormRequest getRequestWithType() {
+        return getRequestBuilder()
+                .property(MavenMetadataExtension.METADATA_TYPE, type)
+                .build();
     }
 
     /**

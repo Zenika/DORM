@@ -2,6 +2,7 @@ package com.zenika.dorm.core.processor.impl;
 
 import com.zenika.dorm.core.exception.CoreException;
 import com.zenika.dorm.core.graph.DependencyNode;
+import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.core.model.DormMetadataExtension;
 import com.zenika.dorm.core.model.DormRequest;
 import com.zenika.dorm.core.model.builder.DependencyNodeBuilderFromRequest;
@@ -41,5 +42,10 @@ public class DormProcessor extends AbstractProcessorExtension {
         LOG.debug("Dorm dependency = " + node.getDependency());
 
         return node;
+    }
+
+    @Override
+    public DormMetadata getMetadata(DormRequest request) {
+        throw new UnsupportedOperationException();
     }
 }

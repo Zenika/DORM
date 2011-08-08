@@ -1,6 +1,6 @@
 package com.zenika.dorm.core.processor;
 
-import com.google.inject.Singleton;
+import com.zenika.dorm.core.graph.Dependency;
 import com.zenika.dorm.core.model.DormRequest;
 
 /**
@@ -11,4 +11,6 @@ import com.zenika.dorm.core.model.DormRequest;
 public interface Processor {
 
     public Boolean push(DormRequest request);
+
+    public Dependency get(DormRequest request);
 }

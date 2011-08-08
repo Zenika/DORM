@@ -10,7 +10,9 @@ import com.zenika.dorm.core.model.DormMetadata;
  */
 public interface DormService {
 
-    public Boolean pushNode(DependencyNode node);
+    public Boolean push(DependencyNode node);
 
-    public Dependency getByMetadata(DormMetadata metadata, Usage usage);
+    public DependencyNode get(DependencyNode node);
+
+    public Dependency getDependency(DormMetadata metadata, Usage usage);
 }

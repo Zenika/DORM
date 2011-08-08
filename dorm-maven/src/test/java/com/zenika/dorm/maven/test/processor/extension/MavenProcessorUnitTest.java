@@ -2,6 +2,7 @@ package com.zenika.dorm.maven.test.processor.extension;
 
 
 import com.zenika.dorm.core.graph.DependencyNode;
+import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.core.model.DormRequest;
 import com.zenika.dorm.core.model.builder.DormRequestBuilder;
 import com.zenika.dorm.maven.exception.MavenException;
@@ -58,6 +59,12 @@ public class MavenProcessorUnitTest extends AbstractUnitTest {
                 .build();
 
         processor.push(request);
+    }
+
+    @Test
+    public void getMavenMetadataFromRequest() {
+        DormMetadata metadata = processor.getMetadata(fixtures.getRequestWithType());
+        Assertions.assertThat(metadata).isEqualTo(fixtures.getMetadata());
     }
 
 }

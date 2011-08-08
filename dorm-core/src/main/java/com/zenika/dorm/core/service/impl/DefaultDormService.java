@@ -29,15 +29,18 @@ public class DefaultDormService implements DormService {
      * @return
      */
     @Override
-    public Boolean pushNode(DependencyNode node) {
+    public Boolean push(DependencyNode node) {
         return dao.push(node);
     }
 
     @Override
-    public Dependency getByMetadata(DormMetadata metadata, Usage usage) {
-//        return dao.getByMetadata(metadata, usage);
+    public DependencyNode get(DependencyNode node) {
+        throw new UnsupportedOperationException();
+    }
 
-        DormFile file = repositoryManager.get(metadata);
+    @Override
+    public Dependency getDependency(DormMetadata metadata, Usage usage) {
+        DormFile file = repository.get(metadata);
         return DefaultDependency.create(metadata, file);
     }
 }

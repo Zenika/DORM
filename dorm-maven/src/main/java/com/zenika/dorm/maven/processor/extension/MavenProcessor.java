@@ -4,9 +4,11 @@ import com.zenika.dorm.core.graph.Dependency;
 import com.zenika.dorm.core.graph.DependencyNode;
 import com.zenika.dorm.core.graph.impl.DefaultDependencyNode;
 import com.zenika.dorm.core.graph.impl.Usage;
+import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.core.model.DormRequest;
 import com.zenika.dorm.core.model.builder.DependencyBuilderFromRequest;
 import com.zenika.dorm.core.model.builder.DormRequestBuilder;
+import com.zenika.dorm.core.model.builder.MetadataBuilderFromRequest;
 import com.zenika.dorm.core.processor.impl.AbstractProcessorExtension;
 import com.zenika.dorm.maven.exception.MavenException;
 import com.zenika.dorm.maven.model.impl.MavenMetadataExtension;
@@ -32,20 +34,13 @@ public class MavenProcessor extends AbstractProcessorExtension {
     @Override
     public DependencyNode push(DormRequest request) {
 
-        LOG.debug("Maven request to push = " + request);
+        LOG.debug("Maven push with request : " + request);
 
         if (!request.hasFile()) {
             throw new MavenException("File is required.");
         }
 
-        // get the maven type from the filename
-        String type = FilenameUtils.getExtension(request.getFilename());
-
-        LOG.debug("Type of the maven file = " + type);
-
-        if (!type.equalsIgnoreCase("jar") && type.equalsIgnoreCase("pom") && type.equalsIgnoreCase("sha1")) {
-            throw new MavenException("Invalid maven type : " + type);
-        }
+        String type = getRequestType(request);
 
         // get the maven metadatas from the request
         String groupId = request.getProperty(MavenMetadataExtension.METADATA_GROUPID);
@@ -79,5 +74,43 @@ public class MavenProcessor extends AbstractProcessorExtension {
         root.addChild(node);
 
         return root;
+    }
+
+    @Override
+    public DormMetadata getMetadata(DormRequest request) {
+
+        LOG.debug("Maven get with request : " + request);
+
+        String type = request.getProperty(MavenMetadataExtension.METADATA_TYPE);
+        checkMavenType(type);
+
+        String groupId = request.getProperty(MavenMetadataExtension.METADATA_GROUPID);
+        String artifactId = request.getProperty(MavenMetadataExtension.METADATA_ARTIFACTID);
+        String versionId = request.getProperty(MavenMetadataExtension.METADATA_VERSIONID);
+
+
+        MavenMetadataExtension extension = new MavenMetadataExtension(groupId, artifactId, versionId,
+                type);
+        LOG.debug("Maven metadata extension from request : " + extension);
+
+        DormMetadata metadata = new MetadataBuilderFromRequest(request, extension).build();
+        LOG.debug("Maven metadata from request : " + metadata);
+
+        return metadata;
+    }
+
+    private String getRequestType(DormRequest request) {
+
+        // get the maven type from the filename
+        String type = FilenameUtils.getExtension(request.getFilename());
+        checkMavenType(type);
+        return type;
+    }
+
+    private void checkMavenType(String type) {
+        LOG.debug("Type of the maven file = " + type);
+        if (!type.equalsIgnoreCase("jar") && type.equalsIgnoreCase("pom") && type.equalsIgnoreCase("sha1")) {
+            throw new MavenException("Invalid maven type : " + type);
+        }
     }
 }
