@@ -19,7 +19,7 @@ public class DefaultDormService implements DormService {
     @Inject
     private DormDao dao;
 
-//    @Inject
+    @Inject
     private DormRepositoryManager repositoryManager;
 
     /**

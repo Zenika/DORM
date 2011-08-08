@@ -8,7 +8,6 @@ import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.core.model.impl.DefaultDormFile;
 import com.zenika.dorm.core.repository.DormRepositoryManager;
 import org.apache.ivy.plugins.repository.file.FileRepository;
-import org.aspectj.lang.annotation.Before;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,10 +28,15 @@ public class IvyRepositoryManager implements DormRepositoryManager {
 
     private FileRepository repository;
 
-//    @Inject
+    @Inject
     public IvyRepositoryManager() {
-        BASEDIR.mkdirs();
-        repository = new FileRepository(BASEDIR.getAbsoluteFile());
+        try {
+            BASEDIR.mkdirs();
+            repository = new FileRepository(BASEDIR.getAbsoluteFile());
+        } catch (Exception e) {
+            LOG.info("Cannot initiate the file repository", e);
+            throw new RepositoryException("Cannot initiate the file repository", e);
+        }
     }
 
     @Override

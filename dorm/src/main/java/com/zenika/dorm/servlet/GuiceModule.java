@@ -62,6 +62,6 @@ public class GuiceModule extends JerseyServletModule {
     }
 
     private void bindRepository() {
-//        bind(DormRepositoryManager.class).to(IvyRepositoryManager.class);
+        bind(DormRepositoryManager.class).to(IvyRepositoryManager.class);
     }
 }
