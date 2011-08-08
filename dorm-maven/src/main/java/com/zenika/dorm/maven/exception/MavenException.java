@@ -1,11 +1,14 @@
 package com.zenika.dorm.maven.exception;
 
-import com.zenika.dorm.core.exception.ArtifactException;
+import com.zenika.dorm.core.exception.CoreException;
 
-@SuppressWarnings("serial")
-public class MavenException extends ArtifactException {
+public class MavenException extends CoreException {
 
-	public MavenException(String message) {
-		super(message);
-	}
+    public MavenException(String message) {
+        super(message);
+    }
+
+    public MavenException(String message, Throwable throwable) {
+        super(message, throwable);
+    }
 }

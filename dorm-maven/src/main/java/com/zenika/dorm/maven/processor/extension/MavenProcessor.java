@@ -41,9 +41,7 @@ public class MavenProcessor extends AbstractProcessorExtension {
         }
 
         String type = getRequestType(request);
-
-        // get the maven metadatas from the request
-        String groupId = request.getProperty(MavenMetadataExtension.METADATA_GROUPID);
+        String groupId = getGroupId(request);
         String artifactId = request.getProperty(MavenMetadataExtension.METADATA_ARTIFACTID);
         String versionId = request.getProperty(MavenMetadataExtension.METADATA_VERSIONID);
 
@@ -84,10 +82,9 @@ public class MavenProcessor extends AbstractProcessorExtension {
         String type = request.getProperty(MavenMetadataExtension.METADATA_TYPE);
         checkMavenType(type);
 
-        String groupId = request.getProperty(MavenMetadataExtension.METADATA_GROUPID);
+        String groupId = getGroupId(request);
         String artifactId = request.getProperty(MavenMetadataExtension.METADATA_ARTIFACTID);
         String versionId = request.getProperty(MavenMetadataExtension.METADATA_VERSIONID);
-
 
         MavenMetadataExtension extension = new MavenMetadataExtension(groupId, artifactId, versionId,
                 type);
@@ -100,17 +97,28 @@ public class MavenProcessor extends AbstractProcessorExtension {
     }
 
     private String getRequestType(DormRequest request) {
-
-        // get the maven type from the filename
         String type = FilenameUtils.getExtension(request.getFilename());
         checkMavenType(type);
         return type;
     }
 
     private void checkMavenType(String type) {
+
+        if (type == null) {
+            throw new MavenException("Type is required (jar, pom, etc...)");
+        }
+
         LOG.debug("Type of the maven file = " + type);
         if (!type.equalsIgnoreCase("jar") && type.equalsIgnoreCase("pom") && type.equalsIgnoreCase("sha1")) {
             throw new MavenException("Invalid maven type : " + type);
+        }
+    }
+
+    private String getGroupId(DormRequest request) {
+        try {
+            return request.getProperty(MavenMetadataExtension.METADATA_GROUPID).replace('/', '.');
+        } catch (NullPointerException e) {
+            throw new MavenException("GroupId is required", e);
         }
     }
 }

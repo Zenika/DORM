@@ -26,7 +26,7 @@ public class MavenFixtures extends ExtensionFixtures {
     /**
      * Maven metadata extension
      */
-    private String groupId = "testgroup";
+    private String groupId = "testgroup1.testgroup2";
     private String artifactId = "testartifact";
     private String versionId = "testversion";
     private String type = "jar";
