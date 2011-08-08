@@ -11,8 +11,6 @@ public interface DormRepositoryResource {
 
     public String getPathFromRepository();
 
-    public String getFilename();
-
     public File getFile();
 
     public DormRepository getRepository();

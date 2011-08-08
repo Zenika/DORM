@@ -8,7 +8,7 @@ import com.zenika.dorm.core.graph.impl.DefaultDependency;
 import com.zenika.dorm.core.graph.impl.Usage;
 import com.zenika.dorm.core.model.DormFile;
 import com.zenika.dorm.core.model.DormMetadata;
-import com.zenika.dorm.core.repository.DormRepositoryManager;
+import com.zenika.dorm.core.repository.DormRepository;
 import com.zenika.dorm.core.service.DormService;
 
 /**
@@ -20,7 +20,7 @@ public class DefaultDormService implements DormService {
     private DormDao dao;
 
     @Inject
-    private DormRepositoryManager repositoryManager;
+    private DormRepository repository;
 
     /**
      * Store metadata on the database and file on the filesystem

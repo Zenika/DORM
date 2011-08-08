@@ -11,16 +11,16 @@ import java.io.File;
  */
 public class DefaultDormRepositoryResource implements DormRepositoryResource {
 
-    private DormFile file;
+    private File file;
     private DormRepository repository;
     private String path;
 
-    public DefaultDormRepositoryResource(DormFile file, DormRepository repository) {
+    public DefaultDormRepositoryResource(File file, DormRepository repository) {
         this.file = file;
         this.repository = repository;
     }
 
-    public DefaultDormRepositoryResource(DormFile file, DormRepository repository, String path) {
+    public DefaultDormRepositoryResource(File file, DormRepository repository, String path) {
         this(file, repository);
         this.path = path;
     }
@@ -36,13 +36,8 @@ public class DefaultDormRepositoryResource implements DormRepositoryResource {
     }
 
     @Override
-    public String getFilename() {
-        return file.getFilename();
-    }
-
-    @Override
     public File getFile() {
-        return file.getFile();
+        return file;
     }
 
     @Override

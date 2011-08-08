@@ -8,8 +8,8 @@ import com.zenika.dorm.core.model.impl.DefaultDormMetadataExtension;
 import com.zenika.dorm.core.processor.Processor;
 import com.zenika.dorm.core.processor.impl.DefaultProcessor;
 import com.zenika.dorm.core.processor.impl.DormProcessor;
-import com.zenika.dorm.core.repository.DormRepositoryManager;
-import com.zenika.dorm.core.repository.impl.IvyRepositoryManager;
+import com.zenika.dorm.core.repository.DormRepository;
+import com.zenika.dorm.core.repository.impl.DefaultDormRepository;
 import com.zenika.dorm.core.service.DormService;
 import com.zenika.dorm.core.service.impl.DefaultDormService;
 import com.zenika.dorm.core.ws.resource.DormResource;
@@ -62,6 +62,6 @@ public class GuiceModule extends JerseyServletModule {
     }
 
     private void bindRepository() {
-        bind(DormRepositoryManager.class).to(IvyRepositoryManager.class);
+        bind(DormRepository.class).to(DefaultDormRepository.class);
     }
 }
