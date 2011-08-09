@@ -104,6 +104,7 @@ public class Neo4jRequestExecutor implements RequestExecutor {
 
     @Override
     public <T extends Neo4jNode> T getNode(URI uri, Type type) {
+
         Neo4jResponse<T> response = resource.uri(uri).accept(MediaType.APPLICATION_JSON).get(new GenericType<Neo4jResponse<T>>(type));
         T node = response.getData();
         node.setResponse(response);
