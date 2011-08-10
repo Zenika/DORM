@@ -1,3 +1,7 @@
+aetherVersion = '1.12'
+mavenVersion = '3.0.2'
+wagonVersion = '1.0-beta-7'
+
 ideaModule {
     javaVersion = "1.7"
 }
@@ -11,4 +15,24 @@ project {
 dependencies {
     // Internal dependencies
     compile project(':dorm-core')
+
+    // External dependencies
+//    compile group: 'org.sonatype.aether', name: 'aether-api', version: aetherVersion
+//    compile group: 'org.sonatype.aether', name: 'aether-spi', version: aetherVersion
+//    compile group: 'org.sonatype.aether', name: 'aether-util', version: aetherVersion
+//    compile group: 'org.sonatype.aether', name: 'aether-impl', version: aetherVersion
+//    compile group: 'org.sonatype.aether', name: 'aether-connector-file', version: aetherVersion
+//    compile group: 'org.sonatype.aether', name: 'aether-connector-wagon', version: aetherVersion
+//
+//    compile group: 'org.apache.maven', name: 'maven-aether-provider', version: mavenVersion
+//
+//    compile group: 'org.apache.maven.wagon', name: 'wagon-provider-api', version: wagonVersion
+//    compile group: 'org.apache.maven.wagon', name: 'wagon-http-lightweight', version: wagonVersion
+//
+//    compile group: 'org.codehaus.plexus', name: 'plexus-container-default', version: '1.5.5'
+//    compile group: 'org.codehaus.plexus', name: 'plexus-utils', version: '2.0.5'
+    compile group: 'org.apache.maven', name: 'maven-model', version: "3.0.3"
+
+    // Test
+    testCompile project(path: ':dorm-core', configuration: 'sharedTests')
 }
