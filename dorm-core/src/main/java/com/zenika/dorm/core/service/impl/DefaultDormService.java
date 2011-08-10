@@ -2,10 +2,10 @@ package com.zenika.dorm.core.service.impl;
 
 import com.google.inject.Inject;
 import com.zenika.dorm.core.dao.DormDao;
-import com.zenika.dorm.core.graph.Dependency;
-import com.zenika.dorm.core.graph.DependencyNode;
-import com.zenika.dorm.core.graph.impl.DefaultDependency;
-import com.zenika.dorm.core.graph.impl.Usage;
+import com.zenika.dorm.core.model.Dependency;
+import com.zenika.dorm.core.model.DependencyNode;
+import com.zenika.dorm.core.model.impl.DefaultDependency;
+import com.zenika.dorm.core.model.impl.Usage;
 import com.zenika.dorm.core.model.DormFile;
 import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.core.repository.DormRepository;

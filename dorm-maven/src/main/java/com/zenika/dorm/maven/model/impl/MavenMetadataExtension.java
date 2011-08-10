@@ -17,41 +17,41 @@ import java.util.Map;
  */
 public final class MavenMetadataExtension implements DormMetadataExtension {
 
-    public static final String NAME = "maven";
+    public static final String EXTENSION_NAME = "maven";
 
     /**
      * Metadata names
      */
     public static final String METADATA_GROUPID = "groupId";
     public static final String METADATA_ARTIFACTID = "artifactId";
-    public static final String METADATA_VERSIONID = "versionId";
+    public static final String METADATA_VERSION = "version";
     public static final String METADATA_TYPE = "type";
 
     private final String groupId;
     private final String artifactId;
-    private final String versionId;
+    private final String version;
     private final String type;
 
-    public MavenMetadataExtension(String groupId, String artifactId, String versionId, String type) {
+    public MavenMetadataExtension(String groupId, String artifactId, String version, String type) {
 
-        if (null == groupId || null == artifactId || null == versionId || null == type) {
+        if (null == groupId || null == artifactId || null == version || null == type) {
             throw new MavenException("Following metadatas are required : groupId, artifactId, versionId, type");
         }
 
         this.groupId = groupId;
         this.artifactId = artifactId;
-        this.versionId = versionId;
+        this.version = version;
         this.type = type;
     }
 
     @Override
     public String getQualifier() {
-        return groupId + ":" + artifactId + ":" + versionId + ":" + type;
+        return groupId + ":" + artifactId + ":" + version + ":" + type;
     }
 
     @Override
     public String getExtensionName() {
-        return NAME;
+        return EXTENSION_NAME;
     }
 
     public String getGroupId() {
@@ -62,8 +62,8 @@ public final class MavenMetadataExtension implements DormMetadataExtension {
         return artifactId;
     }
 
-    public String getVersionId() {
-        return versionId;
+    public String getVersion() {
+        return version;
     }
 
     public String getType() {
@@ -81,7 +81,7 @@ public final class MavenMetadataExtension implements DormMetadataExtension {
             return false;
         if (groupId != null ? !groupId.equals(extension.groupId) : extension.groupId != null) return false;
         if (type != null ? !type.equals(extension.type) : extension.type != null) return false;
-        if (versionId != null ? !versionId.equals(extension.versionId) : extension.versionId != null)
+        if (version != null ? !version.equals(extension.version) : extension.version != null)
             return false;
 
         return true;
@@ -91,7 +91,7 @@ public final class MavenMetadataExtension implements DormMetadataExtension {
     public int hashCode() {
         int result = groupId != null ? groupId.hashCode() : 0;
         result = 31 * result + (artifactId != null ? artifactId.hashCode() : 0);
-        result = 31 * result + (versionId != null ? versionId.hashCode() : 0);
+        result = 31 * result + (version != null ? version.hashCode() : 0);
         result = 31 * result + (type != null ? type.hashCode() : 0);
         return result;
     }
@@ -99,7 +99,7 @@ public final class MavenMetadataExtension implements DormMetadataExtension {
     @Override
     public DormMetadataExtension createFromMap(Map<String, String> properties) {
         return new MavenMetadataExtension(properties.get(METADATA_GROUPID),
-                properties.get(METADATA_ARTIFACTID), properties.get(METADATA_VERSIONID),
+                properties.get(METADATA_ARTIFACTID), properties.get(METADATA_VERSION),
                 properties.get(METADATA_TYPE));
     }
 }

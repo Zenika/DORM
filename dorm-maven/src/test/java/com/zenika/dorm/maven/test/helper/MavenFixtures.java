@@ -1,15 +1,12 @@
 package com.zenika.dorm.maven.test.helper;
 
-import com.zenika.dorm.core.graph.Dependency;
-import com.zenika.dorm.core.graph.DependencyNode;
-import com.zenika.dorm.core.graph.impl.DefaultDependency;
-import com.zenika.dorm.core.graph.impl.DefaultDependencyNode;
-import com.zenika.dorm.core.graph.impl.Usage;
-import com.zenika.dorm.core.model.DormMetadata;
-import com.zenika.dorm.core.model.DormMetadataExtension;
-import com.zenika.dorm.core.model.DormRequest;
+import com.zenika.dorm.core.model.*;
+import com.zenika.dorm.core.model.DependencyNode;
+import com.zenika.dorm.core.model.impl.DefaultDependency;
+import com.zenika.dorm.core.model.impl.*;
+import com.zenika.dorm.core.model.impl.DefaultDependencyNode;
 import com.zenika.dorm.core.model.builder.DormRequestBuilder;
-import com.zenika.dorm.core.model.impl.DefaultDormMetadata;
+import com.zenika.dorm.core.model.impl.Usage;
 import com.zenika.dorm.core.test.helper.ExtensionFixtures;
 import com.zenika.dorm.maven.model.impl.MavenMetadataExtension;
 import com.zenika.dorm.maven.processor.extension.MavenProcessor;
@@ -28,13 +25,18 @@ public class MavenFixtures extends ExtensionFixtures {
      */
     private String groupId = "testgroup1.testgroup2";
     private String artifactId = "testartifact";
-    private String versionId = "testversion";
+    private String mavenVersion = "1.0-SNAPSHOT";
     private String type = "jar";
-    private String origin = MavenMetadataExtension.NAME;
+    private String origin = MavenMetadataExtension.EXTENSION_NAME;
 
     @Override
     public DormMetadataExtension getMetadataExtension() {
-        return new MavenMetadataExtension(groupId, artifactId, versionId, type);
+        return new MavenMetadataExtension(groupId, artifactId, mavenVersion, type);
+    }
+
+    @Override
+    public String getRequestVersion() {
+        return mavenVersion;
     }
 
     @Override
@@ -43,7 +45,7 @@ public class MavenFixtures extends ExtensionFixtures {
                 .origin(origin)
                 .property(MavenMetadataExtension.METADATA_GROUPID, groupId)
                 .property(MavenMetadataExtension.METADATA_ARTIFACTID, artifactId)
-                .property(MavenMetadataExtension.METADATA_VERSIONID, versionId);
+                .property(MavenMetadataExtension.METADATA_VERSION, mavenVersion);
     }
 
     public DormRequest getRequestWithType() {
@@ -61,19 +63,19 @@ public class MavenFixtures extends ExtensionFixtures {
     @Override
     public Dependency getDependencyWithFile() {
 
-        Usage usage = Usage.createInternal(MavenMetadataExtension.NAME);
+        Usage usage = Usage.createInternal(MavenMetadataExtension.EXTENSION_NAME);
         LOG.trace("Maven dependency fixture has the internal usage = " + usage);
 
         return DefaultDependency.create(getMetadata(), usage, getDormFile());
     }
 
     public MavenMetadataExtension getEntityExtension() {
-        return new MavenMetadataExtension(groupId, artifactId, versionId,
+        return new MavenMetadataExtension(groupId, artifactId, mavenVersion,
                 MavenProcessor.ENTITY_TYPE);
     }
 
     public DormMetadata getEntityMetadata() {
-        return DefaultDormMetadata.create(getVersion(), getEntityExtension());
+        return DefaultDormMetadata.create(mavenVersion, getEntityExtension());
     }
 
     /**
@@ -99,8 +101,8 @@ public class MavenFixtures extends ExtensionFixtures {
         return artifactId;
     }
 
-    public String getVersionId() {
-        return versionId;
+    public String getMavenVersion() {
+        return mavenVersion;
     }
 
     public String getType() {

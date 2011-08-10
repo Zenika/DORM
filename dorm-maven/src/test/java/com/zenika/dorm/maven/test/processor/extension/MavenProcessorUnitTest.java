@@ -1,7 +1,7 @@
 package com.zenika.dorm.maven.test.processor.extension;
 
 
-import com.zenika.dorm.core.graph.DependencyNode;
+import com.zenika.dorm.core.model.DependencyNode;
 import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.core.model.DormRequest;
 import com.zenika.dorm.core.model.builder.DormRequestBuilder;

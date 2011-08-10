@@ -1,20 +1,5 @@
 package com.zenika.dorm.core.test.dao.neo4j;
 
-import com.zenika.dorm.core.dao.neo4j.DormDaoNeo4j;
-import com.zenika.dorm.core.graph.Dependency;
-import com.zenika.dorm.core.graph.DependencyNode;
-import com.zenika.dorm.core.graph.impl.DefaultDependency;
-import com.zenika.dorm.core.graph.impl.DefaultDependencyNode;
-import com.zenika.dorm.core.graph.impl.Usage;
-import com.zenika.dorm.core.model.DormMetadata;
-import com.zenika.dorm.core.model.DormMetadataExtension;
-import com.zenika.dorm.core.model.impl.DefaultDormMetadata;
-import com.zenika.dorm.core.model.impl.DefaultDormMetadataExtension;
-import org.junit.Test;
-
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * @author Antoine ROUAZE <antoine.rouaze AT zenika.com>
  */

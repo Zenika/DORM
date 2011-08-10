@@ -11,7 +11,7 @@ import java.util.Map;
  */
 public final class DefaultDormMetadataExtension implements DormMetadataExtension {
 
-    public static final String NAME = "dorm";
+    public static final String EXTENSION_NAME = "dorm";
 
     /**
      * Metadata names
@@ -31,7 +31,7 @@ public final class DefaultDormMetadataExtension implements DormMetadataExtension
 
     @Override
     public String getExtensionName() {
-        return NAME;
+        return EXTENSION_NAME;
     }
 
     public String getName() {

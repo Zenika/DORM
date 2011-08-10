@@ -1,9 +1,9 @@
 package com.zenika.dorm.core.model.helper;
 
-import com.zenika.dorm.core.graph.Dependency;
-import com.zenika.dorm.core.graph.DependencyNode;
-import com.zenika.dorm.core.graph.impl.DefaultDependency;
-import com.zenika.dorm.core.graph.impl.DefaultDependencyNode;
+import com.zenika.dorm.core.model.Dependency;
+import com.zenika.dorm.core.model.DependencyNode;
+import com.zenika.dorm.core.model.impl.DefaultDependency;
+import com.zenika.dorm.core.model.impl.DefaultDependencyNode;
 import com.zenika.dorm.core.model.DormMetadataExtension;
 import com.zenika.dorm.core.model.impl.DefaultDormMetadata;
 

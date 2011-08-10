@@ -1,6 +1,6 @@
 package com.zenika.dorm.core.graph.visitor.impl;
 
-import com.zenika.dorm.core.graph.DependencyNode;
+import com.zenika.dorm.core.model.DependencyNode;
 import com.zenika.dorm.core.graph.visitor.AbstractDependencyVisitor;
 
 /**

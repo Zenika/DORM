@@ -1,17 +1,13 @@
 package com.zenika.dorm.core.test.helper;
 
 import com.zenika.dorm.core.exception.CoreException;
-import com.zenika.dorm.core.graph.Dependency;
-import com.zenika.dorm.core.graph.DependencyNode;
-import com.zenika.dorm.core.graph.impl.DefaultDependency;
-import com.zenika.dorm.core.graph.impl.DefaultDependencyNode;
-import com.zenika.dorm.core.model.DormFile;
-import com.zenika.dorm.core.model.DormMetadata;
-import com.zenika.dorm.core.model.DormMetadataExtension;
-import com.zenika.dorm.core.model.DormRequest;
+import com.zenika.dorm.core.model.Dependency;
+import com.zenika.dorm.core.model.DependencyNode;
+import com.zenika.dorm.core.model.impl.DefaultDependency;
+import com.zenika.dorm.core.model.impl.*;
+import com.zenika.dorm.core.model.*;
 import com.zenika.dorm.core.model.builder.DormRequestBuilder;
-import com.zenika.dorm.core.model.impl.DefaultDormFile;
-import com.zenika.dorm.core.model.impl.DefaultDormMetadata;
+import com.zenika.dorm.core.model.impl.DefaultDependencyNode;
 
 import java.io.File;
 import java.io.IOException;
@@ -53,8 +49,12 @@ public abstract class ExtensionFixtures {
      */
     public abstract DormMetadataExtension getMetadataExtension();
 
+    public String getRequestVersion() {
+        return version;
+    }
+
     public DormRequestBuilder getRequestBuilder() {
-        return new DormRequestBuilder(version, getMetadataExtension().getExtensionName());
+        return new DormRequestBuilder(getRequestVersion(), getMetadataExtension().getExtensionName());
     }
 
     public DormRequestBuilder getRequestBuilderWithFile() {
@@ -70,7 +70,7 @@ public abstract class ExtensionFixtures {
     }
 
     public DormMetadata getMetadata() {
-        return DefaultDormMetadata.create(version, getMetadataExtension());
+        return DefaultDormMetadata.create(getRequestVersion(), getMetadataExtension());
     }
 
     public DormFile getDormFile() {

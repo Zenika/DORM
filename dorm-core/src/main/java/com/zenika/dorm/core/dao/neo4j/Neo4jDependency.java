@@ -1,14 +1,13 @@
 package com.zenika.dorm.core.dao.neo4j;
 
-import com.zenika.dorm.core.graph.Dependency;
-import com.zenika.dorm.core.graph.impl.Usage;
+import com.zenika.dorm.core.model.Dependency;
+import com.zenika.dorm.core.model.impl.Usage;
 import com.zenika.dorm.core.model.DormFile;
 import org.codehaus.jackson.annotate.JsonIgnore;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 import java.net.URI;
 import java.net.URISyntaxException;
 

@@ -71,7 +71,7 @@ public class DormResource {
 
         LOG.trace("POST with params : name = " + name + "; version = " + version);
 
-        DormRequest request = new DormRequestBuilder(version, DefaultDormMetadataExtension.NAME)
+        DormRequest request = new DormRequestBuilder(version, DefaultDormMetadataExtension.EXTENSION_NAME)
                 .property(DefaultDormMetadataExtension.METADATA_NAME, name)
                 .build();
 
@@ -97,7 +97,7 @@ public class DormResource {
 
         LOG.trace("POST with params : name = " + name + "; version = " + version);
 
-        DormRequest request = new DormRequestBuilder(version, DefaultDormMetadataExtension.NAME)
+        DormRequest request = new DormRequestBuilder(version, DefaultDormMetadataExtension.EXTENSION_NAME)
                 .filename(filename)
                 .file(file)
                 .property(DefaultDormMetadataExtension.METADATA_NAME, name)

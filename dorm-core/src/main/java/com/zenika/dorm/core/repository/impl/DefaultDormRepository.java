@@ -2,7 +2,7 @@ package com.zenika.dorm.core.repository.impl;
 
 import com.google.inject.Inject;
 import com.zenika.dorm.core.exception.RepositoryException;
-import com.zenika.dorm.core.graph.Dependency;
+import com.zenika.dorm.core.model.Dependency;
 import com.zenika.dorm.core.model.DormFile;
 import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.core.model.impl.DefaultDormFile;

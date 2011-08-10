@@ -1,7 +1,7 @@
 package com.zenika.dorm.maven.test.integration;
 
-import com.zenika.dorm.core.graph.Dependency;
-import com.zenika.dorm.core.graph.impl.DefaultDependency;
+import com.zenika.dorm.core.model.Dependency;
+import com.zenika.dorm.core.model.impl.DefaultDependency;
 import com.zenika.dorm.core.model.DormFile;
 import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.core.model.DormMetadataExtension;

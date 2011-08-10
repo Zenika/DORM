@@ -1,4 +1,4 @@
-package com.zenika.dorm.core.graph;
+package com.zenika.dorm.core.model;
 
 import com.zenika.dorm.core.graph.visitor.DependencyVisitor;
 

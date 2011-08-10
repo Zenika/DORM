@@ -3,6 +3,10 @@ package com.zenika.dorm.core.exception;
 @SuppressWarnings("serial")
 public class CoreException extends RuntimeException {
 
+    public CoreException() {
+        super();
+    }
+
     public static enum Type {
         FORBIDDEN, NULL, ERROR
     };

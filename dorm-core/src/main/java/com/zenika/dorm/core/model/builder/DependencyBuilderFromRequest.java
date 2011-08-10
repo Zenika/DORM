@@ -1,12 +1,9 @@
 package com.zenika.dorm.core.model.builder;
 
-import com.zenika.dorm.core.graph.Dependency;
-import com.zenika.dorm.core.graph.impl.DefaultDependency;
-import com.zenika.dorm.core.graph.impl.Usage;
-import com.zenika.dorm.core.model.DormFile;
-import com.zenika.dorm.core.model.DormMetadata;
-import com.zenika.dorm.core.model.DormMetadataExtension;
-import com.zenika.dorm.core.model.DormRequest;
+import com.zenika.dorm.core.model.Dependency;
+import com.zenika.dorm.core.model.impl.DefaultDependency;
+import com.zenika.dorm.core.model.impl.Usage;
+import com.zenika.dorm.core.model.*;
 import com.zenika.dorm.core.model.impl.DefaultDormFile;
 
 import java.io.File;

@@ -16,7 +16,7 @@ public class DormFixtures extends ExtensionFixtures {
      */
     private String name = "testname";
     private String qualifier = "testname";
-    private String origin = DefaultDormMetadataExtension.NAME;
+    private String origin = DefaultDormMetadataExtension.EXTENSION_NAME;
 
     @Override
     public DormMetadataExtension getMetadataExtension() {

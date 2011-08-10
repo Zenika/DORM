@@ -1,9 +1,9 @@
 package com.zenika.dorm.maven.processor.extension;
 
-import com.zenika.dorm.core.graph.Dependency;
-import com.zenika.dorm.core.graph.DependencyNode;
-import com.zenika.dorm.core.graph.impl.DefaultDependencyNode;
-import com.zenika.dorm.core.graph.impl.Usage;
+import com.zenika.dorm.core.model.Dependency;
+import com.zenika.dorm.core.model.DependencyNode;
+import com.zenika.dorm.core.model.impl.DefaultDependencyNode;
+import com.zenika.dorm.core.model.impl.Usage;
 import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.core.model.DormRequest;
 import com.zenika.dorm.core.model.builder.DependencyBuilderFromRequest;
@@ -43,10 +43,10 @@ public class MavenProcessor extends AbstractProcessorExtension {
         String type = getRequestType(request);
         String groupId = getGroupId(request);
         String artifactId = request.getProperty(MavenMetadataExtension.METADATA_ARTIFACTID);
-        String versionId = request.getProperty(MavenMetadataExtension.METADATA_VERSIONID);
+        String version = request.getProperty(MavenMetadataExtension.METADATA_VERSION);
 
         // create the entity extension which is the same as the child with a different type
-        MavenMetadataExtension entityExtension = new MavenMetadataExtension(groupId, artifactId, versionId,
+        MavenMetadataExtension entityExtension = new MavenMetadataExtension(groupId, artifactId, version,
                 MavenProcessor.ENTITY_TYPE);
 
         // entity dependencuy has no file
@@ -59,10 +59,10 @@ public class MavenProcessor extends AbstractProcessorExtension {
         LOG.debug("Maven entity dependency = " + entityDependency);
 
         // create the real maven dependency to push
-        MavenMetadataExtension childExtension = new MavenMetadataExtension(groupId, artifactId, versionId, type);
+        MavenMetadataExtension childExtension = new MavenMetadataExtension(groupId, artifactId, version, type);
 
         // replace the default usage by the maven internal for the child dependency
-        Usage childUsage = Usage.createInternal(MavenMetadataExtension.NAME);
+        Usage childUsage = Usage.createInternal(MavenMetadataExtension.EXTENSION_NAME);
 
         Dependency dependency = new DependencyBuilderFromRequest(request, childExtension).usage(childUsage).build();
         LOG.debug("Maven real dependency = " + dependency);
@@ -84,7 +84,7 @@ public class MavenProcessor extends AbstractProcessorExtension {
 
         String groupId = getGroupId(request);
         String artifactId = request.getProperty(MavenMetadataExtension.METADATA_ARTIFACTID);
-        String versionId = request.getProperty(MavenMetadataExtension.METADATA_VERSIONID);
+        String versionId = request.getProperty(MavenMetadataExtension.METADATA_VERSION);
 
         MavenMetadataExtension extension = new MavenMetadataExtension(groupId, artifactId, versionId,
                 type);

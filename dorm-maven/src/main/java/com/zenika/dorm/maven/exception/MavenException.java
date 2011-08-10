@@ -4,6 +4,10 @@ import com.zenika.dorm.core.exception.CoreException;
 
 public class MavenException extends CoreException {
 
+    public MavenException() {
+        super();
+    }
+
     public MavenException(String message) {
         super(message);
     }

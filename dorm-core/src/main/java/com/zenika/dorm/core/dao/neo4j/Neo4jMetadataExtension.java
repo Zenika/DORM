@@ -1,6 +1,6 @@
 package com.zenika.dorm.core.dao.neo4j;
 
-import com.zenika.dorm.core.graph.impl.Usage;
+import com.zenika.dorm.core.model.impl.Usage;
 import com.zenika.dorm.core.model.DormMetadataExtension;
 import org.codehaus.jackson.annotate.JsonIgnore;
 

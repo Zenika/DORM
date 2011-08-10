@@ -1,6 +1,6 @@
 package com.zenika.dorm.core.graph.visitor;
 
-import com.zenika.dorm.core.graph.DependencyNode;
+import com.zenika.dorm.core.model.DependencyNode;
 import com.zenika.dorm.core.graph.visitor.impl.DependencyVisitorCheckException;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;

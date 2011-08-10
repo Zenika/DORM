@@ -1,7 +1,7 @@
 package com.zenika.dorm.core.test.processor;
 
 import com.zenika.dorm.core.exception.CoreException;
-import com.zenika.dorm.core.graph.DependencyNode;
+import com.zenika.dorm.core.model.DependencyNode;
 import com.zenika.dorm.core.model.DormRequest;
 import com.zenika.dorm.core.processor.Processor;
 import com.zenika.dorm.core.processor.ProcessorExtension;

@@ -1,6 +1,6 @@
 package com.zenika.dorm.core.processor;
 
-import com.zenika.dorm.core.graph.Dependency;
+import com.zenika.dorm.core.model.Dependency;
 import com.zenika.dorm.core.model.DormRequest;
 
 /**

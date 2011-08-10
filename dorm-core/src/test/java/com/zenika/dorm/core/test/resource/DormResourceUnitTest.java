@@ -47,7 +47,7 @@ public class DormResourceUnitTest extends AbstractUnitTest {
     }
 
     @Test
-    public void pushInvalidMetadataFromUri() {
+    public void pushInvalidMetadata() {
 
         DormRequest request = new DormRequestBuilder(fixtures.getRequestWithoutFile()).property
                 (DefaultDormMetadataExtension.METADATA_NAME, null).build();
