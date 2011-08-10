@@ -51,7 +51,7 @@ public class MavenResource {
         LOG.info("GET request to the maven web service : " + request);
 
         try {
-            File file = processor.get(request).getFile().getFile();
+            File file = processor.get(request).getResource().getFile();
             return Response.status(Response.Status.OK).entity(file).build();
         } catch (NullPointerException e) {
             return Response.status(Response.Status.NOT_FOUND).build();

@@ -1,8 +1,8 @@
 package com.zenika.dorm.core.dao.neo4j;
 
 import com.zenika.dorm.core.model.Dependency;
+import com.zenika.dorm.core.model.DormResource;
 import com.zenika.dorm.core.model.impl.Usage;
-import com.zenika.dorm.core.model.DormFile;
 import org.codehaus.jackson.annotate.JsonIgnore;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -51,7 +51,7 @@ public class Neo4jDependency extends Neo4jNode implements Dependency{
 
     @JsonIgnore
     @Override
-    public DormFile getFile() {
+    public DormResource getResource() {
         return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 

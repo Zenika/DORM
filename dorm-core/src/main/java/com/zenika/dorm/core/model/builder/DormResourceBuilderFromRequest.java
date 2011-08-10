@@ -1,8 +1,8 @@
 package com.zenika.dorm.core.model.builder;
 
-import com.zenika.dorm.core.model.DormFile;
+import com.zenika.dorm.core.model.DormResource;
 import com.zenika.dorm.core.model.DormRequest;
-import com.zenika.dorm.core.model.impl.DefaultDormFile;
+import com.zenika.dorm.core.model.impl.DefaultDormResource;
 
 import java.io.File;
 
@@ -11,17 +11,17 @@ import java.io.File;
  *
  * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>
  */
-public class DormFileBuilderFromRequest {
+public class DormResourceBuilderFromRequest {
 
     private String filename;
     private File file;
 
-    public DormFileBuilderFromRequest(DormRequest request) {
+    public DormResourceBuilderFromRequest(DormRequest request) {
         this.file = request.getFile();
         this.filename = request.getFilename();
     }
 
-    public DormFile build() {
-        return DefaultDormFile.create(filename, file);
+    public DormResource build() {
+        return DefaultDormResource.create(filename, file);
     }
 }

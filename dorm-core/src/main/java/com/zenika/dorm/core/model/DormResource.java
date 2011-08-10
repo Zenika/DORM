@@ -5,7 +5,7 @@ import java.io.File;
 /**
  * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>
  */
-public interface DormFile {
+public interface DormResource {
 
     /**
      * The full name of the file : name + extension

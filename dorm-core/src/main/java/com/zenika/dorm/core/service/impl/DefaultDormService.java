@@ -4,9 +4,9 @@ import com.google.inject.Inject;
 import com.zenika.dorm.core.dao.DormDao;
 import com.zenika.dorm.core.model.Dependency;
 import com.zenika.dorm.core.model.DependencyNode;
+import com.zenika.dorm.core.model.DormResource;
 import com.zenika.dorm.core.model.impl.DefaultDependency;
 import com.zenika.dorm.core.model.impl.Usage;
-import com.zenika.dorm.core.model.DormFile;
 import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.core.repository.DormRepository;
 import com.zenika.dorm.core.service.DormService;
@@ -40,7 +40,7 @@ public class DefaultDormService implements DormService {
 
     @Override
     public Dependency getDependency(DormMetadata metadata, Usage usage) {
-        DormFile file = repository.get(metadata);
-        return DefaultDependency.create(metadata, file);
+        DormResource resource = repository.get(metadata);
+        return DefaultDependency.create(metadata, resource);
     }
 }

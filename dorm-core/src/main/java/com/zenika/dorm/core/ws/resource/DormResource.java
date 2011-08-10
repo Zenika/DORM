@@ -3,11 +3,10 @@ package com.zenika.dorm.core.ws.resource;
 import com.google.inject.Inject;
 import com.sun.jersey.multipart.FormDataParam;
 import com.zenika.dorm.core.exception.ArtifactException;
-import com.zenika.dorm.core.model.DormFile;
 import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.core.model.DormRequest;
 import com.zenika.dorm.core.model.builder.DormRequestBuilder;
-import com.zenika.dorm.core.model.impl.DefaultDormFile;
+import com.zenika.dorm.core.model.impl.DefaultDormResource;
 import com.zenika.dorm.core.model.impl.DefaultDormMetadata;
 import com.zenika.dorm.core.model.impl.DefaultDormMetadataExtension;
 import com.zenika.dorm.core.processor.Processor;
@@ -128,7 +127,7 @@ public class DormResource {
                                                   @FormDataParam("file") File file) {
 
         DormMetadata metadata = getMetadata(name, version);
-        DormFile dormFile = DefaultDormFile.create(filename, file);
+        com.zenika.dorm.core.model.DormResource dormResource = DefaultDormResource.create(filename, file);
 
         return Response.status(Response.Status.OK).build();
     }

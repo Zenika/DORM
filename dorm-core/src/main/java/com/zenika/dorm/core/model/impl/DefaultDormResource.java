@@ -1,33 +1,33 @@
 package com.zenika.dorm.core.model.impl;
 
 import com.zenika.dorm.core.exception.CoreException;
-import com.zenika.dorm.core.model.DormFile;
+import com.zenika.dorm.core.model.DormResource;
 import org.apache.commons.io.FilenameUtils;
 
 import java.io.File;
 
 /**
- * Immutable class that represents a dorm file
+ * Immutable class that represents a dorm resource
  *
  * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>
  */
-public final class DefaultDormFile implements DormFile {
+public final class DefaultDormResource implements DormResource {
 
     private final String name;
     private final String extension;
     private final File file;
 
-    public static DormFile create(File file) {
-        return new DefaultDormFile(file);
+    public static DormResource create(File file) {
+        return new DefaultDormResource(file);
     }
 
-    public static DefaultDormFile create(String filename, File file) {
-        return new DefaultDormFile(FilenameUtils.getBaseName(filename), FilenameUtils.getExtension(filename),
+    public static DefaultDormResource create(String filename, File file) {
+        return new DefaultDormResource(FilenameUtils.getBaseName(filename), FilenameUtils.getExtension(filename),
                 file);
     }
 
-    public static DefaultDormFile create(String name, String extension, File file) {
-        return new DefaultDormFile(name, extension, file);
+    public static DefaultDormResource create(String name, String extension, File file) {
+        return new DefaultDormResource(name, extension, file);
     }
 
     /**
@@ -35,13 +35,13 @@ public final class DefaultDormFile implements DormFile {
      *
      * @param file
      */
-    private DefaultDormFile(File file) {
+    private DefaultDormResource(File file) {
         this.name = file.getName();
         this.file = file;
         this.extension = null;
     }
 
-    private DefaultDormFile(String name, String extension, File file) {
+    private DefaultDormResource(String name, String extension, File file) {
 
         if (null == name || null == extension || null == file || name.isEmpty() || extension.isEmpty()) {
             throw new CoreException("Name, extension and file are required.");
@@ -75,9 +75,9 @@ public final class DefaultDormFile implements DormFile {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof DefaultDormFile)) return false;
+        if (!(o instanceof DefaultDormResource)) return false;
 
-        DefaultDormFile that = (DefaultDormFile) o;
+        DefaultDormResource that = (DefaultDormResource) o;
 
         if (extension != null ? !extension.equals(that.extension) : that.extension != null) return false;
         if (file != null ? !file.equals(that.file) : that.file != null) return false;

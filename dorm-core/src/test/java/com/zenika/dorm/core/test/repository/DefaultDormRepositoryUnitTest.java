@@ -1,7 +1,7 @@
 package com.zenika.dorm.core.test.repository;
 
 import com.zenika.dorm.core.model.Dependency;
-import com.zenika.dorm.core.model.DormFile;
+import com.zenika.dorm.core.model.DormResource;
 import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.core.repository.impl.DefaultDormRepository;
 import com.zenika.dorm.core.test.unit.AbstractUnitTest;
@@ -39,7 +39,7 @@ public class DefaultDormRepositoryUnitTest extends AbstractUnitTest {
     @Test
     public void getValidDependency() {
         DormMetadata metadata = fixtures.getMetadata();
-        DormFile file = repository.get(metadata);
-        LOG.trace("Test file from repository : " + file);
+        DormResource resource = repository.get(metadata);
+        LOG.trace("Test file from repository : " + resource);
     }
 }

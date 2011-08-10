@@ -2,7 +2,7 @@ package com.zenika.dorm.core.model.impl;
 
 import com.zenika.dorm.core.exception.CoreException;
 import com.zenika.dorm.core.model.Dependency;
-import com.zenika.dorm.core.model.DormFile;
+import com.zenika.dorm.core.model.DormResource;
 import com.zenika.dorm.core.model.DormMetadata;
 
 /**
@@ -21,25 +21,25 @@ public final class DefaultDependency implements Dependency {
     /**
      * Optionnal, may be null
      */
-    private final DormFile file;
+    private final DormResource resource;
 
     public static DefaultDependency create(DormMetadata metadata) {
         return new DefaultDependency(metadata, Usage.create(), null);
     }
 
-    public static DefaultDependency create(DormMetadata metadata, DormFile file) {
-        return new DefaultDependency(metadata, Usage.create(), file);
+    public static DefaultDependency create(DormMetadata metadata, DormResource resource) {
+        return new DefaultDependency(metadata, Usage.create(), resource);
     }
 
     public static DefaultDependency create(DormMetadata metadata, Usage usage) {
         return new DefaultDependency(metadata, usage, null);
     }
 
-    public static DefaultDependency create(DormMetadata metadata, Usage usage, DormFile file) {
-        return new DefaultDependency(metadata, usage, file);
+    public static DefaultDependency create(DormMetadata metadata, Usage usage, DormResource resource) {
+        return new DefaultDependency(metadata, usage, resource);
     }
 
-    private DefaultDependency(DormMetadata metadata, Usage usage, DormFile file) {
+    private DefaultDependency(DormMetadata metadata, Usage usage, DormResource resource) {
 
         if (null == metadata || null == usage) {
             throw new CoreException("Metadata and usage are required.");
@@ -47,7 +47,7 @@ public final class DefaultDependency implements Dependency {
 
         this.metadata = metadata;
         this.usage = usage;
-        this.file = file;
+        this.resource = resource;
     }
 
     @Override
@@ -61,13 +61,13 @@ public final class DefaultDependency implements Dependency {
     }
 
     @Override
-    public DormFile getFile() {
-        return file;
+    public DormResource getResource() {
+        return resource;
     }
 
     @Override
     public Boolean hasFile() {
-        return null != file;
+        return null != resource;
     }
 
     @Override
@@ -77,7 +77,7 @@ public final class DefaultDependency implements Dependency {
 
         DefaultDependency that = (DefaultDependency) o;
 
-        if (file != null ? !file.equals(that.file) : that.file != null) return false;
+        if (resource != null ? !resource.equals(that.resource) : that.resource != null) return false;
         if (metadata != null ? !metadata.equals(that.metadata) : that.metadata != null) return false;
         if (usage != null ? !usage.equals(that.usage) : that.usage != null) return false;
 
@@ -88,13 +88,13 @@ public final class DefaultDependency implements Dependency {
     public int hashCode() {
         int result = usage != null ? usage.hashCode() : 0;
         result = 31 * result + (metadata != null ? metadata.hashCode() : 0);
-        result = 31 * result + (file != null ? file.hashCode() : 0);
+        result = 31 * result + (resource != null ? resource.hashCode() : 0);
         return result;
     }
 
     @Override
     public String toString() {
-        String fileAsString = (file == null) ? "null" : file.toString();
+        String fileAsString = (resource == null) ? "null" : resource.toString();
         return "Dependency { " +
                 "Usage = " + usage + "; " +
                 "Metadata = " + metadata + "; " +

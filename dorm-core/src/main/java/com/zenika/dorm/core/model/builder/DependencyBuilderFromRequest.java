@@ -4,7 +4,7 @@ import com.zenika.dorm.core.model.Dependency;
 import com.zenika.dorm.core.model.impl.DefaultDependency;
 import com.zenika.dorm.core.model.impl.Usage;
 import com.zenika.dorm.core.model.*;
-import com.zenika.dorm.core.model.impl.DefaultDormFile;
+import com.zenika.dorm.core.model.impl.DefaultDormResource;
 
 import java.io.File;
 
@@ -16,7 +16,7 @@ import java.io.File;
 public class DependencyBuilderFromRequest {
 
     private DormMetadata metadata;
-    private DormFile file;
+    private DormResource resource;
     private Usage usage;
 
     private DependencyBuilderFromRequest(DormRequest request) {
@@ -27,7 +27,7 @@ public class DependencyBuilderFromRequest {
 
         // todo: maybe some improvements can be done here
         if (request.hasFile()) {
-            this.file = new DormFileBuilderFromRequest(request).build();
+            this.resource = new DormResourceBuilderFromRequest(request).build();
         }
     }
 
@@ -41,13 +41,13 @@ public class DependencyBuilderFromRequest {
         this.metadata = new MetadataBuilderFromRequest(request, extension).build();
     }
 
-    public DependencyBuilderFromRequest file(DormFile file) {
-        this.file = file;
+    public DependencyBuilderFromRequest file(DormResource resource) {
+        this.resource = resource;
         return this;
     }
 
     public DependencyBuilderFromRequest file(String filename, File file) {
-        this.file = DefaultDormFile.create(filename, file);
+        this.resource = DefaultDormResource.create(filename, file);
         return this;
     }
 
@@ -57,6 +57,6 @@ public class DependencyBuilderFromRequest {
     }
 
     public Dependency build() {
-        return DefaultDependency.create(metadata, usage, file);
+        return DefaultDependency.create(metadata, usage, resource);
     }
 }

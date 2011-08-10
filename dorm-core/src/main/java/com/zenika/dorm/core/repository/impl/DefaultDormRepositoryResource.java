@@ -1,6 +1,5 @@
 package com.zenika.dorm.core.repository.impl;
 
-import com.zenika.dorm.core.model.DormFile;
 import com.zenika.dorm.core.repository.DormRepository;
 import com.zenika.dorm.core.repository.DormRepositoryResource;
 

@@ -13,7 +13,7 @@ public interface Dependency {
 
     public DormMetadata getMetadata();
 
-    public DormFile getFile();
+    public DormResource getResource();
 
     public Boolean hasFile();
 }

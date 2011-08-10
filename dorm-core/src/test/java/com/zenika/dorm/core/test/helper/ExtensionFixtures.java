@@ -73,8 +73,8 @@ public abstract class ExtensionFixtures {
         return DefaultDormMetadata.create(getRequestVersion(), getMetadataExtension());
     }
 
-    public DormFile getDormFile() {
-        return DefaultDormFile.create(filename, filenameExtension, file);
+    public DormResource getDormFile() {
+        return DefaultDormResource.create(filename, filenameExtension, file);
     }
 
     public Dependency getDependencyWithoutFile() {
