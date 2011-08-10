@@ -1,1 +1,1 @@
-include 'dorm', 'dorm-core', 'dorm-core-test', 'dorm-maven'
+include 'dorm', 'dorm-core', 'dorm-core-test', 'dorm-maven', 'dorm-maven-importer'
