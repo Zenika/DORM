@@ -1,18 +1,10 @@
-// this is not working :
-//repositories {
-//    mavenRepo name: 'morphia repository', urls: "http://morphia.googlecode.com/svn/mavenrepo"
-//}
-
 dependencies {
-    testCompile group: 'junit', name: 'junit', version: '4.8.2'
-    testCompile group: 'org.mockito', name: 'mockito-all', version: '1.8.5'
-    testCompile group: 'org.easytesting', name: 'fest-assert', version: '1.4'
-    testCompile group: 'com.sun.jersey', name: 'jersey-client', version: '1.8'
+    // Internal dependencies
+    compile project(':dorm-core')
 
-
+    // External dependencies
     compile 'org.neo4j:neo4j-index:1.2-1.2'
-}
 
-repositories{
-    mavenRepo name: 'maven2-repository.java.net', urls: 'http://download.java.net/maven/2/'
+    // Test
+    testCompile libraries.jersey_client
 }

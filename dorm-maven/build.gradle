@@ -3,6 +3,10 @@ mavenVersion = '3.0.2'
 wagonVersion = '1.0-beta-7'
 
 dependencies {
+    // Internal dependencies
+    compile project(':dorm-core')
+
+    // External dependencies
     compile group: 'org.sonatype.aether', name: 'aether-api', version : aetherVersion
     compile group: 'org.sonatype.aether', name: 'aether-spi', version : aetherVersion
     compile group: 'org.sonatype.aether', name: 'aether-util', version : aetherVersion
@@ -17,4 +21,7 @@ dependencies {
 
     compile group: 'org.codehaus.plexus', name: 'plexus-container-default', version : '1.5.5'
     compile group: 'org.codehaus.plexus', name: 'plexus-utils', version : '2.0.5'
+    
+    // Test
+    testCompile project(path: ':dorm-core', configuration: 'sharedTests')
 }

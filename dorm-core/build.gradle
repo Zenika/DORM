@@ -1,26 +1,20 @@
-apply from: 'https://raw.github.com/breskeby/gradleplugins/0.9-upgrade/aspectjPlugin/aspectJ.gradle'
-
-versions += [
-        ivy         : '2.2.0',
-        guiceberry  : '3.0.4',
-        jukito      : '1.1'
-]
-
-libraries += [
-        ivy         : 'org.apache.ivy:ivy:' + versions.ivy,
-        guiceberry  : 'com.google.guiceberry:guiceberry:' + versions.guiceberry,
-        jukito      : 'org.jukito:jukito:' + versions.jukito
-]
-
-repositories {
-    mavenRepo name: 'tinkerpop', urls: 'http://tinkerpop.com/maven2'
-}
+apply from: '../gradle/aspectJ.gradle'
 
 dependencies {
+    // External dependencies
     compile libraries.ivy
 
-    compile group: 'org.mongodb', name: 'mongo-java-driver', version: '2.6.1'
-    compile group: 'com.tinkerpop', name: 'gremlin', version: '1.1'
+    compile libraries.jersey_server
+    compile libraries.jersey_json
+    compile libraries.jersey_client
+    compile libraries.jersey_multipart
+    compile libraries.jackson_mrbean
+
+    compile libraries.guice
+
+    compile group: 'commons-io', name: 'commons-io', version: '2.0.1'
+
+   // compile group: 'com.tinkerpop', name: 'gremlin', version: '1.1'
     compile group: 'jgrapht', name: 'jgrapht', version: '0.7.3'
     compile 'org.neo4j:neo4j:1.3'
 
@@ -29,6 +23,7 @@ dependencies {
     ajc group: 'org.aspectj', name: 'aspectjtools', version: '1.6.11'
     compile group: 'org.aspectj', name: 'aspectjrt', version: '1.6.11'
 
+    // Test
     testCompile libraries.guiceberry
     testCompile libraries.jukito
 }
