@@ -1,7 +1,9 @@
 package com.zenika.dorm.core.dao.neo4j.util;
 
 import com.sun.jersey.api.client.Client;
+import com.sun.jersey.api.client.ClientHandlerException;
 import com.sun.jersey.api.client.GenericType;
+import com.sun.jersey.api.client.UniformInterfaceException;
 import com.sun.jersey.api.client.WebResource;
 import com.sun.jersey.api.client.config.ClientConfig;
 import com.sun.jersey.api.client.config.DefaultClientConfig;
@@ -11,7 +13,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import java.lang.reflect.Type;
+import java.net.ConnectException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.HashSet;
@@ -103,8 +107,7 @@ public class Neo4jRequestExecutor implements RequestExecutor {
     }
 
     @Override
-    public <T extends Neo4jNode> T getNode(URI uri, Type type) {
-
+    public <T extends Neo4jNode> T getNode(URI uri, Type type) throws ClientHandlerException, UniformInterfaceException {
         Neo4jResponse<T> response = resource.uri(uri).accept(MediaType.APPLICATION_JSON).get(new GenericType<Neo4jResponse<T>>(type));
         T node = response.getData();
         node.setResponse(response);

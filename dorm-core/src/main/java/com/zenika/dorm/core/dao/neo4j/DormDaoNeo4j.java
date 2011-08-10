@@ -2,9 +2,12 @@ package com.zenika.dorm.core.dao.neo4j;
 
 
 import com.google.inject.Inject;
+import com.sun.jersey.api.client.ClientHandlerException;
+import com.sun.jersey.api.client.UniformInterfaceException;
 import com.zenika.dorm.core.dao.DormDao;
 import com.zenika.dorm.core.dao.neo4j.util.Neo4jRequestExecutor;
 import com.zenika.dorm.core.dao.neo4j.util.RequestExecutor;
+import com.zenika.dorm.core.exception.CoreException;
 import com.zenika.dorm.core.graph.Dependency;
 import com.zenika.dorm.core.graph.DependencyNode;
 import com.zenika.dorm.core.graph.impl.DefaultDependencyNode;
@@ -16,7 +19,9 @@ import org.codehaus.jackson.type.TypeReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.ws.rs.core.Response;
 import java.lang.reflect.Type;
+import java.net.ConnectException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.HashMap;
@@ -42,7 +47,13 @@ public class DormDaoNeo4j implements DormDao {
     public DormDaoNeo4j(RequestExecutor executor) {
         this.executor = executor;
         index = new Neo4jIndex();
-        index = this.executor.post(index);
+        try {
+            index = this.executor.post(index);
+        } catch (ClientHandlerException e) {
+            if (e.getCause().getClass().equals(ConnectException.class)) {
+                LOG.error("The Neo4j dao can't connect with the Neo4j Database. Verify your configuration.", e);
+            }
+        }
     }
 
     public void init() {
@@ -62,12 +73,10 @@ public class DormDaoNeo4j implements DormDao {
 
     public Neo4jDependency postDependency(Dependency dormDependency) {
         Usage usage = dormDependency.getUsage();
-        Neo4jDependency dependency = null;
+        Neo4jDependency dependency = new Neo4jDependency(dormDependency);
+        Neo4jMetadata metadata = dependency.getMetadata();
+        Neo4jMetadataExtension extension = dependency.getMetadata().getNeo4jExtension();
         try {
-            dependency = new Neo4jDependency(dormDependency);
-            Neo4jMetadata metadata = dependency.getMetadata();
-            Neo4jMetadataExtension extension = dependency.getMetadata().getNeo4jExtension();
-
             if (executor.get(dependency.getIndexURI(index), List.class).isEmpty()) {
                 executor.post(extension);
                 executor.post(metadata);
@@ -82,8 +91,8 @@ public class DormDaoNeo4j implements DormDao {
                 fillNeo4jDependency(dependency, dormDependency.getMetadata().getExtension());
                 dependency.setUsage(usage);
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (URISyntaxException e) {
+            throw new CoreException("URI syntax error", e);
         }
         return dependency;
     }
@@ -137,8 +146,12 @@ public class DormDaoNeo4j implements DormDao {
             Neo4jTraverse traverse = new Neo4jTraverse(new Neo4jRelationship(usage));
             List<Neo4jRelationship> relationships = executor.post(dependency.getTraverse(Neo4jTraverse.RELATIONSHIP_TYPE), traverse);
             putChild(usage, dependencyNodeMap, relationships, extension);
+        } catch (UniformInterfaceException e) {
+            if (e.getResponse().getStatus() == Response.Status.NOT_FOUND.getStatusCode()) {
+                LOG.debug("The dependency node with this " + metadata.getFullQualifier() + " full qualifier doesn't found");
+            }
         } catch (URISyntaxException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            e.printStackTrace();  //To change bo    dy of catch statement use File | Settings | File Templates.
         }
         return dependencyNodeMap.get(dependency.getResponse().getSelf());
     }
