@@ -99,6 +99,22 @@ public class MavenResource {
         return Response.status(Response.Status.OK).build();
     }
 
+    @PUT
+    @Consumes(MediaType.APPLICATION_OCTET_STREAM)
+    @Path("{groupId:.*}/{artifactId}/{version}/{fileName}.sha1")
+    public Response putSha1(File file, @PathParam("groupId") String groupId, @PathParam("artifactId") String artifactId,
+                        @PathParam("version") String version, @PathParam("fileName") String fileName) {
+        return put(file, groupId, artifactId, version, fileName);
+    }
+
+    @PUT
+    @Consumes(MediaType.APPLICATION_OCTET_STREAM)
+    @Path("{groupId:.*}/{artifactId}/{version}/{fileName}.md5")
+    public Response putMd5(File file, @PathParam("groupId") String groupId, @PathParam("artifactId") String artifactId,
+                        @PathParam("version") String version, @PathParam("fileName") String fileName) {
+        return put(file, groupId, artifactId, version, fileName);
+    }
+
     @GET
     @Produces(MediaType.APPLICATION_OCTET_STREAM)
     @Path("{groupId:.*}/{artifactID}/{versions}/{fileName}.sha1")
