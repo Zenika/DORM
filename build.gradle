@@ -18,6 +18,7 @@ allprojects {
         sharedTests
         // commons-logging artefacts are useless (using SLF4J and Logback)
         all*.exclude group: 'commons-logging'
+        all*.exclude group: 'log4j'
     }
 
     task testJar(type: Jar, dependsOn: testClasses) {
@@ -44,48 +45,48 @@ ideaProject {
 // Trying to get a kind of Maven's dependencyManagement
 // 1st step, introducing general properties
 versions = [
-        slf4j           : '1.6.1',
-        logback         : '0.9.29',
-        servlet_api     : '2.5',
-        jersey          : '1.8',
-        jackson         : '1.8.4',
-        ivy             : '2.2.0',
-        guiceberry      : '3.0.4',
-        jukito          : '1.1',
-        guice           : '3.0',
-        junit           : '4.8.2',
-        fest_assert     : '1.4',
-        mockito         : '1.8.5',
-        morphia         : '0.99'
+        slf4j: '1.6.1',
+        logback: '0.9.29',
+        servlet_api: '2.5',
+        jersey: '1.8',
+        jackson: '1.8.4',
+        ivy: '2.2.0',
+        guiceberry: '3.0.4',
+        jukito: '1.1',
+        guice: '3.0',
+        junit: '4.8.2',
+        fest_assert: '1.4',
+        mockito: '1.8.5',
+        morphia: '0.99'
 ]
 
 // 2nd step, introducing libraries
 libraries = [
-        slf4j_api           : 'org.slf4j:slf4j-api:' + versions.slf4j,
-        slf4j_jcl           : 'org.slf4j:jcl-over-slf4j:' + versions.slf4j,
-        slf4j_jul           : 'org.slf4j:jul-to-slf4j:' + versions.slf4j,
-        slf4j_log4j         : 'org.slf4j:log4j-over-slf4j:' + versions.slf4j,
-        logback_core        : 'ch.qos.logback:logback-core:' + versions.logback,
-        logback_classic     : 'ch.qos.logback:logback-classic:' + versions.logback,
+        slf4j_api: 'org.slf4j:slf4j-api:' + versions.slf4j,
+        slf4j_jcl: 'org.slf4j:jcl-over-slf4j:' + versions.slf4j,
+        slf4j_jul: 'org.slf4j:jul-to-slf4j:' + versions.slf4j,
+        slf4j_log4j: 'org.slf4j:log4j-over-slf4j:' + versions.slf4j,
+        logback_core: 'ch.qos.logback:logback-core:' + versions.logback,
+        logback_classic: 'ch.qos.logback:logback-classic:' + versions.logback,
 
-        servlet_api         : 'javax.servlet:servlet-api:' + versions.servlet_api,
+        servlet_api: 'javax.servlet:servlet-api:' + versions.servlet_api,
 
-        jersey_server       : 'com.sun.jersey:jersey-server:' + versions.jersey,
-        jersey_json         : 'com.sun.jersey:jersey-json:' + versions.jersey,
-        jersey_client       : 'com.sun.jersey:jersey-client:' + versions.jersey,
-        jersey_multipart    : 'com.sun.jersey.contribs:jersey-multipart:' + versions.jersey,
-        jersey_guice        : 'com.sun.jersey.contribs:jersey-guice:' +versions.jersey,
-        jackson_mrbean      : 'org.codehaus.jackson:jackson-mrbean:' + versions.jackson,
+        jersey_server: 'com.sun.jersey:jersey-server:' + versions.jersey,
+        jersey_json: 'com.sun.jersey:jersey-json:' + versions.jersey,
+        jersey_client: 'com.sun.jersey:jersey-client:' + versions.jersey,
+        jersey_multipart: 'com.sun.jersey.contribs:jersey-multipart:' + versions.jersey,
+        jersey_guice: 'com.sun.jersey.contribs:jersey-guice:' + versions.jersey,
+        jackson_mrbean: 'org.codehaus.jackson:jackson-mrbean:' + versions.jackson,
 
-        guice               : 'com.google.inject:guice:' + versions.guice,
+        guice: 'com.google.inject:guice:' + versions.guice,
         guice_assistedinject: 'com.google.inject.extensions:guice-assistedinject:' + versions.guice,
 
-        ivy         : 'org.apache.ivy:ivy:' + versions.ivy,
-        junit       : 'junit:junit:' + versions.junit,
-        mockito     : 'org.mockito:mockito-all:' + versions.mockito,
-        guiceberry  : 'com.google.guiceberry:guiceberry:' + versions.guiceberry,
-        jukito      : 'org.jukito:jukito:' + versions.jukito,
-        fest_assert : 'org.easytesting:fest-assert:' + versions.fest_assert
+        ivy: 'org.apache.ivy:ivy:' + versions.ivy,
+        junit: 'junit:junit:' + versions.junit,
+        mockito: 'org.mockito:mockito-all:' + versions.mockito,
+        guiceberry: 'com.google.guiceberry:guiceberry:' + versions.guiceberry,
+        jukito: 'org.jukito:jukito:' + versions.jukito,
+        fest_assert: 'org.easytesting:fest-assert:' + versions.fest_assert
 ]
 
 subprojects {
