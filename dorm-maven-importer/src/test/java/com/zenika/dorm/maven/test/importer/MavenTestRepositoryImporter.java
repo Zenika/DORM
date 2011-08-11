@@ -10,8 +10,8 @@ public class MavenTestRepositoryImporter {
 
     @Test
     public void testImporter(){
-        MavenRepositoryImporter importer = new MavenRepositoryImporter("/home/erouan/.m2/repository");
-        importer.start();
+        MavenRepositoryImporter importer = new MavenRepositoryImporter("/home/erouan/.m2/repository", "localhost/maven", "7474");
+//        importer.start();
     }
 
 }
