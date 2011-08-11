@@ -10,11 +10,11 @@ import javax.servlet.ServletContextEvent;
 /**
  * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>
  */
-public class GuiceServlet extends GuiceServletContextListener {
+public class DORMGuiceServletContextListener extends GuiceServletContextListener {
 
     @Override
     protected Injector getInjector() {
-        return Guice.createInjector(new GuiceModule());
+        return Guice.createInjector(new DORMGuiceModule());
     }
 
     public void contextInitialized(ServletContextEvent servletContextEvent) {

@@ -22,9 +22,9 @@ import org.slf4j.LoggerFactory;
 /**
  * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>
  */
-public class GuiceModule extends JerseyServletModule {
+public class DORMGuiceModule extends JerseyServletModule {
 
-    private static final Logger LOG = LoggerFactory.getLogger(GuiceModule.class);
+    private static final Logger LOG = LoggerFactory.getLogger(DORMGuiceModule.class);
 
     @Override
     protected void configureServlets() {
