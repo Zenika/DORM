@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<configuration scan="true" scanPeriod="5 seconds">
+
+    <!--
+      Console Développement : Tout est loggé dans la console. Date du jour inutile dans la console, enlevé pour lisibilité
+    -->
+
+    <appender name="ConsoleDevAll" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>| %5p | %-150m | %C.%M\(%F:%L\)%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="ConsoleDevSimple" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>| %5p | %-150m%n</pattern>
+        </encoder>
+    </appender>
+
+    <logger name="com.google" level="TRACE"/>
+    <logger name="com.sun.jersey" level="INFO"/>
+    <logger name="org.apache" level="ERROR"/>
+    <logger name="org.apache.cxf" level="INFO"/>
+    <logger name="httpclient" level="ERROR"/>
+    <logger name="com.sun" level="ERROR"/>
+
+    <root level="TRACE">
+        <appender-ref ref="ConsoleDevAll"/>
+    </root>
+</configuration>
