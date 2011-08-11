@@ -25,8 +25,7 @@ import java.net.ConnectException;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
-
-import static javax.ws.rs.core.Response.Status;
+import java.util.ListIterator;
 
 /**
  * @author Antoine ROUAZE <antoine.rouaze AT zenika.com>
@@ -36,18 +35,23 @@ public class MavenRepositoryImporter {
     private static final Logger LOG = LoggerFactory.getLogger(MavenRepositoryImporter.class);
 
     private String baseUrl;
-    private String host;
-    private String port;
 
     private URI serverUri;
 
     private MavenXpp3Reader reader;
 
     private WebResource resource;
+    
+    private int importSuccess;
+    private int importFail;
 
-    public MavenRepositoryImporter(String baseUrl, String host, String port, String path) {
+    private List<File> importFileFail;
+
+    private long time;
+
+    public MavenRepositoryImporter(String baseUrl, String host, int port, String path) {
         this.baseUrl = baseUrl;
-        serverUri = UriBuilder.fromUri(host).port(Integer.parseInt(port)).path(path).build();
+        this.serverUri = UriBuilder.fromUri(host).port(port).path(path).build();
         init();
     }
 
@@ -58,17 +62,20 @@ public class MavenRepositoryImporter {
 
     private void init() {
         Client client = new Client();
-        resource = client.resource(serverUri);
-        reader = new MavenXpp3Reader();
+        this.resource = client.resource(serverUri);
+        this.reader = new MavenXpp3Reader();
+        this.importSuccess = 0;
+        this.importFail = 0;
+        this.importFileFail = new ArrayList<File>();
     }
 
     public void start() {
+        time = System.currentTimeMillis();
         sendPoms(new File(baseUrl));
+        time = System.currentTimeMillis() - time;
     }
 
     public void sendPoms(File root) {
-        LOG.trace("Root file : " + root);
-        LOG.trace("List files : " + root.listFiles().length);
         for (File file : root.listFiles()) {
             if (FilenameUtils.getExtension(file.getName()).equals("pom")) {
                 Model model = getPomModel(file);
@@ -111,6 +118,7 @@ public class MavenRepositoryImporter {
                         .entity(file)
                         .put();
                 LOG.info("Put request send to " + resource.getURI() + "/" + getArtifactPath(model, file.getName()));
+                importSuccess++;
             } catch (UniformInterfaceException e) {
                 ClientResponse response = e.getResponse();
                 if (response != null && Response.Status.fromStatusCode(response.getStatus()) != null) {
@@ -125,12 +133,16 @@ public class MavenRepositoryImporter {
                 } else {
                     LOG.error("Request error", e);
                 }
+                importFail++;
+                importFileFail.add(file);
             } catch (ClientHandlerException e) {
                 if (e.getCause().equals(ConnectException.class)) {
                     LOG.error("Can't not connect to the host connection refused", e);
                 } else {
                     LOG.error("Connection Exception", e);
                 }
+                importFail++;
+                importFileFail.add(file);
             }
         }
     }
@@ -155,5 +167,21 @@ public class MavenRepositoryImporter {
 
     public String getBaseUrl() {
         return baseUrl;
+    }
+
+    public int getImportSuccess() {
+        return importSuccess;
+    }
+
+    public int getImportFail() {
+        return importFail;
+    }
+
+    public long getTime() {
+        return time;
+    }
+
+    public List<File> getImportFileFail() {
+        return importFileFail;
     }
 }
