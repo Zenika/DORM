@@ -48,7 +48,16 @@ public class MavenResource {
                 .property(MavenMetadataExtension.METADATA_VERSION, version)
                 .build();
 
-        LOG.info("GET request to the maven web service : " + request);
+    @GET
+    @Produces(MediaType.APPLICATION_OCTET_STREAM)
+    @Path("{groupId:.*}/{artifactID}/{versions}/{fileName}.sha1")
+    public Response getSha1(@PathParam("groupId") String path, @PathParam("artifactID") String artifactId,
+                            @PathParam("versions") String version, @PathParam("fileName") String fileName) {
+        LOG.info("Get SHA1 ");
+        LOG.info("GroupId : " + path);
+        LOG.info("ArtifactId : " + artifactId);
+        LOG.info("Version : " + version);
+        LOG.info("FileName : " + fileName);
 
         try {
             File file = processor.get(request).getResource().getFile();

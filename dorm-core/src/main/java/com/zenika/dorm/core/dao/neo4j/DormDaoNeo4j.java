@@ -73,10 +73,13 @@ public class DormDaoNeo4j implements DormDao {
 
     public Neo4jDependency postDependency(Dependency dormDependency) {
         Usage usage = dormDependency.getUsage();
-        Neo4jDependency dependency = new Neo4jDependency(dormDependency);
-        Neo4jMetadata metadata = dependency.getMetadata();
-        Neo4jMetadataExtension extension = dependency.getMetadata().getNeo4jExtension();
+        Neo4jDependency dependency = null;
         try {
+            dependency = new Neo4jDependency(dormDependency);
+            Neo4jMetadata metadata = dependency.getMetadata();
+            LOG.trace("Metatada : " + metadata.getFullQualifier());
+            Neo4jMetadataExtension extension = dependency.getMetadata().getNeo4jExtension();
+
             if (executor.get(dependency.getIndexURI(index), List.class).isEmpty()) {
                 executor.post(extension);
                 executor.post(metadata);
