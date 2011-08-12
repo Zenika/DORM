@@ -40,25 +40,12 @@ public class MavenResource {
         if (fileName.equals("maven-metadata.xml")) {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
-
         DormRequest request = new DormRequestBuilder(version, MavenMetadataExtension.EXTENSION_NAME)
                 .filename(fileName)
                 .property(MavenMetadataExtension.METADATA_GROUPID, groupId)
                 .property(MavenMetadataExtension.METADATA_ARTIFACTID, artifactId)
                 .property(MavenMetadataExtension.METADATA_VERSION, version)
                 .build();
-
-    @GET
-    @Produces(MediaType.APPLICATION_OCTET_STREAM)
-    @Path("{groupId:.*}/{artifactID}/{versions}/{fileName}.sha1")
-    public Response getSha1(@PathParam("groupId") String path, @PathParam("artifactID") String artifactId,
-                            @PathParam("versions") String version, @PathParam("fileName") String fileName) {
-        LOG.info("Get SHA1 ");
-        LOG.info("GroupId : " + path);
-        LOG.info("ArtifactId : " + artifactId);
-        LOG.info("Version : " + version);
-        LOG.info("FileName : " + fileName);
-
         try {
             File file = processor.get(request).getResource().getFile();
             return Response.status(Response.Status.OK).entity(file).build();
