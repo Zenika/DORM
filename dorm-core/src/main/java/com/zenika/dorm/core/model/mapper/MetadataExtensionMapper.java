@@ -2,6 +2,8 @@ package com.zenika.dorm.core.model.mapper;
 
 import com.zenika.dorm.core.exception.CoreException;
 import com.zenika.dorm.core.model.DormMetadataExtension;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -15,6 +17,8 @@ import java.util.Map;
  */
 public final class MetadataExtensionMapper {
 
+    private static final Logger LOG = LoggerFactory.getLogger(MetadataExtensionMapper.class);
+
     private MetadataExtensionMapper() {
 
     }
@@ -27,13 +31,24 @@ public final class MetadataExtensionMapper {
 
         for (Field field : reflect.getDeclaredFields()) {
 
+            LOG.trace("Trying to map field : " + field);
+
             // include non public attributes
+            // todo: find a more elegant way to do this
             field.setAccessible(true);
+
+            // ignore transient fields
+            if (Modifier.isTransient(field.getModifiers())) {
+                continue;
+            }
 
             try {
                 properties.put(field.getName(), (String) field.get(extension));
+            } catch (ClassCastException e) {
+                LOG.error("Cannot map anything else thann Strings, make " + field + " transient", e);
+                continue;
             } catch (IllegalAccessException e) {
-                throw new CoreException("Cannot map from extension", e);
+                throw new CoreException("Cannot access field " + field + " to make the mapping", e);
             }
         }
 
@@ -65,5 +80,6 @@ public final class MetadataExtensionMapper {
 
         return extension;
     }
+
 
 }
