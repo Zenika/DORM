@@ -1,13 +1,12 @@
 package com.zenika.dorm.core.test.helper;
 
 import com.zenika.dorm.core.exception.CoreException;
-import com.zenika.dorm.core.model.Dependency;
-import com.zenika.dorm.core.model.DependencyNode;
-import com.zenika.dorm.core.model.impl.DefaultDependency;
-import com.zenika.dorm.core.model.impl.*;
 import com.zenika.dorm.core.model.*;
 import com.zenika.dorm.core.model.builder.DormRequestBuilder;
+import com.zenika.dorm.core.model.impl.DefaultDependency;
 import com.zenika.dorm.core.model.impl.DefaultDependencyNode;
+import com.zenika.dorm.core.model.impl.DefaultDormMetadata;
+import com.zenika.dorm.core.model.impl.DefaultDormResource;
 
 import java.io.File;
 import java.io.IOException;

@@ -1,13 +1,13 @@
 package com.zenika.dorm.maven.test.helper;
 
 import com.zenika.dorm.core.model.*;
-import com.zenika.dorm.core.model.DependencyNode;
-import com.zenika.dorm.core.model.impl.DefaultDependency;
-import com.zenika.dorm.core.model.impl.*;
-import com.zenika.dorm.core.model.impl.DefaultDependencyNode;
 import com.zenika.dorm.core.model.builder.DormRequestBuilder;
+import com.zenika.dorm.core.model.impl.DefaultDependency;
+import com.zenika.dorm.core.model.impl.DefaultDependencyNode;
+import com.zenika.dorm.core.model.impl.DefaultDormMetadata;
 import com.zenika.dorm.core.model.impl.Usage;
 import com.zenika.dorm.core.test.helper.ExtensionFixtures;
+import com.zenika.dorm.maven.model.impl.MavenFileType;
 import com.zenika.dorm.maven.model.impl.MavenMetadataExtension;
 import com.zenika.dorm.maven.processor.extension.MavenProcessor;
 import org.slf4j.Logger;
@@ -26,7 +26,7 @@ public class MavenFixtures extends ExtensionFixtures {
     private String groupId = "testgroup1.testgroup2";
     private String artifactId = "testartifact";
     private String mavenVersion = "1.0-SNAPSHOT";
-    private String type = "jar";
+    private String type = MavenFileType.JAR;
     private String origin = MavenMetadataExtension.EXTENSION_NAME;
 
     @Override

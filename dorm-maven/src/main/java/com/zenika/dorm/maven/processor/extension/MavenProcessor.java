@@ -2,15 +2,16 @@ package com.zenika.dorm.maven.processor.extension;
 
 import com.zenika.dorm.core.model.Dependency;
 import com.zenika.dorm.core.model.DependencyNode;
-import com.zenika.dorm.core.model.impl.DefaultDependencyNode;
-import com.zenika.dorm.core.model.impl.Usage;
 import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.core.model.DormRequest;
 import com.zenika.dorm.core.model.builder.DependencyBuilderFromRequest;
 import com.zenika.dorm.core.model.builder.DormRequestBuilder;
 import com.zenika.dorm.core.model.builder.MetadataBuilderFromRequest;
+import com.zenika.dorm.core.model.impl.DefaultDependencyNode;
+import com.zenika.dorm.core.model.impl.Usage;
 import com.zenika.dorm.core.processor.impl.AbstractProcessorExtension;
 import com.zenika.dorm.maven.exception.MavenException;
+import com.zenika.dorm.maven.model.impl.MavenFileType;
 import com.zenika.dorm.maven.model.impl.MavenMetadataExtension;
 import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
@@ -109,7 +110,7 @@ public class MavenProcessor extends AbstractProcessorExtension {
         }
 
         LOG.debug("Type of the maven file = " + type);
-        if (!type.equalsIgnoreCase("jar") && type.equalsIgnoreCase("pom") && type.equalsIgnoreCase("sha1")) {
+        if (!MavenFileType.isMavenType(type)) {
             throw new MavenException("Invalid maven type : " + type);
         }
     }
