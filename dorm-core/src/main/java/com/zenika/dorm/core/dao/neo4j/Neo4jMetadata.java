@@ -63,8 +63,8 @@ public class Neo4jMetadata extends Neo4jNode implements DormMetadata {
 
     @JsonIgnore
     @Override
-    public Neo4jMetadataExtension getExtension(){
-        return extension;
+    public DormMetadataExtension getExtension(){
+        throw new UnsupportedOperationException();
     }
 
     @Override

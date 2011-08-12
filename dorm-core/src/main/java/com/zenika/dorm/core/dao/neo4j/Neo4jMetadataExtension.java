@@ -14,48 +14,28 @@ import java.util.Map;
  */
 @XmlAccessorType(XmlAccessType.PROPERTY)
 @XmlRootElement
-public class Neo4jMetadataExtension extends Neo4jNode implements DormMetadataExtension {
+public class Neo4jMetadataExtension extends Neo4jNode {
 
     public static final Usage RELATIONSHIP_TYPE = Usage.create("EXTENSION");
 
     @JsonIgnore
     private Map<String, String> properties;
 
-    private String qualifier;
-    private String extension;
+    private DormMetadataExtension extension;
 
     public Neo4jMetadataExtension() {
 
     }
 
     public Neo4jMetadataExtension(DormMetadataExtension extension) {
-        this.extension = extension.getExtensionName();
-        this.qualifier = extension.getQualifier();
-    }
-
-    @Override
-    public String getQualifier() {
-        return qualifier;  //To change body of implemented methods use File | Settings | File Templates.
-    }
-
-    @Override
-    public String getExtensionName() {
-        return extension;  //To change body of implemented methods use File | Settings | File Templates.
-    }
-
-    public void setQualifier(String qualifier) {
-        this.qualifier = qualifier;
-    }
-
-    public void setExtensionName(String extension) {
         this.extension = extension;
     }
+
 
     @Override
     public String toString() {
         return "Neo4jMetadataExtension{" +
-                "qualifier='" + qualifier + '\'' +
-                ", extension='" + extension + '\'' +
+                "extension='" + extension + '\'' +
                 '}';
     }
 
@@ -68,16 +48,13 @@ public class Neo4jMetadataExtension extends Neo4jNode implements DormMetadataExt
 
         if (extension != null ? !extension.equals(extension1.extension) : extension1.extension != null)
             return false;
-        if (qualifier != null ? !qualifier.equals(extension1.qualifier) : extension1.qualifier != null)
-            return false;
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        int result = qualifier != null ? qualifier.hashCode() : 0;
-        result = 31 * result + (extension != null ? extension.hashCode() : 0);
+        int result = extension != null ? extension.hashCode() : 0;
         return result;
     }
 
@@ -88,9 +65,11 @@ public class Neo4jMetadataExtension extends Neo4jNode implements DormMetadataExt
 //        this.setQualifier(getResponse().getData().getQualifier());
     }
 
-    @Override
-    public DormMetadataExtension createFromMap(Map<String, String> properties) {
-        throw new UnsupportedOperationException();
+    public DormMetadataExtension getExtension() {
+        return extension;
     }
 
+    public void setExtension(DormMetadataExtension extension) {
+        this.extension = extension;
+    }
 }

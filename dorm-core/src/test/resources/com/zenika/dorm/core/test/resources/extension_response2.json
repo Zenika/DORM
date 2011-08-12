@@ -1,8 +1,9 @@
 {
     "outgoing_relationships" : "http://localhost:7474/db/data/node/1/relationships/out",
     "data" : {
-        "extensionName" : "dorm",
-        "qualifier" : "xercesImpl"
+        "EXTENSION_NAME" : "dorm",
+        "name" : "xercesImpl",
+        "METADATA_NAME" : "name"
     },
     "traverse" : "http://localhost:7474/db/data/node/1/traverse/{returnType}",
     "all_typed_relationships" : "http://localhost:7474/db/data/node/1/relationships/all/{-list|&|types}",

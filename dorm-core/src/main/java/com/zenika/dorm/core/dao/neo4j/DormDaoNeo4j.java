@@ -10,11 +10,14 @@ import com.zenika.dorm.core.dao.neo4j.util.RequestExecutor;
 import com.zenika.dorm.core.exception.CoreException;
 import com.zenika.dorm.core.model.Dependency;
 import com.zenika.dorm.core.model.DependencyNode;
+import com.zenika.dorm.core.model.impl.DefaultDependency;
 import com.zenika.dorm.core.model.impl.DefaultDependencyNode;
+import com.zenika.dorm.core.model.impl.DefaultDormMetadata;
 import com.zenika.dorm.core.model.impl.Usage;
 import com.zenika.dorm.core.graph.visitor.impl.DependenciesNodeCollector;
 import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.core.model.DormMetadataExtension;
+import com.zenika.dorm.core.model.mapper.MetadataExtensionMapper;
 import org.codehaus.jackson.type.TypeReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -77,11 +80,9 @@ public class DormDaoNeo4j implements DormDao {
         try {
             dependency = new Neo4jDependency(dormDependency);
             Neo4jMetadata metadata = dependency.getMetadata();
-            LOG.trace("Metatada : " + metadata.getFullQualifier());
             Neo4jMetadataExtension extension = dependency.getMetadata().getNeo4jExtension();
-
             if (executor.get(dependency.getIndexURI(index), List.class).isEmpty()) {
-                executor.post(extension);
+                extension.setResponse(executor.postExtension(MetadataExtensionMapper.fromExtension(extension.getExtension())));
                 executor.post(metadata);
                 executor.post(dependency);
                 executor.post(new Neo4jRelationship(metadata, extension, Neo4jMetadataExtension.RELATIONSHIP_TYPE));
@@ -116,8 +117,7 @@ public class DormDaoNeo4j implements DormDao {
         }.getType());
         Neo4jRelationship metadataExtension = getSingleRelationship(metadata.getResponse()
                 .getOutgoing_typed_relationships(Neo4jMetadataExtension.RELATIONSHIP_TYPE));
-        Neo4jMetadataExtension extension = executor.getNode(metadataExtension.getEnd(), new TypeReference<Neo4jResponse<Neo4jMetadataExtension>>() {
-        }.getType());
+        Neo4jMetadataExtension extension = executor.getExtension(metadataExtension.getEnd(), extensionPlug);
         dependency.setMetadata(metadata);
         metadata.setExtension(extension);
         return dependency;
@@ -127,8 +127,9 @@ public class DormDaoNeo4j implements DormDao {
         Neo4jDependency dependency = executor.getNode(uri, new TypeReference<Neo4jResponse<Neo4jDependency>>() {
         }.getType());
         fillNeo4jDependency(dependency, extension);
-        dependency.setUsage(usage);
-        return dependency;
+        DormMetadata metadata = DefaultDormMetadata
+                .create(dependency.getMetadata().getVersion(), dependency.getMetadata().getNeo4jExtension().getExtension());
+        return DefaultDependency.create(metadata, usage);
     }
 
     private Neo4jRelationship getSingleRelationship(URI uri) {
@@ -148,6 +149,8 @@ public class DormDaoNeo4j implements DormDao {
             dependency = searchNode(Neo4jMetadata.generateIndexURI(metadata.getFullQualifier(), index), type.getType());
             Neo4jTraverse traverse = new Neo4jTraverse(new Neo4jRelationship(usage));
             List<Neo4jRelationship> relationships = executor.post(dependency.getTraverse(Neo4jTraverse.RELATIONSHIP_TYPE), traverse);
+            DependencyNode root = DefaultDependencyNode.create(getDependency(new URI(dependency.getUri()), usage, extension));
+            dependencyNodeMap.put(dependency.getUri(), root);
             putChild(usage, dependencyNodeMap, relationships, extension);
         } catch (UniformInterfaceException e) {
             if (e.getResponse().getStatus() == Response.Status.NOT_FOUND.getStatusCode()) {
@@ -160,6 +163,7 @@ public class DormDaoNeo4j implements DormDao {
     }
 
     public void putChild(Usage usage, Map<String, DependencyNode> dependencyNodeMap, List<Neo4jRelationship> relationships, DormMetadataExtension extension) throws URISyntaxException {
+
         for (Neo4jRelationship relationship : relationships) {
             DependencyNode dependencyParent = dependencyNodeMap.get(relationship.getStart());
             DependencyNode dependencyChild = dependencyNodeMap.get(relationship.getEnd());

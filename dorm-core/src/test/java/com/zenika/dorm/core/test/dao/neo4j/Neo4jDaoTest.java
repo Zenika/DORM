@@ -11,7 +11,13 @@ import com.zenika.dorm.core.dao.neo4j.util.Neo4jRequestExecutor;
 import com.zenika.dorm.core.dao.neo4j.util.RequestExecutor;
 import com.zenika.dorm.core.model.Dependency;
 import com.zenika.dorm.core.model.DependencyNode;
+import com.zenika.dorm.core.model.DormMetadata;
+import com.zenika.dorm.core.model.DormMetadataExtension;
+import com.zenika.dorm.core.model.impl.DefaultDependency;
+import com.zenika.dorm.core.model.impl.DefaultDormMetadata;
 import com.zenika.dorm.core.model.impl.DefaultDormMetadataExtension;
+import com.zenika.dorm.core.model.impl.Usage;
+import com.zenika.dorm.core.model.mapper.MetadataExtensionMapper;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.invocation.InvocationOnMock;
@@ -37,10 +43,11 @@ public class Neo4jDaoTest {
 
     private static final Logger LOG = LoggerFactory.getLogger(Neo4jDaoTest.class);
 
-    //    private Dependency dependency21Response;
-//    private DependencyNode dependencyNode;
-//    private DormMetadata metadata20Response;
-//    private DormMetadataExtension extension19Response;
+    private Dependency dependency21Response;
+    private DependencyNode dependencyNode;
+    private DormMetadata metadata20Response;
+    private DormMetadataExtension extension19Response;
+    private Usage usage;
 
     private Neo4jDaoTestProvider provider;
 
@@ -55,24 +62,26 @@ public class Neo4jDaoTest {
         executor = mock(Neo4jRequestExecutor.class);
         setUpMethod();
         dao = new DormDaoNeo4j(executor);
-//        dao.init();
+        dao.init();
+//        dao = new DormDaoNeo4j();
+//        usage = Usage.create();
 //        extension19Response = new DefaultDormMetadataExtension("habi-base");
 //        metadata20Response = DefaultDormMetadata.create("0.6", extension19Response);
 //        dependency21Response = DefaultDependency.create(metadata20Response, usage);
 //        dependencyNode = DefaultDependencyNode.create(dependency21Response);
-
     }
-//
+
+    //
 //    @Test
 //    public void push() throws Exception {
 //        dao.push(dependency21Response);
 //    }
-//
+////
 //    @Test
 //    public void pushDependencyNode() {
 //        //dao.push(dependencyNode);
 //    }
-//
+////
 //    @Test
 //    public void testPushWithRecursiveChildren() {
 //        DormMetadataExtension extension19Response;
@@ -94,7 +103,7 @@ public class Neo4jDaoTest {
 //        dao.push(dependencies.get(0));
 //        System.out.println("Times to standard push : " + (System.currentTimeMillis() - time));
 //    }
-//
+////
 //    @Test
 //    public void testPushWithManyChildren() {
 //        DormMetadataExtension extension19Response = new DefaultDormMetadataExtension("maven");
@@ -112,23 +121,25 @@ public class Neo4jDaoTest {
 //        dao.push(dependencyNode);
 //        System.out.println("Times to standard push : " + (System.currentTimeMillis() - time));
 //    }
-//
+////
 //    @Test
 //    public void getByMetaData() {
 //        long time = System.currentTimeMillis();
 //        dao.getByMetadata(metadata20Response, usage);
 //        System.out.println("Times to standard push : " + (System.currentTimeMillis() - time));
 //    }
-//
+////
 //    @Test
 //    public void getOtherByMetadata() {
 //        DormMetadataExtension extension19Response = new DefaultDormMetadataExtension("maven");
 //        DormMetadata metadata20Response = DefaultDormMetadata.create("1.0.0", extension19Response);
 //        long time = System.currentTimeMillis();
-//        dao.getByMetadata(metadata20Response, usage);
+//        DependencyNode node = dao.getByMetadata(metadata20Response, usage);
+//        LOG.info("Metadata : " + node.getDependency().getMetadata());
+//        LOG.info("Extension : " + node.getDependency().getMetadata().getExtension());
 //        System.out.println("Times to standard push : " + (System.currentTimeMillis() - time));
 //    }
-//
+////
 //    @Test
 //    public void pushDependencyNodeWithChildren() {
 //        DependencyNode habi_base = createDependencyNode("habi-base", "0.6");
@@ -184,7 +195,7 @@ public class Neo4jDaoTest {
         try {
             Neo4jDependency dependencyResponse = dao.fillNeo4jDependency(provider.getDependency21Response().getData(), new DefaultDormMetadataExtension("test"));
             assertThat(dependencyResponse.getMetadata()).isSameAs(provider.getMetadata20Response().getData());
-            assertThat(dependencyResponse.getMetadata().getNeo4jExtension()).isSameAs(provider.getExtension19Response().getData());
+            assertThat(dependencyResponse.getMetadata().getNeo4jExtension()).isSameAs(provider.getExtension19());
         } catch (URISyntaxException e) {
             LOG.error("Bad URI", e);
         }
@@ -196,9 +207,9 @@ public class Neo4jDaoTest {
         LOG.trace("START testGetDependency");
         try {
             Dependency dependency = dao.getDependency(provider.getDependency21Uri(), provider.getUsage(), new DefaultDormMetadataExtension("test"));
-            assertThat(dependency).isInstanceOf(Neo4jDependency.class);
-            assertThat(dependency.getMetadata()).isSameAs(provider.getMetadata20Response().getData());
-            assertThat(dependency.getMetadata().getExtension()).isSameAs(provider.getExtension19Response().getData());
+            assertThat(dependency).isInstanceOf(DefaultDependency.class);
+            assertThat(dependency.getMetadata()).isInstanceOf(DefaultDormMetadata.class);
+            assertThat(dependency.getMetadata().getExtension()).isInstanceOf(DefaultDormMetadataExtension.class);
             assertThat(dependency.getUsage()).isSameAs(provider.getUsage());
         } catch (URISyntaxException e) {
             LOG.error("Bad URI", e);
@@ -213,17 +224,17 @@ public class Neo4jDaoTest {
             Map<String, DependencyNode> map = new HashMap<String, DependencyNode>();
             dao.putChild(provider.getUsage(), map, provider.getRelationships(), new DefaultDormMetadataExtension("test"));
             assertThat(map.get(provider.getDependency21Uri().toString()).getDependency())
-                    .isSameAs(provider.getDependency21Response().getData());
+                    .isInstanceOf(DefaultDependency.class);
             assertThat(map.get(provider.getDependency21Uri().toString()).getDependency().getMetadata())
-                    .isSameAs(provider.getMetadata20Response().getData());
+                    .isInstanceOf(DefaultDormMetadata.class);
             assertThat(map.get(provider.getDependency21Uri().toString()).getDependency().getMetadata().getExtension())
-                    .isSameAs(provider.getExtension19Response().getData());
+                    .isInstanceOf(DefaultDormMetadataExtension.class);
             assertThat(map.get(provider.getDependency3Uri().toString()).getDependency())
-                    .isSameAs(provider.getDependency3Response().getData());
+                    .isInstanceOf(DefaultDependency.class);
             assertThat(map.get(provider.getDependency3Uri().toString()).getDependency().getMetadata())
-                    .isSameAs(provider.getMetadata2Response().getData());
+                    .isInstanceOf(DefaultDormMetadata.class);
             assertThat(map.get(provider.getDependency3Uri().toString()).getDependency().getMetadata().getExtension())
-                    .isSameAs(provider.getExtension1Response().getData());
+                    .isInstanceOf(DefaultDormMetadataExtension.class);
             assertThat(map.get(provider.getDependency21Uri().toString()).getChildren().iterator().next())
                     .isSameAs(map.get(provider.getDependency3Uri().toString()));
         } catch (URISyntaxException e) {
@@ -238,11 +249,11 @@ public class Neo4jDaoTest {
         try {
             Neo4jDependency dependency = dao.postDependency(provider.getDependency());
             assertThat(dependency.getResponse()).isSameAs(provider.getDependency21Response());
-            verify(executor).post(provider.getDependency());
-            verify(executor).post(provider.getMetadata());
-            verify(executor).post(provider.getExtension());
+            verify(executor).post(provider.getNeo4jDependency());
+            verify(executor).post(provider.getNeo4jMetadata());
+            verify(executor).postExtension(MetadataExtensionMapper.fromExtension(provider.getExtension()));
             verify(executor).post(new Neo4jRelationship(provider.getMetadata20Response().getData(),
-                    provider.getExtension19Response().getData(), Neo4jMetadataExtension.RELATIONSHIP_TYPE));
+                    provider.getExtension19(), Neo4jMetadataExtension.RELATIONSHIP_TYPE));
             verify(executor).post(new Neo4jRelationship(provider.getDependency21Response().getData(),
                     provider.getMetadata20Response().getData(), Neo4jMetadata.RELATIONSHIP_TYPE));
         } catch (URISyntaxException e) {
@@ -252,11 +263,11 @@ public class Neo4jDaoTest {
     }
 
     @Test
-    public void testGetByMetadata(){
+    public void testGetByMetadata() {
         DependencyNode node = dao.getByMetadata(provider.getMetadata(), provider.getUsage());
         assertThat(node.getDependency().getMetadata()).isEqualTo(provider.getMetadata());
         assertThat(node.getDependency().getMetadata().getExtension()).isEqualTo(provider.getExtension());
-        assertThat(node.getChildren().iterator().next().getDependency()).isEqualTo(provider.getDependency3Response().getData());
+//        assertThat(node.getChildren().iterator().next().getDependency()).isEqualTo(provider.getDependency());
     }
 
     private void setUpMethod() {
@@ -274,11 +285,11 @@ public class Neo4jDaoTest {
         when(executor.<Neo4jMetadata>getNode(provider.getMetadata2Uri(), provider.getMetadataResponseType().getType()))
                 .thenReturn(provider.getMetadata2Response().getData());
 
-        when(executor.<Neo4jMetadataExtension>getNode(provider.getExtension19Uri(), provider.getExtensionResponseType().getType()))
-                .thenReturn(provider.getExtension19Response().getData());
+        when(executor.getExtension(eq(provider.getExtension19Uri()), any(DormMetadataExtension.class)))
+                .thenReturn(provider.getExtension19());
 
-        when(executor.<Neo4jMetadataExtension>getNode(provider.getExtension1Uri(), provider.getExtensionResponseType().getType()))
-                .thenReturn(provider.getExtension1Response().getData());
+        when(executor.getExtension(eq(provider.getExtension1Uri()), any(DormMetadataExtension.class)))
+                .thenReturn(provider.getExtension1());
 
         when(executor.<List<Neo4jRelationship>>get(provider.getRelationshipDependency21Uri(), provider.getListRelationshipType().getType()))
                 .thenReturn(provider.getRelationshipsDependency21());
@@ -314,31 +325,27 @@ public class Neo4jDaoTest {
         doAnswer(new Answer<Neo4jDependency>() {
             @Override
             public Neo4jDependency answer(InvocationOnMock invocation) throws Throwable {
-                Neo4jDependency dependency = (Neo4jDependency) invocation.getArguments()[0];
-                dependency.setResponse(provider.getDependency21Response());
+
                 return null;  //To change body of implemented methods use File | Settings | File Templates.
             }
-        }).when(executor).post(provider.getDependency());
+        }).when(executor).post(any(Neo4jDependency.class));
 
-        doAnswer(new Answer<Neo4jMetadataExtension>() {
-
-            @Override
-            public Neo4jMetadataExtension answer(InvocationOnMock invocation) throws Throwable {
-                Neo4jMetadataExtension extension = (Neo4jMetadataExtension) invocation.getArguments()[0];
-                extension.setResponse(provider.getExtension19Response());
-                return null;  //To change body of implemented methods use File | Settings | File Templates.
-            }
-        }).when(executor).post(provider.getExtension());
+        when(executor.postExtension(MetadataExtensionMapper.fromExtension(provider.getExtension()))).thenReturn(provider.getExtension19Response());
 
         doAnswer(new Answer<Neo4jMetadata>() {
 
             @Override
             public Neo4jMetadata answer(InvocationOnMock invocation) throws Throwable {
-                Neo4jMetadata metadata = (Neo4jMetadata) invocation.getArguments()[0];
-                metadata.setResponse(provider.getMetadata20Response());
+                if (invocation.getArguments()[0].getClass().equals(Neo4jDependency.class)){
+                    Neo4jDependency dependency = (Neo4jDependency) invocation.getArguments()[0];
+                    dependency.setResponse(provider.getDependency21Response());
+                }else{
+                    Neo4jMetadata metadata = (Neo4jMetadata) invocation.getArguments()[0];
+                    metadata.setResponse(provider.getMetadata20Response());
+                }
                 return null;  //To change body of implemented methods use File | Settings | File Templates.
             }
-        }).when(executor).post(provider.getMetadata());
+        }).when(executor).post(any(Neo4jMetadata.class));
 
     }
 }

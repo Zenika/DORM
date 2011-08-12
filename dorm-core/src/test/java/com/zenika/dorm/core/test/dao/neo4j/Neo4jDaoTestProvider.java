@@ -8,7 +8,10 @@ import com.zenika.dorm.core.dao.neo4j.Neo4jRelationship;
 import com.zenika.dorm.core.dao.neo4j.Neo4jResponse;
 import com.zenika.dorm.core.dao.neo4j.Neo4jTraverse;
 import com.zenika.dorm.core.dao.neo4j.util.ObjectMapperProvider;
+import com.zenika.dorm.core.model.Dependency;
 import com.zenika.dorm.core.model.DependencyNode;
+import com.zenika.dorm.core.model.DormMetadata;
+import com.zenika.dorm.core.model.DormMetadataExtension;
 import com.zenika.dorm.core.model.impl.DefaultDependency;
 import com.zenika.dorm.core.model.impl.DefaultDependencyNode;
 import com.zenika.dorm.core.model.impl.*;
@@ -24,6 +27,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Antoine ROUAZE <antoine.rouaze AT zenika.com>
@@ -104,17 +108,19 @@ public class Neo4jDaoTestProvider {
 
     private TypeReference<Neo4jResponse<Neo4jDependency>> dependencyResponseType;
     private TypeReference<Neo4jResponse<Neo4jMetadata>> metadataResponseType;
-    private TypeReference<Neo4jResponse<Neo4jMetadataExtension>> extensionResponseType;
+    private TypeReference<Neo4jResponse<Map<String, String>>> extensionResponseType;
     private TypeReference<List<Neo4jRelationship>> listRelationshipType;
     private TypeReference<List<Neo4jResponse<Neo4jDependency>>> listDependencyResponseType;
 
     private Neo4jIndex index;
     private Neo4jResponse<Neo4jDependency> dependency21Response;
     private Neo4jResponse<Neo4jMetadata> metadata20Response;
-    private Neo4jResponse<Neo4jMetadataExtension> extension19Response;
+    private Neo4jResponse<Map<String, String>> extension19Response;
     private Neo4jResponse<Neo4jDependency> dependency3Response;
     private Neo4jResponse<Neo4jMetadata> metadata2Response;
-    private Neo4jResponse<Neo4jMetadataExtension> extension1Response;
+    private Neo4jResponse<Map<String, String>> extension1Response;
+    private Neo4jMetadataExtension extension19;
+    private Neo4jMetadataExtension extension1;
     private Neo4jTraverse traverse;
     private List<Neo4jRelationship> relationshipsDependency21;
     private List<Neo4jRelationship> relationshipsDependency3;
@@ -125,11 +131,16 @@ public class Neo4jDaoTestProvider {
 
     private ObjectMapper mapper;
 
+    private DormMetadataExtension dormMetadataExtension;
+
     private Usage usage;
-    private Neo4jDependency dependency;
+    private Dependency dependency;
+    private Neo4jDependency neo4jDependency;
     private DependencyNode dependencyNode;
-    private Neo4jMetadata metadata;
-    private Neo4jMetadataExtension extension;
+    private DormMetadata metadata;
+    private Neo4jMetadata neo4jMetadata;
+    private DormMetadataExtension extension;
+    private Neo4jMetadataExtension neo4jExtension;
 
     public Neo4jDaoTestProvider() {
         mapper = ObjectMapperProvider.createDefaultMapper();
@@ -187,7 +198,7 @@ public class Neo4jDaoTestProvider {
         };
         metadataResponseType = new TypeReference<Neo4jResponse<Neo4jMetadata>>() {
         };
-        extensionResponseType = new TypeReference<Neo4jResponse<Neo4jMetadataExtension>>() {
+        extensionResponseType = new TypeReference<Neo4jResponse<Map<String, String>>>() {
         };
         listRelationshipType = new TypeReference<List<Neo4jRelationship>>() {
         };
@@ -196,6 +207,7 @@ public class Neo4jDaoTestProvider {
     }
 
     private void setUpNeo4jResponseObject() {
+        dormMetadataExtension = new DefaultDormMetadataExtension("Maven");
         try {
             dependency21Response = mapper.readValue(dependency21Url, dependencyResponseType);
             metadata20Response = mapper.readValue(metadata20Url, metadataResponseType);
@@ -214,21 +226,32 @@ public class Neo4jDaoTestProvider {
 
             dependency21Response.getData().setResponse(dependency21Response);
             metadata20Response.getData().setResponse(metadata20Response);
-            extension19Response.getData().setResponse(extension19Response);
+            extension19 = new Neo4jMetadataExtension();
+            extension19.setExtension(dormMetadataExtension.createFromMap(extension19Response.getData()));
+            extension19.setResponse(extension19Response);
+//            extension19Response.getData().setResponse(extension19Response);
             dependency3Response.getData().setResponse(dependency3Response);
             metadata2Response.getData().setResponse(metadata2Response);
-            extension1Response.getData().setResponse(extension1Response);
+            extension1 = new Neo4jMetadataExtension();
+            extension1.setExtension(dormMetadataExtension.createFromMap(extension1Response.getData()));
+            extension1.setResponse(extension1Response);
+//            extension1Response.getData().setResponse(extension1Response);
         } catch (IOException e) {
             LOG.error("Jackson mapper error", e);
         }
     }
 
-    private void setUpDormDependency(){
+    private void setUpDormDependency() {
         usage = Usage.create("DEFAULT");
-        extension = new Neo4jMetadataExtension(new DefaultDormMetadataExtension("habi-base"));
-        metadata = new Neo4jMetadata(DefaultDormMetadata.create("0.6", extension));
-        dependency = new Neo4jDependency(DefaultDependency.create(metadata, usage));
-        dependencyNode = DefaultDependencyNode.create(dependency);
+        extension = new DefaultDormMetadataExtension("habi-base");
+        neo4jExtension = new Neo4jMetadataExtension(extension);
+        metadata = DefaultDormMetadata.create("0.6", extension);
+        neo4jMetadata = new Neo4jMetadata(metadata);
+        neo4jMetadata.setExtension(neo4jExtension);
+        dependency = DefaultDependency.create(metadata, usage);
+        neo4jDependency = new Neo4jDependency(dependency);
+        neo4jDependency.setMetadata(neo4jMetadata);
+        dependencyNode = DefaultDependencyNode.create(neo4jDependency);
     }
 
     public TypeReference<Neo4jResponse<Neo4jDependency>> getDependencyResponseType() {
@@ -239,7 +262,7 @@ public class Neo4jDaoTestProvider {
         return metadataResponseType;
     }
 
-    public TypeReference<Neo4jResponse<Neo4jMetadataExtension>> getExtensionResponseType() {
+    public TypeReference<Neo4jResponse<Map<String, String>>> getExtensionResponseType() {
         return extensionResponseType;
     }
 
@@ -259,7 +282,7 @@ public class Neo4jDaoTestProvider {
         return metadata20Response;
     }
 
-    public Neo4jResponse<Neo4jMetadataExtension> getExtension19Response() {
+    public Neo4jResponse<Map<String, String>> getExtension19Response() {
         return extension19Response;
     }
 
@@ -271,7 +294,7 @@ public class Neo4jDaoTestProvider {
         return metadata2Response;
     }
 
-    public Neo4jResponse<Neo4jMetadataExtension> getExtension1Response() {
+    public Neo4jResponse<Map<String, String>> getExtension1Response() {
         return extension1Response;
     }
 
@@ -375,28 +398,52 @@ public class Neo4jDaoTestProvider {
         return usage;
     }
 
-    public Neo4jDependency getDependency() {
-        return dependency;
+    public Neo4jDependency getNeo4jDependency() {
+        return neo4jDependency;
     }
 
     public DependencyNode getDependencyNode() {
         return dependencyNode;
     }
 
-    public Neo4jMetadata getMetadata() {
+    public Neo4jMetadata getNeo4jMetadata() {
+        return neo4jMetadata;
+    }
+
+    public Neo4jMetadataExtension getNeo4jExtension() {
+        return neo4jExtension;
+    }
+
+    public DormMetadataExtension getDormMetadataExtension() {
+        return dormMetadataExtension;
+    }
+
+    public Neo4jMetadataExtension getExtension1() {
+        return extension1;
+    }
+
+    public Neo4jMetadataExtension getExtension19() {
+        return extension19;
+    }
+
+    public Dependency getDependency() {
+        return dependency;
+    }
+
+    public DormMetadata getMetadata() {
         return metadata;
     }
 
-    public Neo4jMetadataExtension getExtension() {
+    public DormMetadataExtension getExtension() {
         return extension;
     }
 
-    public List getEmptyList(){
+    public List getEmptyList() {
         return new ArrayList();
     }
 
-    public List getNoEmptyList(){
-        List list =  new ArrayList();
+    public List getNoEmptyList() {
+        List list = new ArrayList();
         list.add("empty");
         return list;
     }
