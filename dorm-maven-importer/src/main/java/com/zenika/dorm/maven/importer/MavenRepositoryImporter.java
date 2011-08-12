@@ -41,7 +41,7 @@ public class MavenRepositoryImporter {
     private MavenXpp3Reader reader;
 
     private WebResource resource;
-    
+
     private int importSuccess;
     private int importFail;
 
@@ -152,6 +152,11 @@ public class MavenRepositoryImporter {
         if (!(model.getGroupId() == null || model.getGroupId().isEmpty())) {
             sb.append(model.getGroupId().replace('.', '/'));
             sb.append('/');
+        } else {
+            if (!(model.getParent().getGroupId() == null || model.getParent().getGroupId().isEmpty())) {
+                sb.append(model.getParent().getGroupId().replace('.', '/'));
+                sb.append('/');
+            }
         }
         if (!(model.getArtifactId() == null || model.getArtifactId().isEmpty())) {
             sb.append(model.getArtifactId());
@@ -160,6 +165,11 @@ public class MavenRepositoryImporter {
         if (!(model.getVersion() == null || model.getVersion().isEmpty())) {
             sb.append(model.getVersion());
             sb.append('/');
+        } else {
+            if (!(model.getParent().getVersion() == null || model.getParent().getVersion().isEmpty())) {
+                sb.append(model.getParent().getVersion());
+                sb.append('/');
+            }
         }
         sb.append(fileName);
         return sb.toString();

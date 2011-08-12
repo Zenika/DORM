@@ -8,7 +8,7 @@ import org.junit.Test;
  */
 public class MavenTestRepositoryImporter {
 
-    @Test
+//    @Test
     public void testImporter(){
         MavenRepositoryImporter importer = new MavenRepositoryImporter("/home/erouan/.m2/repository", "http://localhost", 8080, "maven");
         importer.start();

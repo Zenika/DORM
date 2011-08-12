@@ -38,6 +38,9 @@ public class Launch {
         CmdLineParser parser = new CmdLineParser(this);
         try {
             parser.parseArgument(args);
+            if (!host.contains("http://")){
+                host = "http://" + host;
+            }
             MavenRepositoryImporter importer = new MavenRepositoryImporter(location, host, port, path);
             LOG.info("Start import...");
             importer.start();
