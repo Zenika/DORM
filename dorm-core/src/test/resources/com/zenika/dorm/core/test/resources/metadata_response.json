@@ -1,8 +1,7 @@
 {
     "outgoing_relationships" : "http://localhost:7474/db/data/node/20/relationships/out",
     "data" : {
-        "fullQualifier" : "dorm;habi-base;0.6",
-        "qualifier" : "habi-base",
+        "qualifier" : "dorm;habi-base;0.6",
         "version" : "0.6"
     },
     "traverse" : "http://localhost:7474/db/data/node/20/traverse/{returnType}",

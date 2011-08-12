@@ -21,9 +21,8 @@ public class MavenMetadataExtensionUnitTest extends AbstractUnitTest {
         properties.put(MavenMetadataExtension.METADATA_GROUPID, fixtures.getGroupId());
         properties.put(MavenMetadataExtension.METADATA_ARTIFACTID, fixtures.getArtifactId());
         properties.put(MavenMetadataExtension.METADATA_VERSION, fixtures.getMavenVersion());
-        properties.put(MavenMetadataExtension.METADATA_TYPE, fixtures.getType());
 
-        DormMetadataExtension dummyExtension = new MavenMetadataExtension("a", "b", "c", "d");
+        DormMetadataExtension dummyExtension = new MavenMetadataExtension("a", "b", "c");
         DormMetadataExtension extension = dummyExtension.createFromMap(properties);
 
         Assertions.assertThat(extension).isEqualTo(fixtures.getMetadataExtension());

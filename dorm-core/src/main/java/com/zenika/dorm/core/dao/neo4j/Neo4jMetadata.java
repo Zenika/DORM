@@ -1,8 +1,8 @@
 package com.zenika.dorm.core.dao.neo4j;
 
-import com.zenika.dorm.core.model.impl.Usage;
 import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.core.model.DormMetadataExtension;
+import com.zenika.dorm.core.model.impl.Usage;
 import org.codehaus.jackson.annotate.JsonIgnore;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -26,21 +26,21 @@ public class Neo4jMetadata extends Neo4jNode implements DormMetadata {
 
     private String qualifier;
     private String version;
-    private String fullQualifier;
+    private String type;
 
     public Neo4jMetadata() {
     }
 
     public Neo4jMetadata(DormMetadata metadata) {
-        qualifier = metadata.getQualifier();
         version = metadata.getVersion();
-        fullQualifier = convertFullqualifier(metadata.getFullQualifier());
+        type = metadata.getType();
+        qualifier = convertFullqualifier(metadata.getQualifier());
         extension = new Neo4jMetadataExtension(metadata.getExtension());
     }
 
     public static URI generateIndexURI(String fullQualifier, Neo4jIndex index) throws URISyntaxException {
         String template = index.getTemplate();
-        template = template.replace("{key}", "fullqualifier");
+        template = template.replace("{key}", "qualifier");
         template = template.replace("{value}", convertFullqualifier(fullQualifier));
         return new URI(template);
     }
@@ -51,9 +51,13 @@ public class Neo4jMetadata extends Neo4jNode implements DormMetadata {
         return qualifier;
     }
 
-
     public String getVersion() {
         return version;
+    }
+
+    @Override
+    public String getType() {
+        return type;
     }
 
     @JsonIgnore
@@ -67,11 +71,6 @@ public class Neo4jMetadata extends Neo4jNode implements DormMetadata {
         throw new UnsupportedOperationException();
     }
 
-    @Override
-    public String getFullQualifier() {
-        return fullQualifier;
-    }
-
 
     public void setQualifier(String qualifier) {
         this.qualifier = qualifier;
@@ -83,14 +82,8 @@ public class Neo4jMetadata extends Neo4jNode implements DormMetadata {
     }
 
 
-
     public void setVersion(String version) {
         this.version = version;
-    }
-
-
-    public void setFullQualifier(String fullQualifier) {
-        this.fullQualifier = fullQualifier;
     }
 
     @Override
@@ -99,7 +92,6 @@ public class Neo4jMetadata extends Neo4jNode implements DormMetadata {
                 "extension=" + extension +
                 ", qualifier='" + qualifier + '\'' +
                 ", version='" + version + '\'' +
-                ", fullQualifier='" + fullQualifier + '\'' +
                 '}';
     }
 
@@ -118,9 +110,8 @@ public class Neo4jMetadata extends Neo4jNode implements DormMetadata {
 
         Neo4jMetadata metadata = (Neo4jMetadata) o;
 
-        if (fullQualifier != null ? !fullQualifier.equals(metadata.fullQualifier) : metadata.fullQualifier != null)
+        if (qualifier != null ? !qualifier.equals(metadata.qualifier) : metadata.qualifier != null)
             return false;
-        if (qualifier != null ? !qualifier.equals(metadata.qualifier) : metadata.qualifier != null) return false;
         if (version != null ? !version.equals(metadata.version) : metadata.version != null) return false;
 
         return true;
@@ -130,11 +121,10 @@ public class Neo4jMetadata extends Neo4jNode implements DormMetadata {
     public int hashCode() {
         int result = qualifier != null ? qualifier.hashCode() : 0;
         result = 31 * result + (version != null ? version.hashCode() : 0);
-        result = 31 * result + (fullQualifier != null ? fullQualifier.hashCode() : 0);
         return result;
     }
 
-    public static String convertFullqualifier(String str){
+    public static String convertFullqualifier(String str) {
         return str.replace("/", ";");
     }
 }

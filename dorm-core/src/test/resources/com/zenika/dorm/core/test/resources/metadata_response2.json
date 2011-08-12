@@ -1,8 +1,7 @@
 {
     "outgoing_relationships" : "http://localhost:7474/db/data/node/2/relationships/out",
     "data" : {
-        "fullQualifier" : "xercesImpl:2.4.0:dorm",
-        "qualifier" : "xercesImpl",
+        "qualifier" : "xercesImpl:2.4.0:dorm",
         "version" : "2.4.0"
     },
     "traverse" : "http://localhost:7474/db/data/node/2/traverse/{returnType}",

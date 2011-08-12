@@ -26,17 +26,23 @@ public class MavenFixtures extends ExtensionFixtures {
     private String groupId = "testgroup1.testgroup2";
     private String artifactId = "testartifact";
     private String mavenVersion = "1.0-SNAPSHOT";
-    private String type = MavenFileType.JAR;
+    private String mavenType = MavenFileType.JAR;
+    private String mavenFilename = artifactId + "." + mavenType;
     private String origin = MavenMetadataExtension.EXTENSION_NAME;
 
     @Override
     public DormMetadataExtension getMetadataExtension() {
-        return new MavenMetadataExtension(groupId, artifactId, mavenVersion, type);
+        return new MavenMetadataExtension(groupId, artifactId, mavenVersion);
     }
 
     @Override
     public String getRequestVersion() {
         return mavenVersion;
+    }
+
+    @Override
+    public String getType() {
+        return mavenType;
     }
 
     @Override
@@ -48,9 +54,9 @@ public class MavenFixtures extends ExtensionFixtures {
                 .property(MavenMetadataExtension.METADATA_VERSION, mavenVersion);
     }
 
-    public DormRequest getRequestWithType() {
+    public DormRequest getRequestWithFilename() {
         return getRequestBuilder()
-                .property(MavenMetadataExtension.METADATA_TYPE, type)
+                .filename(mavenFilename)
                 .build();
     }
 
@@ -70,12 +76,11 @@ public class MavenFixtures extends ExtensionFixtures {
     }
 
     public MavenMetadataExtension getEntityExtension() {
-        return new MavenMetadataExtension(groupId, artifactId, mavenVersion,
-                MavenProcessor.ENTITY_TYPE);
+        return new MavenMetadataExtension(groupId, artifactId, mavenVersion);
     }
 
     public DormMetadata getEntityMetadata() {
-        return DefaultDormMetadata.create(mavenVersion, getEntityExtension());
+        return DefaultDormMetadata.create(mavenVersion, MavenProcessor.ENTITY_TYPE, getEntityExtension());
     }
 
     /**
@@ -103,10 +108,6 @@ public class MavenFixtures extends ExtensionFixtures {
 
     public String getMavenVersion() {
         return mavenVersion;
-    }
-
-    public String getType() {
-        return type;
     }
 
     public String getOrigin() {

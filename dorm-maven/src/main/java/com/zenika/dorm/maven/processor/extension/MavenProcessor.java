@@ -24,6 +24,8 @@ import org.slf4j.LoggerFactory;
  *
  * See : https://docs.google.com/drawings/d/1N1epmWY3dUy7th-VwrSNk1HXf6srEi0RoUoETQbe8qM/edit?hl=fr
  *
+ * snapshot upload -
+ *
  * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>
  */
 public class MavenProcessor extends AbstractProcessorExtension {
@@ -35,7 +37,9 @@ public class MavenProcessor extends AbstractProcessorExtension {
     @Override
     public DependencyNode push(DormRequest request) {
 
-        LOG.debug("Maven push with request : " + request);
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Maven push with request : " + request);
+        }
 
         if (!request.hasFile()) {
             throw new MavenException("File is required.");
@@ -47,8 +51,7 @@ public class MavenProcessor extends AbstractProcessorExtension {
         String version = request.getProperty(MavenMetadataExtension.METADATA_VERSION);
 
         // create the entity extension which is the same as the child with a different type
-        MavenMetadataExtension entityExtension = new MavenMetadataExtension(groupId, artifactId, version,
-                MavenProcessor.ENTITY_TYPE);
+        MavenMetadataExtension entityExtension = new MavenMetadataExtension(groupId, artifactId, version);
 
         // entity dependencuy has no file
         DormRequest entityRequest = new DormRequestBuilder(request)
@@ -56,17 +59,26 @@ public class MavenProcessor extends AbstractProcessorExtension {
                 .filename(null)
                 .build();
 
-        Dependency entityDependency = new DependencyBuilderFromRequest(entityRequest, entityExtension).build();
-        LOG.debug("Maven entity dependency = " + entityDependency);
+        Dependency entityDependency = new DependencyBuilderFromRequest(entityRequest, ENTITY_TYPE,
+                entityExtension).build();
+
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Maven entity dependency = " + entityDependency);
+        }
 
         // create the real maven dependency to push
-        MavenMetadataExtension childExtension = new MavenMetadataExtension(groupId, artifactId, version, type);
+        MavenMetadataExtension childExtension = new MavenMetadataExtension(groupId, artifactId, version);
 
         // replace the default usage by the maven internal for the child dependency
         Usage childUsage = Usage.createInternal(MavenMetadataExtension.EXTENSION_NAME);
 
-        Dependency dependency = new DependencyBuilderFromRequest(request, childExtension).usage(childUsage).build();
-        LOG.debug("Maven real dependency = " + dependency);
+        Dependency dependency = new DependencyBuilderFromRequest(request, type, childExtension)
+                .usage(childUsage)
+                .build();
+
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Maven real dependency = " + dependency);
+        }
 
         DependencyNode root = DefaultDependencyNode.create(entityDependency);
         DependencyNode node = DefaultDependencyNode.create(dependency);
@@ -78,21 +90,28 @@ public class MavenProcessor extends AbstractProcessorExtension {
     @Override
     public DormMetadata getMetadata(DormRequest request) {
 
-        LOG.debug("Maven get with request : " + request);
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Maven get with request : " + request);
+        }
 
-        String type = request.getProperty(MavenMetadataExtension.METADATA_TYPE);
+        String type = FilenameUtils.getExtension(request.getFilename());
         checkMavenType(type);
 
         String groupId = getGroupId(request);
         String artifactId = request.getProperty(MavenMetadataExtension.METADATA_ARTIFACTID);
         String versionId = request.getProperty(MavenMetadataExtension.METADATA_VERSION);
 
-        MavenMetadataExtension extension = new MavenMetadataExtension(groupId, artifactId, versionId,
-                type);
-        LOG.debug("Maven metadata extension from request : " + extension);
+        MavenMetadataExtension extension = new MavenMetadataExtension(groupId, artifactId, versionId);
 
-        DormMetadata metadata = new MetadataBuilderFromRequest(request, extension).build();
-        LOG.debug("Maven metadata from request : " + metadata);
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Maven metadata extension from request : " + extension);
+        }
+
+        DormMetadata metadata = new MetadataBuilderFromRequest(type, request, extension).build();
+
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Maven metadata from request : " + metadata);
+        }
 
         return metadata;
     }
@@ -116,10 +135,11 @@ public class MavenProcessor extends AbstractProcessorExtension {
     }
 
     private String getGroupId(DormRequest request) {
-        try {
-            return request.getProperty(MavenMetadataExtension.METADATA_GROUPID).replace('/', '.');
-        } catch (NullPointerException e) {
-            throw new MavenException("GroupId is required", e);
+
+        if (null == request.getProperty(MavenMetadataExtension.METADATA_GROUPID)) {
+            throw new MavenException("GroupId is required").type(MavenException.Type.NULL);
         }
+
+        return request.getProperty(MavenMetadataExtension.METADATA_GROUPID).replace('/', '.');
     }
 }

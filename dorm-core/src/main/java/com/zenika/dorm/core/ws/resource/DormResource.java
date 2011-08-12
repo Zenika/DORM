@@ -3,11 +3,8 @@ package com.zenika.dorm.core.ws.resource;
 import com.google.inject.Inject;
 import com.sun.jersey.multipart.FormDataParam;
 import com.zenika.dorm.core.exception.ArtifactException;
-import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.core.model.DormRequest;
 import com.zenika.dorm.core.model.builder.DormRequestBuilder;
-import com.zenika.dorm.core.model.impl.DefaultDormResource;
-import com.zenika.dorm.core.model.impl.DefaultDormMetadata;
 import com.zenika.dorm.core.model.impl.DefaultDormMetadataExtension;
 import com.zenika.dorm.core.processor.Processor;
 import org.slf4j.Logger;
@@ -16,7 +13,6 @@ import org.slf4j.LoggerFactory;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.StreamingOutput;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -126,10 +122,7 @@ public class DormResource {
                                                   @PathParam("usage") String usage,
                                                   @FormDataParam("file") File file) {
 
-        DormMetadata metadata = getMetadata(name, version);
-        com.zenika.dorm.core.model.DormResource dormResource = DefaultDormResource.create(filename, file);
-
-        return Response.status(Response.Status.OK).build();
+        return Response.status(Response.Status.SERVICE_UNAVAILABLE).build();
     }
 
     /**
@@ -149,9 +142,7 @@ public class DormResource {
                                           @PathParam("parent") String parent,
                                           @PathParam("usage") String usage) {
 
-        DormMetadata metadata = getMetadata(name, version);
-
-        return Response.status(Response.Status.OK).build();
+        return Response.status(Response.Status.SERVICE_UNAVAILABLE).build();
     }
 
     private Response pushRequest(DormRequest request) {
@@ -192,10 +183,7 @@ public class DormResource {
             throw new ArtifactException("Missing artifact metadata").type(ArtifactException.Type.NULL);
         }
 
-//        DormMetadata<MetadataExtension> metadata = new DormMetadata<MetadataExtension>(name, version);
-//        serviceOld.pushArtifact(metadata, file, filename);
-
-        return Response.status(Response.Status.OK).build();
+        return Response.status(Response.Status.SERVICE_UNAVAILABLE).build();
     }
 
     /**
@@ -207,27 +195,10 @@ public class DormResource {
     @GET
     @Produces("application/octet-stream")
     @Path("{name}/{version}")
-    public StreamingOutput getArtifactByMetadata(
+    public Response getArtifactByMetadata(
             @PathParam("name") String name, @PathParam("version") String version) {
 
-//        DormMetadata<MetadataExtension> metadata = new DormMetadata<MetadataExtension>(name, version);
-//        final DormArtifact<MetadataExtension> artifact = serviceOld.getArtifact(metadata);
-
-//        return new StreamingOutput() {
-//            @Override
-//            public void write(OutputStream output) throws IOException, WebApplicationException {
-//
-//                try {
-//                    InputStream is = new FileInputStream(artifact.getFile().getFile());
-//                    output.write(is.read());
-//                } catch (IOException e) {
-//                    throw new CoreException("Cannot read / write artifact stream", e);
-//                }
-//
-//            }
-//        };
-
-        return null;
+        return Response.status(Response.Status.SERVICE_UNAVAILABLE).build();
     }
 
     /**
@@ -240,9 +211,6 @@ public class DormResource {
     @Path("{name}/{version}/{filename}")
     public Response removeArtifactByMetadata(@PathParam("name") String name,
                                              @PathParam("version") String version) {
-
-//        DormMetadata<MetadataExtension> metadata = new DormMetadata<MetadataExtension>(name, version);
-//        serviceOld.removeArtifact(metadata);
 
         return Response.status(Response.Status.OK).build();
     }
@@ -262,9 +230,6 @@ public class DormResource {
                                    @PathParam("version") String version,
                                    @FormDataParam("file") File file,
                                    @PathParam("filename") String filename) {
-
-//        DormMetadata<MetadataExtension> metadata = new DormMetadata<MetadataExtension>(name, version);
-//        serviceOld.updateArtifact(metadata, file, filename);
 
         return Response.status(Response.Status.OK).build();
     }
@@ -295,10 +260,7 @@ public class DormResource {
             throw new ArtifactException("Missing artifact metadata").type(ArtifactException.Type.NULL);
         }
 
-//        DormMetadata<MetadataExtension> metadata = new DormMetadata<MetadataExtension>(name, version);
-//        serviceOld.updateArtifact(metadata, file, filename);
-
-        return Response.status(Response.Status.OK).build();
+        return Response.status(Response.Status.SERVICE_UNAVAILABLE).build();
     }
 
     private Properties getPropertiesFromFile(File file) {
@@ -323,16 +285,5 @@ public class DormResource {
         }
 
         return properties;
-    }
-
-    /**
-     * Create simple dorm metadata with dorm origin from a name and a version
-     *
-     * @param name    the name of the dorm dependency
-     * @param version the version of the dorm dependency
-     * @return the dorm metadata which represents the name and the version
-     */
-    private DormMetadata getMetadata(String name, String version) {
-        return DefaultDormMetadata.create(version, new DefaultDormMetadataExtension(name));
     }
 }

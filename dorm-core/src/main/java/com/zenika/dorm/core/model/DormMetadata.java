@@ -5,16 +5,21 @@ package com.zenika.dorm.core.model;
  */
 public interface DormMetadata {
 
+    /**
+     * Represents the unique qualifier of an dependency
+     *
+     * @return the unique qualifier
+     */
     public String getQualifier();
 
     public String getVersion();
 
-    public DormMetadataExtension getExtension();
-
     /**
-     * Represents the full and unique qualifier of an dependency : qualifier + version + origin
+     * The type of the medatada, commonly the extension of the file associated to the metadata
      *
-     * @return the full and unique qualifier
+     * @return the type
      */
-    public String getFullQualifier();
+    public String getType();
+
+    public DormMetadataExtension getExtension();
 }

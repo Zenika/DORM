@@ -1,10 +1,9 @@
 package com.zenika.dorm.core.model.builder;
 
-import com.zenika.dorm.core.model.Dependency;
-import com.zenika.dorm.core.model.impl.DefaultDependency;
-import com.zenika.dorm.core.model.impl.Usage;
 import com.zenika.dorm.core.model.*;
+import com.zenika.dorm.core.model.impl.DefaultDependency;
 import com.zenika.dorm.core.model.impl.DefaultDormResource;
+import com.zenika.dorm.core.model.impl.Usage;
 
 import java.io.File;
 
@@ -36,9 +35,9 @@ public class DependencyBuilderFromRequest {
         this.metadata = metadata;
     }
 
-    public DependencyBuilderFromRequest(DormRequest request, DormMetadataExtension extension) {
+    public DependencyBuilderFromRequest(DormRequest request, String type, DormMetadataExtension extension) {
         this(request);
-        this.metadata = new MetadataBuilderFromRequest(request, extension).build();
+        this.metadata = new MetadataBuilderFromRequest(type, request, extension).build();
     }
 
     public DependencyBuilderFromRequest file(DormResource resource) {

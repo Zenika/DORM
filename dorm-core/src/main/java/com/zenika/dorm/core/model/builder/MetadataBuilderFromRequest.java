@@ -13,14 +13,16 @@ import com.zenika.dorm.core.model.impl.DefaultDormMetadata;
 public class MetadataBuilderFromRequest {
 
     private String version;
+    private String type;
     private DormMetadataExtension extension;
 
-    public MetadataBuilderFromRequest(DormRequest request, DormMetadataExtension extension) {
+    public MetadataBuilderFromRequest(String type, DormRequest request, DormMetadataExtension extension) {
+        this.type = type;
         this.version = request.getVersion();
         this.extension = extension;
     }
 
     public DormMetadata build() {
-        return DefaultDormMetadata.create(version, extension);
+        return DefaultDormMetadata.create(version, type, extension);
     }
 }

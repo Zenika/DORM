@@ -25,6 +25,8 @@ public interface DormRequest {
 
     public String getVersion();
 
+    public String getType();
+
     public String getUsage();
 
     public String getProperty(String key);

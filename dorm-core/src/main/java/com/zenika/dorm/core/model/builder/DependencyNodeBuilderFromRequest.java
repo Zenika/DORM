@@ -2,9 +2,9 @@ package com.zenika.dorm.core.model.builder;
 
 import com.zenika.dorm.core.model.Dependency;
 import com.zenika.dorm.core.model.DependencyNode;
-import com.zenika.dorm.core.model.impl.DefaultDependencyNode;
 import com.zenika.dorm.core.model.DormMetadataExtension;
 import com.zenika.dorm.core.model.DormRequest;
+import com.zenika.dorm.core.model.impl.DefaultDependencyNode;
 
 /**
  * Builder for dorm dependency node with the respect of immutability
@@ -15,8 +15,9 @@ public class DependencyNodeBuilderFromRequest {
 
     private Dependency dependency;
 
-    public DependencyNodeBuilderFromRequest(DormRequest request, DormMetadataExtension extension) {
-        this.dependency = new DependencyBuilderFromRequest(request, extension).build();
+    public DependencyNodeBuilderFromRequest(DormRequest request, String type,
+                                            DormMetadataExtension extension) {
+        this.dependency = new DependencyBuilderFromRequest(request, type, extension).build();
     }
 
     public DependencyNode build() {

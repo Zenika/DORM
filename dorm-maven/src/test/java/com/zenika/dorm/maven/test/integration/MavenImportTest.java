@@ -1,14 +1,15 @@
 package com.zenika.dorm.maven.test.integration;
 
 import com.zenika.dorm.core.model.Dependency;
-import com.zenika.dorm.core.model.DormResource;
-import com.zenika.dorm.core.model.impl.DefaultDependency;
 import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.core.model.DormMetadataExtension;
-import com.zenika.dorm.core.model.impl.DefaultDormResource;
+import com.zenika.dorm.core.model.DormResource;
+import com.zenika.dorm.core.model.impl.DefaultDependency;
 import com.zenika.dorm.core.model.impl.DefaultDormMetadata;
+import com.zenika.dorm.core.model.impl.DefaultDormResource;
 import com.zenika.dorm.core.processor.Processor;
 import com.zenika.dorm.core.processor.impl.DefaultProcessor;
+import com.zenika.dorm.maven.model.impl.MavenFileType;
 import com.zenika.dorm.maven.model.impl.MavenMetadataExtension;
 import org.junit.Test;
 
@@ -71,8 +72,8 @@ public class MavenImportTest {
         // import A.pom.xml
 
         // metadata
-        DormMetadataExtension originApom = new MavenMetadataExtension("com.zenika", "a", "1.0", "pom");
-        DormMetadata metadataApom = DefaultDormMetadata.create("1.0", originApom);
+        DormMetadataExtension originApom = new MavenMetadataExtension("com.zenika", "a", "1.0");
+        DormMetadata metadataApom = DefaultDormMetadata.create("1.0", MavenFileType.POM, originApom);
 
         // file
         DormResource resourceApom = DefaultDormResource.create("a.pom.xml", new File("repo/a/a.pom.xml"));
@@ -89,8 +90,8 @@ public class MavenImportTest {
 
         // metadata
         // should be equals to previous pom metadata, because only file changes
-        DormMetadataExtension originAjar = new MavenMetadataExtension("com.zenika", "a", "1.0", "jar");
-        DormMetadata metadataAjar = DefaultDormMetadata.create("1.0", originAjar);
+        DormMetadataExtension originAjar = new MavenMetadataExtension("com.zenika", "a", "1.0");
+        DormMetadata metadataAjar = DefaultDormMetadata.create("1.0", MavenFileType.JAR, originAjar);
 
         // file
         DormResource resourceAjar = DefaultDormResource.create("a.jar", new File("repo/a/a.jar"));

@@ -17,7 +17,7 @@ public abstract class MavenFileType {
 
         type = type.toLowerCase();
 
-        if (type == JAR || type == POM || type == SHA1) {
+        if (type.equalsIgnoreCase(JAR) || type.equalsIgnoreCase(POM) || type.equalsIgnoreCase(SHA1)) {
             return true;
         }
 

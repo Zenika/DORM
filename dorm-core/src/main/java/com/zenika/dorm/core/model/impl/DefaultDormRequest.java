@@ -17,6 +17,7 @@ import java.util.Map;
 public final class DefaultDormRequest implements DormRequest {
 
     private final String version;
+    private final String type;
     private final String origin;
     private final String usage;
     private final String filename;
@@ -36,20 +37,15 @@ public final class DefaultDormRequest implements DormRequest {
 
         this.version = builder.getVersion();
         this.origin = builder.getOrigin();
-        this.usage = builder.getUsage();
 
         if (null == version || null == origin) {
             throw new CoreException("Version and origin are required.");
         }
 
-        if (null != builder.getFilename() && null != builder.getFile()) {
-            this.filename = builder.getFilename();
-            this.file = builder.getFile();
-        } else {
-            this.filename = null;
-            this.file = null;
-        }
-
+        this.type = builder.getType();
+        this.usage = builder.getUsage();
+        this.filename = builder.getFilename();
+        this.file = builder.getFile();
         this.properties.putAll(builder.getProperties());
     }
 
@@ -76,6 +72,11 @@ public final class DefaultDormRequest implements DormRequest {
     @Override
     public String getVersion() {
         return version;
+    }
+
+    @Override
+    public String getType() {
+        return type;
     }
 
     @Override
@@ -128,6 +129,7 @@ public final class DefaultDormRequest implements DormRequest {
 
         return "DormRequest { " +
                 "version = " + version + "; " +
+                "type = " + type + "; " +
                 "origin = " + origin + "; " +
                 "usage = " + usage + "; " +
                 "filename = " + filename + "; " +

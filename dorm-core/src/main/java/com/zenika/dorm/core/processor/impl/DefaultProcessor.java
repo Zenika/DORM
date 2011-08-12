@@ -5,9 +5,9 @@ import com.google.inject.Singleton;
 import com.zenika.dorm.core.exception.CoreException;
 import com.zenika.dorm.core.model.Dependency;
 import com.zenika.dorm.core.model.DependencyNode;
-import com.zenika.dorm.core.model.impl.Usage;
 import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.core.model.DormRequest;
+import com.zenika.dorm.core.model.impl.Usage;
 import com.zenika.dorm.core.processor.Processor;
 import com.zenika.dorm.core.processor.ProcessorExtension;
 import com.zenika.dorm.core.service.DormService;
@@ -58,7 +58,9 @@ public class DefaultProcessor implements Processor {
         DormMetadata metadata = getExtension(request).getMetadata(request);
         Usage usage = Usage.create(request.getUsage());
 
-        LOG.info("get dependency for metadata : " + metadata + " and usage : " + usage);
+        if (LOG.isInfoEnabled()) {
+            LOG.info("get dependency for metadata : " + metadata + " and usage : " + usage);
+        }
 
         return service.getDependency(metadata, usage);
     }

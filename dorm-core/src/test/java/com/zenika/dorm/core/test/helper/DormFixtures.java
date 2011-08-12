@@ -19,6 +19,11 @@ public class DormFixtures extends ExtensionFixtures {
     private String origin = DefaultDormMetadataExtension.EXTENSION_NAME;
 
     @Override
+    public String getType() {
+        return DefaultDormMetadataExtension.EXTENSION_TYPE;
+    }
+
+    @Override
     public DormMetadataExtension getMetadataExtension() {
         return new DefaultDormMetadataExtension(name);
     }

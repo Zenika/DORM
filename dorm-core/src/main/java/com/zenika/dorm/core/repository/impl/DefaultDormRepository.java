@@ -78,6 +78,6 @@ public class DefaultDormRepository implements DormRepository {
     }
 
     private String getPathFromMetadata(DormMetadata metadata) {
-        return metadata.getFullQualifier() + "/" + metadata.getExtension().getQualifier();
+        return metadata.getQualifier() + "/" + metadata.getExtension().getQualifier();
     }
 }

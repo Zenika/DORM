@@ -63,7 +63,7 @@ public class MavenProcessorUnitTest extends AbstractUnitTest {
 
     @Test
     public void getMavenMetadataFromRequest() {
-        DormMetadata metadata = processor.getMetadata(fixtures.getRequestWithType());
+        DormMetadata metadata = processor.getMetadata(fixtures.getRequestWithFilename());
         Assertions.assertThat(metadata).isEqualTo(fixtures.getMetadata());
     }
 

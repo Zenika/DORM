@@ -15,6 +15,7 @@ import java.util.Map;
 public class DormRequestBuilder {
 
     private String version;
+    private String type;
     private String origin;
     private String usage;
     private String filename;
@@ -39,6 +40,7 @@ public class DormRequestBuilder {
      */
     public DormRequestBuilder(DormRequest request) {
         this.version = request.getVersion();
+        this.type = request.getType();
         this.origin = request.getOrigin();
         this.usage = request.getUsage();
         this.filename = request.getFilename();
@@ -48,6 +50,11 @@ public class DormRequestBuilder {
 
     public DormRequestBuilder version(String version) {
         this.version = version;
+        return this;
+    }
+
+    public DormRequestBuilder type(String type) {
+        this.type = type;
         return this;
     }
 
@@ -82,6 +89,10 @@ public class DormRequestBuilder {
 
     public String getVersion() {
         return version;
+    }
+
+    public String getType() {
+        return type;
     }
 
     public String getOrigin() {

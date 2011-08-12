@@ -1,6 +1,7 @@
 package com.zenika.dorm.maven.ws.resource;
 
 import com.google.inject.Inject;
+import com.zenika.dorm.core.model.Dependency;
 import com.zenika.dorm.core.model.DormRequest;
 import com.zenika.dorm.core.model.builder.DormRequestBuilder;
 import com.zenika.dorm.core.processor.Processor;
@@ -36,22 +37,34 @@ public class MavenResource {
 
         LOG.info("Call to maven web service : GET");
 
-        // TODO : fix metadata
+        // TODO : fix maven-metadata.xml in maven web service
         if (fileName.equals("maven-metadata.xml")) {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
+
         DormRequest request = new DormRequestBuilder(version, MavenMetadataExtension.EXTENSION_NAME)
                 .filename(fileName)
                 .property(MavenMetadataExtension.METADATA_GROUPID, groupId)
                 .property(MavenMetadataExtension.METADATA_ARTIFACTID, artifactId)
                 .property(MavenMetadataExtension.METADATA_VERSION, version)
                 .build();
-        try {
-            File file = processor.get(request).getResource().getFile();
-            return Response.status(Response.Status.OK).entity(file).build();
-        } catch (NullPointerException e) {
+
+        if (LOG.isInfoEnabled()) {
+            LOG.info("GET request to the maven web service : " + request);
+        }
+
+        Dependency dependency = processor.get(request);
+
+        if (null == dependency.getResource() || null == dependency.getResource().getFile()) {
+            LOG.info("Return http response 404");
             return Response.status(Response.Status.NOT_FOUND).build();
         }
+
+        if (LOG.isInfoEnabled()) {
+            LOG.info("Return response http 200 with the dependency : " + dependency);
+        }
+
+        return Response.status(Response.Status.OK).entity(dependency.getResource().getFile()).build();
     }
 
     @PUT

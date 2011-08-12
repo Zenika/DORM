@@ -7,38 +7,36 @@ import com.zenika.dorm.core.model.DormMetadataExtension;
 /**
  * Immutable dorm metadata
  *
+ * Qualifier pattern : extension name / extension qualifier / version
+ *
  * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>
  */
 public final class DefaultDormMetadata implements DormMetadata {
 
     private final String qualifier;
-    private final String fullQualifier;
     private final String version;
+    private final String type;
 
     /**
-     * todo: Probem here, cannot be sure that all implementations will be immutable.
+     * The metadata extension must be immutable
      */
     private final DormMetadataExtension extension;
 
-    public static DefaultDormMetadata create(String version, DormMetadataExtension extension) {
-        return new DefaultDormMetadata(version, extension);
+    public static DefaultDormMetadata create(String version, String type, DormMetadataExtension extension) {
+        return new DefaultDormMetadata(version, type, extension);
     }
 
-    private DefaultDormMetadata(String version, DormMetadataExtension extension) {
+    private DefaultDormMetadata(String version, String type, DormMetadataExtension extension) {
 
         if (null == version || null == extension || null == extension.getQualifier() || null == extension.getExtensionName()) {
             throw new CoreException("Properties are missing for metadata");
         }
 
         this.version = version;
+        this.type = type;
         this.extension = extension;
-        this.qualifier = extension.getQualifier();
-        this.fullQualifier = extension.getExtensionName() + "/" + this.qualifier + "/" + version;
-    }
-
-    @Override
-    public String getFullQualifier() {
-        return fullQualifier;
+        this.qualifier = extension.getExtensionName() + ":" + extension.getQualifier() + ":" + version +
+                ":" + type;
     }
 
     @Override
@@ -52,6 +50,11 @@ public final class DefaultDormMetadata implements DormMetadata {
     }
 
     @Override
+    public String getType() {
+        return null;
+    }
+
+    @Override
     public DormMetadataExtension getExtension() {
         return extension;
     }
@@ -59,16 +62,15 @@ public final class DefaultDormMetadata implements DormMetadata {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof DefaultDormMetadata)) return false;
+        if (o == null || getClass() != o.getClass()) return false;
 
         DefaultDormMetadata metadata = (DefaultDormMetadata) o;
 
-        if (fullQualifier != null ? !fullQualifier.equals(metadata.fullQualifier) : metadata.fullQualifier != null)
-            return false;
         if (extension != null ? !extension.equals(metadata.extension) : metadata.extension != null)
             return false;
         if (qualifier != null ? !qualifier.equals(metadata.qualifier) : metadata.qualifier != null)
             return false;
+        if (type != null ? !type.equals(metadata.type) : metadata.type != null) return false;
         if (version != null ? !version.equals(metadata.version) : metadata.version != null) return false;
 
         return true;
@@ -77,14 +79,14 @@ public final class DefaultDormMetadata implements DormMetadata {
     @Override
     public int hashCode() {
         int result = qualifier != null ? qualifier.hashCode() : 0;
-        result = 31 * result + (fullQualifier != null ? fullQualifier.hashCode() : 0);
         result = 31 * result + (version != null ? version.hashCode() : 0);
+        result = 31 * result + (type != null ? type.hashCode() : 0);
         result = 31 * result + (extension != null ? extension.hashCode() : 0);
         return result;
     }
 
     @Override
     public String toString() {
-        return "DormMetadata { " + getFullQualifier() + " }";
+        return "DormMetadata { " + getQualifier() + " }";
     }
 }

@@ -40,6 +40,7 @@ public abstract class ExtensionFixtures {
      * Metadata
      */
     private String version = "1.0";
+    private String type = "jar";
 
     /**
      * Return the metadata extension
@@ -50,6 +51,10 @@ public abstract class ExtensionFixtures {
 
     public String getRequestVersion() {
         return version;
+    }
+
+    public String getType() {
+        return type;
     }
 
     public DormRequestBuilder getRequestBuilder() {
@@ -69,7 +74,7 @@ public abstract class ExtensionFixtures {
     }
 
     public DormMetadata getMetadata() {
-        return DefaultDormMetadata.create(getRequestVersion(), getMetadataExtension());
+        return DefaultDormMetadata.create(getRequestVersion(), getType(), getMetadataExtension());
     }
 
     public DormResource getDormFile() {

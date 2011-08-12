@@ -25,28 +25,25 @@ public final class MavenMetadataExtension implements DormMetadataExtension {
     public static final String METADATA_GROUPID = "groupId";
     public static final String METADATA_ARTIFACTID = "artifactId";
     public static final String METADATA_VERSION = "version";
-    public static final String METADATA_TYPE = "type";
 
     private final String groupId;
     private final String artifactId;
     private final String version;
-    private final String type;
 
-    public MavenMetadataExtension(String groupId, String artifactId, String version, String type) {
+    public MavenMetadataExtension(String groupId, String artifactId, String version) {
 
-        if (null == groupId || null == artifactId || null == version || null == type) {
-            throw new MavenException("Following metadatas are required : groupId, artifactId, versionId, type");
+        if (null == groupId || null == artifactId || null == version) {
+            throw new MavenException("Following metadatas are required : groupId, artifactId, versionId");
         }
 
         this.groupId = groupId;
         this.artifactId = artifactId;
         this.version = version;
-        this.type = type;
     }
 
     @Override
     public String getQualifier() {
-        return groupId + ":" + artifactId + ":" + version + ":" + type;
+        return groupId + ":" + artifactId + ":" + version;
     }
 
     @Override
@@ -66,10 +63,6 @@ public final class MavenMetadataExtension implements DormMetadataExtension {
         return version;
     }
 
-    public String getType() {
-        return type;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -80,7 +73,6 @@ public final class MavenMetadataExtension implements DormMetadataExtension {
         if (artifactId != null ? !artifactId.equals(extension.artifactId) : extension.artifactId != null)
             return false;
         if (groupId != null ? !groupId.equals(extension.groupId) : extension.groupId != null) return false;
-        if (type != null ? !type.equals(extension.type) : extension.type != null) return false;
         if (version != null ? !version.equals(extension.version) : extension.version != null)
             return false;
 
@@ -92,14 +84,12 @@ public final class MavenMetadataExtension implements DormMetadataExtension {
         int result = groupId != null ? groupId.hashCode() : 0;
         result = 31 * result + (artifactId != null ? artifactId.hashCode() : 0);
         result = 31 * result + (version != null ? version.hashCode() : 0);
-        result = 31 * result + (type != null ? type.hashCode() : 0);
         return result;
     }
 
     @Override
     public DormMetadataExtension createFromMap(Map<String, String> properties) {
         return new MavenMetadataExtension(properties.get(METADATA_GROUPID),
-                properties.get(METADATA_ARTIFACTID), properties.get(METADATA_VERSION),
-                properties.get(METADATA_TYPE));
+                properties.get(METADATA_ARTIFACTID), properties.get(METADATA_VERSION));
     }
 }

@@ -1,21 +1,12 @@
 package com.zenika.dorm.core.test.dao.neo4j;
 
-import com.zenika.dorm.core.dao.neo4j.Neo4jDependency;
-import com.zenika.dorm.core.dao.neo4j.Neo4jIndex;
-import com.zenika.dorm.core.dao.neo4j.Neo4jMetadata;
-import com.zenika.dorm.core.dao.neo4j.Neo4jMetadataExtension;
-import com.zenika.dorm.core.dao.neo4j.Neo4jRelationship;
-import com.zenika.dorm.core.dao.neo4j.Neo4jResponse;
-import com.zenika.dorm.core.dao.neo4j.Neo4jTraverse;
+import com.zenika.dorm.core.dao.neo4j.*;
 import com.zenika.dorm.core.dao.neo4j.util.ObjectMapperProvider;
 import com.zenika.dorm.core.model.Dependency;
 import com.zenika.dorm.core.model.DependencyNode;
 import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.core.model.DormMetadataExtension;
-import com.zenika.dorm.core.model.impl.DefaultDependency;
-import com.zenika.dorm.core.model.impl.DefaultDependencyNode;
 import com.zenika.dorm.core.model.impl.*;
-import com.zenika.dorm.core.model.impl.Usage;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
 import org.slf4j.Logger;
@@ -245,7 +236,7 @@ public class Neo4jDaoTestProvider {
         usage = Usage.create("DEFAULT");
         extension = new DefaultDormMetadataExtension("habi-base");
         neo4jExtension = new Neo4jMetadataExtension(extension);
-        metadata = DefaultDormMetadata.create("0.6", extension);
+        metadata = DefaultDormMetadata.create("0.6", "jar", extension);
         neo4jMetadata = new Neo4jMetadata(metadata);
         neo4jMetadata.setExtension(neo4jExtension);
         dependency = DefaultDependency.create(metadata, usage);

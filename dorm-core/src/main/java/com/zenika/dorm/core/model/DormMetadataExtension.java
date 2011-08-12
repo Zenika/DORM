@@ -12,6 +12,7 @@ public interface DormMetadataExtension {
 
     /**
      * The internal qualifier of the origin which represents the unique composition of all origin's metadatas
+     * Pattern : "attribute1:attribute2:etc..."
      *
      * @return the internal qualifier
      * @see com.zenika.dorm.core.model.DormMetadata#getQualifier()

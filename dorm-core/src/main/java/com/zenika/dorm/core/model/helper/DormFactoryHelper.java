@@ -1,10 +1,8 @@
 package com.zenika.dorm.core.model.helper;
 
 import com.zenika.dorm.core.model.Dependency;
-import com.zenika.dorm.core.model.DependencyNode;
-import com.zenika.dorm.core.model.impl.DefaultDependency;
-import com.zenika.dorm.core.model.impl.DefaultDependencyNode;
 import com.zenika.dorm.core.model.DormMetadataExtension;
+import com.zenika.dorm.core.model.impl.DefaultDependency;
 import com.zenika.dorm.core.model.impl.DefaultDormMetadata;
 
 /**
@@ -14,11 +12,8 @@ import com.zenika.dorm.core.model.impl.DefaultDormMetadata;
  */
 public class DormFactoryHelper {
 
-    public static Dependency createSimpleDependency(String version, DormMetadataExtension extension) {
-        return DefaultDependency.create(DefaultDormMetadata.create(version, extension));
-    }
-
-    public static DependencyNode createSimpleNode(String version, DormMetadataExtension extension) {
-        return DefaultDependencyNode.create(createSimpleDependency(version, extension));
+    public static Dependency createSimpleDependency(String version, String type,
+                                                    DormMetadataExtension extension) {
+        return DefaultDependency.create(DefaultDormMetadata.create(version, type, extension));
     }
 }

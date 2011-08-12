@@ -31,13 +31,13 @@ public final class MetadataExtensionMapper {
 
         for (Field field : reflect.getDeclaredFields()) {
 
-            LOG.trace("Trying to map field : " + field);
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Trying to map field : " + field);
+            }
 
-            // include non public attributes
-            // todo: find a more elegant way to do this
             field.setAccessible(true);
 
-            // ignore transient fields
+            // ignore transient attributes
             if (Modifier.isTransient(field.getModifiers())) {
                 continue;
             }

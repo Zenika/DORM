@@ -28,7 +28,9 @@ public class DormProcessor extends AbstractProcessorExtension {
     @Override
     public DependencyNode push(DormRequest request) {
 
-        LOG.debug("Dorm request to push = " + request);
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Dorm request to push = " + request);
+        }
 
         String name = request.getProperty(DefaultDormMetadataExtension.METADATA_NAME);
 
@@ -38,8 +40,12 @@ public class DormProcessor extends AbstractProcessorExtension {
 
         DormMetadataExtension extension = new DefaultDormMetadataExtension(name);
 
-        DependencyNode node = new DependencyNodeBuilderFromRequest(request, extension).build();
-        LOG.debug("Dorm dependency = " + node.getDependency());
+        DependencyNode node = new DependencyNodeBuilderFromRequest(request,
+                DefaultDormMetadataExtension.EXTENSION_TYPE, extension).build();
+
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Dorm dependency = " + node.getDependency());
+        }
 
         return node;
     }
