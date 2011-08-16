@@ -60,6 +60,10 @@ public class Neo4jMetadata extends Neo4jNode implements DormMetadata {
         return type;
     }
 
+    public void setType(String type){
+        this.type = type;
+    }
+
     @JsonIgnore
     public Neo4jMetadataExtension getNeo4jExtension() {
         return extension;

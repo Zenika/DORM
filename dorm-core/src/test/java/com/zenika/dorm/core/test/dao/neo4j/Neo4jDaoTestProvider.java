@@ -43,7 +43,7 @@ public class Neo4jDaoTestProvider {
 
 
     // TODO : Refactor to the true model
-    private static final String INDEX_DEPENDENCY_URI = "http://localhost:7474/db/data/index/node/dependency/fullqualifier/dorm;habi-base;0.6";
+    private static final String INDEX_DEPENDENCY_URI = "http://localhost:7474/db/data/index/node/dependency/qualifier/dorm:habi-base:0.6:jar";
     private static final String DEPENDENCY21_URI = "http://localhost:7474/db/data/node/21";
     private static final String DEPENDENCY3_URI = "http://localhost:7474/db/data/node/3";
     private static final String METADATA20_URI = "http://localhost:7474/db/data/node/20";

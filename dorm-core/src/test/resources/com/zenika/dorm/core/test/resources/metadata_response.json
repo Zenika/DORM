@@ -1,8 +1,9 @@
 {
     "outgoing_relationships" : "http://localhost:7474/db/data/node/20/relationships/out",
     "data" : {
-        "qualifier" : "dorm;habi-base;0.6",
-        "version" : "0.6"
+        "qualifier" : "dorm:habi-base:0.6:jar",
+        "version" : "0.6",
+        "type" : "jar"
     },
     "traverse" : "http://localhost:7474/db/data/node/20/traverse/{returnType}",
     "all_typed_relationships" : "http://localhost:7474/db/data/node/20/relationships/all/{-list|&|types}",

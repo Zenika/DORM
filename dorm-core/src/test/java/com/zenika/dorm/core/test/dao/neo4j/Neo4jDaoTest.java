@@ -261,7 +261,7 @@ public class Neo4jDaoTest {
      * todo: fix the test
      */
     @Test
-    @Ignore
+//    @Ignore
     public void testGetByMetadata(){
         DependencyNode node = dao.getByMetadata(provider.getMetadata(), provider.getUsage());
         assertThat(node.getDependency().getMetadata()).isEqualTo(provider.getMetadata());
