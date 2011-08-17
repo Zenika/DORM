@@ -11,6 +11,7 @@ import com.zenika.dorm.core.dao.neo4j.Neo4jTraverse;
 import com.zenika.dorm.core.model.DormMetadataExtension;
 
 import java.lang.reflect.Type;
+import java.net.ConnectException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;

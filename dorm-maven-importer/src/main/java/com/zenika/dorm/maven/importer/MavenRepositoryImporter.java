@@ -6,6 +6,7 @@ import com.sun.jersey.api.client.ClientHandlerException;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.UniformInterfaceException;
 import com.sun.jersey.api.client.WebResource;
+import com.zenika.dorm.maven.importer.utils.ExtensionFilter;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.maven.model.Model;
 import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
@@ -19,6 +20,7 @@ import javax.ws.rs.core.UriBuilder;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.ConnectException;
@@ -106,12 +108,12 @@ public class MavenRepositoryImporter {
     }
 
     public File[] getArtifactFile(File base) {
-        return base.listFiles();
+        File[] files = base.listFiles(new ExtensionFilter());;
+        return files;
     }
 
     public void sendFiles(File[] files, Model model) {
         for (File file : files) {
-            LOG.trace("File is empty : " + file.length());
             try {
                 resource.path(getArtifactPath(model, file.getName()))
                         .type(MediaType.APPLICATION_OCTET_STREAM)

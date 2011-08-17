@@ -23,7 +23,7 @@ import java.util.Map;
 /**
  * @author Antoine ROUAZE <antoine.rouaze AT zenika.com>
  */
-public class Neo4jDaoTestProvider {
+public class    Neo4jDaoTestProvider {
 
     private static final Logger LOG = LoggerFactory.getLogger(Neo4jDaoTestProvider.class);
 

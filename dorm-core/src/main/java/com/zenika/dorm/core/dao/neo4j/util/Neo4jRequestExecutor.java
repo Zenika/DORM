@@ -8,8 +8,12 @@ import com.sun.jersey.api.client.WebResource;
 import com.sun.jersey.api.client.config.ClientConfig;
 import com.sun.jersey.api.client.config.DefaultClientConfig;
 import com.sun.jersey.api.json.JSONConfiguration;
+import com.sun.jersey.client.apache.config.DefaultApacheHttpClientConfig;
+import com.sun.jersey.client.apache.ApacheHttpClient;
 import com.sun.org.apache.xalan.internal.xsltc.runtime.Node;
+import com.sun.xml.bind.v2.runtime.property.Property;
 import com.zenika.dorm.core.dao.neo4j.*;
+import com.zenika.dorm.core.exception.CoreException;
 import com.zenika.dorm.core.model.DormMetadataExtension;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,13 +21,22 @@ import sun.rmi.runtime.Log;
 
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.lang.reflect.Type;
 import java.net.ConnectException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
+import java.util.ResourceBundle;
 import java.util.Set;
 
 /**
@@ -39,11 +52,19 @@ public class Neo4jRequestExecutor implements RequestExecutor {
     private WebResource resource;
 
     public Neo4jRequestExecutor() {
-        ClientConfig config = new DefaultClientConfig();
-        config.getClasses().addAll(getClasses());
-        config.getFeatures().put(JSONConfiguration.FEATURE_POJO_MAPPING, true);
-        Client client = Client.create(config);
-        resource = client.resource(DATA_ENTRY_POINT_URI);
+        try {
+            DefaultApacheHttpClientConfig config = new DefaultApacheHttpClientConfig();
+//            Properties properties = new Properties();
+//            properties.load(getClass().getResourceAsStream("/com/zenika/dorm/core/dao/resources/clientconfig.properties"));
+//            config.getProperties().put(DefaultApacheHttpClientConfig.PROPERTY_PROXY_URI,"http://" + properties.get("proxyHost") + ":" + properties.get("proxyPort") + "/");
+            config.getClasses().addAll(getClasses());
+            config.getFeatures().put(JSONConfiguration.FEATURE_POJO_MAPPING, true);
+            Client client = ApacheHttpClient.create(config);
+            resource = client.resource(DATA_ENTRY_POINT_URI);
+        } catch (Exception e) {
+            logger.error("Error ", e);
+            throw new CoreException("error", e);
+        }
     }
 
     @Override
@@ -73,15 +94,8 @@ public class Neo4jRequestExecutor implements RequestExecutor {
 
     @Override
     public Neo4jIndex post(Neo4jIndex index) {
-        logger.trace(Neo4jIndex.INDEX_PATH);
-
-        try {
-            index = resource.path(Neo4jIndex.INDEX_PATH).accept(MediaType.APPLICATION_JSON)
-                    .type(MediaType.APPLICATION_JSON).post(Neo4jIndex.class, index);
-        } catch (Exception e) {
-            logger.info("Cannot establish connection to the neo4j server", e);
-        }
-
+        index = resource.path(Neo4jIndex.INDEX_PATH).accept(MediaType.APPLICATION_JSON)
+                .type(MediaType.APPLICATION_JSON).post(Neo4jIndex.class, index);
         logRequest("POST", resource, Neo4jIndex.INDEX_PATH);
         return index;
     }
@@ -128,7 +142,8 @@ public class Neo4jRequestExecutor implements RequestExecutor {
 
     @Override
     public Neo4jMetadataExtension getExtension(URI uri, DormMetadataExtension dormExtension) throws ClientHandlerException, UniformInterfaceException {
-        Neo4jResponse<Map<String, String>> response = resource.uri(uri).accept(MediaType.APPLICATION_JSON).get(new GenericType<Neo4jResponse<Map<String, String>>>() {});
+        Neo4jResponse<Map<String, String>> response = resource.uri(uri).accept(MediaType.APPLICATION_JSON).get(new GenericType<Neo4jResponse<Map<String, String>>>() {
+        });
         Neo4jMetadataExtension extension = new Neo4jMetadataExtension();
         extension.setExtension(dormExtension.createFromMap(response.getData()));
         extension.setResponse(response);
@@ -176,4 +191,5 @@ public class Neo4jRequestExecutor implements RequestExecutor {
         classes.add(Neo4jIndex.class);
         return classes;
     }
+
 }

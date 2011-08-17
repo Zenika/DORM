@@ -22,7 +22,7 @@ public class Neo4jIndex {
         CONFIG.put("type", "fulltext");
     }
 
-    public static final String INDEX_PATH = "/index/node";
+    public static final String INDEX_PATH = "index/node";
 
     private String template;
     private String provider;

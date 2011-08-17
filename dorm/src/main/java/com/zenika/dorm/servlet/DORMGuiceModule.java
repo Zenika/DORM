@@ -4,6 +4,7 @@ import com.sun.jersey.guice.JerseyServletModule;
 import com.sun.jersey.guice.spi.container.servlet.GuiceContainer;
 import com.zenika.dorm.core.dao.DormDao;
 import com.zenika.dorm.core.dao.neo4j.DormDaoNeo4j;
+import com.zenika.dorm.core.dao.neo4j.exception.Neo4jDaoException;
 import com.zenika.dorm.core.model.impl.DefaultDormMetadataExtension;
 import com.zenika.dorm.core.processor.Processor;
 import com.zenika.dorm.core.processor.impl.DefaultProcessor;

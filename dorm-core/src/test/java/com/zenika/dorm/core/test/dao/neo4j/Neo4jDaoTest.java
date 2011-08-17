@@ -20,6 +20,7 @@ import org.mockito.stubbing.Answer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.net.ConnectException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.HashMap;
@@ -262,7 +263,7 @@ public class Neo4jDaoTest {
      */
     @Test
 //    @Ignore
-    public void testGetByMetadata(){
+    public void testGetByMetadata() {
         DependencyNode node = dao.getByMetadata(provider.getMetadata(), provider.getUsage());
         assertThat(node.getDependency().getMetadata()).isEqualTo(provider.getMetadata());
         assertThat(node.getDependency().getMetadata().getExtension()).isEqualTo(provider.getExtension());
@@ -335,10 +336,10 @@ public class Neo4jDaoTest {
 
             @Override
             public Neo4jMetadata answer(InvocationOnMock invocation) throws Throwable {
-                if (invocation.getArguments()[0].getClass().equals(Neo4jDependency.class)){
+                if (invocation.getArguments()[0].getClass().equals(Neo4jDependency.class)) {
                     Neo4jDependency dependency = (Neo4jDependency) invocation.getArguments()[0];
                     dependency.setResponse(provider.getDependency21Response());
-                }else{
+                } else {
                     Neo4jMetadata metadata = (Neo4jMetadata) invocation.getArguments()[0];
                     metadata.setResponse(provider.getMetadata20Response());
                 }

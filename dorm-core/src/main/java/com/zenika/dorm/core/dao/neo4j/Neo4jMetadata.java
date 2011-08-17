@@ -33,7 +33,12 @@ public class Neo4jMetadata extends Neo4jNode implements DormMetadata {
 
     public Neo4jMetadata(DormMetadata metadata) {
         version = metadata.getVersion();
-        type = metadata.getType();
+        // todo: Delete when the model will fix
+        if (metadata.getType() == null) {
+            type = "default";
+        } else {
+            type = metadata.getType();
+        }
         qualifier = convertFullqualifier(metadata.getQualifier());
         extension = new Neo4jMetadataExtension(metadata.getExtension());
     }
@@ -60,7 +65,7 @@ public class Neo4jMetadata extends Neo4jNode implements DormMetadata {
         return type;
     }
 
-    public void setType(String type){
+    public void setType(String type) {
         this.type = type;
     }
 
@@ -71,7 +76,7 @@ public class Neo4jMetadata extends Neo4jNode implements DormMetadata {
 
     @JsonIgnore
     @Override
-    public DormMetadataExtension getExtension(){
+    public DormMetadataExtension getExtension() {
         throw new UnsupportedOperationException();
     }
 

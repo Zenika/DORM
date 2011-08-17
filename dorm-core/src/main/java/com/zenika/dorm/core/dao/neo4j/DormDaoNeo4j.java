@@ -5,6 +5,7 @@ import com.google.inject.Inject;
 import com.sun.jersey.api.client.ClientHandlerException;
 import com.sun.jersey.api.client.UniformInterfaceException;
 import com.zenika.dorm.core.dao.DormDao;
+import com.zenika.dorm.core.dao.neo4j.exception.Neo4jDaoException;
 import com.zenika.dorm.core.dao.neo4j.util.Neo4jRequestExecutor;
 import com.zenika.dorm.core.dao.neo4j.util.RequestExecutor;
 import com.zenika.dorm.core.exception.CoreException;
@@ -53,9 +54,9 @@ public class DormDaoNeo4j implements DormDao {
         try {
             index = this.executor.post(index);
         } catch (ClientHandlerException e) {
-            if (e.getCause().getClass().equals(ConnectException.class)) {
-                LOG.error("The Neo4j dao can't connect with the Neo4j Database. Verify your configuration.", e);
-            }
+//            if (e.getCause().getClass().equals(ConnectException.class)) {
+            LOG.error("The Neo4j dao can't connect with the Neo4j Database. Verify your configuration.", e);
+            throw new Neo4jDaoException("The Neo4j dao can't connect with the Neo4j Database. Check your configuration.", e);
         }
     }
 
@@ -182,7 +183,6 @@ public class DormDaoNeo4j implements DormDao {
 
     @Override
     public Boolean push(DependencyNode node) {
-
         // todo: fix this when dao is correct
         if (node.getChildren().isEmpty()) {
             return push(node.getDependency());
