@@ -1,6 +1,5 @@
 package com.zenika.dorm.maven.importer.utils;
 
-import com.sun.org.apache.bcel.internal.generic.F2D;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 

@@ -18,7 +18,7 @@ public abstract class AbstractDependencyVisitor implements DependencyVisitor {
         addCheck(new DependencyVisitorCyclicCheck());
     }
 
-    protected void addCheck(DependencyVisitorCheck check) {
+    public void addCheck(DependencyVisitorCheck check) {
         checks.add(check);
     }
 

@@ -54,7 +54,6 @@ public class DormDaoNeo4j implements DormDao {
         try {
             index = this.executor.post(index);
         } catch (ClientHandlerException e) {
-//            if (e.getCause().getClass().equals(ConnectException.class)) {
             LOG.error("The Neo4j dao can't connect with the Neo4j Database. Verify your configuration.", e);
             throw new Neo4jDaoException("The Neo4j dao can't connect with the Neo4j Database. Check your configuration.", e);
         }
@@ -197,7 +196,7 @@ public class DormDaoNeo4j implements DormDao {
             }
             return true;
         } catch (URISyntaxException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            new Neo4jDaoException("Bad URI", e);
         }
         return false;
     }

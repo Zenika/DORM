@@ -55,7 +55,9 @@ public class MavenResource {
 
         Dependency dependency = processor.get(request);
 
-        if (null == dependency.getResource() || null == dependency.getResource().getFile()) {
+        LOG.info("File exist ? : " + dependency.getResource().getFile().exists());
+
+        if (null == dependency.getResource() || null == dependency.getResource().getFile() || !dependency.getResource().getFile().exists()) {
             LOG.info("Return http response 404");
             return Response.status(Response.Status.NOT_FOUND).build();
         }

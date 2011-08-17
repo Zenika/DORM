@@ -2,6 +2,9 @@ package com.zenika.dorm.core.service.impl;
 
 import com.google.inject.Inject;
 import com.zenika.dorm.core.dao.DormDao;
+import com.zenika.dorm.core.graph.visitor.DependencyVisitor;
+import com.zenika.dorm.core.graph.visitor.impl.DependenciesCollector;
+import com.zenika.dorm.core.graph.visitor.impl.DependencyVisitorFileCheck;
 import com.zenika.dorm.core.model.Dependency;
 import com.zenika.dorm.core.model.DependencyNode;
 import com.zenika.dorm.core.model.DormResource;
@@ -10,6 +13,8 @@ import com.zenika.dorm.core.model.impl.Usage;
 import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.core.repository.DormRepository;
 import com.zenika.dorm.core.service.DormService;
+
+import java.util.Set;
 
 /**
  * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>
@@ -30,6 +35,7 @@ public class DefaultDormService implements DormService {
      */
     @Override
     public Boolean push(DependencyNode node) {
+        repositoryPut(node);
         return dao.push(node);
     }
 
@@ -42,5 +48,18 @@ public class DefaultDormService implements DormService {
     public Dependency getDependency(DormMetadata metadata, Usage usage) {
         DormResource resource = repository.get(metadata);
         return DefaultDependency.create(metadata, resource);
+    }
+
+    private void repositoryPut(DependencyNode node) {
+        DependenciesCollector visitor = new DependenciesCollector(node.getDependency().getUsage());
+        visitor.addCheck(new DependencyVisitorFileCheck());
+        node.accept(visitor);
+        Set<Dependency> dependencies = visitor.getDependencies();
+        for (Dependency dependency : dependencies) {
+            // todo: Remove this when the AspectJ errors are fixed
+            if (dependency.hasFile()) {
+                repository.put(dependency);
+            }
+        }
     }
 }
