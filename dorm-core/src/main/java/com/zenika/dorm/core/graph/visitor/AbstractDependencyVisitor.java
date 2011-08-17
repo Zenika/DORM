@@ -1,31 +1,25 @@
 package com.zenika.dorm.core.graph.visitor;
 
+import com.zenika.dorm.core.graph.visitor.filter.DependencyVisitorCyclicFilter;
 import com.zenika.dorm.core.model.DependencyNode;
-import com.zenika.dorm.core.graph.visitor.impl.DependencyVisitorCheckException;
-import com.zenika.dorm.core.graph.visitor.impl.DependencyVisitorCyclicCheck;
-
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>
  */
 public abstract class AbstractDependencyVisitor implements DependencyVisitor {
 
-    private Set<DependencyVisitorCheck> checks = new HashSet<DependencyVisitorCheck>();
+    private DependencyVisitorFilterChain filterChain = new DependencyVisitorFilterChain();
 
     protected AbstractDependencyVisitor() {
-        addCheck(new DependencyVisitorCyclicCheck());
+        filterChain.addFilter(new DependencyVisitorCyclicFilter());
     }
 
-    public void addCheck(DependencyVisitorCheck check) {
-        checks.add(check);
+    public final boolean collect(DependencyNode node) {
+        filterChain.forward(node);
+        return filterChain.isProcessContinue();
     }
 
-    @Override
-    public void performChecks(DependencyNode node) throws DependencyVisitorCheckException {
-        for (DependencyVisitorCheck check : checks) {
-            check.check(node);
-        }
+    public void addFilter(DependencyVisitorFilter filter) {
+        filterChain.addFilter(filter);
     }
 }

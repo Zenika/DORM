@@ -13,7 +13,7 @@ public class ConsoleVisitor extends AbstractDependencyVisitor {
     private Integer counter = 0;
 
     @Override
-    public Boolean visitEnter(DependencyNode node) {
+    public boolean visitEnter(DependencyNode node) {
         print("Enter composite node : " + node.getDependency().getMetadata());
         print("Usage : " + node.getDependency().getUsage());
         counter++;
@@ -22,7 +22,7 @@ public class ConsoleVisitor extends AbstractDependencyVisitor {
     }
 
     @Override
-    public Boolean visitExit(DependencyNode node) {
+    public boolean visitExit(DependencyNode node) {
         print("Exit composite node : " + node.getDependency().getMetadata());
         counter--;
 

@@ -25,13 +25,13 @@ public class DependenciesNodeCollector extends AbstractDependencyVisitor {
     }
 
     @Override
-    public Boolean visitEnter(DependencyNode node) {
+    public boolean visitEnter(DependencyNode node) {
         dependencies.add(node);
         return true;
     }
 
     @Override
-    public Boolean visitExit(DependencyNode node) {
+    public boolean visitExit(DependencyNode node) {
         return true;
     }
 

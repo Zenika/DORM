@@ -1,9 +1,9 @@
 package com.zenika.dorm.core.graph.visitor.impl;
 
+import com.zenika.dorm.core.graph.visitor.AbstractDependencyVisitor;
 import com.zenika.dorm.core.model.Dependency;
 import com.zenika.dorm.core.model.DependencyNode;
 import com.zenika.dorm.core.model.impl.Usage;
-import com.zenika.dorm.core.graph.visitor.AbstractDependencyVisitor;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -26,13 +26,13 @@ public class DependenciesCollector extends AbstractDependencyVisitor {
     }
 
     @Override
-    public Boolean visitEnter(DependencyNode node) {
+    public boolean visitEnter(DependencyNode node) {
         dependencies.add(node.getDependency());
         return true;
     }
 
     @Override
-    public Boolean visitExit(DependencyNode node) {
+    public boolean visitExit(DependencyNode node) {
         return true;
     }
 

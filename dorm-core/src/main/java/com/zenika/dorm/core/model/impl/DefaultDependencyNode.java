@@ -49,7 +49,7 @@ public final class DefaultDependencyNode implements DependencyNode {
     @Override
     public Boolean accept(DependencyVisitor visitor) {
 
-        if (visitor.visitEnter(this)) {
+        if (visitor.collect(this)) {
             for (DependencyNode children : childrens) {
                 if (!children.accept(visitor)) {
                     break;
