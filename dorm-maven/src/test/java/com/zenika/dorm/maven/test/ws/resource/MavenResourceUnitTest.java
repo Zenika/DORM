@@ -19,6 +19,7 @@ import javax.ws.rs.core.Response;
 
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.junit.Assert.*;
 
 /**
  * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>
@@ -52,7 +53,6 @@ public class MavenResourceUnitTest extends AbstractUnitTest {
 
     @Test(expected = MavenException.class)
     public void pushInvalidMetadata() {
-
         DormRequest request = new DormRequestBuilder(fixtures.getRequestWithFile())
                 .property(MavenMetadataExtension.METADATA_ARTIFACTID, null)
                 .build();

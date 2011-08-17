@@ -40,7 +40,7 @@ import java.util.Properties;
  */
 @Path("dorm")
 @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-public class DormResource {
+public class DormResource extends AbstractResource {
 
     private static final Logger LOG = LoggerFactory.getLogger(DormResource.class);
 

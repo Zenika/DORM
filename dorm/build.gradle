@@ -9,4 +9,7 @@ dependencies {
 	compile libraries.servlet_api
     compile libraries.jersey_guice
     compile libraries.guice_assistedinject
+
+    testCompile project(path: ':dorm-core', configuration: 'sharedTests')
+    testCompile project(path: ':dorm-maven', configuration: 'sharedTests')
 }

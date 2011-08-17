@@ -1,12 +1,7 @@
-//package com.zenika.dorm.maven.test;
-//
-//import java.io.File;
-//
-//import com.zenika.dorm.maven.importer.core.MavenImporterService;
-//import com.zenika.dorm.maven.model.impl.DormMavenMetadata;
-//
-//public class PushArtifactTest {
-//
+package com.zenika.dorm.maven.test;
+
+public class PushArtifactTest {
+
 //	public static void main(String args[]) throws Exception {
 //
 //		DormMavenMetadata metadata = new DormMavenMetadata("com.zenika.demo", "demo", "1.0", "jar");
@@ -18,4 +13,4 @@
 //		// DormArtifact<MavenMetadata> artifact =
 //		// importer.getArtifactWithDependencies(metadata);
 //	}
-//}
+}

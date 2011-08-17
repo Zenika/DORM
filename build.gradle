@@ -57,7 +57,8 @@ versions = [
         junit: '4.8.2',
         fest_assert: '1.4',
         mockito: '1.8.5',
-        morphia: '0.99'
+        morphia: '0.99',
+        tomcat: '7.0.19'
 ]
 
 // 2nd step, introducing libraries
@@ -86,7 +87,10 @@ libraries = [
         mockito: 'org.mockito:mockito-all:' + versions.mockito,
         guiceberry: 'com.google.guiceberry:guiceberry:' + versions.guiceberry,
         jukito: 'org.jukito:jukito:' + versions.jukito,
-        fest_assert: 'org.easytesting:fest-assert:' + versions.fest_assert
+        fest_assert: 'org.easytesting:fest-assert:' + versions.fest_assert,
+
+        tomcat_embeded_core: 'org.apache.tomcat.embed:tomcat-embed-core:' + versions.tomcat,
+        tomcat_embeded_juli: 'org.apache.tomcat.embed:tomcat-embed-logging-juli:' + versions.tomcat
 ]
 
 subprojects {
@@ -112,6 +116,8 @@ subprojects {
         testCompile libraries.junit
         testCompile libraries.mockito
         testCompile libraries.fest_assert
+        testCompile libraries.tomcat_embeded_core
+        testCompile libraries.tomcat_embeded_juli
     }
 
 }
