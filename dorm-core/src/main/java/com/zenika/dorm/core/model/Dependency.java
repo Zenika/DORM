@@ -15,5 +15,5 @@ public interface Dependency {
 
     public DormResource getResource();
 
-    public Boolean hasFile();
+    public Boolean hasResource();
 }

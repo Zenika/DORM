@@ -57,7 +57,7 @@ public class Neo4jDependency extends Neo4jNode implements Dependency{
 
     @JsonIgnore
     @Override
-    public Boolean hasFile() {
+    public Boolean hasResource() {
         return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 

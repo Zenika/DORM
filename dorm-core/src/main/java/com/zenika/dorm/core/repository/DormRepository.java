@@ -1,8 +1,8 @@
 package com.zenika.dorm.core.repository;
 
 import com.zenika.dorm.core.model.Dependency;
-import com.zenika.dorm.core.model.DormResource;
 import com.zenika.dorm.core.model.DormMetadata;
+import com.zenika.dorm.core.model.DormResource;
 
 import java.io.File;
 

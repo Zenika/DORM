@@ -34,6 +34,7 @@ import static org.mockito.Mockito.*;
 /**
  * @author Antoine ROUAZE <antoine.rouaze AT zenika.com>
  */
+@Ignore
 public class Neo4jDaoTest {
 
     private static final Logger LOG = LoggerFactory.getLogger(Neo4jDaoTest.class);

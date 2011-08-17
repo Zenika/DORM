@@ -3,6 +3,7 @@ package com.zenika.dorm.core.model.impl;
 import com.zenika.dorm.core.exception.CoreException;
 import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.core.model.DormMetadataExtension;
+import com.zenika.dorm.core.util.DormFormatter;
 
 /**
  * Immutable dorm metadata
@@ -32,11 +33,13 @@ public final class DefaultDormMetadata implements DormMetadata {
             throw new CoreException("Properties are missing for metadata");
         }
 
-        this.version = version;
-        this.type = type;
+        this.version = DormFormatter.formatMetadataVersion(version);
+        this.type = DormFormatter.formatMetadataType(type);
         this.extension = extension;
-        this.qualifier = extension.getExtensionName() + ":" + extension.getQualifier() + ":" + version +
-                ":" + type;
+
+        String extensionQualifier = DormFormatter.formatMetadataExtensionQualifier(extension.getQualifier());
+        qualifier = DormFormatter.formatMetadataQualifier(extension.getExtensionName(),
+                extensionQualifier, version, type);
     }
 
     @Override

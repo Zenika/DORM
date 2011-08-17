@@ -9,6 +9,7 @@ import com.zenika.dorm.core.processor.impl.DefaultProcessor;
 import com.zenika.dorm.core.service.DormService;
 import com.zenika.dorm.core.test.unit.AbstractUnitTest;
 import org.fest.assertions.Assertions;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -23,6 +24,7 @@ import static org.mockito.Mockito.verify;
  *
  * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>
  */
+@Ignore
 public class ProcessorUnitTest extends AbstractUnitTest {
 
     @Mock

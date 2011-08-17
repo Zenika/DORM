@@ -9,8 +9,6 @@ public interface DormRepositoryResource {
 
     public String getPath();
 
-    public String getPathFromRepository();
-
     public File getFile();
 
     public DormRepository getRepository();

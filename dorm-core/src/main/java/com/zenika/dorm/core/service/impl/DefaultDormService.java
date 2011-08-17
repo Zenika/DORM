@@ -7,10 +7,10 @@ import com.zenika.dorm.core.graph.visitor.impl.DependenciesCollector;
 import com.zenika.dorm.core.graph.visitor.impl.DependencyVisitorFileCheck;
 import com.zenika.dorm.core.model.Dependency;
 import com.zenika.dorm.core.model.DependencyNode;
+import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.core.model.DormResource;
 import com.zenika.dorm.core.model.impl.DefaultDependency;
 import com.zenika.dorm.core.model.impl.Usage;
-import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.core.repository.DormRepository;
 import com.zenika.dorm.core.service.DormService;
 

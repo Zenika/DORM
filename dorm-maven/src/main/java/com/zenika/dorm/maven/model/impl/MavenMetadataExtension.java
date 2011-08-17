@@ -25,25 +25,50 @@ public final class MavenMetadataExtension implements DormMetadataExtension {
     public static final String METADATA_GROUPID = "groupId";
     public static final String METADATA_ARTIFACTID = "artifactId";
     public static final String METADATA_VERSION = "version";
+    public static final String METADATA_CLASSIFIER = "classifier";
+    public static final String METADATA_PACKAGING = "packaging";
 
     private final String groupId;
     private final String artifactId;
     private final String version;
+    private final String classifier;
+    private final String packaging;
 
-    public MavenMetadataExtension(String groupId, String artifactId, String version) {
+    public MavenMetadataExtension(String groupId, String artifactId, String version, String packaging,
+                                  String classifier) {
 
         if (null == groupId || null == artifactId || null == version) {
             throw new MavenException("Following metadatas are required : groupId, artifactId, versionId");
         }
 
+        if (null == packaging) {
+            packaging = "jar";
+        }
+
+        if (null == classifier) {
+            classifier = "";
+        }
+
         this.groupId = groupId;
         this.artifactId = artifactId;
         this.version = version;
+        this.packaging = packaging;
+        this.classifier = classifier;
     }
 
     @Override
     public String getQualifier() {
-        return groupId + ":" + artifactId + ":" + version;
+        String separator = ":";
+        StringBuilder qualifier = new StringBuilder()
+                .append(groupId).append(separator)
+                .append(artifactId).append(separator)
+                .append(packaging).append(separator);
+
+        if (classifier.isEmpty()) {
+            qualifier.append(classifier).append(separator);
+        }
+
+        return qualifier.append(packaging).append(separator).append(version).toString();
     }
 
     @Override
@@ -61,6 +86,14 @@ public final class MavenMetadataExtension implements DormMetadataExtension {
 
     public String getVersion() {
         return version;
+    }
+
+    public String getPackaging() {
+        return packaging;
+    }
+
+    public String getClassifier() {
+        return classifier;
     }
 
     @Override
@@ -90,6 +123,6 @@ public final class MavenMetadataExtension implements DormMetadataExtension {
     @Override
     public DormMetadataExtension createFromMap(Map<String, String> properties) {
         return new MavenMetadataExtension(properties.get(METADATA_GROUPID),
-                properties.get(METADATA_ARTIFACTID), properties.get(METADATA_VERSION));
+                properties.get(METADATA_ARTIFACTID), properties.get(METADATA_VERSION), null, null);
     }
 }

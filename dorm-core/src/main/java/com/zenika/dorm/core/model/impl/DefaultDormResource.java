@@ -18,32 +18,21 @@ public final class DefaultDormResource implements DormResource {
     private final File file;
 
     public static DormResource create(File file) {
-        return new DefaultDormResource(file);
+        return create(file.getName(), file);
     }
 
     public static DefaultDormResource create(String filename, File file) {
-        return new DefaultDormResource(FilenameUtils.getBaseName(filename), FilenameUtils.getExtension(filename),
-                file);
+        return create(FilenameUtils.getBaseName(filename), FilenameUtils.getExtension(filename), file);
     }
 
     public static DefaultDormResource create(String name, String extension, File file) {
         return new DefaultDormResource(name, extension, file);
     }
 
-    /**
-     * Temporary, do not use
-     *
-     * @param file
-     */
-    private DefaultDormResource(File file) {
-        this.name = file.getName();
-        this.file = file;
-        this.extension = null;
-    }
-
     private DefaultDormResource(String name, String extension, File file) {
 
-        if (null == name || null == extension || null == file || name.isEmpty() || extension.isEmpty()) {
+        if (null == name || null == extension || null == file || name.isEmpty() || extension.isEmpty() ||
+                !file.exists()) {
             throw new CoreException("Name, extension and file are required.");
         }
 

@@ -7,6 +7,7 @@ import com.zenika.dorm.core.model.impl.DefaultDormMetadataExtension;
 import com.zenika.dorm.core.processor.impl.DormProcessor;
 import com.zenika.dorm.core.test.unit.AbstractUnitTest;
 import org.fest.assertions.Assertions;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 
@@ -15,6 +16,7 @@ import org.mockito.InjectMocks;
  *
  * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>
  */
+@Ignore
 public class DormProcessorUnitTest extends AbstractUnitTest {
 
 

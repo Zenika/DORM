@@ -5,6 +5,7 @@ import com.zenika.dorm.core.model.DormResource;
 import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.core.repository.impl.DefaultDormRepository;
 import com.zenika.dorm.core.test.unit.AbstractUnitTest;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,6 +15,7 @@ import java.io.File;
 /**
  * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>
  */
+@Ignore
 public class DefaultDormRepositoryUnitTest extends AbstractUnitTest {
 
     private static final Logger LOG = LoggerFactory.getLogger(DefaultDormRepositoryUnitTest.class);

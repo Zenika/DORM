@@ -28,5 +28,10 @@ public interface DormResource {
      */
     public String getExtension();
 
+    /**
+     * Get the file
+     *
+     * @return the file
+     */
     public File getFile();
 }

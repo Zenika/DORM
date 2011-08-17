@@ -3,8 +3,8 @@ package com.zenika.dorm.core.repository.impl;
 import com.google.inject.Inject;
 import com.zenika.dorm.core.exception.RepositoryException;
 import com.zenika.dorm.core.model.Dependency;
-import com.zenika.dorm.core.model.DormResource;
 import com.zenika.dorm.core.model.DormMetadata;
+import com.zenika.dorm.core.model.DormResource;
 import com.zenika.dorm.core.model.impl.DefaultDormResource;
 import com.zenika.dorm.core.repository.DormRepository;
 import com.zenika.dorm.core.repository.DormRepositoryResource;
@@ -69,6 +69,12 @@ public class DefaultDormRepository implements DormRepository {
         LOG.debug("Get file at location : " + location);
 
         DormRepositoryResource resource = resolveEngine.resolve(location);
+
+        if (!resource.exists()) {
+            throw new RepositoryException("File not found for metadata : " + metadata)
+                    .type(RepositoryException.Type.NULL);
+        }
+
         return DefaultDormResource.create(resource.getFile());
     }
 
@@ -77,6 +83,12 @@ public class DefaultDormRepository implements DormRepository {
         return base;
     }
 
+    /**
+     * Pattern from metadata
+     *
+     * @param metadata
+     * @return
+     */
     private String getPathFromMetadata(DormMetadata metadata) {
         return metadata.getQualifier() + "/" + metadata.getExtension().getQualifier();
     }

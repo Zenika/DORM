@@ -51,7 +51,8 @@ public class MavenProcessor extends AbstractProcessorExtension {
         String version = request.getProperty(MavenMetadataExtension.METADATA_VERSION);
 
         // create the entity extension which is the same as the child with a different type
-        MavenMetadataExtension entityExtension = new MavenMetadataExtension(groupId, artifactId, version);
+        MavenMetadataExtension entityExtension = new MavenMetadataExtension(groupId, artifactId, version,
+                null, null);
 
         // entity dependencuy has no file
         DormRequest entityRequest = new DormRequestBuilder(request)
@@ -67,7 +68,8 @@ public class MavenProcessor extends AbstractProcessorExtension {
         }
 
         // create the real maven dependency to push
-        MavenMetadataExtension childExtension = new MavenMetadataExtension(groupId, artifactId, version);
+        MavenMetadataExtension childExtension = new MavenMetadataExtension(groupId, artifactId, version,
+                null, null);
 
         // replace the default usage by the maven internal for the child dependency
         Usage childUsage = Usage.createInternal(MavenMetadataExtension.EXTENSION_NAME);
@@ -101,7 +103,8 @@ public class MavenProcessor extends AbstractProcessorExtension {
         String artifactId = request.getProperty(MavenMetadataExtension.METADATA_ARTIFACTID);
         String versionId = request.getProperty(MavenMetadataExtension.METADATA_VERSION);
 
-        MavenMetadataExtension extension = new MavenMetadataExtension(groupId, artifactId, versionId);
+        MavenMetadataExtension extension = new MavenMetadataExtension(groupId, artifactId, versionId,
+                null, null);
 
         if (LOG.isDebugEnabled()) {
             LOG.debug("Maven metadata extension from request : " + extension);

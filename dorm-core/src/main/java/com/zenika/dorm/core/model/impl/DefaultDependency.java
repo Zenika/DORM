@@ -66,7 +66,7 @@ public final class DefaultDependency implements Dependency {
     }
 
     @Override
-    public Boolean hasFile() {
+    public Boolean hasResource() {
         return null != resource;
     }
 

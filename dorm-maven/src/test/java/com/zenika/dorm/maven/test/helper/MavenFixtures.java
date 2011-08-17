@@ -12,6 +12,7 @@ import com.zenika.dorm.maven.model.impl.MavenMetadataExtension;
 import com.zenika.dorm.maven.processor.extension.MavenProcessor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.sonatype.aether.repository.RemoteRepository;
 
 /**
  * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>
@@ -32,7 +33,7 @@ public class MavenFixtures extends ExtensionFixtures {
 
     @Override
     public DormMetadataExtension getMetadataExtension() {
-        return new MavenMetadataExtension(groupId, artifactId, mavenVersion);
+        return new MavenMetadataExtension(groupId, artifactId, mavenVersion, null, null);
     }
 
     @Override
@@ -76,7 +77,7 @@ public class MavenFixtures extends ExtensionFixtures {
     }
 
     public MavenMetadataExtension getEntityExtension() {
-        return new MavenMetadataExtension(groupId, artifactId, mavenVersion);
+        return new MavenMetadataExtension(groupId, artifactId, mavenVersion, null, null);
     }
 
     public DormMetadata getEntityMetadata() {

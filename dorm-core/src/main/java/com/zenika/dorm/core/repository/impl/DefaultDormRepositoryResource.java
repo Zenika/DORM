@@ -10,9 +10,9 @@ import java.io.File;
  */
 public class DefaultDormRepositoryResource implements DormRepositoryResource {
 
+    private String path;
     private File file;
     private DormRepository repository;
-    private String path;
 
     public DefaultDormRepositoryResource(File file, DormRepository repository) {
         this.file = file;
@@ -27,11 +27,6 @@ public class DefaultDormRepositoryResource implements DormRepositoryResource {
     @Override
     public String getPath() {
         return repository.getBase() + "/" + path;
-    }
-
-    @Override
-    public String getPathFromRepository() {
-        return path;
     }
 
     @Override
