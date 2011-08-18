@@ -173,28 +173,20 @@ public class Neo4jDaoTest {
     @Test
     public void testSearchNode() {
         LOG.trace("START testSearchNode");
-        try {
-            Neo4jDependency dependencyResult = dao.searchNode(provider.getIndexUri(), provider.getListDependencyResponseType().getType());
-            verify(executor).get(provider.getIndexUri(), provider.getListDependencyResponseType().getType());
-            assertThat(provider.getListDependencyResponse().get(0)).isSameAs(dependencyResult.getResponse());
-            assertThat(provider.getListDependencyResponse().get(0).getData()).isSameAs(dependencyResult);
-            assertEquals("The Responses doesn't same", provider.getListDependencyResponse().get(0), dependencyResult.getResponse());
-        } catch (URISyntaxException e) {
-            LOG.error("Bad URI", e);
-        }
+        Neo4jDependency dependencyResult = dao.searchNode(provider.getIndexUri(), provider.getListDependencyResponseType().getType());
+        verify(executor).get(provider.getIndexUri(), provider.getListDependencyResponseType().getType());
+        assertThat(provider.getListDependencyResponse().get(0)).isSameAs(dependencyResult.getResponse());
+        assertThat(provider.getListDependencyResponse().get(0).getData()).isSameAs(dependencyResult);
+        assertEquals("The Responses doesn't same", provider.getListDependencyResponse().get(0), dependencyResult.getResponse());
         LOG.trace("END testSearchNode");
     }
 
     @Test
     public void testFillNeo4jDependency() {
         LOG.trace("START testFillNeo4jDependency");
-        try {
-            Neo4jDependency dependencyResponse = dao.fillNeo4jDependency(provider.getDependency21Response().getData(), new DefaultDormMetadataExtension("test"));
-            assertThat(dependencyResponse.getMetadata()).isSameAs(provider.getMetadata20Response().getData());
-            assertThat(dependencyResponse.getMetadata().getNeo4jExtension()).isSameAs(provider.getExtension19());
-        } catch (URISyntaxException e) {
-            LOG.error("Bad URI", e);
-        }
+        Neo4jDependency dependencyResponse = dao.fillNeo4jDependency(provider.getDependency21Response().getData(), new DefaultDormMetadataExtension("test"));
+        assertThat(dependencyResponse.getMetadata()).isSameAs(provider.getMetadata20Response().getData());
+        assertThat(dependencyResponse.getMetadata().getNeo4jExtension()).isSameAs(provider.getExtension19());
         LOG.trace("END testFillNeo4jDependency");
     }
 

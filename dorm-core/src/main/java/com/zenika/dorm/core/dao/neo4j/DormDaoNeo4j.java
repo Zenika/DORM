@@ -4,6 +4,7 @@ package com.zenika.dorm.core.dao.neo4j;
 import com.google.inject.Inject;
 import com.sun.jersey.api.client.ClientHandlerException;
 import com.sun.jersey.api.client.UniformInterfaceException;
+import com.sun.org.apache.bcel.internal.generic.NEW;
 import com.zenika.dorm.core.dao.DormDao;
 import com.zenika.dorm.core.dao.neo4j.exception.Neo4jDaoException;
 import com.zenika.dorm.core.dao.neo4j.util.Neo4jRequestExecutor;
@@ -28,6 +29,7 @@ import java.lang.reflect.Type;
 import java.net.ConnectException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,6 +41,10 @@ import java.util.Set;
 public class DormDaoNeo4j implements DormDao {
 
     private static final Logger LOG = LoggerFactory.getLogger(DormDaoNeo4j.class);
+
+    private static final TypeReference<List<Neo4jResponse<Neo4jDependency>>> TYPE_LIST_RESPONSE_DEPENDENCY = new TypeReference<List<Neo4jResponse<Neo4jDependency>>>() {
+    };
+
 
     private RequestExecutor executor;
     private Neo4jIndex index;
@@ -101,26 +107,41 @@ public class DormDaoNeo4j implements DormDao {
         return dependency;
     }
 
-    public <T extends Neo4jNode> T searchNode(URI uri, Type type) throws URISyntaxException {
-        List<Neo4jResponse<T>> responses = executor.get(uri, type);
-        Neo4jResponse<T> response = responses.get(0);
-        T node = response.getData();
-        node.setResponse(response);
-        node.setProperties();
-        return node;
+    public <T extends Neo4jNode> T searchNode(URI uri, Type type) {
+        List<T> nodes = searchNodes(uri, type);
+        if (nodes.size() > 1) {
+            throw new Neo4jDaoException("Multiple Node found for this requests : " + uri + ". Maybe you should use the searchNodes method");
+        }
+        return nodes.get(0);
     }
 
-    public Neo4jDependency fillNeo4jDependency(Neo4jDependency dependency, DormMetadataExtension extensionPlug) throws URISyntaxException {
-        Neo4jRelationship dependencyMetadata = getSingleRelationship(dependency.getResponse()
-                .getOutgoing_typed_relationships(Neo4jMetadata.RELATIONSHIP_TYPE));
-        Neo4jMetadata metadata = executor.getNode(dependencyMetadata.getEnd(), new TypeReference<Neo4jResponse<Neo4jMetadata>>() {
-        }.getType());
-        Neo4jRelationship metadataExtension = getSingleRelationship(metadata.getResponse()
-                .getOutgoing_typed_relationships(Neo4jMetadataExtension.RELATIONSHIP_TYPE));
-        Neo4jMetadataExtension extension = executor.getExtension(metadataExtension.getEnd(), extensionPlug);
-        dependency.setMetadata(metadata);
-        metadata.setExtension(extension);
-        return dependency;
+    public <T extends Neo4jNode> List<T> searchNodes(URI uri, Type type) {
+        List<Neo4jResponse<T>> responses = executor.get(uri, type);
+        List<T> nodes = new ArrayList<T>();
+        for (Neo4jResponse<T> response : responses) {
+            T node = response.getData();
+            node.setResponse(response);
+            node.setProperties();
+            nodes.add(node);
+        }
+        return nodes;
+    }
+
+    public Neo4jDependency fillNeo4jDependency(Neo4jDependency dependency, DormMetadataExtension extensionPlug) {
+        try {
+            Neo4jRelationship dependencyMetadata = getSingleRelationship(dependency.getResponse()
+                    .getOutgoing_typed_relationships(Neo4jMetadata.RELATIONSHIP_TYPE));
+            Neo4jMetadata metadata = executor.getNode(dependencyMetadata.getEnd(), new TypeReference<Neo4jResponse<Neo4jMetadata>>() {
+            }.getType());
+            Neo4jRelationship metadataExtension = getSingleRelationship(metadata.getResponse()
+                    .getOutgoing_typed_relationships(Neo4jMetadataExtension.RELATIONSHIP_TYPE));
+            Neo4jMetadataExtension extension = executor.getExtension(metadataExtension.getEnd(), extensionPlug);
+            dependency.setMetadata(metadata);
+            metadata.setExtension(extension);
+            return dependency;
+        } catch (URISyntaxException e) {
+            throw new Neo4jDaoException("URI syntax exception", e);
+        }
     }
 
     public Dependency getDependency(URI uri, Usage usage, DormMetadataExtension extension) throws URISyntaxException {
@@ -158,9 +179,27 @@ public class DormDaoNeo4j implements DormDao {
                         "found");
             }
         } catch (URISyntaxException e) {
-            e.printStackTrace();  //To change bo    dy of catch statement use File | Settings | File Templates.
+            throw new Neo4jDaoException("URI syntax exception", e);
         }
         return dependencyNodeMap.get(dependency.getResponse().getSelf());
+    }
+
+    public List<DependencyNode> getSnapshotMetadata(DormMetadata metadata, Usage usage) {
+        try {
+            List<Neo4jDependency> dependencies = searchNodes(Neo4jMetadata.generateIndexURI(metadata.getQualifier(), index), TYPE_LIST_RESPONSE_DEPENDENCY.getType());
+            List<DependencyNode> nodes = new ArrayList<DependencyNode>();
+            for (Neo4jDependency dependency : dependencies) {
+                nodes.add(DefaultDependencyNode.create(getDependency(new URI(dependency.getUri()), usage, metadata.getExtension())));
+            }
+            return nodes;
+        } catch (UniformInterfaceException e) {
+            if (e.getResponse().getStatus() == Response.Status.NOT_FOUND.getStatusCode()) {
+                LOG.debug("No dependency node with this " + metadata.getQualifier() + "found");
+            }
+            throw e;
+        } catch (URISyntaxException e) {
+            throw new Neo4jDaoException("URI syntax exception", e);
+        }
     }
 
     public void putChild(Usage usage, Map<String, DependencyNode> dependencyNodeMap, List<Neo4jRelationship> relationships, DormMetadataExtension extension) throws URISyntaxException {

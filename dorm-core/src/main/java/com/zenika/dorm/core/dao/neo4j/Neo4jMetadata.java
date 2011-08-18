@@ -1,5 +1,6 @@
 package com.zenika.dorm.core.dao.neo4j;
 
+import com.zenika.dorm.core.dao.neo4j.exception.Neo4jDaoException;
 import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.core.model.DormMetadataExtension;
 import com.zenika.dorm.core.model.impl.Usage;
@@ -43,11 +44,15 @@ public class Neo4jMetadata extends Neo4jNode implements DormMetadata {
         extension = new Neo4jMetadataExtension(metadata.getExtension());
     }
 
-    public static URI generateIndexURI(String fullQualifier, Neo4jIndex index) throws URISyntaxException {
+    public static URI generateIndexURI(String fullQualifier, Neo4jIndex index) {
         String template = index.getTemplate();
         template = template.replace("{key}", "qualifier");
         template = template.replace("{value}", convertFullqualifier(fullQualifier));
-        return new URI(template);
+        try {
+            return new URI(template);
+        } catch (URISyntaxException e) {
+            throw new Neo4jDaoException("URI syntax exception", e);
+        }
     }
 
     @XmlElement
