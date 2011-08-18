@@ -11,7 +11,7 @@ public final class DormFormatter {
 
     private static final Logger LOG = LoggerFactory.getLogger(DormFormatter.class);
 
-    private static final String REGEX_EXTENSION_QUALIFIER = "[\\w\\s:]*";
+    private static final String REGEX_EXTENSION_QUALIFIER = "[\\w\\s:.]*";
     private static final String REGEX_VERSION = "[a-zA-Z0-9-.]*";
     private static final String REGEX_TYPE = "[a-zA-Z0-9-]*";
 
@@ -32,13 +32,13 @@ public final class DormFormatter {
         // qualifier can contains any number of times :
         // - any letter case insensitive
         // - any number
-        // - ":", "_"
+        // - ":", "_", "."
         // - whitespace
         //"^[a-zA-Z0-9 \\s]+([\\:][a-zA-Z0-9 \\s]+)*$"
         if (!qualifier.matches(REGEX_EXTENSION_QUALIFIER)) {
             LOG.error("Invalid metadata extension qualifier: " + qualifier);
             throw new CoreException("Extension qualifier can contains only letters, numbers, " +
-                    "whitespaces \"_\" and \":\"");
+                    "whitespaces \"_\", \".\" and \":\"");
 
 
         }
