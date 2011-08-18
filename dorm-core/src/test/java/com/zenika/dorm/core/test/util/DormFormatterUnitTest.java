@@ -14,11 +14,13 @@ public class DormFormatterUnitTest {
     public void formatValidMetadataExtensionQualifier() {
         Assertions.assertThat(DormFormatter.formatMetadataExtensionQualifier("com.foo:Bar Bar:Foo_Bar"))
                 .isEqualTo("com.foo-Bar_Bar-Foo_Bar");
+        Assertions.assertThat(DormFormatter.formatMetadataExtensionQualifier("com.foo:bar:1.0-FOO"))
+                .isEqualTo("com.foo-bar-1.0_FOO");
     }
 
     @Test(expected = CoreException.class)
     public void formatInvalidMetadataExtensionQualifier() {
-        Assertions.assertThat(DormFormatter.formatMetadataExtensionQualifier("Foo:Bar-Toto:85"));
+        Assertions.assertThat(DormFormatter.formatMetadataExtensionQualifier("Foo:Bar-Toto:85$â"));
     }
 
     @Test
