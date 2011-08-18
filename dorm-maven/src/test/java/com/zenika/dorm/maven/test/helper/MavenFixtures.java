@@ -12,7 +12,6 @@ import com.zenika.dorm.maven.model.impl.MavenMetadataExtension;
 import com.zenika.dorm.maven.processor.extension.MavenProcessor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.sonatype.aether.repository.RemoteRepository;
 
 /**
  * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>
@@ -73,7 +72,7 @@ public class MavenFixtures extends ExtensionFixtures {
         Usage usage = Usage.createInternal(MavenMetadataExtension.EXTENSION_NAME);
         LOG.trace("Maven dependency fixture has the internal usage = " + usage);
 
-        return DefaultDependency.create(getMetadata(), usage, getDormFile());
+        return DefaultDependency.create(getMetadata(), usage, getDormResource());
     }
 
     public MavenMetadataExtension getEntityExtension() {

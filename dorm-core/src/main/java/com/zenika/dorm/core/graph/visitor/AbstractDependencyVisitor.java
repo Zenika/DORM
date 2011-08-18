@@ -1,6 +1,6 @@
 package com.zenika.dorm.core.graph.visitor;
 
-import com.zenika.dorm.core.graph.visitor.filter.DependencyVisitorCyclicFilter;
+import com.zenika.dorm.core.graph.visitor.filter.CyclicDependencyVisitorFilter;
 import com.zenika.dorm.core.model.DependencyNode;
 
 /**
@@ -8,14 +8,22 @@ import com.zenika.dorm.core.model.DependencyNode;
  */
 public abstract class AbstractDependencyVisitor implements DependencyVisitor {
 
-    private DependencyVisitorFilterChain filterChain = new DependencyVisitorFilterChain();
+    private DependencyVisitorFilterChain filterChain = new DependencyVisitorFilterChain(this);
 
     protected AbstractDependencyVisitor() {
-        filterChain.addFilter(new DependencyVisitorCyclicFilter());
+        filterChain.addFilter(new CyclicDependencyVisitorFilter());
     }
 
-    public final boolean collect(DependencyNode node) {
-        filterChain.forward(node);
+    @Override
+    public final boolean collectEnter(DependencyNode node) {
+        filterChain.process(node);
+        return filterChain.isProcessContinue();
+    }
+
+    @Override
+    public final boolean collectExit(DependencyNode node) {
+        filterChain.changeOrientationToBackward();
+        filterChain.process(node);
         return filterChain.isProcessContinue();
     }
 

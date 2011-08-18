@@ -77,7 +77,7 @@ public abstract class ExtensionFixtures {
         return DefaultDormMetadata.create(getRequestVersion(), getType(), getMetadataExtension());
     }
 
-    public DormResource getDormFile() {
+    public DormResource getDormResource() {
         return DefaultDormResource.create(filename, filenameExtension, file);
     }
 
@@ -86,7 +86,7 @@ public abstract class ExtensionFixtures {
     }
 
     public Dependency getDependencyWithFile() {
-        return DefaultDependency.create(getMetadata(), getDormFile());
+        return DefaultDependency.create(getMetadata(), getDormResource());
     }
 
     public DependencyNode getNodeWithoutFile() {

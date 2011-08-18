@@ -9,7 +9,9 @@ public interface DependencyVisitorFilter {
 
     public void init();
 
-    public void doFilter(DependencyNode node, DependencyVisitorFilterChain filterChain);
+    public void doFilterOnEntrance(DependencyNode node, DependencyVisitorFilterChain filterChain);
+
+    public void doFilterOnExit(DependencyNode node, DependencyVisitorFilterChain filterChain);
 
     public void destroy();
 }

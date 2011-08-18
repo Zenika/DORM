@@ -2,8 +2,8 @@ package com.zenika.dorm.core.service.impl;
 
 import com.google.inject.Inject;
 import com.zenika.dorm.core.dao.DormDao;
+import com.zenika.dorm.core.graph.visitor.filter.WithResourceDependencyVisitorFilter;
 import com.zenika.dorm.core.graph.visitor.impl.DependenciesCollector;
-import com.zenika.dorm.core.graph.visitor.impl.DependencyVisitorFileFilter;
 import com.zenika.dorm.core.model.Dependency;
 import com.zenika.dorm.core.model.DependencyNode;
 import com.zenika.dorm.core.model.DormMetadata;
@@ -51,7 +51,7 @@ public class DefaultDormService implements DormService {
 
     private void repositoryPut(DependencyNode node) {
         DependenciesCollector visitor = new DependenciesCollector(node.getDependency().getUsage());
-        visitor.addFilter(new DependencyVisitorFileFilter());
+        visitor.addFilter(new WithResourceDependencyVisitorFilter());
         node.accept(visitor);
         Set<Dependency> dependencies = visitor.getDependencies();
         for (Dependency dependency : dependencies) {

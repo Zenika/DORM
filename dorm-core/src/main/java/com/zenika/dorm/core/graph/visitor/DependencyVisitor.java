@@ -10,16 +10,11 @@ import com.zenika.dorm.core.model.DependencyNode;
  */
 public interface DependencyVisitor {
 
-    /**
-     * The visitor enters to a composite node
-     * Calls automatically performChecks in the DependencyVisitorCheckAspect
-     *
-     * @param node the composite node
-     * @return the visit's enter result
-     */
     boolean visitEnter(DependencyNode node);
 
     boolean visitExit(DependencyNode node);
 
-    boolean collect(DependencyNode node);
+    boolean collectEnter(DependencyNode node);
+
+    boolean collectExit(DependencyNode node);
 }

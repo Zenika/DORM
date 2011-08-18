@@ -1,8 +1,8 @@
 package com.zenika.dorm.core.model.impl;
 
+import com.zenika.dorm.core.graph.visitor.DependencyVisitor;
 import com.zenika.dorm.core.model.Dependency;
 import com.zenika.dorm.core.model.DependencyNode;
-import com.zenika.dorm.core.graph.visitor.DependencyVisitor;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -49,7 +49,7 @@ public final class DefaultDependencyNode implements DependencyNode {
     @Override
     public Boolean accept(DependencyVisitor visitor) {
 
-        if (visitor.collect(this)) {
+        if (visitor.collectEnter(this)) {
             for (DependencyNode children : childrens) {
                 if (!children.accept(visitor)) {
                     break;
@@ -57,7 +57,7 @@ public final class DefaultDependencyNode implements DependencyNode {
             }
         }
 
-        return visitor.visitExit(this);
+        return visitor.collectExit(this);
     }
 
     @Override
