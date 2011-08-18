@@ -1,4 +1,4 @@
-package com.zenika.dorm.test.ws;
+package com.zenika.dorm.test.ws.resource;
 
 import com.zenika.dorm.maven.client.MavenClientConfig;
 import com.zenika.dorm.maven.client.MavenClientService;
@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
  * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>
  */
 @Ignore
-public class MavenResourceIntegrationTest extends TomcatIntegrationTest {
+public class MavenResourceIntegrationTest extends AbstractIntegrationTest {
 
     private static final Logger LOG = LoggerFactory.getLogger(MavenResourceIntegrationTest.class);
 

@@ -1,4 +1,4 @@
-package com.zenika.dorm.test.ws;
+package com.zenika.dorm.test.ws.resource;
 
 import org.junit.Ignore;
 import org.slf4j.Logger;
@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
  * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>
  */
 @Ignore
-public class DormResourceIntegrationTest extends TomcatIntegrationTest {
+public class DormResourceIntegrationTest extends AbstractIntegrationTest {
 
     private static final Logger LOG = LoggerFactory.getLogger(DormResourceIntegrationTest.class);
 

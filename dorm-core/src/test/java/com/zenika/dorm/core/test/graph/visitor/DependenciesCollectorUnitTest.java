@@ -33,7 +33,6 @@ public class DependenciesCollectorUnitTest extends AbstractDependencyGraphUnitTe
         dependencies.add(fixtures.getDependencyWithFile());
         dependencies.add(fixtures.getDependencyWithFile2());
         dependencies.add(fixtures.getDependencyWithFile3());
-        dependencies.add(fixtures.getDependencyWithFile4());
 
         LOG.debug("Collected dependencies : " + collector.getDependencies());
         Assertions.assertThat(collector.getDependencies()).isEqualTo(dependencies);
@@ -52,7 +51,6 @@ public class DependenciesCollectorUnitTest extends AbstractDependencyGraphUnitTe
         dependencies.add(fixtures.getDependencyWithFile());
         dependencies.add(fixtures.getDependencyWithFile2());
         dependencies.add(fixtures.getDependencyWithFile3());
-        dependencies.add(fixtures.getDependencyWithFile4());
 
         LOG.debug("Collected dependencies : " + collector.getDependencies());
         Assertions.assertThat(collector.getDependencies()).isEqualTo(dependencies);
