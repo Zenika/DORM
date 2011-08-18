@@ -11,6 +11,10 @@ public final class DormFormatter {
 
     private static final Logger LOG = LoggerFactory.getLogger(DormFormatter.class);
 
+    private static final String REGEX_EXTENSION_QUALIFIER = "[\\w\\s:]*";
+    private static final String REGEX_VERSION = "[a-zA-Z0-9-.]*";
+    private static final String REGEX_TYPE = "[a-zA-Z0-9-]*";
+
     private DormFormatter() {
 
     }
@@ -22,27 +26,29 @@ public final class DormFormatter {
         }
 
         if (LOG.isDebugEnabled()) {
-            LOG.debug("format qualifier : " + qualifier);
+            LOG.debug("Format qualifier : " + qualifier);
         }
 
         // qualifier can contains any number of times :
         // - any letter case insensitive
         // - any number
-        // - ":"
+        // - ":", "_"
         // - whitespace
-        if (!qualifier.matches("^[a-zA-Z0-9 \\s]+([\\:][a-zA-Z0-9 \\s]+)*$")) {
+        //"^[a-zA-Z0-9 \\s]+([\\:][a-zA-Z0-9 \\s]+)*$"
+        if (!qualifier.matches(REGEX_EXTENSION_QUALIFIER)) {
+            LOG.error("Invalid metadata extension qualifier: " + qualifier);
             throw new CoreException("Extension qualifier can contains only letters, numbers, " +
-                    "whitespaces and \":\"");
+                    "whitespaces \"_\" and \":\"");
 
-            
+
         }
 
         qualifier = qualifier.replaceAll(":", "-")
-                .replaceAll(" ", "-")
+                .replaceAll(" ", "_")
                 .trim();
 
         if (LOG.isDebugEnabled()) {
-            LOG.debug("formatted qualifier : " + qualifier);
+            LOG.debug("Formatted qualifier : " + qualifier);
         }
 
         return qualifier;
@@ -55,14 +61,15 @@ public final class DormFormatter {
         }
 
         if (LOG.isDebugEnabled()) {
-            LOG.debug("format version : " + version);
+            LOG.debug("Format version : " + version);
         }
 
         // version can contains any number of times :
         // - any letter case insensitive
         // - any number
         // - "-", "."
-        if (!version.matches("/[a-zA-Z]|\\d|-|\\.*/")) {
+        if (!version.matches(REGEX_VERSION)) {
+            LOG.error("Invalid version: " + version);
             throw new CoreException("Version can contains only letters, numbers, \"-\" and \".\"");
         }
 
@@ -76,21 +83,16 @@ public final class DormFormatter {
         }
 
         if (LOG.isDebugEnabled()) {
-            LOG.debug("format type : " + type);
+            LOG.debug("Format type : " + type);
         }
 
         // type can contains any number of times :
         // - any letter case insensitive
         // - any number
         // - "-"
-        if (!type.matches("/[a-zA-Z]|\\d|-*/")) {
+        if (!type.matches(REGEX_TYPE)) {
+            LOG.error("Invalid type : " + type);
             throw new CoreException("Version can contains only letters, numbers and \"-\"");
-        }
-
-        type = type.trim();
-
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("formatted type : " + type);
         }
 
         return type;
@@ -102,7 +104,7 @@ public final class DormFormatter {
         String qualifier = extensionName + ":" + extensionQualifier + ":" + version + ":" + type;
 
         if (LOG.isDebugEnabled()) {
-            LOG.debug("formatted metadata qualifier : " + qualifier);
+            LOG.debug("Formatted metadata qualifier : " + qualifier);
         }
 
         return qualifier;
