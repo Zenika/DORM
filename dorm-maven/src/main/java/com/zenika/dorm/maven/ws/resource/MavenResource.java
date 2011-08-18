@@ -41,7 +41,7 @@ public class MavenResource extends AbstractResource {
 
         LOG.info("Call to maven web service : GET");
 
-        // TODO : fix maven-metadata.xml in maven web service
+//        // TODO : fix maven-metadata.xml in maven web service
         if (fileName.equals("maven-metadata.xml")) {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
@@ -58,8 +58,6 @@ public class MavenResource extends AbstractResource {
         }
 
         Dependency dependency = processor.get(request);
-
-        LOG.info("File exist ? : " + dependency.getResource().getFile().exists());
 
         if (null == dependency.getResource() || null == dependency.getResource().getFile() || !dependency.getResource().getFile().exists()) {
             LOG.info("Return http response 404");

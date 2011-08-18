@@ -1,5 +1,6 @@
 package com.zenika.dorm.maven.processor.extension;
 
+import com.zenika.dorm.core.exception.CoreException;
 import com.zenika.dorm.core.model.Dependency;
 import com.zenika.dorm.core.model.DependencyNode;
 import com.zenika.dorm.core.model.DormMetadata;
@@ -11,19 +12,24 @@ import com.zenika.dorm.core.model.impl.DefaultDependencyNode;
 import com.zenika.dorm.core.model.impl.Usage;
 import com.zenika.dorm.core.processor.impl.AbstractProcessorExtension;
 import com.zenika.dorm.maven.exception.MavenException;
+import com.zenika.dorm.maven.helper.MavenPatternHelper;
 import com.zenika.dorm.maven.model.impl.MavenFileType;
 import com.zenika.dorm.maven.model.impl.MavenMetadataExtension;
+import org.apache.commons.codec.binary.StringUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * The maven processor needs to create an abstract dependency node which will be the parent of the
  * following maven nodes : maven pom node, maven jar node, maven sha1 node, etc...
  * The only difference between theses nodes is the file and his type : pom.xml, jar, etc...
- *
+ * <p/>
  * See : https://docs.google.com/drawings/d/1N1epmWY3dUy7th-VwrSNk1HXf6srEi0RoUoETQbe8qM/edit?hl=fr
- *
+ * <p/>
  * snapshot upload -
  *
  * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>
@@ -49,6 +55,10 @@ public class MavenProcessor extends AbstractProcessorExtension {
         String groupId = getGroupId(request);
         String artifactId = request.getProperty(MavenMetadataExtension.METADATA_ARTIFACTID);
         String version = request.getProperty(MavenMetadataExtension.METADATA_VERSION);
+        String classifier = "";
+        if (MavenPatternHelper.isHasClassifier(request.getFilename())){
+            classifier = MavenPatternHelper.getClassifier(request.getFilename());
+        }
 
         // create the entity extension which is the same as the child with a different type
         MavenMetadataExtension entityExtension = new MavenMetadataExtension(groupId, artifactId, version,
@@ -69,7 +79,7 @@ public class MavenProcessor extends AbstractProcessorExtension {
 
         // create the real maven dependency to push
         MavenMetadataExtension childExtension = new MavenMetadataExtension(groupId, artifactId, version,
-                null, null);
+                null, classifier);
 
         // replace the default usage by the maven internal for the child dependency
         Usage childUsage = Usage.createInternal(MavenMetadataExtension.EXTENSION_NAME);
@@ -102,9 +112,13 @@ public class MavenProcessor extends AbstractProcessorExtension {
         String groupId = getGroupId(request);
         String artifactId = request.getProperty(MavenMetadataExtension.METADATA_ARTIFACTID);
         String versionId = request.getProperty(MavenMetadataExtension.METADATA_VERSION);
+        String classifier = "";
+        if (MavenPatternHelper.isHasClassifier(request.getFilename())){
+            classifier = MavenPatternHelper.getClassifier(request.getFilename());
+        }
 
         MavenMetadataExtension extension = new MavenMetadataExtension(groupId, artifactId, versionId,
-                null, null);
+                null, classifier);
 
         if (LOG.isDebugEnabled()) {
             LOG.debug("Maven metadata extension from request : " + extension);
@@ -145,4 +159,5 @@ public class MavenProcessor extends AbstractProcessorExtension {
 
         return request.getProperty(MavenMetadataExtension.METADATA_GROUPID).replace('/', '.');
     }
+
 }
