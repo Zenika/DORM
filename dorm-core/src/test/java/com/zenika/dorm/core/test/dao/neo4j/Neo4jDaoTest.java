@@ -20,7 +20,6 @@ import org.mockito.stubbing.Answer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.net.ConnectException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.HashMap;
@@ -121,7 +120,7 @@ public class Neo4jDaoTest {
 //    @Test
 //    public void getByMetaData() {
 //        long time = System.currentTimeMillis();
-//        dao.getByMetadata(metadata20Response, usage);
+//        dao.getSingleByMetadata(metadata20Response, usage);
 //        System.out.println("Times to standard push : " + (System.currentTimeMillis() - time));
 //    }
 ////
@@ -130,7 +129,7 @@ public class Neo4jDaoTest {
 //        DormMetadataExtension extension19Response = new DefaultDormMetadataExtension("maven");
 //        DormMetadata metadata20Response = DefaultDormMetadata.create("1.0.0", extension19Response);
 //        long time = System.currentTimeMillis();
-//        DependencyNode node = dao.getByMetadata(metadata20Response, usage);
+//        DependencyNode node = dao.getSingleByMetadata(metadata20Response, usage);
 //        LOG.info("Metadata : " + node.getDependency().getMetadata());
 //        LOG.info("Extension : " + node.getDependency().getMetadata().getExtension());
 //        System.out.println("Times to standard push : " + (System.currentTimeMillis() - time));
@@ -257,7 +256,7 @@ public class Neo4jDaoTest {
     @Test
 //    @Ignore
     public void testGetByMetadata() {
-        DependencyNode node = dao.getByMetadata(provider.getMetadata(), provider.getUsage());
+        DependencyNode node = dao.getSingleByMetadata(provider.getMetadata(), provider.getUsage());
         assertThat(node.getDependency().getMetadata()).isEqualTo(provider.getMetadata());
         assertThat(node.getDependency().getMetadata().getExtension()).isEqualTo(provider.getExtension());
 //        assertThat(node.getChildren().iterator().next().getDependency()).isEqualTo(provider.getDependency());

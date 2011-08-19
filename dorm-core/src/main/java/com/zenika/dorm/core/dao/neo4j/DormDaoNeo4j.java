@@ -160,7 +160,7 @@ public class DormDaoNeo4j implements DormDao {
     }
 
     @Override
-    public DependencyNode getByMetadata(DormMetadata metadata, Usage usage) {
+    public DependencyNode getSingleByMetadata(DormMetadata metadata, Usage usage) {
         DormMetadataExtension extension = metadata.getExtension();
         Map<String, DependencyNode> dependencyNodeMap = new HashMap<String, DependencyNode>();
         Neo4jDependency dependency = null;
@@ -184,14 +184,14 @@ public class DormDaoNeo4j implements DormDao {
         return dependencyNodeMap.get(dependency.getResponse().getSelf());
     }
 
-    public List<DependencyNode> getSnapshotMetadata(DormMetadata metadata, Usage usage) {
+    public DependencyNode getByMetadata(DormMetadata metadata, Usage usage) {
         try {
             List<Neo4jDependency> dependencies = searchNodes(Neo4jMetadata.generateIndexURI(metadata.getQualifier(), index), TYPE_LIST_RESPONSE_DEPENDENCY.getType());
-            List<DependencyNode> nodes = new ArrayList<DependencyNode>();
+            DependencyNode node = DefaultDependencyNode.create(DefaultDependency.create(metadata, usage));
             for (Neo4jDependency dependency : dependencies) {
-                nodes.add(DefaultDependencyNode.create(getDependency(new URI(dependency.getUri()), usage, metadata.getExtension())));
+                node.getChildren().add(DefaultDependencyNode.create(getDependency(new URI(dependency.getUri()), usage, metadata.getExtension())));
             }
-            return nodes;
+            return node;
         } catch (UniformInterfaceException e) {
             if (e.getResponse().getStatus() == Response.Status.NOT_FOUND.getStatusCode()) {
                 LOG.debug("No dependency node with this " + metadata.getQualifier() + "found");

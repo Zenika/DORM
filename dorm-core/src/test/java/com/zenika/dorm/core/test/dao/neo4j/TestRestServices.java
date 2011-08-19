@@ -47,7 +47,7 @@ public class TestRestServices {
 //        DormOrigin origin = new DefaultDormOrigin("maven2");
 //        DormMetadata metadata = new DefaultDormMetadata("1.0.0", origin);
 //        Usage usage = new Usage("DEFAULT");
-//        DependencyNode dependencyNode = test.getByMetadata(metadata, usage);
+//        DependencyNode dependencyNode = test.getSingleByMetadata(metadata, usage);
 //        System.out.println(dependencyNode.getDependency().getMetadata().getFullQualifier());
 //        for (DependencyNode node : dependencyNode.getChildren()) {
 //            System.out.println(node.getDependency().getMetadata().getFullQualifier());
