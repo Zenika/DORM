@@ -74,32 +74,32 @@ public class MavenImportTest {
         // import A.pom.xml
 
         // metadata
-        DormMetadataExtension originApom = new MavenMetadataExtension("com.zenika", "a", "1.0", null, null);
-        DormMetadata metadataApom = DefaultDormMetadata.create("1.0", MavenFileType.POM, originApom);
-
-        // file
-        DormResource resourceApom = DefaultDormResource.create("a.pom.xml", new File("repo/a/a.pom.xml"));
-
-        // dependency
-        Dependency dependencyApom = DefaultDependency.create(metadataApom, resourceApom);
-
-        // store dependency
-        // 1. create node com.zenika:a:1.0:1.0:maven
-        // 2. store a.pom.xml in the FS
-//        service.pushDependency(dependencyApom);
-
-        // import A.jar
-
-        // metadata
-        // should be equals to previous pom metadata, because only file changes
-        DormMetadataExtension originAjar = new MavenMetadataExtension("com.zenika", "a", "1.0", null, null);
-        DormMetadata metadataAjar = DefaultDormMetadata.create("1.0", MavenFileType.JAR, originAjar);
-
-        // file
-        DormResource resourceAjar = DefaultDormResource.create("a.jar", new File("repo/a/a.jar"));
-
-        // dependency
-        Dependency dependencyAjar = DefaultDependency.create(metadataAjar, resourceAjar);
+//        DormMetadataExtension originApom = new MavenMetadataExtension("com.zenika", "a", "1.0", null, null);
+//        DormMetadata metadataApom = DefaultDormMetadata.create("1.0", MavenFileType.POM, originApom);
+//
+//        // file
+//        DormResource resourceApom = DefaultDormResource.create("a.pom.xml", new File("repo/a/a.pom.xml"));
+//
+//        // dependency
+//        Dependency dependencyApom = DefaultDependency.create(metadataApom, resourceApom);
+//
+//        // store dependency
+//        // 1. create node com.zenika:a:1.0:1.0:maven
+//        // 2. store a.pom.xml in the FS
+////        service.pushDependency(dependencyApom);
+//
+//        // import A.jar
+//
+//        // metadata
+//        // should be equals to previous pom metadata, because only file changes
+//        DormMetadataExtension originAjar = new MavenMetadataExtension("com.zenika", "a", "1.0", null, null);
+//        DormMetadata metadataAjar = DefaultDormMetadata.create("1.0", MavenFileType.JAR, originAjar);
+//
+//        // file
+//        DormResource resourceAjar = DefaultDormResource.create("a.jar", new File("repo/a/a.jar"));
+//
+//        // dependency
+//        Dependency dependencyAjar = DefaultDependency.create(metadataAjar, resourceAjar);
 
         // store
         // 1. find node com.zenika:a:1.0:1.0:maven

@@ -9,6 +9,7 @@ import com.zenika.dorm.core.model.impl.Usage;
 import com.zenika.dorm.core.test.helper.ExtensionFixtures;
 import com.zenika.dorm.maven.model.impl.MavenFileType;
 import com.zenika.dorm.maven.model.impl.MavenMetadataExtension;
+import com.zenika.dorm.maven.model.impl.MavenMetadataExtensionBuilder;
 import com.zenika.dorm.maven.processor.extension.MavenProcessor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,7 +33,7 @@ public class MavenFixtures extends ExtensionFixtures {
 
     @Override
     public DormMetadataExtension getMetadataExtension() {
-        return new MavenMetadataExtension(groupId, artifactId, mavenVersion, null, null);
+        return new MavenMetadataExtensionBuilder(groupId, artifactId, mavenVersion).build();
     }
 
     @Override
@@ -76,7 +77,7 @@ public class MavenFixtures extends ExtensionFixtures {
     }
 
     public MavenMetadataExtension getEntityExtension() {
-        return new MavenMetadataExtension(groupId, artifactId, mavenVersion, null, null);
+        return new MavenMetadataExtensionBuilder(groupId, artifactId, mavenVersion).build();
     }
 
     public DormMetadata getEntityMetadata() {
