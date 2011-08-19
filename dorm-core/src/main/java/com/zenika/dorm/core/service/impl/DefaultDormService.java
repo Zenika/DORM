@@ -49,6 +49,10 @@ public class DefaultDormService implements DormService {
         return DefaultDependency.create(metadata, resource);
     }
 
+    public DependencyNode getDependencyNode(DormMetadata metadata, Usage usage){
+        return dao.getByMetadata(metadata, usage);
+    }
+
     private void repositoryPut(DependencyNode node) {
         DependenciesCollector visitor = new DependenciesCollector(node.getDependency().getUsage());
         visitor.addFilter(new WithResourceDependencyVisitorFilter());

@@ -20,6 +20,7 @@ public class DormRequestBuilder {
     private String usage;
     private String filename;
     private File file;
+    private boolean postHandler;
     private Map<String, String> properties = new HashMap<String, String>();
 
     /**
@@ -83,6 +84,11 @@ public class DormRequestBuilder {
         return this;
     }
 
+    public DormRequestBuilder postHandler(boolean postHandler){
+        this.postHandler = true;
+        return this;
+    }
+
     public DormRequest build() {
         return new DefaultDormRequest(this);
     }
@@ -113,5 +119,9 @@ public class DormRequestBuilder {
 
     public Map<String, String> getProperties() {
         return properties;
+    }
+
+    public boolean getPostHandler(){
+        return postHandler;
     }
 }

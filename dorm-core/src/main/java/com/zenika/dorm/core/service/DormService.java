@@ -15,4 +15,6 @@ public interface DormService {
     public DependencyNode get(DependencyNode node);
 
     public Dependency getDependency(DormMetadata metadata, Usage usage);
+
+    public DependencyNode getDependencyNode(DormMetadata metadata, Usage usage);
 }

@@ -55,14 +55,19 @@ public class DefaultProcessor implements Processor {
             throw new CoreException("Request is required");
         }
 
-        DormMetadata metadata = getExtension(request).getMetadata(request);
+        ProcessorExtension processorExtension = getExtension(request);
+        DormMetadata metadata = processorExtension.getMetadata(request);
         Usage usage = Usage.create(request.getUsage());
 
         if (LOG.isInfoEnabled()) {
             LOG.info("get dependency for metadata : " + metadata + " and usage : " + usage);
         }
 
-        return service.getDependency(metadata, usage);
+        if (request.isPostHandler()) {
+            return processorExtension.postHandler(service.getDependencyNode(metadata, usage));
+        } else {
+            return service.getDependency(metadata, usage);
+        }
     }
 
     /**

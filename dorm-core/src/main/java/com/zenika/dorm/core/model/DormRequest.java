@@ -31,6 +31,8 @@ public interface DormRequest {
 
     public String getProperty(String key);
 
+    public boolean isPostHandler();
+
     /**
      * The request properties in read only mode
      *

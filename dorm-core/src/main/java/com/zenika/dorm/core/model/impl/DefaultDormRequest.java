@@ -23,6 +23,8 @@ public final class DefaultDormRequest implements DormRequest {
     private final String filename;
     private final File file;
 
+    private final boolean postHandler;
+
     /**
      * Additionnal properties
      */
@@ -46,6 +48,7 @@ public final class DefaultDormRequest implements DormRequest {
         this.usage = builder.getUsage();
         this.filename = builder.getFilename();
         this.file = builder.getFile();
+        this.postHandler = builder.getPostHandler();
         this.properties.putAll(builder.getProperties());
     }
 
@@ -87,6 +90,11 @@ public final class DefaultDormRequest implements DormRequest {
     @Override
     public String getProperty(String key) {
         return properties.get(key);
+    }
+
+    @Override
+    public boolean isPostHandler() {
+        return postHandler;
     }
 
     @Override

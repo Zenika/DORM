@@ -194,7 +194,7 @@ public class DormDaoNeo4j implements DormDao {
             return node;
         } catch (UniformInterfaceException e) {
             if (e.getResponse().getStatus() == Response.Status.NOT_FOUND.getStatusCode()) {
-                LOG.debug("No dependency node with this " + metadata.getQualifier() + "found");
+                LOG.debug("No dependency node found with this " + metadata.getQualifier());
             }
             throw e;
         } catch (URISyntaxException e) {
