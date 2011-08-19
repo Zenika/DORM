@@ -63,11 +63,9 @@ public class DefaultProcessor implements Processor {
             LOG.info("get dependency for metadata : " + metadata + " and usage : " + usage);
         }
 
-        if (request.isPostHandler()) {
-            return processorExtension.postHandler(service.getDependencyNode(metadata, usage));
-        } else {
-            return service.getDependency(metadata, usage);
-        }
+        DependencyNode node = service.getDependencyNode(metadata, usage);
+
+        return processorExtension.getDependency(node);
     }
 
     /**

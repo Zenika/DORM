@@ -1,6 +1,5 @@
 package com.zenika.dorm.maven.processor.extension;
 
-import com.zenika.dorm.core.exception.CoreException;
 import com.zenika.dorm.core.model.Dependency;
 import com.zenika.dorm.core.model.DependencyNode;
 import com.zenika.dorm.core.model.DormMetadata;
@@ -10,18 +9,13 @@ import com.zenika.dorm.core.model.builder.DormRequestBuilder;
 import com.zenika.dorm.core.model.builder.MetadataBuilderFromRequest;
 import com.zenika.dorm.core.model.impl.DefaultDependencyNode;
 import com.zenika.dorm.core.model.impl.Usage;
-import com.zenika.dorm.core.processor.impl.AbstractProcessorExtension;
+import com.zenika.dorm.core.processor.ProcessorExtension;
 import com.zenika.dorm.maven.exception.MavenException;
-import com.zenika.dorm.maven.helper.MavenPatternHelper;
-import com.zenika.dorm.maven.model.impl.MavenFileType;
 import com.zenika.dorm.maven.model.impl.MavenMetadataExtension;
-import org.apache.commons.codec.binary.StringUtils;
-import org.apache.commons.io.FilenameUtils;
+import com.zenika.dorm.maven.model.impl.MavenMetadataExtensionBuilder;
+import com.zenika.dorm.maven.processor.helper.MavenRequestHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * The maven processor needs to create an abstract dependency node which will be the parent of the
@@ -34,7 +28,7 @@ import java.util.regex.Pattern;
  *
  * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>
  */
-public class MavenProcessor extends AbstractProcessorExtension {
+public class MavenProcessor implements ProcessorExtension {
 
     private static final Logger LOG = LoggerFactory.getLogger(MavenProcessor.class);
 
@@ -51,18 +45,20 @@ public class MavenProcessor extends AbstractProcessorExtension {
             throw new MavenException("File is required.");
         }
 
-        String type = getRequestType(request);
-        String groupId = getGroupId(request);
+        String type = MavenRequestHelper.getMavenType(request);
+        String classifier = MavenRequestHelper.getClassifierIfExists(request);
+        String groupId = MavenRequestHelper.getGroupId(request);
         String artifactId = request.getProperty(MavenMetadataExtension.METADATA_ARTIFACTID);
         String version = request.getProperty(MavenMetadataExtension.METADATA_VERSION);
-        String classifier = "";
-        if (MavenPatternHelper.isHasClassifier(request.getFilename())){
-            classifier = MavenPatternHelper.getClassifier(request.getFilename());
-        }
+        String packaging = request.getProperty(MavenMetadataExtension.METADATA_PACKAGING);
+        String timestamp = request.getProperty(MavenMetadataExtension.METADATA_TIMESTAMP);
 
         // create the entity extension which is the same as the child with a different type
-        MavenMetadataExtension entityExtension = new MavenMetadataExtension(groupId, artifactId, version,
-                null, null);
+        MavenMetadataExtension entityExtension = new MavenMetadataExtensionBuilder(groupId, artifactId, version)
+                .classifier(classifier)
+                .packaging(packaging)
+                .timestamp(timestamp)
+                .build();
 
         // entity dependencuy has no file
         DormRequest entityRequest = new DormRequestBuilder(request)
@@ -78,8 +74,11 @@ public class MavenProcessor extends AbstractProcessorExtension {
         }
 
         // create the real maven dependency to push
-        MavenMetadataExtension childExtension = new MavenMetadataExtension(groupId, artifactId, version,
-                null, classifier);
+        MavenMetadataExtension childExtension = new MavenMetadataExtensionBuilder(groupId, artifactId, version)
+                .classifier(classifier)
+                .packaging(packaging)
+                .timestamp(timestamp)
+                .build();
 
         // replace the default usage by the maven internal for the child dependency
         Usage childUsage = Usage.createInternal(MavenMetadataExtension.EXTENSION_NAME);
@@ -106,19 +105,19 @@ public class MavenProcessor extends AbstractProcessorExtension {
             LOG.debug("Maven get with request : " + request);
         }
 
-        String type = FilenameUtils.getExtension(request.getFilename());
-        checkMavenType(type);
-
-        String groupId = getGroupId(request);
+        String type = MavenRequestHelper.getMavenType(request);
+        String groupId = MavenRequestHelper.getGroupId(request);
+        String classifier = MavenRequestHelper.getClassifierIfExists(request);
         String artifactId = request.getProperty(MavenMetadataExtension.METADATA_ARTIFACTID);
-        String versionId = request.getProperty(MavenMetadataExtension.METADATA_VERSION);
-        String classifier = "";
-        if (MavenPatternHelper.isHasClassifier(request.getFilename())){
-            classifier = MavenPatternHelper.getClassifier(request.getFilename());
-        }
+        String version = request.getProperty(MavenMetadataExtension.METADATA_VERSION);
+        String packaging = request.getProperty(MavenMetadataExtension.METADATA_PACKAGING);
+        String timestamp = request.getProperty(MavenMetadataExtension.METADATA_TIMESTAMP);
 
-        MavenMetadataExtension extension = new MavenMetadataExtension(groupId, artifactId, versionId,
-                null, classifier);
+        MavenMetadataExtension extension = new MavenMetadataExtensionBuilder(groupId, artifactId, version)
+                .classifier(classifier)
+                .packaging(packaging)
+                .timestamp(timestamp)
+                .build();
 
         if (LOG.isDebugEnabled()) {
             LOG.debug("Maven metadata extension from request : " + extension);
@@ -133,31 +132,8 @@ public class MavenProcessor extends AbstractProcessorExtension {
         return metadata;
     }
 
-    private String getRequestType(DormRequest request) {
-        String type = FilenameUtils.getExtension(request.getFilename());
-        checkMavenType(type);
-        return type;
+    @Override
+    public Dependency getDependency(DependencyNode node) {
+        return node.getDependency();
     }
-
-    private void checkMavenType(String type) {
-
-        if (type == null) {
-            throw new MavenException("Type is required (jar, pom, etc...)");
-        }
-
-        LOG.debug("Type of the maven file = " + type);
-        if (!MavenFileType.isMavenType(type)) {
-            throw new MavenException("Invalid maven type : " + type);
-        }
-    }
-
-    private String getGroupId(DormRequest request) {
-
-        if (null == request.getProperty(MavenMetadataExtension.METADATA_GROUPID)) {
-            throw new MavenException("GroupId is required").type(MavenException.Type.NULL);
-        }
-
-        return request.getProperty(MavenMetadataExtension.METADATA_GROUPID).replace('/', '.');
-    }
-
 }

@@ -1,13 +1,11 @@
 package com.zenika.dorm.core.processor.impl;
 
 import com.zenika.dorm.core.exception.CoreException;
-import com.zenika.dorm.core.model.Dependency;
-import com.zenika.dorm.core.model.DependencyNode;
-import com.zenika.dorm.core.model.DormMetadata;
-import com.zenika.dorm.core.model.DormMetadataExtension;
-import com.zenika.dorm.core.model.DormRequest;
+import com.zenika.dorm.core.model.*;
 import com.zenika.dorm.core.model.builder.DependencyNodeBuilderFromRequest;
+import com.zenika.dorm.core.model.impl.DefaultDormMetadata;
 import com.zenika.dorm.core.model.impl.DefaultDormMetadataExtension;
+import com.zenika.dorm.core.processor.ProcessorExtension;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,7 +14,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>
  */
-public class DormProcessor extends AbstractProcessorExtension {
+public class DormProcessor implements ProcessorExtension {
 
     private static final Logger LOG = LoggerFactory.getLogger(DormProcessor.class);
 
@@ -53,11 +51,15 @@ public class DormProcessor extends AbstractProcessorExtension {
 
     @Override
     public DormMetadata getMetadata(DormRequest request) {
-        throw new UnsupportedOperationException();
+
+        DefaultDormMetadataExtension extension = new DefaultDormMetadataExtension(
+                request.getProperty(DefaultDormMetadataExtension.METADATA_NAME));
+
+        return DefaultDormMetadata.create(request.getVersion(), request.getType(), extension);
     }
 
     @Override
-    public Dependency postHandler(DependencyNode node) {
-        throw new UnsupportedOperationException();
+    public Dependency getDependency(DependencyNode node) {
+        return node.getDependency();
     }
 }

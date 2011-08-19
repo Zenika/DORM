@@ -14,5 +14,5 @@ public interface ProcessorExtension {
 
     public DormMetadata getMetadata(DormRequest request);
 
-    public Dependency postHandler(DependencyNode node);
+    public Dependency getDependency(DependencyNode node);
 }
