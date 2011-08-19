@@ -62,6 +62,10 @@ public final class MavenRequestHelper {
 
     public static String getMavenType(DormRequest request) {
 
+        if (MavenMetadataExtension.MAVEN_METADATA_XML.equals(request.getFilename())) {
+            return MavenMetadataExtension.MAVEN_METADATA_XML;
+        }
+
         String type = FilenameUtils.getExtension(request.getFilename());
 
         if (null == type) {

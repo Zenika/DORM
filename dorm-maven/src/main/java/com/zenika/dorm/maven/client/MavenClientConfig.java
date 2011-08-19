@@ -9,6 +9,8 @@ import org.sonatype.aether.RepositorySystemSession;
 import org.sonatype.aether.connector.file.FileRepositoryConnectorFactory;
 import org.sonatype.aether.connector.wagon.WagonProvider;
 import org.sonatype.aether.connector.wagon.WagonRepositoryConnectorFactory;
+import org.sonatype.aether.deployment.DeployRequest;
+import org.sonatype.aether.impl.RemoteRepositoryManager;
 import org.sonatype.aether.repository.LocalRepository;
 import org.sonatype.aether.repository.RemoteRepository;
 import org.sonatype.aether.spi.connector.RepositoryConnectorFactory;
@@ -57,6 +59,7 @@ public class MavenClientConfig {
             RepositorySystem system = createRepositorySystem();
             RepositorySystemSession session = createRepositorySystemSession(system, path);
             RemoteRepository repository = new RemoteRepository(remoteName, "default", remoteUrl);
+            
             return new MavenClientConfig(session, system, repository);
         }
 

@@ -4,7 +4,9 @@ import com.zenika.dorm.core.model.Dependency;
 import com.zenika.dorm.maven.exception.MavenException;
 import com.zenika.dorm.maven.model.impl.MavenMetadataExtension;
 import org.sonatype.aether.artifact.Artifact;
+import org.sonatype.aether.artifact.ArtifactType;
 import org.sonatype.aether.util.artifact.DefaultArtifact;
+import org.sonatype.aether.util.artifact.DefaultArtifactType;
 
 /**
  * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>
@@ -21,8 +23,10 @@ public class MavenClientHelper {
             throw new MavenException("Extension is not maven");
         }
 
+        ArtifactType type = new DefaultArtifactType(dependency.getMetadata().getType());
         Artifact artifact = new DefaultArtifact(extension.getGroupId(), extension.getArtifactId(),
-                extension.getClassifier(), dependency.getMetadata().getType(), extension.getVersion());
+                extension.getClassifier(), dependency.getMetadata().getType(), extension.getVersion(), type);
+
 
         if (dependency.hasResource()) {
             return artifact.setFile(dependency.getResource().getFile());

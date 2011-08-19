@@ -28,6 +28,7 @@ public final class MavenMetadataExtension implements DormMetadataExtension {
     public static final String METADATA_CLASSIFIER = "classifier";
     public static final String METADATA_PACKAGING = "packaging";
     public static final String METADATA_TIMESTAMP = "timestamp";
+    public static final String MAVEN_METADATA_XML = "maven-metadata.xml";
 
     private final String groupId;
     private final String artifactId;
@@ -35,6 +36,7 @@ public final class MavenMetadataExtension implements DormMetadataExtension {
     private final String classifier;
     private final String packaging;
     private final String timestamp;
+    private final boolean mavenMetadata;
 
     /**
      * Only accessed by the builder in the same package
@@ -47,7 +49,7 @@ public final class MavenMetadataExtension implements DormMetadataExtension {
      * @param timestamp
      */
     MavenMetadataExtension(String groupId, String artifactId, String version, String packaging,
-                           String classifier, String timestamp) {
+                           String classifier, String timestamp, Boolean mavenMetadata) {
 
         if (null == groupId || null == artifactId || null == version) {
             throw new MavenException("Following metadatas are required : groupId, artifactId, versionId");
@@ -65,11 +67,16 @@ public final class MavenMetadataExtension implements DormMetadataExtension {
             timestamp = "";
         }
 
+        if (null == mavenMetadata) {
+            mavenMetadata = false;
+        }
+
         this.groupId = groupId;
         this.artifactId = artifactId;
         this.version = version;
         this.packaging = packaging;
 
+        this.mavenMetadata = mavenMetadata;
         this.classifier = classifier;
         this.timestamp = timestamp;
     }
@@ -123,6 +130,10 @@ public final class MavenMetadataExtension implements DormMetadataExtension {
         return timestamp;
     }
 
+    public boolean isMavenMetadata() {
+        return mavenMetadata;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -160,7 +171,7 @@ public final class MavenMetadataExtension implements DormMetadataExtension {
         return new MavenMetadataExtension(properties.get(METADATA_GROUPID),
                 properties.get(METADATA_ARTIFACTID), properties.get(METADATA_VERSION),
                 properties.get(METADATA_PACKAGING), properties.get(METADATA_CLASSIFIER),
-                properties.get(METADATA_TIMESTAMP));
+                properties.get(METADATA_TIMESTAMP), null);
     }
 
 

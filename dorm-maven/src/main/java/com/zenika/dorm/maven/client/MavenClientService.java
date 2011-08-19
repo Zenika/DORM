@@ -1,7 +1,12 @@
 package com.zenika.dorm.maven.client;
 
+import com.zenika.dorm.core.model.Dependency;
 import com.zenika.dorm.maven.exception.MavenException;
+import org.sonatype.aether.RequestTrace;
 import org.sonatype.aether.artifact.Artifact;
+import org.sonatype.aether.deployment.DeployRequest;
+import org.sonatype.aether.deployment.DeployResult;
+import org.sonatype.aether.deployment.DeploymentException;
 import org.sonatype.aether.installation.InstallRequest;
 import org.sonatype.aether.installation.InstallationException;
 
@@ -13,7 +18,7 @@ public class MavenClientService {
         this.config = config;
     }
 
-    public void installArtifact(com.zenika.dorm.core.model.Dependency dependency) {
+    public void install(Dependency dependency) {
 
         Artifact artifact = MavenClientHelper.fromDependencyToArtifact(dependency);
 
@@ -23,8 +28,26 @@ public class MavenClientService {
         try {
             config.getSystem().install(config.getSession(), request);
         } catch (InstallationException e) {
-            throw new MavenException("Install exception");
+            throw new MavenException("Install exception", e);
         }
+    }
+
+    public void deploy(Dependency dependency) {
+        Artifact artifact = MavenClientHelper.fromDependencyToArtifact(dependency);
+
+        DeployRequest request = new DeployRequest();
+        request.addArtifact(artifact);
+        request.setRepository(config.getRemoteRepository());
+
+        DeployResult result;
+
+        try {
+            result = config.getSystem().deploy(config.getSession(), request);
+        } catch (DeploymentException e) {
+            throw new MavenException("Deploy exception", e);
+        }
+
+        RequestTrace trace = result.getRequest().getTrace();
     }
 
 //    public DormArtifact<DormMavenMetadata> getFullArtifact(DormMavenMetadata metadata) {

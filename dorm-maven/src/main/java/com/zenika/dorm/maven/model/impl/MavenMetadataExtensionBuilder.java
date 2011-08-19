@@ -13,6 +13,7 @@ public class MavenMetadataExtensionBuilder {
     private String classifier;
     private String packaging;
     private String timestamp;
+    private boolean mavenMetadata;
 
     public MavenMetadataExtensionBuilder(String groupId, String artifactId, String version) {
         this.groupId = groupId;
@@ -35,7 +36,13 @@ public class MavenMetadataExtensionBuilder {
         return this;
     }
 
+    public MavenMetadataExtensionBuilder mavenMetadata(boolean mavenMetadata) {
+        this.mavenMetadata = mavenMetadata;
+        return this;
+    }
+
     public MavenMetadataExtension build() {
-        return new MavenMetadataExtension(groupId, artifactId, version, packaging, classifier, timestamp);
+        return new MavenMetadataExtension(groupId, artifactId, version, packaging, classifier, timestamp,
+                mavenMetadata);
     }
 }

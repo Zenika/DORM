@@ -54,7 +54,7 @@ public final class DefaultDormMetadata implements DormMetadata {
 
     @Override
     public String getType() {
-        return null;
+        return type;
     }
 
     @Override

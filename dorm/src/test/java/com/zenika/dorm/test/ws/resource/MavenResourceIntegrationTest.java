@@ -1,5 +1,6 @@
 package com.zenika.dorm.test.ws.resource;
 
+import com.zenika.dorm.core.model.Dependency;
 import com.zenika.dorm.maven.client.MavenClientConfig;
 import com.zenika.dorm.maven.client.MavenClientService;
 import com.zenika.dorm.maven.test.helper.MavenFixtures;
@@ -37,6 +38,7 @@ public class MavenResourceIntegrationTest extends AbstractIntegrationTest {
 
     @Test
     public void pushValidArtifact() {
-        mavenClient.installArtifact(fixtures.getDependencyWithResource());
+        Dependency dependency = fixtures.getDependencyWithResource();
+        mavenClient.deploy(dependency);
     }
 }

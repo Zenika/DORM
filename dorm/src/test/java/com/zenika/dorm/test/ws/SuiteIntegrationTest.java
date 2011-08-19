@@ -19,13 +19,13 @@ import org.junit.runners.Suite;
 public class SuiteIntegrationTest {
 
     @BeforeClass
-    public void beforeClass() {
+    public static void beforeClass() {
         IntegrationTestWrapper.getInstance().startTomcat();
         IntegrationTestWrapper.getInstance().startJerseyClient();
     }
 
     @AfterClass
-    public void afterClass() {
+    public static void afterClass() {
         IntegrationTestWrapper.getInstance().stopJerseyClient();
         IntegrationTestWrapper.getInstance().stopTomcat();
     }
