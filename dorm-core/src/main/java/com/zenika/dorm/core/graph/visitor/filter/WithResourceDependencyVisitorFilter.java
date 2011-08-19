@@ -36,7 +36,16 @@ public class WithResourceDependencyVisitorFilter implements DependencyVisitorFil
             }
 
             filterChain.process(node);
+        } else {
+
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Ignore dependency without resource from node : " + node);
+            }
+
+            filterChain.ignoreAndGoToNext();
         }
+
+
     }
 
     @Override

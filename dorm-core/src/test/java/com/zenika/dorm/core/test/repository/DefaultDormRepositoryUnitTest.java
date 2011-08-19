@@ -34,7 +34,7 @@ public class DefaultDormRepositoryUnitTest extends AbstractUnitTest {
 
     @Test
     public void putValidDependency() {
-        Dependency dependency = fixtures.getDependencyWithFile();
+        Dependency dependency = fixtures.getDependencyWithResource();
         repository.put(dependency);
     }
 

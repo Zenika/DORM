@@ -77,11 +77,11 @@ public class DependencyVisitorFilterChain {
             }
 
             processContinue = visitor.visitEnter(node);
-            iterator = filters.listIterator();
+            resetIteratorToFirstFilter();
         }
     }
 
-    public void processBackward(DependencyNode node) {
+    private void processBackward(DependencyNode node) {
 
         if (LOG.isTraceEnabled()) {
             LOG.trace("Filter iterator of the filter chain is oriented to BACKWARD");
@@ -106,8 +106,14 @@ public class DependencyVisitorFilterChain {
         }
     }
 
-    public boolean isProcessContinue() {
-        return processContinue;
+    public void ignoreAndGoToNext() {
+
+        if (LOG.isTraceEnabled()) {
+            LOG.trace("Ignore current node. Skip all next filters if any");
+        }
+
+        processContinue = true;
+        resetIteratorToFirstFilter();
     }
 
     public void changeOrientationToBackward() {
@@ -127,8 +133,33 @@ public class DependencyVisitorFilterChain {
         resetIteratorToLastFilter();
     }
 
+    public void changeOrientationToForward() {
+
+        if (orientation.equals(Orientation.FORWARD)) {
+            if (LOG.isTraceEnabled()) {
+                LOG.trace("Filter chain orientation is already set to forward");
+            }
+            return;
+        }
+
+        if (LOG.isTraceEnabled()) {
+            LOG.trace("Change filter chain orientation to forward and set filter iterator to the first element");
+        }
+
+        orientation = Orientation.FORWARD;
+        resetIteratorToFirstFilter();
+    }
+
     private void resetIteratorToLastFilter() {
         iterator = filters.listIterator(filters.size());
+    }
+
+    private void resetIteratorToFirstFilter() {
+        iterator = filters.listIterator();
+    }
+
+    public boolean isProcessContinue() {
+        return processContinue;
     }
 
     private static enum Orientation {

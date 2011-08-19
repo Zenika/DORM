@@ -67,7 +67,7 @@ public class MavenFixtures extends ExtensionFixtures {
      * @return
      */
     @Override
-    public Dependency getDependencyWithFile() {
+    public Dependency getDependencyWithResource() {
 
         Usage usage = Usage.createInternal(MavenMetadataExtension.EXTENSION_NAME);
         LOG.trace("Maven dependency fixture has the internal usage = " + usage);
@@ -94,7 +94,7 @@ public class MavenFixtures extends ExtensionFixtures {
 
     public DependencyNode getEntityNodeWithChild() {
         DependencyNode node = DefaultDependencyNode.create(getEntityDependency());
-        node.addChild(getNodeWithFile());
+        node.addChild(getNodeWithResource());
         return node;
     }
 

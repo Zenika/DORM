@@ -2,8 +2,6 @@ package com.zenika.dorm.core.test.helper;
 
 import com.zenika.dorm.core.model.Dependency;
 import com.zenika.dorm.core.model.DependencyNode;
-import com.zenika.dorm.core.model.DormMetadata;
-import com.zenika.dorm.core.model.DormMetadataExtension;
 import com.zenika.dorm.core.model.impl.DefaultDependency;
 import com.zenika.dorm.core.model.impl.DefaultDependencyNode;
 import com.zenika.dorm.core.model.impl.DefaultDormMetadata;
@@ -14,119 +12,139 @@ import com.zenika.dorm.core.model.impl.DefaultDormMetadataExtension;
  */
 public class DormGraphFixtures extends DormFixtures {
 
-    private String name2 = "testname2";
-    private String name3 = "testname3";
-    private String name4 = "testname4";
-    private String name5 = "testname5";
-
-    public DormMetadataExtension getMetadataExtension2() {
-        return new DefaultDormMetadataExtension(name2);
+    public Dependency getDependencyWithResource2() {
+        return DefaultDependency.create(DefaultDormMetadata.create(getRequestVersion(), getType(),
+                new DefaultDormMetadataExtension("dependency with file 2")), getDormResource());
     }
 
-    public DormMetadataExtension getMetadataExtension3() {
-        return new DefaultDormMetadataExtension(name3);
+    public Dependency getDependencyWithResource3() {
+        return DefaultDependency.create(DefaultDormMetadata.create(getRequestVersion(), getType(),
+                new DefaultDormMetadataExtension("dependency with file 3")), getDormResource());
     }
 
-    public DormMetadataExtension getMetadataExtension4() {
-        return new DefaultDormMetadataExtension(name4);
+    public Dependency getDependencyWithResource4() {
+        return DefaultDependency.create(DefaultDormMetadata.create(getRequestVersion(), getType(),
+                new DefaultDormMetadataExtension("dependency with file 4")), getDormResource());
     }
 
-    public DormMetadataExtension getMetadataExtension5() {
-        return new DefaultDormMetadataExtension(name4);
+    public Dependency getDependencyWithResource5() {
+        return DefaultDependency.create(DefaultDormMetadata.create(getRequestVersion(), getType(),
+                new DefaultDormMetadataExtension("dependency with file 5")), getDormResource());
     }
 
-    public DormMetadata getMetadata2() {
-        return DefaultDormMetadata.create(getRequestVersion(), getType(), getMetadataExtension2());
+    public Dependency getDependencyWithoutResource2() {
+        return DefaultDependency.create(DefaultDormMetadata.create(getRequestVersion(), getType(),
+                new DefaultDormMetadataExtension("dependency without file 1")));
     }
 
-    public DormMetadata getMetadata3() {
-        return DefaultDormMetadata.create(getRequestVersion(), getType(), getMetadataExtension3());
+    public DependencyNode getNodeWithResource2() {
+        return DefaultDependencyNode.create(getDependencyWithResource2());
     }
 
-    public DormMetadata getMetadata4() {
-        return DefaultDormMetadata.create(getRequestVersion(), getType(), getMetadataExtension4());
+    public DependencyNode getNodeWithResource3() {
+        return DefaultDependencyNode.create(getDependencyWithResource3());
     }
 
-    public DormMetadata getMetadata5() {
-        return DefaultDormMetadata.create(getRequestVersion(), getType(), getMetadataExtension4());
+    public DependencyNode getNodeWithResource4() {
+        return DefaultDependencyNode.create(getDependencyWithResource4());
     }
 
-    public Dependency getDependencyWithFile2() {
-        return DefaultDependency.create(getMetadata2(), getDormResource());
+    public DependencyNode getNodeWithResource5() {
+        return DefaultDependencyNode.create(getDependencyWithResource5());
     }
 
-    public Dependency getDependencyWithFile3() {
-        return DefaultDependency.create(getMetadata3(), getDormResource());
+    public DependencyNode getNodeWithoutResource2() {
+        return DefaultDependencyNode.create(getDependencyWithoutResource2());
     }
 
-    public Dependency getDependencyWithFile4() {
-        return DefaultDependency.create(getMetadata4(), getDormResource());
-    }
-
-    public Dependency getDependencyWithoutFile5() {
-        return DefaultDependency.create(getMetadata5());
-    }
-
-    public DependencyNode getNodeWithFile2() {
-        return DefaultDependencyNode.create(getDependencyWithFile2());
-    }
-
-    public DependencyNode getNodeWithFile3() {
-        return DefaultDependencyNode.create(getDependencyWithFile3());
-    }
-
-    public DependencyNode getNodeWithFile4() {
-        return DefaultDependencyNode.create(getDependencyWithFile4());
-    }
-
-    public DependencyNode getNodeWithoutFile5() {
-        return DefaultDependencyNode.create(getDependencyWithoutFile5());
-    }
-
+    /**
+     * Graph representation :
+     * 1
+     * -- 2
+     * ---- 4
+     * -- 3
+     *
+     * @return the graph
+     */
     public DependencyNode getSimpleGraph() {
 
-        DependencyNode node3 = getNodeWithFile3();
-        DependencyNode node2 = getNodeWithFile2();
-        DependencyNode node = getNodeWithFile();
+        DependencyNode node4 = getNodeWithResource4();
+        DependencyNode node3 = getNodeWithResource3();
+        DependencyNode node2 = getNodeWithResource2();
+        DependencyNode node = getNodeWithResource();
 
-        node2.addChild(node3);
+        node2.addChild(node4);
         node.addChild(node2);
+        node.addChild(node3);
 
         return node;
     }
 
+    /**
+     * Graph representation :
+     * 1
+     * -- 2
+     * ---- 3
+     * ------ 1 -> cyclic dep
+     * -- 4
+     *
+     * @return the graph
+     */
     public DependencyNode getCyclicGraph() {
 
-        DependencyNode node3 = getNodeWithFile3();
-        DependencyNode node2 = getNodeWithFile2();
-        DependencyNode node = getNodeWithFile();
+        DependencyNode node4 = getNodeWithResource4();
+        DependencyNode node3 = getNodeWithResource3();
+        DependencyNode node2 = getNodeWithResource2();
+        DependencyNode node = getNodeWithResource();
 
         node3.addChild(node);
         node2.addChild(node3);
         node.addChild(node2);
-
-        return node;
-    }
-
-    public DependencyNode getCyclicGraphWithNoResource() {
-
-        DependencyNode node = getSimpleGraph();
-        DependencyNode node4 = getNodeWithFile();
-        DependencyNode node5 = getNodeWithoutFile5();
-
-        node4.addChild(node5);
         node.addChild(node4);
 
         return node;
     }
 
+    /**
+     * Graph representation :
+     * 1
+     * -- 2
+     * ---- 3
+     * ------ 1 -> cyclic dep
+     * -- 4
+     * -- 5
+     *
+     * @return the graph
+     */
+    public DependencyNode getCyclicGraphWithNoResource() {
+
+        DependencyNode node = getCyclicGraph();
+        DependencyNode node5 = getNodeWithoutResource();
+
+        node.addChild(node5);
+
+        return node;
+    }
+
+    /**
+     * Graph representation :
+     * 1
+     * -- 2
+     * ---- 3
+     * ------ 1 -> cyclic dep
+     * -- 4
+     * -- 5 -> no resource
+     * ---- 6
+     *
+     * @return the graph
+     */
     public DependencyNode getCyclicGraphWithNoResourceAndNotLinear() {
 
         DependencyNode node = getCyclicGraph();
-        DependencyNode node4 = getNodeWithFile();
-        DependencyNode node5 = getNodeWithoutFile5();
+        DependencyNode node5 = getNodeWithoutResource();
+        DependencyNode node6 = getNodeWithResource5();
 
-        node5.addChild(node4);
+        node5.addChild(node6);
         node.addChild(node5);
 
         return node;

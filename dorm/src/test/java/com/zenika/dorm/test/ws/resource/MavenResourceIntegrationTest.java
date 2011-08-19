@@ -37,6 +37,6 @@ public class MavenResourceIntegrationTest extends AbstractIntegrationTest {
 
     @Test
     public void pushValidArtifact() {
-        mavenClient.installArtifact(fixtures.getDependencyWithFile());
+        mavenClient.installArtifact(fixtures.getDependencyWithResource());
     }
 }

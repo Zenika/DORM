@@ -16,6 +16,7 @@ public abstract class AbstractDependencyVisitor implements DependencyVisitor {
 
     @Override
     public final boolean collectEnter(DependencyNode node) {
+        filterChain.changeOrientationToForward();
         filterChain.process(node);
         return filterChain.isProcessContinue();
     }

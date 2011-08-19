@@ -30,9 +30,10 @@ public class DependenciesCollectorUnitTest extends AbstractDependencyGraphUnitTe
         graph.accept(collector);
 
         Set<Dependency> dependencies = new LinkedHashSet<Dependency>();
-        dependencies.add(fixtures.getDependencyWithFile());
-        dependencies.add(fixtures.getDependencyWithFile2());
-        dependencies.add(fixtures.getDependencyWithFile3());
+        dependencies.add(fixtures.getDependencyWithResource());
+        dependencies.add(fixtures.getDependencyWithResource2());
+        dependencies.add(fixtures.getDependencyWithResource4());
+        dependencies.add(fixtures.getDependencyWithResource3());
 
         LOG.debug("Collected dependencies : " + collector.getDependencies());
         Assertions.assertThat(collector.getDependencies()).isEqualTo(dependencies);
@@ -48,9 +49,10 @@ public class DependenciesCollectorUnitTest extends AbstractDependencyGraphUnitTe
         graph.accept(collector);
 
         Set<Dependency> dependencies = new LinkedHashSet<Dependency>();
-        dependencies.add(fixtures.getDependencyWithFile());
-        dependencies.add(fixtures.getDependencyWithFile2());
-        dependencies.add(fixtures.getDependencyWithFile3());
+        dependencies.add(fixtures.getDependencyWithResource());
+        dependencies.add(fixtures.getDependencyWithResource2());
+        dependencies.add(fixtures.getDependencyWithResource3());
+        dependencies.add(fixtures.getDependencyWithResource4());
 
         LOG.debug("Collected dependencies : " + collector.getDependencies());
         Assertions.assertThat(collector.getDependencies()).isEqualTo(dependencies);
