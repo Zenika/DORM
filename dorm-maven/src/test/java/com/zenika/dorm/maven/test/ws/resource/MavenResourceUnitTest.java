@@ -19,7 +19,6 @@ import javax.ws.rs.core.Response;
 
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.junit.Assert.*;
 
 /**
  * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>
@@ -86,7 +85,7 @@ public class MavenResourceUnitTest extends AbstractUnitTest {
         DormRequest request = fixtures.getRequestWithoutFile();
         LOG.trace("Test request = " + request);
 
-        when(processor.get(request)).thenReturn(fixtures.getDependencyWithFile());
+        when(processor.get(request)).thenReturn(fixtures.getDependencyWithResource());
 
         Response response = resource.get(fixtures.getGroupId(), fixtures.getArtifactId(),
                 fixtures.getMavenVersion(), fixtures.getFilenameWithExtension());

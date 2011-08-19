@@ -26,7 +26,7 @@ public class DormProcessorUnitTest extends AbstractUnitTest {
     @Test
     public void pushStandardDormArtifact() {
 
-        DependencyNode node = fixtures.getNodeWithFile();
+        DependencyNode node = fixtures.getNodeWithResource();
         DormRequest request = fixtures.getRequestWithFile();
 
         Assertions.assertThat(processor.push(request)).isEqualTo(node);

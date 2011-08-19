@@ -54,7 +54,7 @@ public class ProcessorUnitTest extends AbstractUnitTest {
                 .origin("test")
                 .build();
 
-        DependencyNode node = fixtures.getNodeWithFile();
+        DependencyNode node = fixtures.getNodeWithResource();
 
         // extension return the correct node corresponding to the request
         given(extension.push(request)).willReturn(node);

@@ -81,20 +81,20 @@ public abstract class ExtensionFixtures {
         return DefaultDormResource.create(filename, filenameExtension, file);
     }
 
-    public Dependency getDependencyWithoutFile() {
+    public Dependency getDependencyWithoutResource() {
         return DefaultDependency.create(getMetadata());
     }
 
-    public Dependency getDependencyWithFile() {
+    public Dependency getDependencyWithResource() {
         return DefaultDependency.create(getMetadata(), getDormResource());
     }
 
-    public DependencyNode getNodeWithoutFile() {
-        return DefaultDependencyNode.create(getDependencyWithoutFile());
+    public DependencyNode getNodeWithoutResource() {
+        return DefaultDependencyNode.create(getDependencyWithoutResource());
     }
 
-    public DependencyNode getNodeWithFile() {
-        return DefaultDependencyNode.create(getDependencyWithFile());
+    public DependencyNode getNodeWithResource() {
+        return DefaultDependencyNode.create(getDependencyWithResource());
     }
 
     public String getFilenameWithExtension() {
