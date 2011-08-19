@@ -2,6 +2,7 @@ package com.zenika.dorm.core.dao.neo4j.util;
 
 import com.sun.jersey.api.client.ClientHandlerException;
 import com.sun.jersey.api.client.UniformInterfaceException;
+import com.zenika.dorm.core.dao.neo4j.Neo4jDependency;
 import com.zenika.dorm.core.dao.neo4j.Neo4jIndex;
 import com.zenika.dorm.core.dao.neo4j.Neo4jMetadataExtension;
 import com.zenika.dorm.core.dao.neo4j.Neo4jNode;
@@ -44,4 +45,6 @@ public interface RequestExecutor {
     <T extends Neo4jNode> T getNode(URI uri);
 
     public String test();
+
+    public List<Neo4jDependency> get(String script);
 }

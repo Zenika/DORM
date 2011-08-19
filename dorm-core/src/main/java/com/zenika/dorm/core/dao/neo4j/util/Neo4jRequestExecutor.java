@@ -2,6 +2,7 @@ package com.zenika.dorm.core.dao.neo4j.util;
 
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientHandlerException;
+import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.GenericType;
 import com.sun.jersey.api.client.UniformInterfaceException;
 import com.sun.jersey.api.client.WebResource;
@@ -15,10 +16,12 @@ import com.sun.xml.bind.v2.runtime.property.Property;
 import com.zenika.dorm.core.dao.neo4j.*;
 import com.zenika.dorm.core.exception.CoreException;
 import com.zenika.dorm.core.model.DormMetadataExtension;
+import org.apache.lucene.search.spans.NearSpansOrdered;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sun.rmi.runtime.Log;
 
+import javax.print.attribute.standard.Media;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.File;
@@ -32,6 +35,7 @@ import java.net.ConnectException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -48,6 +52,7 @@ public class Neo4jRequestExecutor implements RequestExecutor {
 
     public static final String DATA_ENTRY_POINT_URI = "http://localhost:7474/db/data";
     public static final String NODE_PATH = "node";
+    public static final String GREMLIN_SCRIPT_PATH = "ext/GremlinPlugin/graphdb/execute_script";
 
     private WebResource resource;
 
@@ -65,6 +70,23 @@ public class Neo4jRequestExecutor implements RequestExecutor {
             logger.error("Error ", e);
             throw new CoreException("error", e);
         }
+    }
+
+    @Override
+    public List<Neo4jDependency> get(String script) {
+        List<Neo4jResponse<Neo4jDependency>> responses = resource.path(GREMLIN_SCRIPT_PATH)
+                .accept(MediaType.APPLICATION_JSON_TYPE)
+                .type(MediaType.APPLICATION_JSON_TYPE)
+                .entity(buildGremlinScriptToJson(script))
+                .post(new GenericType<List<Neo4jResponse<Neo4jDependency>>>() {});
+        List<Neo4jDependency> dependencies = new ArrayList<Neo4jDependency>();
+        for (Neo4jResponse<Neo4jDependency> response : responses){
+            Neo4jDependency dependency = response.getData();
+            dependency.setResponse(response);
+            dependencies.add(dependency);
+        }
+        logRequest("POST", resource, GREMLIN_SCRIPT_PATH);
+        return dependencies;
     }
 
     @Override
@@ -190,6 +212,14 @@ public class Neo4jRequestExecutor implements RequestExecutor {
         classes.add(Neo4jResponse.class);
         classes.add(Neo4jIndex.class);
         return classes;
+    }
+
+    private String buildGremlinScriptToJson(String script) {
+        StringBuilder str = new StringBuilder(20);
+        str.append("{\"script\":\"");
+        str.append(script);
+        str.append("\"}");
+        return str.toString();
     }
 
 }

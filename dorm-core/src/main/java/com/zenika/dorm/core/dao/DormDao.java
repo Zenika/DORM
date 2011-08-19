@@ -6,6 +6,8 @@ import com.zenika.dorm.core.model.DependencyNode;
 import com.zenika.dorm.core.model.impl.Usage;
 import com.zenika.dorm.core.model.DormMetadata;
 
+import java.util.Map;
+
 /**
  * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>
  */
@@ -18,4 +20,6 @@ public interface DormDao {
     public DependencyNode getSingleByMetadata(DormMetadata metadata, Usage usage);
 
     public DependencyNode getByMetadata(DormMetadata metadata, Usage usage);
+
+    public DependencyNode getByMetadataExtension(DormMetadata metadata, Usage usage, Map<String, String> params);
 }

@@ -20,6 +20,7 @@ import com.zenika.dorm.core.graph.visitor.impl.DependenciesNodeCollector;
 import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.core.model.DormMetadataExtension;
 import com.zenika.dorm.core.model.mapper.MetadataExtensionMapper;
+import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.type.TypeReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -147,7 +148,11 @@ public class DormDaoNeo4j implements DormDao {
     public Dependency getDependency(URI uri, Usage usage, DormMetadataExtension extension) throws URISyntaxException {
         Neo4jDependency dependency = executor.getNode(uri, new TypeReference<Neo4jResponse<Neo4jDependency>>() {
         }.getType());
-        fillNeo4jDependency(dependency, extension);
+        return getDependency(dependency, usage, extension);
+    }
+
+    public Dependency getDependency(Neo4jDependency dependency, Usage usage, DormMetadataExtension extension) {
+        dependency = fillNeo4jDependency(dependency, extension);
         DormMetadata metadata = DefaultDormMetadata.create(dependency.getMetadata().getVersion(),
                 dependency.getMetadata().getType(), dependency.getMetadata().getNeo4jExtension().getExtension());
         return DefaultDependency.create(metadata, usage);
@@ -182,6 +187,15 @@ public class DormDaoNeo4j implements DormDao {
             throw new Neo4jDaoException("URI syntax exception", e);
         }
         return dependencyNodeMap.get(dependency.getResponse().getSelf());
+    }
+
+    public DependencyNode getByMetadataExtension(DormMetadata metadata, Usage usage, Map<String, String> params) {
+        List<Neo4jDependency> dependencies = executor.get(buildGremlinScript(params));
+        DependencyNode node = DefaultDependencyNode.create(DefaultDependency.create(metadata, usage));
+        for (Neo4jDependency dependency : dependencies){
+            node.addChild(DefaultDependencyNode.create(getDependency(dependency, usage, metadata.getExtension())));
+        }
+        return node;
     }
 
     public DependencyNode getByMetadata(DormMetadata metadata, Usage usage) {
@@ -246,6 +260,26 @@ public class DormDaoNeo4j implements DormDao {
             Neo4jDependency dependencyChild = postDependency(child.getDependency());
             executor.post(new Neo4jRelationship(dependency, dependencyChild, dependency.getUsage()));
         }
+    }
+
+    public String buildGremlinScript(Map<String, String> param) {
+        StringBuilder str = new StringBuilder(100);
+        str.append("g.V.outE('");
+        str.append(Neo4jMetadataExtension.RELATIONSHIP_TYPE.getName());
+        str.append("').inV{");
+        List<String> strList = new ArrayList<String>();
+        for (Map.Entry<String, String> entry : param.entrySet()) {
+            StringBuilder strEntry = new StringBuilder(20);
+            strEntry.append("it.");
+            strEntry.append(entry.getKey());
+            strEntry.append(" == '");
+            strEntry.append(entry.getValue());
+            strEntry.append("'");
+            strList.add(strEntry.toString());
+        }
+        str.append(StringUtils.join(strList, " && "));
+        str.append("}.inE.outV.inE.outV");
+        return str.toString();
     }
 
 }
