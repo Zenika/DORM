@@ -4,37 +4,31 @@ package com.zenika.dorm.core.dao.neo4j;
 import com.google.inject.Inject;
 import com.sun.jersey.api.client.ClientHandlerException;
 import com.sun.jersey.api.client.UniformInterfaceException;
-import com.sun.org.apache.bcel.internal.generic.NEW;
 import com.zenika.dorm.core.dao.DormDao;
 import com.zenika.dorm.core.dao.neo4j.exception.Neo4jDaoException;
 import com.zenika.dorm.core.dao.neo4j.util.Neo4jRequestExecutor;
 import com.zenika.dorm.core.dao.neo4j.util.RequestExecutor;
 import com.zenika.dorm.core.exception.CoreException;
+import com.zenika.dorm.core.graph.visitor.impl.DependenciesNodeCollector;
 import com.zenika.dorm.core.model.Dependency;
 import com.zenika.dorm.core.model.DependencyNode;
+import com.zenika.dorm.core.model.DormMetadata;
+import com.zenika.dorm.core.model.DormMetadataExtension;
 import com.zenika.dorm.core.model.impl.DefaultDependency;
 import com.zenika.dorm.core.model.impl.DefaultDependencyNode;
 import com.zenika.dorm.core.model.impl.DefaultDormMetadata;
 import com.zenika.dorm.core.model.impl.Usage;
-import com.zenika.dorm.core.graph.visitor.impl.DependenciesNodeCollector;
-import com.zenika.dorm.core.model.DormMetadata;
-import com.zenika.dorm.core.model.DormMetadataExtension;
 import com.zenika.dorm.core.model.mapper.MetadataExtensionMapper;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.codehaus.jackson.type.TypeReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.ws.rs.core.Response;
 import java.lang.reflect.Type;
-import java.net.ConnectException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>

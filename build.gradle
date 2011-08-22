@@ -58,7 +58,9 @@ versions = [
         fest_assert: '1.4',
         mockito: '1.8.5',
         morphia: '0.99',
-        tomcat: '7.0.19'
+        tomcat: '7.0.19',
+        commons_lang3: '3.0.1',
+        commons_io: '2.0.1'
 ]
 
 // 2nd step, introducing libraries
@@ -90,7 +92,10 @@ libraries = [
         fest_assert: 'org.easytesting:fest-assert:' + versions.fest_assert,
 
         tomcat_embeded_core: 'org.apache.tomcat.embed:tomcat-embed-core:' + versions.tomcat,
-        tomcat_embeded_juli: 'org.apache.tomcat.embed:tomcat-embed-logging-juli:' + versions.tomcat
+        tomcat_embeded_juli: 'org.apache.tomcat.embed:tomcat-embed-logging-juli:' + versions.tomcat,
+
+        commons_lang3: 'org.apache.commons:commons-lang3:' + versions.commons_lang3,
+        commons_io: 'commons-io:commons-io:' + versions.commons_io
 ]
 
 subprojects {
@@ -104,7 +109,12 @@ subprojects {
     }
 
     dependencies {
-        // Only logging libraries should be common to all projects in compile scope
+
+        // commons
+        compile libraries.commons_lang3
+        compile libraries.commons_io
+
+        // logging
         compile libraries.slf4j_api
         compile libraries.slf4j_jcl
         compile libraries.slf4j_jul
@@ -112,12 +122,10 @@ subprojects {
         compile libraries.logback_core
         compile libraries.logback_classic
 
-        // Common test libraries
+        // common test libraries
         testCompile libraries.junit
         testCompile libraries.mockito
         testCompile libraries.fest_assert
-        testCompile libraries.tomcat_embeded_core
-        testCompile libraries.tomcat_embeded_juli
     }
 
 }
