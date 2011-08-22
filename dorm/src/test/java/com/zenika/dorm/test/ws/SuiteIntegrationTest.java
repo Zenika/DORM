@@ -11,7 +11,6 @@ import org.junit.runners.Suite;
 /**
  * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>
  */
-@Ignore
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
         DormResourceIntegrationTest.class, MavenResourceIntegrationTest.class
