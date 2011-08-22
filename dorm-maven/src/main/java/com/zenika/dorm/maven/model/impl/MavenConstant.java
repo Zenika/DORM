@@ -7,34 +7,40 @@ import java.util.Arrays;
  */
 public abstract class MavenConstant {
 
-    public static abstract class Type {
+    public static final String JAR = "jar";
+    public static final String POM = "pom";
+    public static final String EAR = "ear";
+    public static final String EJB = "ejb";
+    public static final String WAR = "war";
 
-        public static final String JAR = "jar";
-        public static final String POM = "pom";
+    public static abstract class FileExtension extends MavenConstant {
+
         public static final String SHA1 = "sha1";
         public static final String MD5 = "md5";
+        public static final String ZIP = "zip";
 
-        public static final String[] EXTENSIONS = {JAR, POM, SHA1, MD5};
+        public static final String[] EXTENSIONS = {JAR, POM, EAR, EJB, WAR, SHA1, MD5, ZIP};
 
-        public static boolean isMavenType(String type) {
+        public static boolean isMavenExtension(String type) {
             return Arrays.asList(EXTENSIONS).contains(type);
         }
     }
 
-    public static abstract class Packaging {
+    public static abstract class Packaging extends MavenConstant {
 
-        public static final String JAR = "jar";
-        public static final String EAR = "ear";
-        public static final String EJB = "ejb";
         public static final String RAR = "rar";
-        public static final String WAR = "war";
-        public static final String APP_CLIENT = "app-client";
-        public static final String SHADE = "shade";
+        public static final String PAR = "par";
+        public static final String MAVEN_PLUGIN = "maven-plugin";
 
-        public static final String[] EXTENSIONS = {JAR, EAR, EJB, RAR, WAR, APP_CLIENT, SHADE};
+        public static final String[] PACKAGINGS = {POM, JAR, MAVEN_PLUGIN, EJB, WAR, EAR, RAR, PAR};
 
         public static boolean isPackagingType(String type) {
-            return Arrays.asList(EXTENSIONS).contains(type);
+            return Arrays.asList(PACKAGINGS).contains(type);
         }
+    }
+
+    public static abstract class Other {
+        public static final String MAVEN_METADATA_XML = "maven-metadata.xml";
+        public static final String SNAPSHOT = "SNAPSHOT";
     }
 }

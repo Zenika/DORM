@@ -11,13 +11,13 @@ public class MavenFileTypeUnitTest {
 
     @Test
     public void isValidMavenType() {
-        Assertions.assertThat(MavenConstant.Type.isMavenType("jar")).isTrue();
-        Assertions.assertThat(MavenConstant.Type.isMavenType("sha1")).isTrue();
-        Assertions.assertThat(MavenConstant.Type.isMavenType("pom")).isTrue();
+        Assertions.assertThat(MavenConstant.FileExtension.isMavenExtension("jar")).isTrue();
+        Assertions.assertThat(MavenConstant.FileExtension.isMavenExtension("sha1")).isTrue();
+        Assertions.assertThat(MavenConstant.FileExtension.isMavenExtension("pom")).isTrue();
     }
 
     @Test
     public void isWrongMavenType() {
-        Assertions.assertThat(MavenConstant.Type.isMavenType("foo")).isFalse();
+        Assertions.assertThat(MavenConstant.FileExtension.isMavenExtension("foo")).isFalse();
     }
 }

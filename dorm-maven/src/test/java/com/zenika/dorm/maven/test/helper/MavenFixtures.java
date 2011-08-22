@@ -27,7 +27,7 @@ public class MavenFixtures extends ExtensionFixtures {
     private String groupId = "testgroup1.testgroup2";
     private String artifactId = "testartifact";
     private String mavenVersion = "1.0-SNAPSHOT";
-    private String mavenType = MavenConstant.Type.JAR;
+    private String mavenType = MavenConstant.FileExtension.JAR;
     private String mavenFilename = artifactId + "." + mavenType;
     private String origin = MavenMetadataExtension.EXTENSION_NAME;
 

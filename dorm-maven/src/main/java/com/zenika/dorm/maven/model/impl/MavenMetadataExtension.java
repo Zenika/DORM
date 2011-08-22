@@ -5,7 +5,9 @@ package com.zenika.dorm.maven.model.impl;
  */
 
 import com.zenika.dorm.core.model.DormMetadataExtension;
+import com.zenika.dorm.core.util.DormStringUtils;
 import com.zenika.dorm.maven.exception.MavenException;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.Map;
 
@@ -28,7 +30,6 @@ public final class MavenMetadataExtension implements DormMetadataExtension {
     public static final String METADATA_CLASSIFIER = "classifier";
     public static final String METADATA_PACKAGING = "packaging";
     public static final String METADATA_TIMESTAMP = "timestamp";
-    public static final String MAVEN_METADATA_XML = "maven-metadata.xml";
 
     private final String groupId;
     private final String artifactId;
@@ -36,54 +37,36 @@ public final class MavenMetadataExtension implements DormMetadataExtension {
     private final String classifier;
     private final String packaging;
     private final String timestamp;
+    private final String extension;
+    private final String buildNumber;
 
     private final boolean mavenMetadata;
     private final boolean snapshot;
 
     /**
      * Only accessed by the builder in the same package
-     *
-     * @param groupId
-     * @param artifactId
-     * @param version
-     * @param packaging
-     * @param classifier
-     * @param timestamp
      */
-    MavenMetadataExtension(String groupId, String artifactId, String version, String packaging,
-                           String classifier, String timestamp, Boolean mavenMetadata, Boolean snapshot) {
+    MavenMetadataExtension(String groupId, String artifactId, String version, String extension,
+                           String packaging, String classifier, String timestamp, String buildNumber,
+                           boolean mavenMetadata, boolean snapshot) {
 
-        if (null == groupId || null == artifactId || null == version) {
-            throw new MavenException("Following metadatas are required : groupId, artifactId, versionId");
-        }
-
-        if (null == packaging) {
-            packaging = MavenConstant.Packaging.JAR;
-        }
-
-        if (null == classifier) {
-            classifier = "";
-        }
-
-        if (null == timestamp) {
-            timestamp = "";
-        }
-
-        if (null == mavenMetadata) {
-            mavenMetadata = false;
-        }
-
-        if (null == snapshot) {
-            snapshot = false;
-        }
+//        if (DormStringUtils.areBlanks(groupId, artifactId, version, extension)) {
+//            throw new MavenException("Following metadatas are required : groupId, artifactId, versionId, extension");
+//        }
+//
+//        if (MavenConstant.FileExtension.isMavenExtension(extension)) {
+//            throw new MavenException("Extension is not allowed for a maven file : " + extension);
+//        }
 
         this.groupId = groupId;
         this.artifactId = artifactId;
         this.version = version;
-        this.packaging = packaging;
+        this.extension = extension;
 
-        this.classifier = classifier;
-        this.timestamp = timestamp;
+        this.packaging = StringUtils.defaultIfBlank(packaging, MavenConstant.Packaging.JAR);
+        this.classifier = StringUtils.defaultIfBlank(classifier, "");
+        this.timestamp = StringUtils.defaultIfBlank(timestamp, "");
+        this.buildNumber = StringUtils.defaultIfBlank(buildNumber, "");
 
         this.mavenMetadata = mavenMetadata;
         this.snapshot = snapshot;
@@ -126,6 +109,10 @@ public final class MavenMetadataExtension implements DormMetadataExtension {
         return version;
     }
 
+    public String getExtension() {
+        return extension;
+    }
+
     public String getPackaging() {
         return packaging;
     }
@@ -138,6 +125,11 @@ public final class MavenMetadataExtension implements DormMetadataExtension {
         return timestamp;
     }
 
+    public String getBuildNumber() {
+
+        return buildNumber;
+    }
+
     public boolean isMavenMetadata() {
         return mavenMetadata;
     }
@@ -148,10 +140,12 @@ public final class MavenMetadataExtension implements DormMetadataExtension {
 
     @Override
     public DormMetadataExtension createFromMap(Map<String, String> properties) {
-        return new MavenMetadataExtension(properties.get(METADATA_GROUPID),
-                properties.get(METADATA_ARTIFACTID), properties.get(METADATA_VERSION),
-                properties.get(METADATA_PACKAGING), properties.get(METADATA_CLASSIFIER),
-                properties.get(METADATA_TIMESTAMP), null, null);
+        return new MavenMetadataExtensionBuilder(properties.get(METADATA_GROUPID),
+                properties.get(METADATA_ARTIFACTID), properties.get(METADATA_VERSION))
+                .packaging(properties.get(METADATA_PACKAGING))
+                .classifier(properties.get(METADATA_CLASSIFIER))
+                .timestamp(properties.get(METADATA_TIMESTAMP))
+                .build();
     }
 
     @Override
@@ -159,20 +153,24 @@ public final class MavenMetadataExtension implements DormMetadataExtension {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        MavenMetadataExtension extension = (MavenMetadataExtension) o;
+        MavenMetadataExtension extension1 = (MavenMetadataExtension) o;
 
-        if (mavenMetadata != extension.mavenMetadata) return false;
-        if (snapshot != extension.snapshot) return false;
-        if (artifactId != null ? !artifactId.equals(extension.artifactId) : extension.artifactId != null)
+        if (mavenMetadata != extension1.mavenMetadata) return false;
+        if (snapshot != extension1.snapshot) return false;
+        if (artifactId != null ? !artifactId.equals(extension1.artifactId) : extension1.artifactId != null)
             return false;
-        if (classifier != null ? !classifier.equals(extension.classifier) : extension.classifier != null)
+        if (buildNumber != null ? !buildNumber.equals(extension1.buildNumber) : extension1.buildNumber != null)
             return false;
-        if (groupId != null ? !groupId.equals(extension.groupId) : extension.groupId != null) return false;
-        if (packaging != null ? !packaging.equals(extension.packaging) : extension.packaging != null)
+        if (classifier != null ? !classifier.equals(extension1.classifier) : extension1.classifier != null)
             return false;
-        if (timestamp != null ? !timestamp.equals(extension.timestamp) : extension.timestamp != null)
+        if (extension != null ? !extension.equals(extension1.extension) : extension1.extension != null)
             return false;
-        if (version != null ? !version.equals(extension.version) : extension.version != null) return false;
+        if (groupId != null ? !groupId.equals(extension1.groupId) : extension1.groupId != null) return false;
+        if (packaging != null ? !packaging.equals(extension1.packaging) : extension1.packaging != null)
+            return false;
+        if (timestamp != null ? !timestamp.equals(extension1.timestamp) : extension1.timestamp != null)
+            return false;
+        if (version != null ? !version.equals(extension1.version) : extension1.version != null) return false;
 
         return true;
     }
@@ -185,6 +183,8 @@ public final class MavenMetadataExtension implements DormMetadataExtension {
         result = 31 * result + (classifier != null ? classifier.hashCode() : 0);
         result = 31 * result + (packaging != null ? packaging.hashCode() : 0);
         result = 31 * result + (timestamp != null ? timestamp.hashCode() : 0);
+        result = 31 * result + (extension != null ? extension.hashCode() : 0);
+        result = 31 * result + (buildNumber != null ? buildNumber.hashCode() : 0);
         result = 31 * result + (mavenMetadata ? 1 : 0);
         result = 31 * result + (snapshot ? 1 : 0);
         return result;
