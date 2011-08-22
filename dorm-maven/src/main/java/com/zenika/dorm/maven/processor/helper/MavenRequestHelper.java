@@ -2,7 +2,7 @@ package com.zenika.dorm.maven.processor.helper;
 
 import com.zenika.dorm.core.model.DormRequest;
 import com.zenika.dorm.maven.exception.MavenException;
-import com.zenika.dorm.maven.model.impl.MavenFileType;
+import com.zenika.dorm.maven.model.impl.MavenConstant;
 import com.zenika.dorm.maven.model.impl.MavenMetadataExtension;
 import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
@@ -76,7 +76,7 @@ public final class MavenRequestHelper {
             LOG.debug("Type of the maven file = " + type);
         }
 
-        if (!MavenFileType.isMavenType(type)) {
+        if (!MavenConstant.Type.isMavenType(type)) {
             throw new MavenException("Invalid maven type : " + type);
         }
 

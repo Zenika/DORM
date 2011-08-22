@@ -1,20 +1,9 @@
 package com.zenika.dorm.maven.test.integration;
 
-import com.zenika.dorm.core.model.Dependency;
-import com.zenika.dorm.core.model.DormMetadata;
-import com.zenika.dorm.core.model.DormMetadataExtension;
-import com.zenika.dorm.core.model.DormResource;
-import com.zenika.dorm.core.model.impl.DefaultDependency;
-import com.zenika.dorm.core.model.impl.DefaultDormMetadata;
-import com.zenika.dorm.core.model.impl.DefaultDormResource;
 import com.zenika.dorm.core.processor.Processor;
 import com.zenika.dorm.core.processor.impl.DefaultProcessor;
-import com.zenika.dorm.maven.model.impl.MavenFileType;
-import com.zenika.dorm.maven.model.impl.MavenMetadataExtension;
 import org.junit.Ignore;
 import org.junit.Test;
-
-import java.io.File;
 
 /**
  * Integration test for maven extension

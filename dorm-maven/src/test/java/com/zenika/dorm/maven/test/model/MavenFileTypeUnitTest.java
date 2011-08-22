@@ -1,6 +1,6 @@
 package com.zenika.dorm.maven.test.model;
 
-import com.zenika.dorm.maven.model.impl.MavenFileType;
+import com.zenika.dorm.maven.model.impl.MavenConstant;
 import org.fest.assertions.Assertions;
 import org.junit.Test;
 
@@ -11,13 +11,13 @@ public class MavenFileTypeUnitTest {
 
     @Test
     public void isValidMavenType() {
-        Assertions.assertThat(MavenFileType.isMavenType("jar")).isTrue();
-        Assertions.assertThat(MavenFileType.isMavenType("sha1")).isTrue();
-        Assertions.assertThat(MavenFileType.isMavenType("pom")).isTrue();
+        Assertions.assertThat(MavenConstant.Type.isMavenType("jar")).isTrue();
+        Assertions.assertThat(MavenConstant.Type.isMavenType("sha1")).isTrue();
+        Assertions.assertThat(MavenConstant.Type.isMavenType("pom")).isTrue();
     }
 
     @Test
     public void isWrongMavenType() {
-        Assertions.assertThat(MavenFileType.isMavenType("foo")).isFalse();
+        Assertions.assertThat(MavenConstant.Type.isMavenType("foo")).isFalse();
     }
 }

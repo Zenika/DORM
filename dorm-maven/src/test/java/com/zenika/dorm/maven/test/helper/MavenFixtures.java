@@ -7,7 +7,7 @@ import com.zenika.dorm.core.model.impl.DefaultDependencyNode;
 import com.zenika.dorm.core.model.impl.DefaultDormMetadata;
 import com.zenika.dorm.core.model.impl.Usage;
 import com.zenika.dorm.core.test.helper.ExtensionFixtures;
-import com.zenika.dorm.maven.model.impl.MavenFileType;
+import com.zenika.dorm.maven.model.impl.MavenConstant;
 import com.zenika.dorm.maven.model.impl.MavenMetadataExtension;
 import com.zenika.dorm.maven.model.impl.MavenMetadataExtensionBuilder;
 import com.zenika.dorm.maven.processor.extension.MavenProcessor;
@@ -27,7 +27,7 @@ public class MavenFixtures extends ExtensionFixtures {
     private String groupId = "testgroup1.testgroup2";
     private String artifactId = "testartifact";
     private String mavenVersion = "1.0-SNAPSHOT";
-    private String mavenType = MavenFileType.JAR;
+    private String mavenType = MavenConstant.Type.JAR;
     private String mavenFilename = artifactId + "." + mavenType;
     private String origin = MavenMetadataExtension.EXTENSION_NAME;
 
