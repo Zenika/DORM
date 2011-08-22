@@ -24,7 +24,7 @@ public final class MavenFormatter {
 
     private static final String REGEX_CLASSIFIER = "\\-[0-9]+\\.[0-9]+\\-[0-9]\\.";
     private static final String REGEX_TIMESTAMP = "\\-[a-z]+\\.";
-    private static final String REGEX_BUILDNUMBER = "-[1-9]$";
+    private static final String REGEX_BUILDNUMBER = "-[1-9].";
 
     private static final Pattern PATTERN_CLASSIFIER = Pattern.compile(REGEX_CLASSIFIER);
     private static final Pattern PATTERN_TIMESTAMP = Pattern.compile(REGEX_TIMESTAMP);
@@ -81,15 +81,26 @@ public final class MavenFormatter {
         return null;
     }
 
+    /**
+     * @param filename
+     * @return the buildnumber if found or null
+     */
     public static String getBuildNumber(String filename) {
+
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Get build number from filename : " + filename);
+        }
 
         Matcher matcher = PATTERN_BUILDNUMBER.matcher(filename);
 
         if (!matcher.find()) {
+            LOG.debug("Build number was not found, return null");
             return null;
         }
 
-        String buildNumber = matcher.group();
+        LOG.trace("foo : " + matcher.groupCount());
+
+        String buildNumber = matcher.group(matcher.groupCount());
         buildNumber = buildNumber.substring(1, buildNumber.length() - 1);
 
         if (LOG.isDebugEnabled()) {
