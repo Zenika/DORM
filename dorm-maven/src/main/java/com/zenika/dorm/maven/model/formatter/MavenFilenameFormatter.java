@@ -1,13 +1,12 @@
 package com.zenika.dorm.maven.model.formatter;
 
-import com.zenika.dorm.core.util.DormStringUtils;
 import com.zenika.dorm.maven.exception.MavenException;
+import com.zenika.dorm.maven.exception.MavenFormatterException;
 import com.zenika.dorm.maven.model.impl.MavenConstant;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.regex.Pattern;
 
 /**
  * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>
@@ -17,8 +16,7 @@ public class MavenFilenameFormatter {
     private static final Logger LOG = LoggerFactory.getLogger(MavenFilenameFormatter.class);
 
     private static final String SEPARATOR = "-";
-    private static final String REGEX = "(.+)(?:\\.)$";
-    private static final Pattern PATTERN = Pattern.compile(REGEX);
+    private static final String REGEX_VERSION_TIMESTAMP = "^[0-9]*(\\.)*[0-9]*$";
 
     private String filename;
     private String artifactId;
@@ -27,6 +25,9 @@ public class MavenFilenameFormatter {
     private String buildNumber;
     private String classifier;
     private String extension;
+
+    private String[] elements;
+    private int index;
 
     public MavenFilenameFormatter(String filename) {
 
@@ -37,6 +38,9 @@ public class MavenFilenameFormatter {
         this.filename = filename;
     }
 
+    /**
+     * Format the filename from right to left
+     */
     public void format() {
 
         if (LOG.isDebugEnabled()) {
@@ -48,52 +52,95 @@ public class MavenFilenameFormatter {
             return;
         }
 
-        String[] split = filename.split(SEPARATOR);
-        if (null == split || split.length < 3) { // minimum 3 elements : artifactid - version - timestamp
-            LOG.error("Filename must be formatted with \"-\" between elements");
-            return;
+        if (StringUtils.isBlank(filename)) {
+            throw new MavenFormatterException("Filename to format is required");
         }
 
-        int current = split.length - 1;
 
-        String last = split[current];
-        if (null == last) {
-            LOG.error("Cannot format filename");
-            return;
+        extension = FilenameUtils.getExtension(filename);
+        if (StringUtils.isBlank(extension)) {
+            throw new MavenFormatterException("Filename to format have no extension");
         }
 
-        if (LOG.isTraceEnabled()) {
-            LOG.trace("Last element with extension from filename : " + last);
+        String filenameWithoutExtension = FilenameUtils.removeExtension(filename);
+
+        elements = filenameWithoutExtension.split(SEPARATOR);
+
+        // minimum 3 elements : artifactid - version - timestamp
+        if (null == elements || elements.length < 3) {
+            throw new MavenFormatterException("Filename must be formatted with \"-\" between elements");
         }
 
-        String[] withExtension = last.split(".");
-        if (null == withExtension || withExtension.length < 2 ||
-                DormStringUtils.areBlanks(withExtension[0], withExtension[1])) {
-            LOG.error("Cannot format extension from filename");
-            return;
-        }
+        index = elements.length;
 
-        last = withExtension[0];
-        extension = withExtension[1];
+        String last = getPreviousElement();
 
+        // build number
         if (StringUtils.isNumeric(last)) {
             buildNumber = last;
             classifier = "";
-        } else {
-            buildNumber = split[--current];
+        }
+
+        // classifier
+        else {
+            buildNumber = getPreviousElement();
             classifier = last;
+
+            if (!StringUtils.isNumeric(buildNumber)) {
+                throw new MavenFormatterException("Buildnumber must be numeric : " + buildNumber);
+            }
         }
 
-        timestamp = split[--current];
+        timestamp = getPreviousElement();
+        validateVersionAndTimestamp(timestamp);
 
-        version = split[--current];
+        version = getPreviousElement();
         if (StringUtils.equals(version, MavenConstant.Other.SNAPSHOT)) {
-            version = split[--current] + "-" + version;
+            String versionWithoutSnapshot = getPreviousElement();
+            validateVersionAndTimestamp(versionWithoutSnapshot);
+            version = versionWithoutSnapshot + "-" + version;
+        } else {
+            validateVersionAndTimestamp(version);
         }
 
-        artifactId = split[0];
-        for (int i = 1; i <= current; i++) {
-            artifactId += "-" + split[i];
+        artifactId = elements[0];
+        if (index == 0 || StringUtils.isBlank(artifactId)) {
+            throw new MavenFormatterException("Cannot format artifactId from filename");
+        }
+
+        for (int i = 1; i < index; i++) {
+            artifactId += "-" + elements[i];
+        }
+
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Format complete with values : " + toString());
+        }
+    }
+
+    private String getPreviousElement() {
+
+        if (index == 0) {
+            throw new MavenFormatterException("Cannot format the filename, something excepected before : " +
+                    elements[index]);
+        }
+
+        String element = elements[--index];
+
+        if (StringUtils.isBlank(element)) {
+            throw new MavenFormatterException("Element is required before : " + elements[index]);
+        }
+
+        return element;
+    }
+
+    private void validateVersionAndTimestamp(String value) {
+
+        if (StringUtils.isBlank(value)) {
+            throw new MavenFormatterException("Cannot format the filename");
+        }
+
+        if (!value.matches(REGEX_VERSION_TIMESTAMP)) {
+            throw new MavenFormatterException("Cannot format the filename with invalid value : " + value);
         }
     }
 
@@ -106,6 +153,41 @@ public class MavenFilenameFormatter {
                 ", timestamp='" + timestamp + '\'' +
                 ", buildNumber='" + buildNumber + '\'' +
                 ", classifier='" + classifier + '\'' +
+                ", extension='" + extension + '\'' +
                 '}';
+    }
+
+    public String getFilename() {
+        return filename;
+    }
+
+    public String getArtifactId() {
+        format();
+        return artifactId;
+    }
+
+    public String getVersion() {
+        format();
+        return version;
+    }
+
+    public String getTimestamp() {
+        format();
+        return timestamp;
+    }
+
+    public String getBuildNumber() {
+        format();
+        return buildNumber;
+    }
+
+    public String getClassifier() {
+        format();
+        return classifier;
+    }
+
+    public String getExtension() {
+        format();
+        return extension;
     }
 }
