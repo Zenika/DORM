@@ -10,9 +10,11 @@ import com.zenika.dorm.core.model.builder.MetadataBuilderFromRequest;
 import com.zenika.dorm.core.model.impl.DefaultDependencyNode;
 import com.zenika.dorm.core.model.impl.Usage;
 import com.zenika.dorm.core.processor.ProcessorExtension;
+import com.zenika.dorm.core.service.get.DormServiceGetRequest;
 import com.zenika.dorm.maven.exception.MavenException;
 import com.zenika.dorm.maven.model.impl.MavenMetadataExtension;
 import com.zenika.dorm.maven.model.impl.MavenMetadataExtensionBuilder;
+import com.zenika.dorm.maven.service.get.MavenServiceGetRequestBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,6 +32,9 @@ import org.slf4j.LoggerFactory;
 public class MavenProcessor implements ProcessorExtension {
 
     private static final Logger LOG = LoggerFactory.getLogger(MavenProcessor.class);
+
+    private static final String PROCESS_GET_METADATAXML_FILE = "get_metadataxml_file";
+    private static final String PROCESS_GET_ARTIFACT = "get_artifact";
 
     public static final String ENTITY_TYPE = "entity";
 
@@ -95,26 +100,44 @@ public class MavenProcessor implements ProcessorExtension {
     }
 
     @Override
-    public DormMetadata getMetadata(DormRequest request) {
+    public DormServiceGetRequest buildGetRequest(DormRequest request) {
 
         if (LOG.isDebugEnabled()) {
             LOG.debug("Maven get with request : " + request);
         }
 
         MavenMetadataExtension mavenMetadata = new MavenMetadataExtensionBuilder(request).build();
-        String type = mavenMetadata.getExtension();
 
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("Maven metadata extension from request : " + mavenMetadata);
+
+        DormServiceGetRequest getRequest;
+
+        if (mavenMetadata.isMavenMetadata()) {
+            getRequest = new MavenServiceGetRequestBuilder(PROCESS_GET_METADATAXML_FILE, mavenMetadata)
+                    .withArtifactId()
+                    .withGroupId()
+                    .withVersion()
+                    .repositoryRequest(false)
+                    .build();
+        } else {
+            getRequest = new MavenServiceGetRequestBuilder(PROCESS_GET_ARTIFACT, mavenMetadata)
+                    .withAll()
+                    .repositoryRequest(true)
+                    .build();
         }
 
-        DormMetadata metadata = new MetadataBuilderFromRequest(type, request, mavenMetadata).build();
 
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("Maven metadata from request : " + metadata);
-        }
 
-        return metadata;
+//        if (LOG.isDebugEnabled()) {
+//            LOG.debug("Maven metadata extension from request : " + mavenMetadata);
+//        }
+
+//        DormMetadata metadata = new MetadataBuilderFromRequest(type, request, mavenMetadata).build();
+
+//        if (LOG.isDebugEnabled()) {
+//            LOG.debug("Maven metadata from request : " + metadata);
+//        }
+
+        return getRequest;
     }
 
     @Override
