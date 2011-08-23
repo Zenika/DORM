@@ -17,7 +17,7 @@ public final class DefaultDormMetadataExtension implements DormMetadataExtension
     /**
      * Metadata names
      */
-    public static final String METADATA_NAME = "name";
+    public static final transient String METADATA_NAME = "name";
 
 
     private final String name;

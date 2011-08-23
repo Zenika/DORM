@@ -14,12 +14,10 @@ import java.util.Map;
 /**
  * Maven immutable extension point to the dorm model
  * Add maven specific metadatas
- *
- * todo: add packaging + classifier metadatas
  */
 public final class MavenMetadataExtension implements DormMetadataExtension {
 
-    public static final String EXTENSION_NAME = "maven";
+    public static final transient String EXTENSION_NAME = "maven";
 
     /**
      * Metadata names
@@ -30,6 +28,10 @@ public final class MavenMetadataExtension implements DormMetadataExtension {
     public static final transient String METADATA_CLASSIFIER = "classifier";
     public static final transient String METADATA_PACKAGING = "packaging";
     public static final transient String METADATA_TIMESTAMP = "timestamp";
+    public static final transient String METADATA_EXTENSION = "extension";
+    public static final transient String METADATA_BUILDNUMBER = "buildNumber";
+    public static final transient String METADATA_SNAPSHOT = "snapshot";
+
 
     private final String groupId;
     private final String artifactId;
@@ -39,9 +41,9 @@ public final class MavenMetadataExtension implements DormMetadataExtension {
     private final String timestamp;
     private final String extension;
     private final String buildNumber;
-
-    private final boolean mavenMetadata;
     private final boolean snapshot;
+
+    private final transient boolean mavenMetadata;
 
     /**
      * Only accessed by the builder in the same package
