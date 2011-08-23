@@ -6,6 +6,7 @@ import com.zenika.dorm.core.model.Dependency;
 import com.zenika.dorm.core.model.DependencyNode;
 import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.core.model.DormMetadataExtension;
+import com.zenika.dorm.core.model.impl.DefaultDependencyNode;
 import com.zenika.dorm.core.model.impl.Usage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,7 +53,8 @@ public class DormDaoJdbc implements DormDao {
 
     @Override
     public DependencyNode getSingleByMetadata(DormMetadata metadata, Usage usage) {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        Dependency dependency = executor.selectDependency(metadata);
+        return DefaultDependencyNode.create(dependency);
     }
 
     @Override

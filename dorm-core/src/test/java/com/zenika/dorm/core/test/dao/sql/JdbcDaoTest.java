@@ -14,14 +14,17 @@ import com.zenika.dorm.core.model.impl.Usage;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Antoine ROUAZE <antoine.rouaze AT zenika.com>
  */
-@Ignore
-public class SqlDaoTest {
+//@Ignore
+public class JdbcDaoTest {
+
+    private static final Logger LOG = LoggerFactory.getLogger(JdbcDaoTest.class);
 
     public static DormDao dao;
 
@@ -76,6 +79,13 @@ public class SqlDaoTest {
     public void testPushNode() {
         dao.push(habi_base);
     }
+
+    @Test
+    public void testGetSingleByMetadata(){
+        DependencyNode node = dao.getSingleByMetadata(habi_base.getDependency().getMetadata(), usage);
+        LOG.trace("Dependency : " + node.getDependency());
+    }
+
 
     @AfterClass
     public static void afterClass() {

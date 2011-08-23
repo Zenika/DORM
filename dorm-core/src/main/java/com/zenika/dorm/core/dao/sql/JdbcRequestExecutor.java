@@ -1,8 +1,12 @@
 package com.zenika.dorm.core.dao.sql;
 
 import com.zenika.dorm.core.exception.DaoSQLException;
+import com.zenika.dorm.core.model.Dependency;
 import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.core.model.DormMetadataExtension;
+import com.zenika.dorm.core.model.impl.DefaultDependency;
+import com.zenika.dorm.core.model.impl.DefaultDormMetadata;
+import com.zenika.dorm.core.model.impl.DefaultDormMetadataExtension;
 import com.zenika.dorm.core.model.impl.Usage;
 import com.zenika.dorm.core.model.mapper.MetadataExtensionMapper;
 import org.postgresql.Driver;
@@ -15,6 +19,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -27,6 +32,13 @@ public class JdbcRequestExecutor {
     private static final String ID_CHILD_COLUMN = "id_child";
     private static final String ID_PARENT_COLUMN = "id_parent";
     private static final String USAGE_COLUMN = "dorm_usage";
+    private static final String DORM_KEY_COLUMN = "dorm_key";
+    private static final String DORM_VALUE_COLUMN = "dorm_value";
+    private static final String DORM_EXTENSION_QUALIFIER_COLUMN = "dorm_extension_qualifier";
+    private static final String DORM_NAME_COLUMN = "dorm_name";
+    private static final String DORM_QUALIFIER_COLUMN = "dorm_qualifier";
+    private static final String DORM_VERSION_COLUMN = "dorm_version";
+    private static final String DORM_TYPE_COLUMN = "dorm_type";
 
     private static final Logger LOG = LoggerFactory.getLogger(DormDaoJdbc.class);
     private static final String DB_URL = "jdbc:postgresql://localhost:5555/DORM_DATA";
@@ -50,6 +62,46 @@ public class JdbcRequestExecutor {
             this.connection.setAutoCommit(false);
         } catch (SQLException e) {
             throw new DaoSQLException("Unable to connect to Postgres server", e);
+        }
+    }
+
+    public Dependency selectDependency(DormMetadata metadata) {
+        PreparedStatement statement = null;
+        try {
+            DormMetadataExtension extension = metadata.getExtension();
+            String version = null;
+            String type = null;
+            Map<String, String> extensionProperties = new HashMap<String, String>();
+            statement = connection.prepareStatement("SELECT e.dorm_key, e.dorm_value, e.dorm_extension_qualifier, e.dorm_name, m.dorm_version, m.dorm_type \n" +
+                    "FROM dorm_metadata m JOIN dorm_extension e ON e.dorm_metadata_fk = m.id\n" +
+                    "WHERE m.dorm_qualifier = ?");
+            statement.setString(1, metadata.getQualifier());
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()){
+                extensionProperties.put(resultSet.getString(DORM_KEY_COLUMN), resultSet.getString(DORM_VALUE_COLUMN));
+                if (resultSet.isFirst()){
+                    extensionProperties.put("name", resultSet.getString(DORM_EXTENSION_QUALIFIER_COLUMN));
+                    extensionProperties.put("qualifier", resultSet.getString(DORM_NAME_COLUMN));
+                    version = resultSet.getString(DORM_VERSION_COLUMN);
+                    type = resultSet.getString(DORM_TYPE_COLUMN);
+                }
+            }
+            if (type == null){
+                throw new DaoSQLException("Cannot find the dependency with this Qualifier : " + metadata.getQualifier(), new NullPointerException());
+            }
+            extension = extension.createFromMap(extensionProperties);
+            metadata = DefaultDormMetadata.create(version, type, extension);
+            return DefaultDependency.create(metadata);
+        } catch (SQLException e) {
+            throw new DaoSQLException("Unable to execute request", e);
+        } finally {
+            if (statement != null) {
+                try {
+                    statement.close();
+                } catch (SQLException e) {
+                    throw new DaoSQLException("Unable to close the statement", e);
+                }
+            }
         }
     }
 
@@ -120,11 +172,13 @@ public class JdbcRequestExecutor {
     public void insertExtension(DormMetadataExtension extension, Long idMetadata) {
         PreparedStatement statement = null;
         try {
-            statement = connection.prepareStatement("INSERT INTO dorm_extension (dorm_key, dorm_value, dorm_metadata_fk) VALUES (?, ?, ?)");
+            statement = connection.prepareStatement("INSERT INTO dorm_extension (dorm_key, dorm_value, dorm_extension_qualifier, dorm_name, dorm_metadata_fk) VALUES (?, ?, ?, ?, ?)");
             for (Map.Entry<String, String> properties : MetadataExtensionMapper.fromExtension(extension).entrySet()) {
                 statement.setString(1, properties.getKey());
                 statement.setString(2, properties.getValue());
-                statement.setLong(3, idMetadata);
+                statement.setString(3, extension.getQualifier());
+                statement.setString(4, extension.getExtensionName());
+                statement.setLong(5, idMetadata);
                 statement.execute();
                 statement.clearParameters();
             }
