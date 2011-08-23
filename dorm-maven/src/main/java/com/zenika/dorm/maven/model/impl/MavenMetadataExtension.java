@@ -50,13 +50,14 @@ public final class MavenMetadataExtension implements DormMetadataExtension {
                            String packaging, String classifier, String timestamp, String buildNumber,
                            boolean mavenMetadata, boolean snapshot) {
 
-//        if (DormStringUtils.areBlanks(groupId, artifactId, version, extension)) {
-//            throw new MavenException("Following metadatas are required : groupId, artifactId, versionId, extension");
-//        }
-//
-//        if (MavenConstant.FileExtension.isMavenExtension(extension)) {
-//            throw new MavenException("Extension is not allowed for a maven file : " + extension);
-//        }
+        if (DormStringUtils.areBlanks(groupId, artifactId, version) &&
+                (!mavenMetadata || StringUtils.isBlank(extension))) {
+            throw new MavenException("Following metadatas are required : groupId, artifactId, versionId, extension");
+        }
+
+        if (MavenConstant.FileExtension.isMavenExtension(extension)) {
+            throw new MavenException("Extension is not allowed for a maven file : " + extension);
+        }
 
         this.groupId = groupId;
         this.artifactId = artifactId;

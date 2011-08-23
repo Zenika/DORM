@@ -1,7 +1,8 @@
 package com.zenika.dorm.maven.model.impl;
 
 import com.zenika.dorm.core.model.DormRequest;
-import com.zenika.dorm.maven.util.MavenFormatter;
+import com.zenika.dorm.maven.helper.MavenSpecificHelper;
+import com.zenika.dorm.maven.model.formatter.MavenFilenameFormatter;
 
 /**
  * Builder for maven metadata extension
@@ -29,27 +30,25 @@ public class MavenMetadataExtensionBuilder {
 
     public MavenMetadataExtensionBuilder(DormRequest request) {
 
-        // required metadata
-        groupId = MavenFormatter.formatGroupId(request.getProperty(MavenMetadataExtension.METADATA_GROUPID));
+        groupId = request.getProperty(MavenMetadataExtension.METADATA_GROUPID);
         artifactId = request.getProperty(MavenMetadataExtension.METADATA_ARTIFACTID);
         version = request.getProperty(MavenMetadataExtension.METADATA_VERSION);
-        extension = MavenFormatter.getExtension(request.getFilename());
 
-        mavenMetadata = MavenFormatter.isMavenMetadataFile(request.getFilename());
+        mavenMetadata = MavenSpecificHelper.isMavenMetadataFile(request.getFilename());
         if (mavenMetadata) {
             return;
         }
 
+        MavenFilenameFormatter formatter = new MavenFilenameFormatter(request.getFilename());
+        classifier = formatter.getClassifier();
+        extension = formatter.getExtension();
         packaging = request.getProperty(MavenMetadataExtension.METADATA_PACKAGING);
-        classifier = MavenFormatter.getClassifierIfExists(request.getProperty(MavenMetadataExtension.METADATA_CLASSIFIER));
 
-        snapshot = MavenFormatter.isSnapshot(version);
+        snapshot = MavenSpecificHelper.isSnapshot(version);
         if (snapshot) {
-//            timestamp = MavenFormatter.get
-//            buildNumber = MavenFormatter
+            timestamp = formatter.getTimestamp();
+            buildNumber = formatter.getBuildNumber();
         }
-
-
     }
 
     public MavenMetadataExtensionBuilder extension(String extension) {

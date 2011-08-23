@@ -13,7 +13,6 @@ import com.zenika.dorm.core.processor.ProcessorExtension;
 import com.zenika.dorm.maven.exception.MavenException;
 import com.zenika.dorm.maven.model.impl.MavenMetadataExtension;
 import com.zenika.dorm.maven.model.impl.MavenMetadataExtensionBuilder;
-import com.zenika.dorm.maven.util.MavenFormatter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -46,19 +45,21 @@ public class MavenProcessor implements ProcessorExtension {
         }
 
 
-        String classifier = MavenFormatter.getClassifierIfExists(null);
-        String groupId = MavenFormatter.formatGroupId(null);
-        String artifactId = request.getProperty(MavenMetadataExtension.METADATA_ARTIFACTID);
-        String version = request.getProperty(MavenMetadataExtension.METADATA_VERSION);
-        String packaging = request.getProperty(MavenMetadataExtension.METADATA_PACKAGING);
-        String timestamp = request.getProperty(MavenMetadataExtension.METADATA_TIMESTAMP);
+//        String classifier = MavenFormatter.getClassifierIfExists(null);
+//        String groupId = MavenFormatter.formatGroupId(null);
+//        String artifactId = request.getProperty(MavenMetadataExtension.METADATA_ARTIFACTID);
+//        String version = request.getProperty(MavenMetadataExtension.METADATA_VERSION);
+//        String packaging = request.getProperty(MavenMetadataExtension.METADATA_PACKAGING);
+//        String timestamp = request.getProperty(MavenMetadataExtension.METADATA_TIMESTAMP);
 
         // create the entity extension which is the same as the child with a different type
-        MavenMetadataExtension extension = new MavenMetadataExtensionBuilder(groupId, artifactId, version)
-                .classifier(classifier)
-                .packaging(packaging)
-                .timestamp(timestamp)
-                .build();
+        MavenMetadataExtension extension = new MavenMetadataExtensionBuilder(request).build();
+
+//                (groupId, artifactId, version)
+//                .classifier(classifier)
+//                .packaging(packaging)
+//                .timestamp(timestamp)
+//                .build();
 
         String type = extension.getExtension();
 
@@ -100,27 +101,14 @@ public class MavenProcessor implements ProcessorExtension {
             LOG.debug("Maven get with request : " + request);
         }
 
-
-        String groupId = MavenFormatter.formatGroupId(null);
-        String classifier = MavenFormatter.getClassifierIfExists(null);
-        String artifactId = request.getProperty(MavenMetadataExtension.METADATA_ARTIFACTID);
-        String version = request.getProperty(MavenMetadataExtension.METADATA_VERSION);
-        String packaging = request.getProperty(MavenMetadataExtension.METADATA_PACKAGING);
-        String timestamp = request.getProperty(MavenMetadataExtension.METADATA_TIMESTAMP);
-
-        MavenMetadataExtension extension = new MavenMetadataExtensionBuilder(groupId, artifactId, version)
-                .classifier(classifier)
-                .packaging(packaging)
-                .timestamp(timestamp)
-                .build();
-
-        String type = extension.getExtension();
+        MavenMetadataExtension mavenMetadata = new MavenMetadataExtensionBuilder(request).build();
+        String type = mavenMetadata.getExtension();
 
         if (LOG.isDebugEnabled()) {
-            LOG.debug("Maven metadata extension from request : " + extension);
+            LOG.debug("Maven metadata extension from request : " + mavenMetadata);
         }
 
-        DormMetadata metadata = new MetadataBuilderFromRequest(type, request, extension).build();
+        DormMetadata metadata = new MetadataBuilderFromRequest(type, request, mavenMetadata).build();
 
         if (LOG.isDebugEnabled()) {
             LOG.debug("Maven metadata from request : " + metadata);
