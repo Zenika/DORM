@@ -11,8 +11,8 @@ import java.util.Map;
  */
 public final class DefaultDormMetadataExtension implements DormMetadataExtension {
 
-    public static final String EXTENSION_NAME = "dorm";
-    public static final String EXTENSION_TYPE = "jar";
+    public static final transient String EXTENSION_NAME = "dorm";
+    public static final transient String EXTENSION_TYPE = "jar";
 
     /**
      * Metadata names
