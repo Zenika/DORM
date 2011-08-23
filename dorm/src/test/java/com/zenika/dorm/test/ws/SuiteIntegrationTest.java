@@ -15,6 +15,7 @@ import org.junit.runners.Suite;
 @Suite.SuiteClasses({
         DormResourceIntegrationTest.class, MavenResourceIntegrationTest.class
 })
+@Ignore
 public class SuiteIntegrationTest {
 
     @BeforeClass

@@ -18,5 +18,6 @@ dependencies {
 }
 
 test {
-    excludes = ['MavenResourceIntegrationTest', 'DormResourceIntegrationTest']
+    excludes = ['SuiteIntegrationTest', // temporary ignored
+            'MavenResourceIntegrationTest', 'DormResourceIntegrationTest']
 }
