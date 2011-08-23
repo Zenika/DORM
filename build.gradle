@@ -60,7 +60,8 @@ versions = [
         morphia: '0.99',
         tomcat: '7.0.19',
         commons_lang3: '3.0.1',
-        commons_io: '2.0.1'
+        commons_io: '2.0.1',
+        postgresql: '9.0-801.jdbc4'
 ]
 
 // 2nd step, introducing libraries
@@ -95,7 +96,8 @@ libraries = [
         tomcat_embeded_juli: 'org.apache.tomcat.embed:tomcat-embed-logging-juli:' + versions.tomcat,
 
         commons_lang3: 'org.apache.commons:commons-lang3:' + versions.commons_lang3,
-        commons_io: 'commons-io:commons-io:' + versions.commons_io
+        commons_io: 'commons-io:commons-io:' + versions.commons_io,
+        postgresql: 'postgresql:postgresql:' + versions.postgresql
 ]
 
 subprojects {

@@ -102,6 +102,15 @@ public class DormDaoNeo4j implements DormDao {
         return dependency;
     }
 
+    /**
+     * d = g.addVertex();
+     * m = g.addVertex([qualifier:'test',version:'1.0.0',type:'jar'])
+     * e = g.addVertex([groupId:'test',artifactId:'test',version:'1.0.0',classifier:'bin',packaging:'jar',timestamp:'129099087'])
+     * g.addEdge(d,m,'METADATA')
+     * g.addEdge(m.e,'EXTENSION')
+     *
+     */
+
     public <T extends Neo4jNode> T searchNode(URI uri, Type type) {
         List<T> nodes = searchNodes(uri, type);
         if (nodes.size() > 1) {
