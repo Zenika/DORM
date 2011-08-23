@@ -33,22 +33,17 @@ public class MavenResource extends AbstractResource {
 
     @GET
     @Produces(MediaType.APPLICATION_OCTET_STREAM)
-    @Path("{groupId:.*}/{artifactID}/{version}/{fileName}")
+    @Path("{groupId:.*}/{artifactId}/{version}/{filename}")
     public Response get(@PathParam("groupId") String groupId,
-                        @PathParam("artifactID") String artifactId,
+                        @PathParam("artifactId") String artifactId,
                         @PathParam("version") String version,
-                        @PathParam("fileName") String fileName) {
+                        @PathParam("filename") String filename) {
 
         LOG.info("Call to maven web service : GET");
 
-//        // TODO : fix maven-metadata.xml in maven web service
-        if (fileName.equals("maven-metadata.xml")) {
-            return Response.status(Response.Status.NOT_FOUND).build();
-        }
-
         DormRequest request = new DormRequestBuilder(version, MavenMetadataExtension.EXTENSION_NAME)
-                .filename(fileName)
-                .property(MavenMetadataExtension.METADATA_GROUPID, groupId)
+                .filename(filename)
+                .property(MavenMetadataExtension.METADATA_GROUPID, MavenResourceHelper.formatGroupId(groupId))
                 .property(MavenMetadataExtension.METADATA_ARTIFACTID, artifactId)
                 .property(MavenMetadataExtension.METADATA_VERSION, version)
                 .build();
