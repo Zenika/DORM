@@ -1,6 +1,7 @@
 package com.zenika.dorm.core.util;
 
 import com.zenika.dorm.core.exception.CoreException;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,8 +22,8 @@ public final class DormFormatter {
 
     public static String formatMetadataExtensionQualifier(String qualifier) {
 
-        if (isEmpty(qualifier)) {
-            throw new CoreException("Metadata extension qualifier is null or empty").type(CoreException.Type.NULL);
+        if (StringUtils.isBlank(qualifier)) {
+            throw new CoreException("Metadata extension qualifier is blank").type(CoreException.Type.NULL);
         }
 
         if (LOG.isDebugEnabled()) {
@@ -56,8 +57,8 @@ public final class DormFormatter {
 
     public static String formatMetadataVersion(String version) {
 
-        if (isEmpty(version)) {
-            throw new CoreException("Metadata version is null or empty").type(CoreException.Type.NULL);
+        if (StringUtils.isBlank(version)) {
+            throw new CoreException("Metadata version is blank").type(CoreException.Type.NULL);
         }
 
         if (LOG.isDebugEnabled()) {
@@ -78,8 +79,8 @@ public final class DormFormatter {
 
     public static String formatMetadataType(String type) {
 
-        if (isEmpty(type)) {
-            throw new CoreException("Type is null or empty").type(CoreException.Type.NULL);
+        if (StringUtils.isBlank(type)) {
+            throw new CoreException("Type is blank").type(CoreException.Type.NULL);
         }
 
         if (LOG.isDebugEnabled()) {
@@ -108,9 +109,5 @@ public final class DormFormatter {
         }
 
         return qualifier;
-    }
-
-    private static boolean isEmpty(String string) {
-        return null == string || string.isEmpty();
     }
 }
