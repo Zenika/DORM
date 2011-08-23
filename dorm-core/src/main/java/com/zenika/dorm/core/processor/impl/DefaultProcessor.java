@@ -5,12 +5,12 @@ import com.google.inject.Singleton;
 import com.zenika.dorm.core.exception.CoreException;
 import com.zenika.dorm.core.model.Dependency;
 import com.zenika.dorm.core.model.DependencyNode;
-import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.core.model.DormRequest;
 import com.zenika.dorm.core.model.impl.Usage;
 import com.zenika.dorm.core.processor.Processor;
 import com.zenika.dorm.core.processor.ProcessorExtension;
 import com.zenika.dorm.core.service.DormService;
+import com.zenika.dorm.core.service.get.DormServiceGetRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -56,14 +56,15 @@ public class DefaultProcessor implements Processor {
         }
 
         ProcessorExtension processorExtension = getExtension(request);
-        DormMetadata metadata = processorExtension.getMetadata(request);
+
+        DormServiceGetRequest getRequest = processorExtension.buildGetRequest(request);
         Usage usage = Usage.create(request.getUsage());
 
         if (LOG.isInfoEnabled()) {
-            LOG.info("get dependency for metadata : " + metadata + " and usage : " + usage);
+            LOG.info("get request : " + getRequest + " with usage : " + usage);
         }
 
-        DependencyNode node = service.getDependencyNode(metadata, usage);
+        DependencyNode node = service.get(getRequest);
 
         return processorExtension.getDependency(node);
     }

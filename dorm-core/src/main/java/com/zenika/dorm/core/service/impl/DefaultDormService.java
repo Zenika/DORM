@@ -12,6 +12,7 @@ import com.zenika.dorm.core.model.impl.DefaultDependency;
 import com.zenika.dorm.core.model.impl.Usage;
 import com.zenika.dorm.core.repository.DormRepository;
 import com.zenika.dorm.core.service.DormService;
+import com.zenika.dorm.core.service.get.DormServiceGetRequest;
 
 import java.util.Set;
 
@@ -39,7 +40,7 @@ public class DefaultDormService implements DormService {
     }
 
     @Override
-    public DependencyNode get(DependencyNode node) {
+    public DependencyNode get(DormServiceGetRequest request) {
         throw new UnsupportedOperationException();
     }
 
@@ -49,7 +50,7 @@ public class DefaultDormService implements DormService {
         return DefaultDependency.create(metadata, resource);
     }
 
-    public DependencyNode getDependencyNode(DormMetadata metadata, Usage usage){
+    public DependencyNode getDependencyNode(DormMetadata metadata, Usage usage) {
         return dao.getByMetadata(metadata, usage);
     }
 
