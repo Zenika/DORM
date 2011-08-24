@@ -2,6 +2,7 @@ package com.zenika.dorm.core.dao.sql;
 
 import com.zenika.dorm.core.exception.DaoSQLException;
 import com.zenika.dorm.core.model.Dependency;
+import com.zenika.dorm.core.model.DependencyNode;
 import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.core.model.DormMetadataExtension;
 import com.zenika.dorm.core.model.impl.DefaultDependency;
@@ -64,6 +65,16 @@ public class JdbcRequestExecutor {
         }
     }
 
+//    public DependencyNode selectDependencyNode(DormMetadata metadata, Map<String, String> properties){
+//        PreparedStatement statement = null;
+//        DormMetadataExtension extension = metadata.getExtension();
+//        String version = null;
+//        String type = null;
+//        Map<String, String> extensionProperties = new HashMap<String, String>();
+//
+//        statement = connection.prepareStatement()
+//    }
+
     public Dependency selectDependency(DormMetadata metadata) {
         PreparedStatement statement = null;
         try {
@@ -72,7 +83,7 @@ public class JdbcRequestExecutor {
             String type = null;
             Map<String, String> extensionProperties = new HashMap<String, String>();
             statement = connection.prepareStatement("SELECT e.property_key, e.property_value, e.extension_qualifier, e.extension_name, m.metadata_version, m.metadata_type \n" +
-                    "FROM dorm_metadata m JOIN dorm_extension e ON e.metadata_fk = m.id\n" +
+                    "FROM dorm_metadata m JOIN dorm_extension e ON e.metadata_id = m.id\n" +
                     "WHERE m.metadata_qualifier = ?");
             statement.setString(1, metadata.getQualifier());
             ResultSet resultSet = statement.executeQuery();
@@ -170,7 +181,7 @@ public class JdbcRequestExecutor {
     public void insertExtension(DormMetadataExtension extension, Long idMetadata) {
         PreparedStatement statement = null;
         try {
-            statement = connection.prepareStatement("INSERT INTO dorm_extension (property_key, property_value, extension_qualifier, extension_name, metadata_fk) VALUES (?, ?, ?, ?, ?)");
+            statement = connection.prepareStatement("INSERT INTO dorm_extension (property_key, property_value, extension_qualifier, extension_name, metadata_id) VALUES (?, ?, ?, ?, ?)");
             for (Map.Entry<String, String> properties : MetadataExtensionMapper.fromExtension(extension).entrySet()) {
                 statement.setString(1, properties.getKey());
                 statement.setString(2, properties.getValue());
@@ -256,4 +267,8 @@ public class JdbcRequestExecutor {
             throw new DaoSQLException("Unable to close the connection", e);
         }
     }
+
+//    private String generateSelectQuery(int size){
+//
+//    }
 }

@@ -5,6 +5,23 @@
 CREATE DATABASE "DORM_DATA"
   WITH ENCODING = 'UTF8';
 
+-- Table: dorm_metadata
+
+-- DROP TABLE dorm_metadata;
+
+CREATE TABLE dorm_metadata
+(
+  id serial NOT NULL,
+  dorm_qualifier character varying(255) NOT NULL,
+  dorm_version character varying(255) NOT NULL,
+  dorm_type character varying(255) NOT NULL,
+  CONSTRAINT id_metadata PRIMARY KEY (id),
+  CONSTRAINT unique_qualifier UNIQUE (dorm_qualifier)
+)
+WITH (
+  OIDS=FALSE
+);
+
 -- Table: dorm_dependencies
 
 -- DROP TABLE dorm_dependencies;
@@ -47,19 +64,3 @@ WITH (
   OIDS=FALSE
 );
 
--- Table: dorm_metadata
-
--- DROP TABLE dorm_metadata;
-
-CREATE TABLE dorm_metadata
-(
-  id serial NOT NULL,
-  dorm_qualifier character varying(255) NOT NULL,
-  dorm_version character varying(255) NOT NULL,
-  dorm_type character varying(255) NOT NULL,
-  CONSTRAINT id_metadata PRIMARY KEY (id),
-  CONSTRAINT unique_qualifier UNIQUE (dorm_qualifier)
-)
-WITH (
-  OIDS=FALSE
-);
