@@ -6,6 +6,7 @@ import com.zenika.dorm.core.model.DependencyNode;
 import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.core.model.DormMetadataExtension;
 import com.zenika.dorm.core.model.impl.DefaultDependency;
+import com.zenika.dorm.core.model.impl.DefaultDependencyNode;
 import com.zenika.dorm.core.model.impl.DefaultDormMetadata;
 import com.zenika.dorm.core.model.impl.Usage;
 import com.zenika.dorm.core.model.mapper.MetadataExtensionMapper;
@@ -19,9 +20,13 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * @author Antoine ROUAZE <antoine.rouaze AT zenika.com>
@@ -60,20 +65,64 @@ public class JdbcRequestExecutor {
         try {
             this.connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
             this.connection.setAutoCommit(false);
+            LOG.trace("Thread sleeping...");
+            try {
+                Thread.sleep(10000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            }
+            LOG.trace("Thread awake");
         } catch (SQLException e) {
             throw new DaoSQLException("Unable to connect to Postgres server", e);
         }
     }
 
-//    public DependencyNode selectDependencyNode(DormMetadata metadata, Map<String, String> properties){
-//        PreparedStatement statement = null;
-//        DormMetadataExtension extension = metadata.getExtension();
-//        String version = null;
-//        String type = null;
-//        Map<String, String> extensionProperties = new HashMap<String, String>();
-//
-//        statement = connection.prepareStatement()
-//    }
+    public DependencyNode selectDependencyNode(DormMetadata metadata, Usage usage, Map<String, String> properties) {
+        PreparedStatement statement = null;
+        DormMetadataExtension extension = metadata.getExtension();
+        DependencyNode node = DefaultDependencyNode.create(DefaultDependency.create(metadata));
+        Map<String, String> extensionProperties = new HashMap<String, String>();
+        String metadataQualifier = "";
+        String metadataVersion = "";
+        String metadataType = "";
+        try {
+            statement = connection.prepareStatement(generateSelectQuery(properties.size()));
+            List<Map.Entry<String, String>> listProperties = new ArrayList<Map.Entry<String, String>>(properties.entrySet());
+            for (int i = 0; i < listProperties.size(); i++) {
+                statement.setString(keyParamIndex(i), listProperties.get(i).getKey());
+                statement.setString(valueParamIndex(i), listProperties.get(i).getValue());
+            }
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                if (!resultSet.getString(METADATA_QUALIFIER_COLUMN).equals(metadataQualifier)) {
+                    if (!resultSet.isFirst()) {
+                        node.addChild(createDependencyNode(usage, extension, extensionProperties, metadataVersion, metadataType));
+                        extensionProperties = new HashMap<String, String>();
+                    }
+                    metadataQualifier = resultSet.getString(METADATA_QUALIFIER_COLUMN);
+                    metadataVersion = resultSet.getString(METADATA_VERSION_COLUMN);
+                    metadataType = resultSet.getString(METADATA_TYPE_COLUMN);
+                    extensionProperties.put("qualifier", resultSet.getString(EXTENSION_QUALIFIER_COLUMN));
+                    extensionProperties.put("name", resultSet.getString(EXTENSION_NAME_COLUMN));
+                }
+                extensionProperties.put(resultSet.getString(PROPERTY_KEY_COLUMN), resultSet.getString(PROPERTY_VALUE_COLUMN));
+                if (resultSet.isLast()) {
+                    node.addChild(createDependencyNode(usage, extension, extensionProperties, metadataVersion, metadataType));
+                }
+            }
+            return node;
+        } catch (SQLException e) {
+            throw new DaoSQLException("Unable to execute request", e);
+        } finally {
+            if (statement != null) {
+                try {
+                    statement.close();
+                } catch (SQLException e) {
+                    throw new DaoSQLException("Unable to close the statement", e);
+                }
+            }
+        }
+    }
 
     public Dependency selectDependency(DormMetadata metadata) {
         PreparedStatement statement = null;
@@ -87,16 +136,16 @@ public class JdbcRequestExecutor {
                     "WHERE m.metadata_qualifier = ?");
             statement.setString(1, metadata.getQualifier());
             ResultSet resultSet = statement.executeQuery();
-            while (resultSet.next()){
+            while (resultSet.next()) {
                 extensionProperties.put(resultSet.getString(PROPERTY_KEY_COLUMN), resultSet.getString(PROPERTY_VALUE_COLUMN));
-                if (resultSet.isFirst()){
+                if (resultSet.isFirst()) {
                     extensionProperties.put("name", resultSet.getString(EXTENSION_NAME_COLUMN));
                     extensionProperties.put("qualifier", resultSet.getString(EXTENSION_QUALIFIER_COLUMN));
                     version = resultSet.getString(METADATA_VERSION_COLUMN);
                     type = resultSet.getString(METADATA_TYPE_COLUMN);
                 }
             }
-            if (type == null){
+            if (type == null) {
                 throw new DaoSQLException("Cannot find the dependency with this Qualifier : " + metadata.getQualifier(), new NullPointerException());
             }
             extension = extension.createFromMap(extensionProperties);
@@ -254,7 +303,7 @@ public class JdbcRequestExecutor {
             try {
                 connection.rollback();
             } catch (SQLException e1) {
-                throw new DaoSQLException("Unable to rollback request", e);
+                throw new DaoSQLException("Unable to rollback request", e1);
             }
             throw new DaoSQLException("Unable to commit the transaction", e);
         }
@@ -268,7 +317,38 @@ public class JdbcRequestExecutor {
         }
     }
 
-//    private String generateSelectQuery(int size){
-//
-//    }
+    public String generateSelectQuery(int size) {
+        StringBuilder str = new StringBuilder(50);
+        str.append("SELECT e.property_key, e.property_value, e.extension_qualifier, e.extension_name, m.metadata_version, m.metadata_type, m.metadata_qualifier " +
+                "FROM dorm_metadata m " +
+                "JOIN dorm_extension e ON e.metadata_id = m.id");
+        for (int i = 0; i < size; i++) {
+            str.append(" JOIN dorm_extension e");
+            str.append(i + 1);
+            str.append(" ON (m.id = e");
+            str.append(i + 1);
+            str.append(".metadata_id and e");
+            str.append(i + 1);
+            str.append(".property_key = ? and e");
+            str.append(i + 1);
+            str.append(".property_value = ?)");
+        }
+//        str.append(")");
+        return str.toString();
+    }
+
+    private int keyParamIndex(int i) {
+        return i * 2 + 1;
+    }
+
+    private int valueParamIndex(int i) {
+        return i * 2 + 2;
+    }
+
+    private DependencyNode createDependencyNode(Usage usage, DormMetadataExtension extension, Map<String, String> extensionProperties, String metadataVersion, String metadataType) {
+        DormMetadataExtension extensionTmp = extension.createFromMap(extensionProperties);
+        DormMetadata metadataTmp = DefaultDormMetadata.create(metadataVersion, metadataType, extensionTmp);
+        Dependency dependency = DefaultDependency.create(metadataTmp, usage);
+        return DefaultDependencyNode.create(dependency);
+    }
 }

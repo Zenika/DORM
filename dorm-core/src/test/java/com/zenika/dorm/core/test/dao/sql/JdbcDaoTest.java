@@ -19,6 +19,9 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * @author Antoine ROUAZE <antoine.rouaze AT zenika.com>
  */
@@ -82,11 +85,21 @@ public class JdbcDaoTest {
     }
 
     @Test
-    public void testGetSingleByMetadata(){
+    public void testGetSingleByMetadata() {
         DependencyNode node = dao.getSingleByMetadata(habi_base.getDependency().getMetadata(), usage);
         LOG.trace("Dependency : " + node.getDependency());
     }
 
+    @Test
+    public void testGetByMetadataExtension() {
+        Map properties = new HashMap();
+        properties.put("groupId", "test");
+        properties.put("versionId", "1.0.0");
+        DependencyNode node = dao.getByMetadataExtension(habi_base.getDependency().getMetadata(), usage, properties);
+        for (DependencyNode nodeChild : node.getChildren()) {
+            LOG.trace("Node : " + nodeChild);
+        }
+    }
 
     @AfterClass
     public static void afterClass() {

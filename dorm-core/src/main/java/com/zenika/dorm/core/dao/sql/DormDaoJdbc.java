@@ -59,12 +59,12 @@ public class DormDaoJdbc implements DormDao {
 
     @Override
     public DependencyNode getByMetadata(DormMetadata metadata, Usage usage) {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        return null;
     }
 
     @Override
     public DependencyNode getByMetadataExtension(DormMetadata metadata, Usage usage, Map<String, String> params) {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        return executor.selectDependencyNode(metadata, usage, params);
     }
 
     public void closeConnection() {
