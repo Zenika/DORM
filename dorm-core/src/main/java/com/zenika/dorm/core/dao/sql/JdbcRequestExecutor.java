@@ -6,7 +6,6 @@ import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.core.model.DormMetadataExtension;
 import com.zenika.dorm.core.model.impl.DefaultDependency;
 import com.zenika.dorm.core.model.impl.DefaultDormMetadata;
-import com.zenika.dorm.core.model.impl.DefaultDormMetadataExtension;
 import com.zenika.dorm.core.model.impl.Usage;
 import com.zenika.dorm.core.model.mapper.MetadataExtensionMapper;
 import org.postgresql.Driver;
@@ -31,14 +30,14 @@ public class JdbcRequestExecutor {
     private static final String ID_COLUMN = "id";
     private static final String ID_CHILD_COLUMN = "id_child";
     private static final String ID_PARENT_COLUMN = "id_parent";
-    private static final String USAGE_COLUMN = "dorm_usage";
-    private static final String DORM_KEY_COLUMN = "dorm_key";
-    private static final String DORM_VALUE_COLUMN = "dorm_value";
-    private static final String DORM_EXTENSION_QUALIFIER_COLUMN = "dorm_extension_qualifier";
-    private static final String DORM_NAME_COLUMN = "dorm_name";
-    private static final String DORM_QUALIFIER_COLUMN = "dorm_qualifier";
-    private static final String DORM_VERSION_COLUMN = "dorm_version";
-    private static final String DORM_TYPE_COLUMN = "dorm_type";
+    private static final String USAGE_COLUMN = "usage";
+    private static final String PROPERTY_KEY_COLUMN = "property_key";
+    private static final String PROPERTY_VALUE_COLUMN = "property_value";
+    private static final String EXTENSION_QUALIFIER_COLUMN = "extension_qualifier";
+    private static final String EXTENSION_NAME_COLUMN = "extension_name";
+    private static final String METADATA_QUALIFIER_COLUMN = "metadata_qualifier";
+    private static final String METADATA_VERSION_COLUMN = "metadata_version";
+    private static final String METADATA_TYPE_COLUMN = "metadata_type";
 
     private static final Logger LOG = LoggerFactory.getLogger(DormDaoJdbc.class);
     private static final String DB_URL = "jdbc:postgresql://localhost:5555/DORM_DATA";
@@ -72,18 +71,18 @@ public class JdbcRequestExecutor {
             String version = null;
             String type = null;
             Map<String, String> extensionProperties = new HashMap<String, String>();
-            statement = connection.prepareStatement("SELECT e.dorm_key, e.dorm_value, e.dorm_extension_qualifier, e.dorm_name, m.dorm_version, m.dorm_type \n" +
-                    "FROM dorm_metadata m JOIN dorm_extension e ON e.dorm_metadata_fk = m.id\n" +
-                    "WHERE m.dorm_qualifier = ?");
+            statement = connection.prepareStatement("SELECT e.property_key, e.property_value, e.extension_qualifier, e.extension_name, m.metadata_version, m.metadata_type \n" +
+                    "FROM dorm_metadata m JOIN dorm_extension e ON e.metadata_fk = m.id\n" +
+                    "WHERE m.metadata_qualifier = ?");
             statement.setString(1, metadata.getQualifier());
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()){
-                extensionProperties.put(resultSet.getString(DORM_KEY_COLUMN), resultSet.getString(DORM_VALUE_COLUMN));
+                extensionProperties.put(resultSet.getString(PROPERTY_KEY_COLUMN), resultSet.getString(PROPERTY_VALUE_COLUMN));
                 if (resultSet.isFirst()){
-                    extensionProperties.put("name", resultSet.getString(DORM_EXTENSION_QUALIFIER_COLUMN));
-                    extensionProperties.put("qualifier", resultSet.getString(DORM_NAME_COLUMN));
-                    version = resultSet.getString(DORM_VERSION_COLUMN);
-                    type = resultSet.getString(DORM_TYPE_COLUMN);
+                    extensionProperties.put("name", resultSet.getString(EXTENSION_NAME_COLUMN));
+                    extensionProperties.put("qualifier", resultSet.getString(EXTENSION_QUALIFIER_COLUMN));
+                    version = resultSet.getString(METADATA_VERSION_COLUMN);
+                    type = resultSet.getString(METADATA_TYPE_COLUMN);
                 }
             }
             if (type == null){
@@ -106,11 +105,10 @@ public class JdbcRequestExecutor {
     }
 
     public Long getDependencyId(DormMetadata metadata) {
-        LOG.debug("Get metadata : " + metadata.getQualifier());
         PreparedStatement statement = null;
         try {
             Long id = null;
-            statement = connection.prepareStatement("SELECT id FROM dorm_metadata WHERE dorm_qualifier = ?");
+            statement = connection.prepareStatement("SELECT id FROM dorm_metadata WHERE metadata_qualifier = ?");
             statement.setString(1, metadata.getQualifier());
             ResultSet result = statement.executeQuery();
             if (result.next()) {
@@ -139,7 +137,7 @@ public class JdbcRequestExecutor {
         PreparedStatement statement = null;
         try {
             Long id = null;
-            statement = connection.prepareStatement("INSERT INTO dorm_metadata (dorm_qualifier, dorm_version, dorm_type) VALUES (?, ?, ?);", Statement.RETURN_GENERATED_KEYS);
+            statement = connection.prepareStatement("INSERT INTO dorm_metadata (metadata_qualifier, metadata_version, metadata_type) VALUES (?, ?, ?);", Statement.RETURN_GENERATED_KEYS);
             statement.setString(1, metadata.getQualifier());
             statement.setString(2, metadata.getVersion());
             statement.setString(3, metadata.getType());
@@ -172,7 +170,7 @@ public class JdbcRequestExecutor {
     public void insertExtension(DormMetadataExtension extension, Long idMetadata) {
         PreparedStatement statement = null;
         try {
-            statement = connection.prepareStatement("INSERT INTO dorm_extension (dorm_key, dorm_value, dorm_extension_qualifier, dorm_name, dorm_metadata_fk) VALUES (?, ?, ?, ?, ?)");
+            statement = connection.prepareStatement("INSERT INTO dorm_extension (property_key, property_value, extension_qualifier, extension_name, metadata_fk) VALUES (?, ?, ?, ?, ?)");
             for (Map.Entry<String, String> properties : MetadataExtensionMapper.fromExtension(extension).entrySet()) {
                 statement.setString(1, properties.getKey());
                 statement.setString(2, properties.getValue());
