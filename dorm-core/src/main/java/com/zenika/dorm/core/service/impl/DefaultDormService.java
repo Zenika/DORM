@@ -13,6 +13,8 @@ import com.zenika.dorm.core.model.impl.Usage;
 import com.zenika.dorm.core.repository.DormRepository;
 import com.zenika.dorm.core.service.DormService;
 import com.zenika.dorm.core.service.get.DormServiceGetRequest;
+import com.zenika.dorm.core.service.get.DormServiceGetResult;
+import com.zenika.dorm.core.service.impl.get.DefaultDormServiceGetResult;
 
 import java.util.Set;
 
@@ -40,8 +42,15 @@ public class DefaultDormService implements DormService {
     }
 
     @Override
-    public DependencyNode get(DormServiceGetRequest request) {
-        throw new UnsupportedOperationException();
+    public DormServiceGetResult get(DormServiceGetRequest request) {
+
+        DependencyNode node = dao.get(request.getValues());
+
+        if (request.isRepositoryRequest()) {
+            //todo: get file from the repo
+        }
+
+        return new DefaultDormServiceGetResult(request.getProcessName(), node);
     }
 
     @Override

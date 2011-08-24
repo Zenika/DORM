@@ -1,6 +1,5 @@
 package com.zenika.dorm.maven.service.get;
 
-import com.zenika.dorm.core.service.get.DormServiceGetRequest;
 import com.zenika.dorm.core.service.impl.get.DefaultDormServiceGetRequestBuilder;
 import com.zenika.dorm.maven.model.impl.MavenMetadataExtension;
 import org.apache.commons.lang3.StringUtils;
@@ -34,7 +33,7 @@ public class MavenServiceGetRequestBuilder extends DefaultDormServiceGetRequestB
 
     public MavenServiceGetRequestBuilder withClassifier() {
         if (StringUtils.isNotBlank(metadata.getClassifier())) {
-            request.addExtensionWhereClause(MavenMetadataExtension.METADATA_SNAPSHOT, metadata.getClassifier());
+            request.addExtensionWhereClause(MavenMetadataExtension.METADATA_CLASSIFIER, metadata.getClassifier());
         }
 
         return this;
@@ -42,28 +41,28 @@ public class MavenServiceGetRequestBuilder extends DefaultDormServiceGetRequestB
 
     public MavenServiceGetRequestBuilder withPackaging() {
         if (StringUtils.isNotBlank(metadata.getPackaging())) {
-            request.addExtensionWhereClause(MavenMetadataExtension.METADATA_SNAPSHOT, metadata.getPackaging());
+            request.addExtensionWhereClause(MavenMetadataExtension.METADATA_PACKAGING, metadata.getPackaging());
         }
         return this;
     }
 
     public MavenServiceGetRequestBuilder withTimestamp() {
         if (StringUtils.isNotBlank(metadata.getTimestamp())) {
-            request.addExtensionWhereClause(MavenMetadataExtension.METADATA_SNAPSHOT, metadata.getTimestamp());
+            request.addExtensionWhereClause(MavenMetadataExtension.METADATA_TIMESTAMP, metadata.getTimestamp());
         }
         return this;
     }
 
     public MavenServiceGetRequestBuilder withExtension() {
         if (StringUtils.isNotBlank(metadata.getExtension())) {
-            request.addExtensionWhereClause(MavenMetadataExtension.METADATA_SNAPSHOT, metadata.getExtension());
+            request.addExtensionWhereClause(MavenMetadataExtension.METADATA_EXTENSION, metadata.getExtension());
         }
         return this;
     }
 
     public MavenServiceGetRequestBuilder withBuildNumber() {
         if (StringUtils.isNotBlank(metadata.getBuildNumber())) {
-            request.addExtensionWhereClause(MavenMetadataExtension.METADATA_SNAPSHOT, metadata.getBuildNumber());
+            request.addExtensionWhereClause(MavenMetadataExtension.METADATA_BUILDNUMBER, metadata.getBuildNumber());
         }
         return this;
     }

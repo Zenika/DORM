@@ -19,6 +19,7 @@ import com.zenika.dorm.core.model.impl.DefaultDependencyNode;
 import com.zenika.dorm.core.model.impl.DefaultDormMetadata;
 import com.zenika.dorm.core.model.impl.Usage;
 import com.zenika.dorm.core.model.mapper.MetadataExtensionMapper;
+import com.zenika.dorm.core.service.get.DormServiceGetValues;
 import org.apache.commons.lang3.StringUtils;
 import org.codehaus.jackson.type.TypeReference;
 import org.slf4j.Logger;
@@ -199,6 +200,11 @@ public class DormDaoNeo4j implements DormDao {
             node.addChild(DefaultDependencyNode.create(getDependency(dependency, usage, metadata.getExtension())));
         }
         return node;
+    }
+
+    @Override
+    public DependencyNode get(DormServiceGetValues values) {
+        return null;
     }
 
     public DependencyNode getByMetadata(DormMetadata metadata, Usage usage) {

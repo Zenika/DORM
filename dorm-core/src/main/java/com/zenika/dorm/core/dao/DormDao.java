@@ -3,8 +3,9 @@ package com.zenika.dorm.core.dao;
 
 import com.zenika.dorm.core.model.Dependency;
 import com.zenika.dorm.core.model.DependencyNode;
-import com.zenika.dorm.core.model.impl.Usage;
 import com.zenika.dorm.core.model.DormMetadata;
+import com.zenika.dorm.core.model.impl.Usage;
+import com.zenika.dorm.core.service.get.DormServiceGetValues;
 
 import java.util.Map;
 
@@ -22,4 +23,6 @@ public interface DormDao {
     public DependencyNode getByMetadata(DormMetadata metadata, Usage usage);
 
     public DependencyNode getByMetadataExtension(DormMetadata metadata, Usage usage, Map<String, String> params);
+
+    public DependencyNode get(DormServiceGetValues values);
 }

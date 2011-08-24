@@ -2,11 +2,9 @@ package com.zenika.dorm.maven.processor.extension;
 
 import com.zenika.dorm.core.model.Dependency;
 import com.zenika.dorm.core.model.DependencyNode;
-import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.core.model.DormRequest;
 import com.zenika.dorm.core.model.builder.DependencyBuilderFromRequest;
 import com.zenika.dorm.core.model.builder.DormRequestBuilder;
-import com.zenika.dorm.core.model.builder.MetadataBuilderFromRequest;
 import com.zenika.dorm.core.model.impl.DefaultDependencyNode;
 import com.zenika.dorm.core.model.impl.Usage;
 import com.zenika.dorm.core.processor.ProcessorExtension;
@@ -49,22 +47,7 @@ public class MavenProcessor implements ProcessorExtension {
             throw new MavenException("File is required.");
         }
 
-
-//        String classifier = MavenFormatter.getClassifierIfExists(null);
-//        String groupId = MavenFormatter.formatGroupId(null);
-//        String artifactId = request.getProperty(MavenMetadataExtension.METADATA_ARTIFACTID);
-//        String version = request.getProperty(MavenMetadataExtension.METADATA_VERSION);
-//        String packaging = request.getProperty(MavenMetadataExtension.METADATA_PACKAGING);
-//        String timestamp = request.getProperty(MavenMetadataExtension.METADATA_TIMESTAMP);
-
-        // create the entity extension which is the same as the child with a different type
         MavenMetadataExtension extension = new MavenMetadataExtensionBuilder(request).build();
-
-//                (groupId, artifactId, version)
-//                .classifier(classifier)
-//                .packaging(packaging)
-//                .timestamp(timestamp)
-//                .build();
 
         String type = extension.getExtension();
 
@@ -108,7 +91,6 @@ public class MavenProcessor implements ProcessorExtension {
 
         MavenMetadataExtension mavenMetadata = new MavenMetadataExtensionBuilder(request).build();
 
-
         DormServiceGetRequest getRequest;
 
         if (mavenMetadata.isMavenMetadata()) {
@@ -124,7 +106,6 @@ public class MavenProcessor implements ProcessorExtension {
                     .repositoryRequest(true)
                     .build();
         }
-
 
 
 //        if (LOG.isDebugEnabled()) {
