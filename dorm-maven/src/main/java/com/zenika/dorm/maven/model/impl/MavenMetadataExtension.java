@@ -57,7 +57,7 @@ public final class MavenMetadataExtension implements DormMetadataExtension {
             throw new MavenException("Following metadatas are required : groupId, artifactId, versionId, extension");
         }
 
-        if (MavenConstant.FileExtension.isMavenExtension(extension)) {
+        if (!MavenConstant.FileExtension.isMavenExtension(extension)) {
             throw new MavenException("Extension is not allowed for a maven file : " + extension);
         }
 

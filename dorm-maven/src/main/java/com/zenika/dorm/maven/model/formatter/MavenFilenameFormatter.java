@@ -95,7 +95,7 @@ public class MavenFilenameFormatter {
         validateVersionAndTimestamp(timestamp);
 
         version = getPreviousElement();
-        if (StringUtils.equals(version, MavenConstant.Other.SNAPSHOT)) {
+        if (StringUtils.equals(version, MavenConstant.Special.SNAPSHOT)) {
             String versionWithoutSnapshot = getPreviousElement();
             validateVersionAndTimestamp(versionWithoutSnapshot);
             version = versionWithoutSnapshot + "-" + version;

@@ -45,8 +45,8 @@ public class DefaultProcessor implements Processor {
         }
 
         DormServicePutRequest putRequest = getExtension(request).buildPutRequest(request);
-
         service.put(putRequest);
+
         return true;
     }
 

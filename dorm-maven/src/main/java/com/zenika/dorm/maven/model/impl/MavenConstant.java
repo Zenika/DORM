@@ -39,7 +39,7 @@ public abstract class MavenConstant {
         }
     }
 
-    public static abstract class Other {
+    public static abstract class Special {
         public static final String MAVEN_METADATA_XML = "maven-metadata.xml";
         public static final String SNAPSHOT = "SNAPSHOT";
     }

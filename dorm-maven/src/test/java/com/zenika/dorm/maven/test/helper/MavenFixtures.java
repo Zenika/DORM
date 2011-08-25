@@ -36,6 +36,15 @@ public class MavenFixtures extends ExtensionFixtures {
         return new MavenMetadataExtensionBuilder(groupId, artifactId, mavenVersion).build();
     }
 
+    public DormMetadataExtension getSnapshotMetadataExtension() {
+        return new MavenMetadataExtensionBuilder(groupId, artifactId, mavenVersion)
+                .snapshot(true)
+                .extension("jar")
+                .buildNumber("1")
+                .timestamp("20110825.142212")
+                .build();
+    }
+
     @Override
     public String getRequestVersion() {
         return mavenVersion;

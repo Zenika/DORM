@@ -13,6 +13,7 @@ import com.zenika.dorm.core.model.impl.Usage;
 import com.zenika.dorm.core.processor.ProcessorExtension;
 import com.zenika.dorm.core.service.get.DormServiceGetRequest;
 import com.zenika.dorm.core.service.get.DormServiceGetResult;
+import com.zenika.dorm.core.service.impl.put.DefaultDormServicePutRequest;
 import com.zenika.dorm.core.service.put.DormServicePutRequest;
 import com.zenika.dorm.maven.exception.MavenException;
 import com.zenika.dorm.maven.model.impl.MavenConstant;
@@ -47,54 +48,9 @@ public class MavenProcessor implements ProcessorExtension {
 
     private static final String PROCESS_GET_METADATAXML_FILE = "get_metadataxml_file";
     private static final String PROCESS_GET_ARTIFACT = "get_artifact";
+    private static final String PROCESS_PUT_ARTIFACT = "put_artifact";
 
     public static final String ENTITY_TYPE = "entity";
-
-    
-    public DependencyNode push(DormRequest request) {
-
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("Maven push with request : " + request);
-        }
-
-        if (!request.hasFile()) {
-            throw new MavenException("File is required.");
-        }
-
-        MavenMetadataExtension extension = new MavenMetadataExtensionBuilder(request).build();
-
-        String type = extension.getExtension();
-
-        // entity dependencuy has no file
-        DormRequest entityRequest = new DormRequestBuilder(request)
-                .file(null)
-                .filename(null)
-                .build();
-
-        Dependency entityDependency = new DependencyBuilderFromRequest(entityRequest, ENTITY_TYPE,
-                extension).build();
-
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("Maven entity dependency = " + entityDependency);
-        }
-
-        // replace the default usage by the maven internal for the child dependency
-        Usage childUsage = Usage.createInternal(MavenMetadataExtension.EXTENSION_NAME);
-
-        Dependency dependency = new DependencyBuilderFromRequest(request, type, extension)
-                .usage(childUsage)
-                .build();
-
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("Maven real dependency = " + dependency);
-        }
-
-        DependencyNode root = DefaultDependencyNode.create(entityDependency);
-        DependencyNode node = DefaultDependencyNode.create(dependency);
-        root.addChild(node);
-
-        return root;
-    }
 
     @Override
     public DormServiceGetRequest buildGetRequest(DormRequest request) {
@@ -146,7 +102,7 @@ public class MavenProcessor implements ProcessorExtension {
         if (StringUtils.equals(result.getProcessName(), PROCESS_GET_METADATAXML_FILE)) {
             dependency = buildMavenMetadataFile(result);
         } else if (StringUtils.equals(result.getProcessName(), PROCESS_GET_ARTIFACT)) {
-            dependency = null;
+            dependency = result.getUniqueNode().getDependency();
         } else {
             throw new MavenException("Cannot find builder for maven process : " + result.getProcessName());
         }
@@ -176,7 +132,7 @@ public class MavenProcessor implements ProcessorExtension {
             writer.write(metadata);
         }
 
-        DormResource resource = DefaultDormResource.create(MavenConstant.Other.MAVEN_METADATA_XML,
+        DormResource resource = DefaultDormResource.create(MavenConstant.Special.MAVEN_METADATA_XML,
                 mavenMetadataFile);
 
         return DefaultDependency.create(result.getNodes().get(0).getDependency().getMetadata(), resource);
@@ -184,6 +140,50 @@ public class MavenProcessor implements ProcessorExtension {
 
     @Override
     public DormServicePutRequest buildPutRequest(DormRequest request) {
-        return null;
+
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Maven push with request : " + request);
+        }
+
+        if (!request.hasFile()) {
+            throw new MavenException("File is required.");
+        }
+
+        MavenMetadataExtension extension = new MavenMetadataExtensionBuilder(request).build();
+
+        String type = extension.getExtension();
+
+        // entity dependencuy has no file
+        DormRequest entityRequest = new DormRequestBuilder(request)
+                .file(null)
+                .filename(null)
+                .build();
+
+        Dependency entityDependency = new DependencyBuilderFromRequest(entityRequest, ENTITY_TYPE,
+                extension).build();
+
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Maven entity dependency = " + entityDependency);
+        }
+
+        // replace the default usage by the maven internal for the child dependency
+        Usage childUsage = Usage.createInternal(MavenMetadataExtension.EXTENSION_NAME);
+
+        Dependency dependency = new DependencyBuilderFromRequest(request, type, extension)
+                .usage(childUsage)
+                .build();
+
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Maven real dependency = " + dependency);
+        }
+
+        DependencyNode root = DefaultDependencyNode.create(entityDependency);
+        DependencyNode node = DefaultDependencyNode.create(dependency);
+        root.addChild(node);
+
+        DefaultDormServicePutRequest putRequest = new DefaultDormServicePutRequest(PROCESS_PUT_ARTIFACT);
+        putRequest.setNode(root);
+
+        return putRequest;
     }
 }

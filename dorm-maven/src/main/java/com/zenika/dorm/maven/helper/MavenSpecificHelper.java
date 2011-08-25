@@ -12,10 +12,10 @@ public final class MavenSpecificHelper {
     }
 
     public static boolean isMavenMetadataFile(String filename) {
-        return StringUtils.equals(filename, MavenConstant.Other.MAVEN_METADATA_XML);
+        return StringUtils.equals(filename, MavenConstant.Special.MAVEN_METADATA_XML);
     }
 
     public static boolean isSnapshot(String version) {
-        return StringUtils.contains(version, MavenConstant.Other.SNAPSHOT);
+        return StringUtils.contains(version, MavenConstant.Special.SNAPSHOT);
     }
 }
