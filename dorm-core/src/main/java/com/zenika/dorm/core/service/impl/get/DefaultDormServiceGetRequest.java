@@ -12,6 +12,7 @@ public class DefaultDormServiceGetRequest extends DefaultDormServiceProcess
         implements DormServiceGetRequest {
 
     private boolean repositoryRequest;
+    private boolean transitiveDependencies;
     private DormServiceGetValues values;
 
     public DefaultDormServiceGetRequest(String processName, DormMetadataExtension metadataExtension) {
@@ -26,6 +27,20 @@ public class DefaultDormServiceGetRequest extends DefaultDormServiceProcess
 
     public void setRepositoryRequest(boolean repositoryRequest) {
         this.repositoryRequest = repositoryRequest;
+    }
+
+    @Override
+    public boolean getTransitiveDependencies() {
+        return transitiveDependencies;
+    }
+
+    public void setTransitiveDependencies(boolean transitiveDependencies) {
+        this.transitiveDependencies = transitiveDependencies;
+    }
+
+    @Override
+    public boolean isUniqueResultRequest() {
+        return getValues().hasQualifier();
     }
 
     @Override

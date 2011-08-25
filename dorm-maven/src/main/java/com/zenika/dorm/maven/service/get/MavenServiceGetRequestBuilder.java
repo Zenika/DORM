@@ -17,23 +17,23 @@ public class MavenServiceGetRequestBuilder extends DefaultDormServiceGetRequestB
     }
 
     public MavenServiceGetRequestBuilder withGroupId() {
-        request.addExtensionWhereClause(MavenMetadataExtension.METADATA_GROUPID, metadata.getGroupId());
+        request.getValues().addMetadataExtensionClause(MavenMetadataExtension.METADATA_GROUPID, metadata.getGroupId());
         return this;
     }
 
     public MavenServiceGetRequestBuilder withArtifactId() {
-        request.addExtensionWhereClause(MavenMetadataExtension.METADATA_ARTIFACTID, metadata.getArtifactId());
+        request.getValues().addMetadataExtensionClause(MavenMetadataExtension.METADATA_ARTIFACTID, metadata.getArtifactId());
         return this;
     }
 
     public MavenServiceGetRequestBuilder withVersion() {
-        request.addExtensionWhereClause(MavenMetadataExtension.METADATA_VERSION, metadata.getVersion());
+        request.getValues().addMetadataExtensionClause(MavenMetadataExtension.METADATA_VERSION, metadata.getVersion());
         return this;
     }
 
     public MavenServiceGetRequestBuilder withClassifier() {
         if (StringUtils.isNotBlank(metadata.getClassifier())) {
-            request.addExtensionWhereClause(MavenMetadataExtension.METADATA_CLASSIFIER, metadata.getClassifier());
+            request.getValues().addMetadataExtensionClause(MavenMetadataExtension.METADATA_CLASSIFIER, metadata.getClassifier());
         }
 
         return this;
@@ -41,34 +41,34 @@ public class MavenServiceGetRequestBuilder extends DefaultDormServiceGetRequestB
 
     public MavenServiceGetRequestBuilder withPackaging() {
         if (StringUtils.isNotBlank(metadata.getPackaging())) {
-            request.addExtensionWhereClause(MavenMetadataExtension.METADATA_PACKAGING, metadata.getPackaging());
+            request.getValues().addMetadataExtensionClause(MavenMetadataExtension.METADATA_PACKAGING, metadata.getPackaging());
         }
         return this;
     }
 
     public MavenServiceGetRequestBuilder withTimestamp() {
         if (StringUtils.isNotBlank(metadata.getTimestamp())) {
-            request.addExtensionWhereClause(MavenMetadataExtension.METADATA_TIMESTAMP, metadata.getTimestamp());
+            request.getValues().addMetadataExtensionClause(MavenMetadataExtension.METADATA_TIMESTAMP, metadata.getTimestamp());
         }
         return this;
     }
 
     public MavenServiceGetRequestBuilder withExtension() {
         if (StringUtils.isNotBlank(metadata.getExtension())) {
-            request.addExtensionWhereClause(MavenMetadataExtension.METADATA_EXTENSION, metadata.getExtension());
+            request.getValues().addMetadataExtensionClause(MavenMetadataExtension.METADATA_EXTENSION, metadata.getExtension());
         }
         return this;
     }
 
     public MavenServiceGetRequestBuilder withBuildNumber() {
         if (StringUtils.isNotBlank(metadata.getBuildNumber())) {
-            request.addExtensionWhereClause(MavenMetadataExtension.METADATA_BUILDNUMBER, metadata.getBuildNumber());
+            request.getValues().addMetadataExtensionClause(MavenMetadataExtension.METADATA_BUILDNUMBER, metadata.getBuildNumber());
         }
         return this;
     }
 
     public MavenServiceGetRequestBuilder withSnapshot() {
-        request.addExtensionWhereClause(MavenMetadataExtension.METADATA_SNAPSHOT,
+        request.getValues().addMetadataExtensionClause(MavenMetadataExtension.METADATA_SNAPSHOT,
                 Boolean.toString(metadata.isSnapshot()));
         return this;
     }
