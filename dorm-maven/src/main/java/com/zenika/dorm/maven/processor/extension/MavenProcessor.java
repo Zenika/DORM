@@ -3,18 +3,32 @@ package com.zenika.dorm.maven.processor.extension;
 import com.zenika.dorm.core.model.Dependency;
 import com.zenika.dorm.core.model.DependencyNode;
 import com.zenika.dorm.core.model.DormRequest;
+import com.zenika.dorm.core.model.DormResource;
 import com.zenika.dorm.core.model.builder.DependencyBuilderFromRequest;
 import com.zenika.dorm.core.model.builder.DormRequestBuilder;
+import com.zenika.dorm.core.model.impl.DefaultDependency;
 import com.zenika.dorm.core.model.impl.DefaultDependencyNode;
+import com.zenika.dorm.core.model.impl.DefaultDormResource;
 import com.zenika.dorm.core.model.impl.Usage;
 import com.zenika.dorm.core.processor.ProcessorExtension;
 import com.zenika.dorm.core.service.get.DormServiceGetRequest;
+import com.zenika.dorm.core.service.get.DormServiceGetResult;
+import com.zenika.dorm.core.service.put.DormServicePutRequest;
 import com.zenika.dorm.maven.exception.MavenException;
+import com.zenika.dorm.maven.model.impl.MavenConstant;
 import com.zenika.dorm.maven.model.impl.MavenMetadataExtension;
 import com.zenika.dorm.maven.model.impl.MavenMetadataExtensionBuilder;
+import com.zenika.dorm.maven.processor.comparator.MavenSnapshotTimestampComparator;
+import com.zenika.dorm.maven.processor.helper.MavenProcessorHelper;
 import com.zenika.dorm.maven.service.get.MavenServiceGetRequestBuilder;
+import com.zenika.dorm.maven.writer.MavenMetadataFileWriter;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.File;
+import java.util.Collections;
+import java.util.Comparator;
 
 /**
  * The maven processor needs to create an abstract dependency node which will be the parent of the
@@ -36,7 +50,7 @@ public class MavenProcessor implements ProcessorExtension {
 
     public static final String ENTITY_TYPE = "entity";
 
-    @Override
+    
     public DependencyNode push(DormRequest request) {
 
         if (LOG.isDebugEnabled()) {
@@ -122,7 +136,54 @@ public class MavenProcessor implements ProcessorExtension {
     }
 
     @Override
-    public Dependency getDependency(DependencyNode node) {
-        return node.getDependency();
+    public Dependency buildDependency(DormServiceGetResult result) {
+
+        if (!result.hasResult()) {
+            throw new MavenException("No result").type(MavenException.Type.NULL);
+        }
+
+        Dependency dependency;
+        if (StringUtils.equals(result.getProcessName(), PROCESS_GET_METADATAXML_FILE)) {
+            dependency = buildMavenMetadataFile(result);
+        } else if (StringUtils.equals(result.getProcessName(), PROCESS_GET_ARTIFACT)) {
+            dependency = null;
+        } else {
+            throw new MavenException("Cannot find builder for maven process : " + result.getProcessName());
+        }
+
+        return dependency;
+    }
+
+    private Dependency buildMavenMetadataFile(DormServiceGetResult result) {
+
+        Collections.sort(result.getNodes(), new Comparator<DependencyNode>() {
+
+            @Override
+            public int compare(DependencyNode node1, DependencyNode node2) {
+
+                MavenMetadataExtension extension1 = MavenProcessorHelper.getMavenMetadata(node1);
+                MavenMetadataExtension extension2 = MavenProcessorHelper.getMavenMetadata(node2);
+
+                return new MavenSnapshotTimestampComparator().compare(extension1, extension2);
+            }
+        });
+
+        File mavenMetadataFile = new File("tmp/maven-tmp/maven-metadata.xml");
+        MavenMetadataFileWriter writer = new MavenMetadataFileWriter(mavenMetadataFile);
+
+        for (DependencyNode node : result.getNodes()) {
+            MavenMetadataExtension metadata = MavenProcessorHelper.getMavenMetadata(node);
+            writer.write(metadata);
+        }
+
+        DormResource resource = DefaultDormResource.create(MavenConstant.Other.MAVEN_METADATA_XML,
+                mavenMetadataFile);
+
+        return DefaultDependency.create(result.getNodes().get(0).getDependency().getMetadata(), resource);
+    }
+
+    @Override
+    public DormServicePutRequest buildPutRequest(DormRequest request) {
+        return null;
     }
 }
