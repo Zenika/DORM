@@ -11,6 +11,8 @@ import com.zenika.dorm.core.model.impl.DefaultDependencyNode;
 import com.zenika.dorm.core.model.impl.DefaultDormMetadata;
 import com.zenika.dorm.core.model.impl.DefaultDormMetadataExtension;
 import com.zenika.dorm.core.model.impl.Usage;
+import com.zenika.dorm.core.service.get.DormServiceGetValues;
+import com.zenika.dorm.core.service.impl.get.DefaultDormServiceGetValues;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -20,12 +22,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
  * @author Antoine ROUAZE <antoine.rouaze AT zenika.com>
  */
-//@Ignore
+@Ignore
 public class JdbcDaoTest {
 
     private static final Logger LOG = LoggerFactory.getLogger(JdbcDaoTest.class);
@@ -85,19 +88,23 @@ public class JdbcDaoTest {
     }
 
     @Test
-    public void testGetSingleByMetadata() {
-        DependencyNode node = dao.getSingleByMetadata(habi_base.getDependency().getMetadata(), usage);
+    public void testGetOne() {
+        DormServiceGetValues values = new DefaultDormServiceGetValues(new DefaultDormMetadataExtension("dorm"));
+        values.setUsage(usage);
+        values.setQualifier(habi_base.getDependency().getMetadata().getQualifier());
+        DependencyNode node = dao.getOne(values, false);
         LOG.trace("Dependency : " + node.getDependency());
     }
 
     @Test
-    public void testGetByMetadataExtension() {
-        Map properties = new HashMap();
-        properties.put("groupId", "test");
-        properties.put("versionId", "1.0.0");
-        DependencyNode node = dao.getByMetadataExtension(habi_base.getDependency().getMetadata(), usage, properties);
-        for (DependencyNode nodeChild : node.getChildren()) {
-            LOG.trace("Node : " + nodeChild);
+    public void testGet() {
+        DormServiceGetValues values = new DefaultDormServiceGetValues(new DefaultDormMetadataExtension("dorm"));
+        values.setUsage(usage);
+        values.addMetadataExtensionClause("groupId", "test");
+        values.addMetadataExtensionClause("versionId", "1.0.0");
+        List<DependencyNode> nodes = dao.get(values, false);
+        for (DependencyNode node : nodes) {
+            LOG.trace("Node : " + node);
         }
     }
 

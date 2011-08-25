@@ -15,6 +15,7 @@ import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -51,19 +52,29 @@ public class DormDaoJdbc implements DormDao {
 
     @Override
     public DependencyNode getSingleByMetadata(DormMetadata metadata, Usage usage) {
-        JdbcSelectExecutor executor = new JdbcSelectExecutor(getConnection(), metadata, usage);
-        executor.execute();
-        return executor.getNode();
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override
     public DependencyNode getByMetadata(DormMetadata metadata, Usage usage) {
-        return null;
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override
     public DependencyNode getByMetadataExtension(DormMetadata metadata, Usage usage, Map<String, String> params) {
-        JdbcSelectExecutor executor = new JdbcSelectExecutor(getConnection(), metadata, params, usage);
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public List<DependencyNode> get(DormServiceGetValues values, boolean withDependencies) {
+        JdbcSelectExecutor executor = new JdbcSelectExecutor(getConnection(), values);
+        executor.execute();
+        return executor.getNodes();
+    }
+
+    @Override
+    public DependencyNode getOne(DormServiceGetValues values, boolean withDependencies) {
+        JdbcSelectExecutor executor = new JdbcSelectExecutor(getConnection(), values);
         executor.execute();
         return executor.getNode();
     }
@@ -83,13 +94,4 @@ public class DormDaoJdbc implements DormDao {
 //        }
     }
 
-    @Override
-    public List<DependencyNode> get(DormServiceGetValues values, boolean withDependencies) {
-        return null;
-    }
-
-    @Override
-    public DependencyNode getOne(DormServiceGetValues values, boolean withDependencies) {
-        return null;
-    }
 }

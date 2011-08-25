@@ -9,6 +9,8 @@ import com.zenika.dorm.core.model.impl.DefaultDependency;
 import com.zenika.dorm.core.model.impl.DefaultDependencyNode;
 import com.zenika.dorm.core.model.impl.DefaultDormMetadata;
 import com.zenika.dorm.core.model.impl.Usage;
+import com.zenika.dorm.core.service.get.DormServiceGetRequest;
+import com.zenika.dorm.core.service.get.DormServiceGetValues;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -24,8 +26,9 @@ import java.util.Map;
  */
 public class JdbcSelectExecutor extends JdbcExecutor {
 
+    private List<DependencyNode> nodes = new ArrayList<DependencyNode>();
     private DependencyNode node;
-    private DormMetadata metadata;
+    private DormMetadataExtension extension;
     private Map<String, String> properties;
     private Usage usage;
 
@@ -34,39 +37,35 @@ public class JdbcSelectExecutor extends JdbcExecutor {
     private String metadataType;
     private Map<String, String> extensionProperties = new HashMap<String, String>();
 
-    public JdbcSelectExecutor(Connection connection, DormMetadata metadata, Usage usage) {
-        super(connection);
-        this.metadata = metadata;
-        this.usage = usage;
-    }
+    private DormServiceGetValues values;
 
-    public JdbcSelectExecutor(Connection connection, DormMetadata metadata, Map<String, String> properties, Usage usage) {
+    public JdbcSelectExecutor(Connection connection, DormServiceGetValues values) {
         super(connection);
-        this.metadata = metadata;
-        this.properties = properties;
-        this.usage = usage;
+        this.values = values;
+        this.extension = values.getMetadataExtension();
+        this.usage = values.getUsage();
     }
 
     @Override
     public void execute() {
-        if (extensionProperties == null) {
-            selectDependency();
-        } else {
+        if (values.hasMetadataExtensionClauses()) {
+            properties = values.getMetadataExtensionClauses();
             selectDependencyNode();
+        } else {
+            selectDependency();
         }
     }
 
     public DependencyNode getNode() {
-        if (node == null) {
-            throw new IllegalStateException("Node can't be null");
-        }
         return node;
+    }
+
+    public List<DependencyNode> getNodes(){
+        return nodes;
     }
 
     private void selectDependencyNode() {
         PreparedStatement statement = null;
-        DormMetadataExtension extension = metadata.getExtension();
-        DependencyNode node = DefaultDependencyNode.create(DefaultDependency.create(metadata));
         try {
             statement = connection.prepareStatement(generateSelectQuery(properties.size()));
             List<Map.Entry<String, String>> listProperties = new ArrayList<Map.Entry<String, String>>(properties.entrySet());
@@ -78,7 +77,7 @@ public class JdbcSelectExecutor extends JdbcExecutor {
             while (resultSet.next()) {
                 if (!resultSet.getString(METADATA_QUALIFIER_COLUMN).equals(metadataQualifier)) {
                     if (!resultSet.isFirst()) {
-                        node.addChild(createDependencyNode(extension));
+                        nodes.add(createDependencyNode(extension));
                         extensionProperties = new HashMap<String, String>();
                     }
                     metadataQualifier = resultSet.getString(METADATA_QUALIFIER_COLUMN);
@@ -87,10 +86,12 @@ public class JdbcSelectExecutor extends JdbcExecutor {
                 }
                 extensionProperties.put(resultSet.getString(PROPERTY_KEY_COLUMN), resultSet.getString(PROPERTY_VALUE_COLUMN));
                 if (resultSet.isLast()) {
-                    node.addChild(createDependencyNode(extension));
+                    nodes.add(createDependencyNode(extension));
                 }
             }
-            this.node = node;
+            if (metadataQualifier == null) {
+                throw new JDBCException("Cannot find the dependency with this extension clause : " + extensionProperties, new NullPointerException());
+            }
         } catch (SQLException e) {
             throw new JDBCException("Unable to execute request", e);
         } finally {
@@ -101,11 +102,10 @@ public class JdbcSelectExecutor extends JdbcExecutor {
     private void selectDependency() {
         PreparedStatement statement = null;
         try {
-            DormMetadataExtension extension = metadata.getExtension();
             statement = connection.prepareStatement("SELECT e.property_key, e.property_value,m.metadata_version, m.metadata_type, m.metadata_qualifier " +
                     "FROM dorm_metadata m JOIN dorm_extension e ON e.metadata_id = m.id " +
                     "WHERE m.metadata_qualifier = ?");
-            statement.setString(1, metadata.getQualifier());
+            statement.setString(1, values.getQualifier());
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 extensionProperties.put(resultSet.getString(PROPERTY_KEY_COLUMN), resultSet.getString(PROPERTY_VALUE_COLUMN));
@@ -116,9 +116,8 @@ public class JdbcSelectExecutor extends JdbcExecutor {
                 }
             }
             if (metadataQualifier == null) {
-                throw new JDBCException("Cannot find the dependency with this Qualifier : " + metadata.getQualifier(), new NullPointerException());
+                throw new JDBCException("Cannot find the dependency with this Qualifier : " + values.getQualifier(), new NullPointerException());
             }
-            extension = extension.createFromMap(extensionProperties);
             node = createDependencyNode(extension.createFromMap(extensionProperties));
         } catch (SQLException e) {
             throw new JDBCException("Unable to execute request", e);
