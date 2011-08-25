@@ -4,13 +4,14 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.zenika.dorm.core.exception.CoreException;
 import com.zenika.dorm.core.model.Dependency;
-import com.zenika.dorm.core.model.DependencyNode;
 import com.zenika.dorm.core.model.DormRequest;
 import com.zenika.dorm.core.model.impl.Usage;
 import com.zenika.dorm.core.processor.Processor;
 import com.zenika.dorm.core.processor.ProcessorExtension;
 import com.zenika.dorm.core.service.DormService;
 import com.zenika.dorm.core.service.get.DormServiceGetRequest;
+import com.zenika.dorm.core.service.get.DormServiceGetResult;
+import com.zenika.dorm.core.service.put.DormServicePutRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -43,9 +44,10 @@ public class DefaultProcessor implements Processor {
             throw new CoreException("Request is required");
         }
 
-        DependencyNode node = getExtension(request).push(request);
+        DormServicePutRequest putRequest = getExtension(request).buildPutRequest(request);
 
-        return service.push(node);
+        service.put(putRequest);
+        return true;
     }
 
     @Override
@@ -64,9 +66,8 @@ public class DefaultProcessor implements Processor {
             LOG.info("get request : " + getRequest + " with usage : " + usage);
         }
 
-        DependencyNode node = service.get(getRequest);
-
-        return processorExtension.getDependency(node);
+        DormServiceGetResult result = service.get(getRequest);
+        return processorExtension.buildDependency(result);
     }
 
     /**
