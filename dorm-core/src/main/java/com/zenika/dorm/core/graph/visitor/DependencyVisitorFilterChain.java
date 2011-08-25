@@ -26,11 +26,10 @@ public class DependencyVisitorFilterChain {
         this.visitor = visitor;
     }
 
-    public void addFilter(DependencyVisitorFilter filter) {
+    void addFilter(DependencyVisitorFilter filter) {
         if (!filters.contains(filter)) {
             filters.add(filter);
         }
-
     }
 
     public void process(DependencyNode node) {
@@ -116,7 +115,7 @@ public class DependencyVisitorFilterChain {
         resetIteratorToFirstFilter();
     }
 
-    public void changeOrientationToBackward() {
+    void changeOrientationToBackward() {
 
         if (orientation.equals(Orientation.BACKWARD)) {
             if (LOG.isTraceEnabled()) {
@@ -133,7 +132,7 @@ public class DependencyVisitorFilterChain {
         resetIteratorToLastFilter();
     }
 
-    public void changeOrientationToForward() {
+    void changeOrientationToForward() {
 
         if (orientation.equals(Orientation.FORWARD)) {
             if (LOG.isTraceEnabled()) {
@@ -158,7 +157,7 @@ public class DependencyVisitorFilterChain {
         iterator = filters.listIterator();
     }
 
-    public boolean isProcessContinue() {
+    boolean isProcessContinue() {
         return processContinue;
     }
 
