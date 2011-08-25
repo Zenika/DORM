@@ -8,6 +8,7 @@ import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.core.model.DormMetadataExtension;
 import com.zenika.dorm.core.model.impl.DefaultDependencyNode;
 import com.zenika.dorm.core.model.impl.Usage;
+import com.zenika.dorm.core.service.get.DormServiceGetValues;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -104,5 +105,15 @@ public class DormDaoJdbc implements DormDao {
         Long id = executor.insertMetadata(metadata);
         executor.insertExtension(extension, id);
         return id;
+    }
+
+    @Override
+    public List<DependencyNode> get(DormServiceGetValues values, boolean withDependencies) {
+        return null;
+    }
+
+    @Override
+    public DependencyNode getOne(DormServiceGetValues values, boolean withDependencies) {
+        return null;
     }
 }
