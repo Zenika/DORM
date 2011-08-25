@@ -25,7 +25,7 @@ import java.util.Map;
 /**
  * @author Antoine ROUAZE <antoine.rouaze AT zenika.com>
  */
-@Ignore
+//@Ignore
 public class JdbcDaoTest {
 
     private static final Logger LOG = LoggerFactory.getLogger(JdbcDaoTest.class);
@@ -103,7 +103,7 @@ public class JdbcDaoTest {
 
     @AfterClass
     public static void afterClass() {
-        ((DormDaoJdbc) dao).closeConnection();
+//        ((DormDaoJdbc) dao).closeConnection();
     }
 
     private DependencyNode createDependencyNode(String name, String version) {
