@@ -66,11 +66,6 @@ public class DormDaoJdbc implements DormDao {
         return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
-    @Override
-    public DependencyNode get(DormServiceGetValues values) {
-        return null;
-    }
-
     public void closeConnection() {
         executor.close();
     }
@@ -108,5 +103,15 @@ public class DormDaoJdbc implements DormDao {
         Long id = executor.insertMetadata(metadata);
         executor.insertExtension(extension, id);
         return id;
+    }
+
+    @Override
+    public List<DependencyNode> get(DormServiceGetValues values, boolean withDependencies) {
+        return null;
+    }
+
+    @Override
+    public DependencyNode getOne(DormServiceGetValues values, boolean withDependencies) {
+        return null;
     }
 }

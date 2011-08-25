@@ -109,7 +109,6 @@ public class DormDaoNeo4j implements DormDao {
      * e = g.addVertex([groupId:'test',artifactId:'test',version:'1.0.0',classifier:'bin',packaging:'jar',timestamp:'129099087'])
      * g.addEdge(d,m,'METADATA')
      * g.addEdge(m.e,'EXTENSION')
-     *
      */
 
     public <T extends Neo4jNode> T searchNode(URI uri, Type type) {
@@ -196,15 +195,10 @@ public class DormDaoNeo4j implements DormDao {
     public DependencyNode getByMetadataExtension(DormMetadata metadata, Usage usage, Map<String, String> params) {
         List<Neo4jDependency> dependencies = executor.get(buildGremlinScript(params));
         DependencyNode node = DefaultDependencyNode.create(DefaultDependency.create(metadata, usage));
-        for (Neo4jDependency dependency : dependencies){
+        for (Neo4jDependency dependency : dependencies) {
             node.addChild(DefaultDependencyNode.create(getDependency(dependency, usage, metadata.getExtension())));
         }
         return node;
-    }
-
-    @Override
-    public DependencyNode get(DormServiceGetValues values) {
-        return null;
     }
 
     public DependencyNode getByMetadata(DormMetadata metadata, Usage usage) {
@@ -291,4 +285,13 @@ public class DormDaoNeo4j implements DormDao {
         return str.toString();
     }
 
+    @Override
+    public List<DependencyNode> get(DormServiceGetValues values, boolean withDependencies) {
+        return null;
+    }
+
+    @Override
+    public DependencyNode getOne(DormServiceGetValues values, boolean withDependencies) {
+        return null;
+    }
 }
