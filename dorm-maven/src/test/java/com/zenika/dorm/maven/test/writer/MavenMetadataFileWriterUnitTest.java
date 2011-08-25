@@ -23,6 +23,6 @@ public class MavenMetadataFileWriterUnitTest extends AbstractUnitTest {
         file.createNewFile();
 
         MavenMetadataFileWriter writer = new MavenMetadataFileWriter(file);
-        writer.write((MavenMetadataExtension) fixtures.getMetadataExtension());
+        writer.write((MavenMetadataExtension) fixtures.getSnapshotMetadataExtension());
     }
 }
