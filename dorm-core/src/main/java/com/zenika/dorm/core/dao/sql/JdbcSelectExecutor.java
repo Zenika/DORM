@@ -9,7 +9,6 @@ import com.zenika.dorm.core.model.impl.DefaultDependency;
 import com.zenika.dorm.core.model.impl.DefaultDependencyNode;
 import com.zenika.dorm.core.model.impl.DefaultDormMetadata;
 import com.zenika.dorm.core.model.impl.Usage;
-import com.zenika.dorm.core.service.get.DormServiceGetRequest;
 import com.zenika.dorm.core.service.get.DormServiceGetValues;
 
 import java.sql.Connection;
@@ -60,7 +59,7 @@ public class JdbcSelectExecutor extends JdbcExecutor {
         return node;
     }
 
-    public List<DependencyNode> getNodes(){
+    public List<DependencyNode> getNodes() {
         return nodes;
     }
 
@@ -90,7 +89,7 @@ public class JdbcSelectExecutor extends JdbcExecutor {
                 }
             }
             if (metadataQualifier == null) {
-                throw new JDBCException("Cannot find the dependency with this extension clause : " + extensionProperties, new NullPointerException());
+                throw new JDBCException("Cannot find the dependency with this extension clause : " + extensionProperties);
             }
         } catch (SQLException e) {
             throw new JDBCException("Unable to execute request", e);
@@ -116,7 +115,7 @@ public class JdbcSelectExecutor extends JdbcExecutor {
                 }
             }
             if (metadataQualifier == null) {
-                throw new JDBCException("Cannot find the dependency with this Qualifier : " + values.getQualifier(), new NullPointerException());
+                throw new JDBCException("Cannot find the dependency with this Qualifier : " + values.getQualifier());
             }
             node = createDependencyNode(extension.createFromMap(extensionProperties));
         } catch (SQLException e) {

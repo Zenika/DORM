@@ -23,6 +23,7 @@ import static org.mockito.Mockito.when;
 /**
  * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>
  */
+@Ignore
 public class MavenResourceUnitTest extends AbstractUnitTest {
 
     private static final Logger LOG = LoggerFactory.getLogger(MavenResourceUnitTest.class);

@@ -5,6 +5,7 @@ import com.zenika.dorm.maven.model.impl.MavenMetadataExtension;
 import com.zenika.dorm.maven.model.impl.MavenMetadataExtensionBuilder;
 import com.zenika.dorm.maven.test.unit.AbstractUnitTest;
 import org.fest.assertions.Assertions;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -13,6 +14,7 @@ import java.util.Map;
 /**
  * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>
  */
+@Ignore
 public class MavenMetadataExtensionUnitTest extends AbstractUnitTest {
 
     @Test
