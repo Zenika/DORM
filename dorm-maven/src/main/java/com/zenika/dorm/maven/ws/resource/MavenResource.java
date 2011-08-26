@@ -80,7 +80,7 @@ public class MavenResource extends AbstractResource {
         DormRequest request = new DormRequestBuilder(version, MavenMetadataExtension.EXTENSION_NAME)
                 .file(file)
                 .filename(fileName)
-                .property(MavenMetadataExtension.METADATA_GROUPID, groupId)
+                .property(MavenMetadataExtension.METADATA_GROUPID, MavenResourceHelper.formatGroupId(groupId))
                 .property(MavenMetadataExtension.METADATA_ARTIFACTID, artifactId)
                 .property(MavenMetadataExtension.METADATA_VERSION, version)
                 .build();

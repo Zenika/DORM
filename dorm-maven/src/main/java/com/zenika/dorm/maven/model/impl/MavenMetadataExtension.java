@@ -148,6 +148,8 @@ public final class MavenMetadataExtension implements DormMetadataExtension {
                 .packaging(properties.get(METADATA_PACKAGING))
                 .classifier(properties.get(METADATA_CLASSIFIER))
                 .timestamp(properties.get(METADATA_TIMESTAMP))
+                .extension(properties.get(METADATA_EXTENSION))
+                .snapshot(Boolean.valueOf(properties.get(METADATA_SNAPSHOT)))
                 .build();
     }
 

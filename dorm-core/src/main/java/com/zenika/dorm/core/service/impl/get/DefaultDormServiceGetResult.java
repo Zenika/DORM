@@ -4,6 +4,7 @@ import com.zenika.dorm.core.exception.CoreException;
 import com.zenika.dorm.core.model.DependencyNode;
 import com.zenika.dorm.core.service.get.DormServiceGetResult;
 import com.zenika.dorm.core.service.impl.DefaultDormServiceProcess;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -65,5 +66,13 @@ public class DefaultDormServiceGetResult extends DefaultDormServiceProcess imple
     @Override
     public boolean hasResult() {
         return !nodes.isEmpty();
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this)
+                .append("nodes", nodes)
+                .appendSuper(super.toString())
+                .toString();
     }
 }
