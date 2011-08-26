@@ -1,13 +1,6 @@
--- Database: "DORM_DATA"
 
--- DROP DATABASE "DORM_DATA";
 
-CREATE DATABASE "DORM_DATA"
-  WITH ENCODING = 'UTF8';
-
--- Table: dorm_metadata
-
--- DROP TABLE dorm_metadata;
+DROP TABLE IF EXISTS dorm_metadata;
 
 CREATE TABLE dorm_metadata
 (
@@ -24,7 +17,7 @@ WITH (
 
 -- Table: dorm_dependencies
 
--- DROP TABLE dorm_dependencies;
+DROP TABLE IF EXISTS dorm_dependencies;
 
 CREATE TABLE dorm_dependencies
 (
@@ -47,7 +40,7 @@ WITH (
 
 -- Table: dorm_extension
 
--- DROP TABLE dorm_extension;
+DROP TABLE IF EXISTS dorm_extension;
 
 CREATE TABLE dorm_extension
 (
