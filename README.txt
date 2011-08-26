@@ -15,7 +15,7 @@ Dorm can run with 2 differents persistence system :
 - Download and install postgres database version >= 8.4.
 - Execute the dao_jdbc/postgresql_create.sql script and then upgrade it to the last update.
 - Launch tomcat with following parameters :
-    "-Dpostgres_database=db_name -Dpostgres_user=db_user -Dpostgres_password=db_pass"
+    "-Dpostgres_host=db_host -Dpostgres_port=5432 -Dpostgres_database=db_name -Dpostgres_user=db_user -Dpostgres_password=db_pass"
 
 2. Neo4j :
 
