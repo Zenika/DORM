@@ -2,6 +2,7 @@ package com.zenika.dorm.maven.test.model.formatter;
 
 import com.zenika.dorm.maven.exception.MavenFormatterException;
 import com.zenika.dorm.maven.model.formatter.MavenFilenameFormatter;
+import com.zenika.dorm.maven.model.impl.MavenConstant;
 import org.fest.assertions.Assertions;
 import org.junit.Before;
 import org.junit.Test;
@@ -22,11 +23,13 @@ public class MavenFilenameFormatterUnitTest {
     private String buildNumber;
     private String classifier;
     private String extension;
+    private String extension2;
 
     private String filename1;
     private String filename2;
     private String filename3;
     private String filename4;
+    private String filename5;
 
     private String badFilename1;
     private String badFilename2;
@@ -42,7 +45,8 @@ public class MavenFilenameFormatterUnitTest {
         timestamp = "20110822.152325";
         buildNumber = "1";
         classifier = "test";
-        extension = "jar";
+        extension = MavenConstant.FileExtension.JAR;
+        extension2 = MavenConstant.FileExtension.SHA1;
 
         filename1 = artifactId + "-" + version + "-" + timestamp + "-" + buildNumber + "." + extension;
         filename2 = artifactId + "-" + version + "-" + timestamp + "-" + buildNumber + "-" + classifier +
@@ -50,6 +54,8 @@ public class MavenFilenameFormatterUnitTest {
         filename3 = artifactId + "-" + versionWithSnapshot + "-" + timestamp + "-" + buildNumber + "." + extension;
         filename4 = artifactId + "-" + versionWithSnapshot + "-" + timestamp + "-" + buildNumber + "-" + classifier +
                 "." + extension;
+        filename5 = artifactId + "-" + versionWithSnapshot + "-" + timestamp + "-" + buildNumber + "-" + classifier +
+                "." + extension + "." + extension2;
 
         badFilename1 = version + "-" + timestamp + "-" + buildNumber + "." + extension;
         badFilename2 = artifactId + "-" + version + "-" + timestamp + "-" + buildNumber;
@@ -115,6 +121,21 @@ public class MavenFilenameFormatterUnitTest {
         Assertions.assertThat(formatter.getBuildNumber()).isEqualTo(buildNumber);
         Assertions.assertThat(formatter.getClassifier()).isEqualTo(classifier);
         Assertions.assertThat(formatter.getExtension()).isEqualTo(extension);
+    }
+
+    @Test
+    public void formatValidFilenameWithSnapshotClassifierAndSecondExtension() {
+
+        LOG.debug("Test filename to format : " + filename5);
+
+        MavenFilenameFormatter formatter = new MavenFilenameFormatter(filename5);
+
+        Assertions.assertThat(formatter.getArtifactId()).isEqualTo(artifactId);
+        Assertions.assertThat(formatter.getVersion()).isEqualTo(versionWithSnapshot);
+        Assertions.assertThat(formatter.getTimestamp()).isEqualTo(timestamp);
+        Assertions.assertThat(formatter.getBuildNumber()).isEqualTo(buildNumber);
+        Assertions.assertThat(formatter.getClassifier()).isEqualTo(classifier);
+        Assertions.assertThat(formatter.getExtension()).isEqualTo(extension2);
     }
 
     @Test(expected = MavenFormatterException.class)

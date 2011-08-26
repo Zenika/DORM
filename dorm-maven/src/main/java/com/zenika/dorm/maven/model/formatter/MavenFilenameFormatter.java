@@ -64,6 +64,17 @@ public class MavenFilenameFormatter {
 
         String filenameWithoutExtension = FilenameUtils.removeExtension(filename);
 
+        // Fix: if filename is equal to "foo.jar.sha1" for example
+        if (extension.equals(MavenConstant.FileExtension.SHA1) ||
+                extension.equals(MavenConstant.FileExtension.MD5)) {
+            filenameWithoutExtension = FilenameUtils.removeExtension(filenameWithoutExtension);
+        }
+
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Filename extension : " + extension);
+            LOG.debug("Filename without extension : " + filenameWithoutExtension);
+        }
+
         elements = filenameWithoutExtension.split(SEPARATOR);
 
         // minimum 3 elements : artifactid - version - timestamp
