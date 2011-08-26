@@ -78,11 +78,14 @@ public class MavenFixtures extends ExtensionFixtures {
      */
     @Override
     public Dependency getDependencyWithResource() {
-
         Usage usage = Usage.createInternal(MavenMetadataExtension.EXTENSION_NAME);
-        LOG.trace("Maven dependency fixture has the internal usage = " + usage);
-
         return DefaultDependency.create(getMetadata(), usage, getDormResource());
+    }
+
+    public Dependency getSnapshotDependencyWithResource() {
+        Usage usage = Usage.createInternal(MavenMetadataExtension.EXTENSION_NAME);
+        return DefaultDependency.create(DefaultDormMetadata.create(getRequestVersion(), getType(),
+                getSnapshotMetadataExtension()), usage, getDormResource());
     }
 
     public MavenMetadataExtension getEntityExtension() {

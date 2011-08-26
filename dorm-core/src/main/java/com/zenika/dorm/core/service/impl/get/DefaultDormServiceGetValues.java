@@ -3,6 +3,7 @@ package com.zenika.dorm.core.service.impl.get;
 import com.zenika.dorm.core.model.DormMetadataExtension;
 import com.zenika.dorm.core.model.impl.Usage;
 import com.zenika.dorm.core.service.get.DormServiceGetValues;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -80,5 +81,17 @@ public class DefaultDormServiceGetValues implements DormServiceGetValues {
     @Override
     public void setQualifier(String qualifier) {
         this.qualifier = qualifier;
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this)
+                .append("version", version)
+                .append("qualifier", qualifier)
+                .append("usage", usage)
+                .append("metadataExtension", metadataExtension)
+                .append("metadataExtensionClauses", metadataExtensionClauses)
+                .appendSuper(super.toString())
+                .toString();
     }
 }

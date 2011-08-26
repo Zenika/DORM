@@ -8,6 +8,7 @@ import com.zenika.dorm.core.model.DormMetadataExtension;
 import com.zenika.dorm.core.util.DormStringUtils;
 import com.zenika.dorm.maven.exception.MavenException;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import java.util.Map;
 
@@ -63,9 +64,9 @@ public final class MavenMetadataExtension implements DormMetadataExtension {
         this.groupId = groupId;
         this.artifactId = artifactId;
         this.version = version;
-        this.extension = extension;
 
         this.packaging = StringUtils.defaultIfBlank(packaging, MavenConstant.Packaging.JAR);
+        this.extension = StringUtils.defaultIfBlank(extension, "");
         this.classifier = StringUtils.defaultIfBlank(classifier, "");
         this.timestamp = StringUtils.defaultIfBlank(timestamp, "");
         this.buildNumber = StringUtils.defaultIfBlank(buildNumber, "");
@@ -187,8 +188,25 @@ public final class MavenMetadataExtension implements DormMetadataExtension {
         result = 31 * result + (timestamp != null ? timestamp.hashCode() : 0);
         result = 31 * result + (extension != null ? extension.hashCode() : 0);
         result = 31 * result + (buildNumber != null ? buildNumber.hashCode() : 0);
-        result = 31 * result + (mavenMetadata ? 1 : 0);
         result = 31 * result + (snapshot ? 1 : 0);
+        result = 31 * result + (mavenMetadata ? 1 : 0);
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this)
+                .append("groupId", groupId)
+                .append("artifactId", artifactId)
+                .append("version", version)
+                .append("classifier", classifier)
+                .append("packaging", packaging)
+                .append("timestamp", timestamp)
+                .append("extension", extension)
+                .append("buildNumber", buildNumber)
+                .append("snapshot", snapshot)
+                .append("mavenMetadata", mavenMetadata)
+                .appendSuper(super.toString())
+                .toString();
     }
 }

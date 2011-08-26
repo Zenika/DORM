@@ -60,14 +60,27 @@ public class DefaultProcessor implements Processor {
         ProcessorExtension processorExtension = getExtension(request);
 
         DormServiceGetRequest getRequest = processorExtension.buildGetRequest(request);
+
         Usage usage = Usage.create(request.getUsage());
+        getRequest.getValues().setUsage(usage);
 
         if (LOG.isInfoEnabled()) {
-            LOG.info("get request : " + getRequest + " with usage : " + usage);
+            LOG.info("Get request : " + getRequest);
         }
 
-        DormServiceGetResult result = service.get(getRequest);
-        return processorExtension.buildDependency(result);
+        DormServiceGetResult getResult = service.get(getRequest);
+
+        if (LOG.isInfoEnabled()) {
+            LOG.info("Get result : " + getResult);
+        }
+
+        Dependency dependency = processorExtension.buildDependency(getResult);
+
+        if (LOG.isInfoEnabled()) {
+            LOG.info("Dependency from get result : " + dependency);
+        }
+
+        return dependency;
     }
 
     /**

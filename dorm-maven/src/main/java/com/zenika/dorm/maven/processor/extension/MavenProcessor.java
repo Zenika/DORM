@@ -1,5 +1,6 @@
 package com.zenika.dorm.maven.processor.extension;
 
+import com.zenika.dorm.core.exception.DormProcessException;
 import com.zenika.dorm.core.model.Dependency;
 import com.zenika.dorm.core.model.DependencyNode;
 import com.zenika.dorm.core.model.DormRequest;
@@ -56,14 +57,19 @@ public class MavenProcessor implements ProcessorExtension {
     public DormServiceGetRequest buildGetRequest(DormRequest request) {
 
         if (LOG.isDebugEnabled()) {
-            LOG.debug("Maven get with request : " + request);
+            LOG.debug("Build maven get request from webservice request : " + request);
         }
 
         MavenMetadataExtension mavenMetadata = new MavenMetadataExtensionBuilder(request).build();
 
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Maven metadata : " + mavenMetadata);
+        }
+
         DormServiceGetRequest getRequest;
 
         if (mavenMetadata.isMavenMetadata()) {
+            LOG.trace("Maven metadata is maven-metadata.xml file");
             getRequest = new MavenServiceGetRequestBuilder(PROCESS_GET_METADATAXML_FILE, mavenMetadata)
                     .withArtifactId()
                     .withGroupId()
@@ -71,22 +77,16 @@ public class MavenProcessor implements ProcessorExtension {
                     .repositoryRequest(false)
                     .build();
         } else {
+            LOG.trace("Maven metadata is representation of an maven artifact");
             getRequest = new MavenServiceGetRequestBuilder(PROCESS_GET_ARTIFACT, mavenMetadata)
                     .withAll()
                     .repositoryRequest(true)
                     .build();
         }
 
-
-//        if (LOG.isDebugEnabled()) {
-//            LOG.debug("Maven metadata extension from request : " + mavenMetadata);
-//        }
-
-//        DormMetadata metadata = new MetadataBuilderFromRequest(type, request, mavenMetadata).build();
-
-//        if (LOG.isDebugEnabled()) {
-//            LOG.debug("Maven metadata from request : " + metadata);
-//        }
+        if (LOG.isInfoEnabled()) {
+            LOG.info("Maven get request : " + getRequest);
+        }
 
         return getRequest;
     }

@@ -4,6 +4,7 @@ import com.zenika.dorm.core.model.DormMetadataExtension;
 import com.zenika.dorm.core.service.get.DormServiceGetRequest;
 import com.zenika.dorm.core.service.get.DormServiceGetValues;
 import com.zenika.dorm.core.service.impl.DefaultDormServiceRequest;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
 /**
  * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>
@@ -37,5 +38,14 @@ public class DefaultDormServiceGetRequest extends DefaultDormServiceRequest
     @Override
     public DormServiceGetValues getValues() {
         return values;
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this)
+                .append("transitiveDependencies", transitiveDependencies)
+                .append("values", values)
+                .appendSuper(super.toString())
+                .toString();
     }
 }
