@@ -88,9 +88,7 @@ public class JdbcSelectExecutor extends JdbcExecutor {
                     nodes.add(createDependencyNode(extension));
                 }
             }
-            if (metadataQualifier == null) {
-                throw new JDBCException("Cannot find the dependency with this extension clause : " + extensionProperties);
-            }
+
         } catch (SQLException e) {
             throw new JDBCException("Unable to execute request", e);
         } finally {
