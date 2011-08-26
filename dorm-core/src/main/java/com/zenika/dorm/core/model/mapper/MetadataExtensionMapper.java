@@ -2,12 +2,12 @@ package com.zenika.dorm.core.model.mapper;
 
 import com.zenika.dorm.core.exception.CoreException;
 import com.zenika.dorm.core.model.DormMetadataExtension;
+import org.apache.commons.beanutils.BeanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -24,36 +24,44 @@ public final class MetadataExtensionMapper {
     }
 
     public static <T extends DormMetadataExtension> Map<String, String> fromExtension(T extension) {
-
-        Map<String, String> properties = new HashMap<String, String>();
-
-        Class<? extends DormMetadataExtension> reflect = extension.getClass();
-
-        for (Field field : reflect.getDeclaredFields()) {
-
-            if (LOG.isDebugEnabled()) {
-                LOG.debug("Trying to map field : " + field);
-            }
-
-            field.setAccessible(true);
-
-            // ignore transient attributes
-            if (Modifier.isTransient(field.getModifiers())) {
-                continue;
-            }
-
-            try {
-                properties.put(field.getName(), (String) field.get(extension));
-            } catch (ClassCastException e) {
-                LOG.error("Cannot map anything else thann Strings, make " + field + " transient", e);
-                continue;
-            } catch (IllegalAccessException e) {
-                throw new CoreException("Cannot access field " + field + " to make the mapping", e);
-            }
+        try {
+            return BeanUtils.describe(extension);
+        } catch (Exception e) {
+            throw new CoreException("Cannot map extension attributes to key -> value", e);
         }
-
-        return properties;
     }
+
+//    public static <T extends DormMetadataExtension> Map<String, String> fromExtension(T extension) {
+//
+//        Map<String, String> properties = new HashMap<String, String>();
+//
+//        Class<? extends DormMetadataExtension> reflect = extension.getClass();
+//
+//        for (Field field : reflect.getDeclaredFields()) {
+//
+//            if (LOG.isDebugEnabled()) {
+//                LOG.debug("Trying to map field : " + field);
+//            }
+//
+//            field.setAccessible(true);
+//
+//            // ignore transient attributes
+//            if (Modifier.isTransient(field.getModifiers())) {
+//                continue;
+//            }
+//
+//            try {
+//                properties.put(field.getName(), (String) field.get(extension));
+//            } catch (ClassCastException e) {
+//                LOG.error("Cannot map anything else thann Strings, make " + field + " transient", e);
+//                continue;
+//            } catch (IllegalAccessException e) {
+//                throw new CoreException("Cannot access field " + field + " to make the mapping", e);
+//            }
+//        }
+//
+//        return properties;
+//    }
 
     public static <T extends DormMetadataExtension> T toExtension(T extension, Map<String, String> properties) {
 
