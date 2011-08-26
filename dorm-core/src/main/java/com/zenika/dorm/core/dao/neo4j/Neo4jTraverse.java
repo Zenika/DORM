@@ -1,8 +1,5 @@
 package com.zenika.dorm.core.dao.neo4j;
 
-import com.sun.org.apache.bcel.internal.generic.NEW;
-
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

@@ -51,21 +51,6 @@ public class DormDaoJdbc implements DormDao {
     }
 
     @Override
-    public DependencyNode getSingleByMetadata(DormMetadata metadata, Usage usage) {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
-    }
-
-    @Override
-    public DependencyNode getByMetadata(DormMetadata metadata, Usage usage) {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
-    }
-
-    @Override
-    public DependencyNode getByMetadataExtension(DormMetadata metadata, Usage usage, Map<String, String> params) {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
-    }
-
-    @Override
     public List<DependencyNode> get(DormServiceGetValues values, boolean withDependencies) {
         JdbcSelectExecutor executor = new JdbcSelectExecutor(getConnection(), values);
         executor.execute();

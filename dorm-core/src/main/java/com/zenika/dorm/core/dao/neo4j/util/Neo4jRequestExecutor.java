@@ -11,15 +11,12 @@ import com.sun.jersey.api.client.config.DefaultClientConfig;
 import com.sun.jersey.api.json.JSONConfiguration;
 import com.sun.jersey.client.apache.config.DefaultApacheHttpClientConfig;
 import com.sun.jersey.client.apache.ApacheHttpClient;
-import com.sun.org.apache.xalan.internal.xsltc.runtime.Node;
-import com.sun.xml.bind.v2.runtime.property.Property;
 import com.zenika.dorm.core.dao.neo4j.*;
 import com.zenika.dorm.core.exception.CoreException;
 import com.zenika.dorm.core.model.DormMetadataExtension;
 import org.apache.lucene.search.spans.NearSpansOrdered;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import sun.rmi.runtime.Log;
 
 import javax.print.attribute.standard.Media;
 import javax.ws.rs.core.MediaType;
@@ -32,6 +29,7 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.lang.reflect.Type;
 import java.net.ConnectException;
+import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -74,6 +72,7 @@ public class Neo4jRequestExecutor implements RequestExecutor {
 
     @Override
     public List<Neo4jDependency> get(String script) {
+        logger.trace("Script : " + script);
         List<Neo4jResponse<Neo4jDependency>> responses = resource.path(GREMLIN_SCRIPT_PATH)
                 .accept(MediaType.APPLICATION_JSON_TYPE)
                 .type(MediaType.APPLICATION_JSON_TYPE)
@@ -135,6 +134,13 @@ public class Neo4jRequestExecutor implements RequestExecutor {
                 .post(new GenericType<List<Neo4jRelationship>>() {
                 });
         logRequest("POST", uri);
+        return relationships;
+    }
+
+    @Override
+    public List<Neo4jRelationship> getDependencyRelationship(URI uri){
+        List<Neo4jRelationship> relationships = resource.uri(uri).accept(MediaType.APPLICATION_JSON_TYPE).get(new GenericType<List<Neo4jRelationship>>() {
+                });
         return relationships;
     }
 

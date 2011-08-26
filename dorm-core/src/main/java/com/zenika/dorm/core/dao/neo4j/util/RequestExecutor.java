@@ -47,4 +47,6 @@ public interface RequestExecutor {
     public String test();
 
     public List<Neo4jDependency> get(String script);
+
+    List<Neo4jRelationship> getDependencyRelationship(URI uri);
 }

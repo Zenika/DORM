@@ -167,63 +167,10 @@ public class DormDaoNeo4j implements DormDao {
         return relationships.get(0);
     }
 
-    @Override
-    public DependencyNode getSingleByMetadata(DormMetadata metadata, Usage usage) {
-        DormMetadataExtension extension = metadata.getExtension();
-        Map<String, DependencyNode> dependencyNodeMap = new HashMap<String, DependencyNode>();
-        Neo4jDependency dependency = null;
-        try {
-            TypeReference<List<Neo4jResponse<Neo4jDependency>>> type = new TypeReference<List<Neo4jResponse<Neo4jDependency>>>() {
-            };
-            dependency = searchNode(Neo4jMetadata.generateIndexURI(metadata.getQualifier(), index), type.getType());
-            Neo4jTraverse traverse = new Neo4jTraverse(new Neo4jRelationship(usage));
-            List<Neo4jRelationship> relationships = executor.post(dependency.getTraverse(Neo4jTraverse.RELATIONSHIP_TYPE), traverse);
-            DependencyNode root = DefaultDependencyNode.create(getDependency(new URI(dependency.getUri()), usage, extension));
-            dependencyNodeMap.put(dependency.getUri(), root);
-            putChild(usage, dependencyNodeMap, relationships, extension);
-        } catch (UniformInterfaceException e) {
-            if (e.getResponse().getStatus() == Response.Status.NOT_FOUND.getStatusCode()) {
-                LOG.debug("The dependency node with this " + metadata.getQualifier() + " full qualifier doesn't " +
-                        "found");
-            }
-        } catch (URISyntaxException e) {
-            throw new Neo4jDaoException("URI syntax exception", e);
-        }
-        return dependencyNodeMap.get(dependency.getResponse().getSelf());
-    }
-
-    public DependencyNode getByMetadataExtension(DormMetadata metadata, Usage usage, Map<String, String> params) {
-        List<Neo4jDependency> dependencies = executor.get(buildGremlinScript(params));
-        DependencyNode node = DefaultDependencyNode.create(DefaultDependency.create(metadata, usage));
-        for (Neo4jDependency dependency : dependencies) {
-            node.addChild(DefaultDependencyNode.create(getDependency(dependency, usage, metadata.getExtension())));
-        }
-        return node;
-    }
-
-    public DependencyNode getByMetadata(DormMetadata metadata, Usage usage) {
-        try {
-            List<Neo4jDependency> dependencies = searchNodes(Neo4jMetadata.generateIndexURI(metadata.getQualifier(), index), TYPE_LIST_RESPONSE_DEPENDENCY.getType());
-            DependencyNode node = DefaultDependencyNode.create(DefaultDependency.create(metadata, usage));
-            for (Neo4jDependency dependency : dependencies) {
-                node.getChildren().add(DefaultDependencyNode.create(getDependency(new URI(dependency.getUri()), usage, metadata.getExtension())));
-            }
-            return node;
-        } catch (UniformInterfaceException e) {
-            if (e.getResponse().getStatus() == Response.Status.NOT_FOUND.getStatusCode()) {
-                LOG.debug("No dependency node found with this " + metadata.getQualifier());
-            }
-            throw e;
-        } catch (URISyntaxException e) {
-            throw new Neo4jDaoException("URI syntax exception", e);
-        }
-    }
-
     public void putChild(Usage usage, Map<String, DependencyNode> dependencyNodeMap, List<Neo4jRelationship> relationships, DormMetadataExtension extension) throws URISyntaxException {
-
         for (Neo4jRelationship relationship : relationships) {
-            DependencyNode dependencyParent = dependencyNodeMap.get(relationship.getStart());
-            DependencyNode dependencyChild = dependencyNodeMap.get(relationship.getEnd());
+            DependencyNode dependencyParent = dependencyNodeMap.get(relationship.getStart().toString());
+            DependencyNode dependencyChild = dependencyNodeMap.get(relationship.getEnd().toString());
             if (dependencyParent == null) {
                 dependencyParent = DefaultDependencyNode.create(getDependency(relationship.getStart(), usage, extension));
                 dependencyNodeMap.put(relationship.getStart().toString(), dependencyParent);
@@ -260,8 +207,18 @@ public class DormDaoNeo4j implements DormDao {
     private void postNodeWithChild(DependencyNode currentNode) throws URISyntaxException {
         Neo4jDependency dependency = postDependency(currentNode.getDependency());
         for (DependencyNode child : currentNode.getChildren()) {
+            boolean isNotExist = true;
             Neo4jDependency dependencyChild = postDependency(child.getDependency());
-            executor.post(new Neo4jRelationship(dependency, dependencyChild, dependency.getUsage()));
+            List<Neo4jRelationship> relationships = executor.getDependencyRelationship(dependencyChild.getResponse().getOutgoing_typed_relationships(dependencyChild.getUsage()));
+            for (Neo4jRelationship relationship : relationships) {
+                if (relationship.getStart().equals(dependency.getUri()) && relationship.getEnd().equals(dependencyChild.getUri())) {
+                    isNotExist = false;
+                    break;
+                }
+            }
+            if (isNotExist) {
+                executor.post(new Neo4jRelationship(dependency, dependencyChild, dependency.getUsage()));
+            }
         }
     }
 
@@ -287,11 +244,64 @@ public class DormDaoNeo4j implements DormDao {
 
     @Override
     public List<DependencyNode> get(DormServiceGetValues values, boolean withDependencies) {
-        return null;
+        DormMetadataExtension extension = values.getMetadataExtension();
+        List<Neo4jDependency> dependencies = executor.get(buildGremlinScript(values.getMetadataExtensionClauses()));
+        List<DependencyNode> nodes = new ArrayList<DependencyNode>();
+        for (Neo4jDependency dependency : dependencies) {
+            DependencyNode node = DefaultDependencyNode.create(getDependency(dependency, values.getUsage(), extension));
+            if (withDependencies) {
+                node = getDependencyNodeChildren(node);
+            }
+            nodes.add(node);
+        }
+        return nodes;
     }
+
+    private DependencyNode getDependencyNodeChildren(DependencyNode node) {
+        Usage usage = node.getDependency().getUsage();
+        DormMetadata metadata = node.getDependency().getMetadata();
+        DormMetadataExtension extension = metadata.getExtension();
+        Map<String, DependencyNode> dependencyNodeMap = new HashMap<String, DependencyNode>();
+        Neo4jDependency dependency = null;
+        try {
+            TypeReference<List<Neo4jResponse<Neo4jDependency>>> type = new TypeReference<List<Neo4jResponse<Neo4jDependency>>>() {
+            };
+            dependency = searchNode(Neo4jMetadata.generateIndexURI(metadata.getQualifier(), index), type.getType());
+            Neo4jTraverse traverse = new Neo4jTraverse(new Neo4jRelationship(usage));
+            List<Neo4jRelationship> relationships = executor.post(dependency.getTraverse(Neo4jTraverse.RELATIONSHIP_TYPE), traverse);
+            dependencyNodeMap.put(dependency.getUri(), node);
+            putChild(usage, dependencyNodeMap, relationships, extension);
+        } catch (UniformInterfaceException e) {
+            if (e.getResponse().getStatus() == Response.Status.NOT_FOUND.getStatusCode()) {
+                LOG.debug("The dependency node with this " + metadata.getQualifier() + " full qualifier doesn't " +
+                        "found");
+            }
+        } catch (URISyntaxException e) {
+            throw new Neo4jDaoException("URI syntax exception", e);
+        }
+        return dependencyNodeMap.get(dependency.getResponse().getSelf());
+    }
+
 
     @Override
     public DependencyNode getOne(DormServiceGetValues values, boolean withDependencies) {
-        return null;
+        try {
+            List<Neo4jDependency> dependencies = searchNodes(Neo4jMetadata.generateIndexURI(values.getQualifier(), index), TYPE_LIST_RESPONSE_DEPENDENCY.getType());
+            if (dependencies.size() > 1) {
+                throw new Neo4jDaoException("Retrieve more than one dependency");
+            }
+            DependencyNode node = DefaultDependencyNode.create(getDependency(new URI(dependencies.get(0).getUri()), values.getUsage(), values.getMetadataExtension()));
+            if (withDependencies){
+                node = getDependencyNodeChildren(node);
+            }
+            return node;
+        } catch (UniformInterfaceException e) {
+            if (e.getResponse().getStatus() == Response.Status.NOT_FOUND.getStatusCode()) {
+                LOG.debug("No dependency node found with this " + values.getQualifier());
+            }
+            throw e;
+        } catch (URISyntaxException e) {
+            throw new Neo4jDaoException("URI syntax exception", e);
+        }
     }
 }
