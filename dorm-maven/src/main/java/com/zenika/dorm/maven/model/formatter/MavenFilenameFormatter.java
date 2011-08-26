@@ -16,7 +16,8 @@ public class MavenFilenameFormatter {
     private static final Logger LOG = LoggerFactory.getLogger(MavenFilenameFormatter.class);
 
     private static final String SEPARATOR = "-";
-    private static final String REGEX_VERSION_TIMESTAMP = "^[0-9]*(\\.)*[0-9]*$";
+    private static final String REGEX_TIMESTAMP = "^[0-9]*(\\.)[0-9]*$";
+    private static final String REGEX_VERSION = "^(([0-9])(\\.)?)*[^\\.]$";
 
     private String filename;
     private String artifactId;
@@ -103,15 +104,15 @@ public class MavenFilenameFormatter {
         }
 
         timestamp = getPreviousElement();
-        validateVersionAndTimestamp(timestamp);
+        validateTimestamp(timestamp);
 
         version = getPreviousElement();
         if (StringUtils.equals(version, MavenConstant.Special.SNAPSHOT)) {
             String versionWithoutSnapshot = getPreviousElement();
-            validateVersionAndTimestamp(versionWithoutSnapshot);
+            validateVersion(versionWithoutSnapshot);
             version = versionWithoutSnapshot + "-" + version;
         } else {
-            validateVersionAndTimestamp(version);
+            validateVersion(version);
         }
 
         artifactId = elements[0];
@@ -144,14 +145,25 @@ public class MavenFilenameFormatter {
         return element;
     }
 
-    private void validateVersionAndTimestamp(String value) {
+    private void validateTimestamp(String timestamp) {
 
-        if (StringUtils.isBlank(value)) {
-            throw new MavenFormatterException("Cannot format the filename");
+        if (StringUtils.isBlank(timestamp)) {
+            throw new MavenFormatterException("Timestamp is required");
         }
 
-        if (!value.matches(REGEX_VERSION_TIMESTAMP)) {
-            throw new MavenFormatterException("Cannot format the filename with invalid value : " + value);
+        if (!timestamp.matches(REGEX_TIMESTAMP)) {
+            throw new MavenFormatterException("Timestamp is invalid : " + timestamp);
+        }
+    }
+
+    private void validateVersion(String version) {
+
+        if (StringUtils.isBlank(version)) {
+            throw new MavenFormatterException("Version is required");
+        }
+
+        if (!version.matches(REGEX_VERSION)) {
+            throw new MavenFormatterException("Version is invalid : " + version);
         }
     }
 
