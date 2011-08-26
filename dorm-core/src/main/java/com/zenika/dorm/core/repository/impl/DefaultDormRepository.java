@@ -71,8 +71,7 @@ public class DefaultDormRepository implements DormRepository {
         DormRepositoryResource resource = resolveEngine.resolve(location);
 
         if (!resource.exists()) {
-            throw new RepositoryException("File not found for metadata : " + metadata)
-                    .type(RepositoryException.Type.NULL);
+            throw new RepositoryException("File not found for metadata : " + metadata);
         }
 
         return DefaultDormResource.create(resource.getFile());

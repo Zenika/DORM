@@ -2,7 +2,7 @@ package com.zenika.dorm.core.ws.resource;
 
 import com.google.inject.Inject;
 import com.sun.jersey.multipart.FormDataParam;
-import com.zenika.dorm.core.exception.ArtifactException;
+import com.zenika.dorm.core.exception.DormProcessException;
 import com.zenika.dorm.core.model.DormRequest;
 import com.zenika.dorm.core.model.builder.DormRequestBuilder;
 import com.zenika.dorm.core.model.impl.DefaultDormMetadataExtension;
@@ -180,7 +180,7 @@ public class DormResource extends AbstractResource {
             version = properties.getProperty("version").toString();
             filename = properties.getProperty("filename").toString();
         } catch (NullPointerException e) {
-            throw new ArtifactException("Missing artifact metadata").type(ArtifactException.Type.NULL);
+            throw new DormProcessException("Missing artifact metadata").type(DormProcessException.Type.NULL);
         }
 
         return Response.status(Response.Status.SERVICE_UNAVAILABLE).build();
@@ -257,7 +257,7 @@ public class DormResource extends AbstractResource {
             version = properties.getProperty("version").toString();
             filename = properties.getProperty("filename").toString();
         } catch (NullPointerException e) {
-            throw new ArtifactException("Missing artifact metadata").type(ArtifactException.Type.NULL);
+            throw new DormProcessException("Missing artifact metadata").type(DormProcessException.Type.NULL);
         }
 
         return Response.status(Response.Status.SERVICE_UNAVAILABLE).build();
@@ -272,8 +272,7 @@ public class DormResource extends AbstractResource {
             stream = new FileInputStream(file);
             properties.load(stream);
         } catch (Exception e) {
-            throw new ArtifactException("Properties invalid")
-                    .type(ArtifactException.Type.NULL);
+            throw new DormProcessException("Missing artifact metadata").type(DormProcessException.Type.NULL);
         } finally {
             if (null != stream) {
                 try {

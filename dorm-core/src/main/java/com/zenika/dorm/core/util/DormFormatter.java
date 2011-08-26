@@ -23,7 +23,7 @@ public final class DormFormatter {
     public static String formatMetadataExtensionQualifier(String qualifier) {
 
         if (StringUtils.isBlank(qualifier)) {
-            throw new CoreException("Metadata extension qualifier is blank").type(CoreException.Type.NULL);
+            throw new CoreException("Metadata extension qualifier is blank");
         }
 
         if (LOG.isDebugEnabled()) {
@@ -58,7 +58,7 @@ public final class DormFormatter {
     public static String formatMetadataVersion(String version) {
 
         if (StringUtils.isBlank(version)) {
-            throw new CoreException("Metadata version is blank").type(CoreException.Type.NULL);
+            throw new CoreException("Metadata version is blank");
         }
 
         if (LOG.isDebugEnabled()) {
@@ -80,7 +80,7 @@ public final class DormFormatter {
     public static String formatMetadataType(String type) {
 
         if (StringUtils.isBlank(type)) {
-            throw new CoreException("Type is blank").type(CoreException.Type.NULL);
+            throw new CoreException("Type is blank");
         }
 
         if (LOG.isDebugEnabled()) {

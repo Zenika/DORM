@@ -95,7 +95,7 @@ public class MavenProcessor implements ProcessorExtension {
     public Dependency buildDependency(DormServiceGetResult result) {
 
         if (!result.hasResult()) {
-            throw new MavenException("No result").type(MavenException.Type.NULL);
+            throw new DormProcessException("No result").type(DormProcessException.Type.NULL);
         }
 
         Dependency dependency;

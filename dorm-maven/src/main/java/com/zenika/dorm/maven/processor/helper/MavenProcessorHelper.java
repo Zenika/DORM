@@ -16,9 +16,9 @@ public final class MavenProcessorHelper {
         try {
             return (MavenMetadataExtension) node.getDependency().getMetadata().getExtension();
         } catch (NullPointerException e) {
-            throw new MavenException("Node dosen't contains metadata.", e).type(MavenException.Type.ERROR);
+            throw new MavenException("Node dosen't contains metadata.", e);
         } catch (ClassCastException e) {
-            throw new MavenException("Node dosen't contains maven metadata.", e).type(MavenException.Type.ERROR);
+            throw new MavenException("Node dosen't contains maven metadata.", e);
         }
     }
 }

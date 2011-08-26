@@ -3,7 +3,6 @@ package com.zenika.dorm.servlet;
 import com.sun.jersey.guice.JerseyServletModule;
 import com.sun.jersey.guice.spi.container.servlet.GuiceContainer;
 import com.zenika.dorm.core.dao.DormDao;
-import com.zenika.dorm.core.dao.neo4j.DormDaoNeo4j;
 import com.zenika.dorm.core.dao.sql.DormDaoJdbc;
 import com.zenika.dorm.core.exception.JDBCException;
 import com.zenika.dorm.core.model.impl.DefaultDormMetadataExtension;
@@ -14,6 +13,8 @@ import com.zenika.dorm.core.repository.DormRepository;
 import com.zenika.dorm.core.repository.impl.DefaultDormRepository;
 import com.zenika.dorm.core.service.DormService;
 import com.zenika.dorm.core.service.impl.DefaultDormService;
+import com.zenika.dorm.core.ws.provider.CoreExceptionMapper;
+import com.zenika.dorm.core.ws.provider.DormProcessExceptionMapper;
 import com.zenika.dorm.core.ws.resource.DormResource;
 import com.zenika.dorm.maven.model.impl.MavenMetadataExtension;
 import com.zenika.dorm.maven.processor.extension.MavenProcessor;
@@ -49,13 +50,14 @@ public class DORMGuiceModule extends JerseyServletModule {
     }
 
     private void bindResources() {
+        // web services
         bind(DormResource.class);
         bind(MavenResource.class);
-//        try {
-//
-//        } catch (Exception e) {
-//            LOG.error("Error", e);
-//        }
+
+        // exception mappers
+        bind(CoreExceptionMapper.class);
+        bind(DormProcessExceptionMapper.class);
+
     }
 
     private void bindProcessor() {

@@ -7,26 +7,11 @@ public class CoreException extends RuntimeException {
         super();
     }
 
-    public static enum Type {
-        FORBIDDEN, NULL, ERROR
-    };
-
-    protected Type type;
-
-    public CoreException(String message) {
-        super(message);
+    public CoreException(String s) {
+        super(s);
     }
 
-    public CoreException(String message, Throwable throwable) {
-        super(message, throwable);
-    }
-
-    public CoreException type(Type type) {
-        this.type = type;
-        return this;
-    }
-
-    public Type getType() {
-        return type;
+    public CoreException(String s, Throwable throwable) {
+        super(s, throwable);
     }
 }
