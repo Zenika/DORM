@@ -29,11 +29,11 @@ public class MavenSnapshotTimestampComparator implements Comparator<MavenMetadat
             LOG.debug("Compare timestamps : " + timestamp1 + " and : " + timestamp2);
         }
 
-        Integer value1, value2;
+        Long value1, value2;
 
         try {
-            value1 = Integer.valueOf(timestamp1);
-            value2 = Integer.valueOf(timestamp2);
+            value1 = Long.valueOf(timestamp1);
+            value2 = Long.valueOf(timestamp2);
         } catch (NumberFormatException e) {
             throw new MavenException("Timestamp are not well formated", e);
         }
