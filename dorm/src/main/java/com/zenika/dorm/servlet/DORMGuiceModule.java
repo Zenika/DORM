@@ -57,7 +57,6 @@ public class DORMGuiceModule extends JerseyServletModule {
         // exception mappers
         bind(CoreExceptionMapper.class);
         bind(DormProcessExceptionMapper.class);
-
     }
 
     private void bindProcessor() {
