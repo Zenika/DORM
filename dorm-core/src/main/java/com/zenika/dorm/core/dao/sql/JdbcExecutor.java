@@ -31,12 +31,22 @@ public abstract class JdbcExecutor {
     protected Connection connection;
 
     public JdbcExecutor(Connection connection) {
+        if (null == connection) {
+            throw new JDBCException("Connection is null");
+        }
+
+        try {
+            connection.setAutoCommit(false);
+        } catch (SQLException e) {
+            throw new JDBCException("Cannot disable autocommit");
+        }
+
         this.connection = connection;
     }
 
     public abstract void execute();
 
-    protected void close(){
+    protected void close() {
         try {
             connection.close();
         } catch (SQLException e) {
