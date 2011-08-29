@@ -23,7 +23,7 @@ public class MavenClientHelper {
             throw new MavenException("Extension is not maven");
         }
 
-        ArtifactType type = new DefaultArtifactType(dependency.getMetadata().getType());
+        ArtifactType type = new DefaultArtifactType(extension.getExtension());
         Artifact artifact = new DefaultArtifact(extension.getGroupId(), extension.getArtifactId(),
                 "toto", dependency.getMetadata().getType(), extension.getVersion(), type);
 

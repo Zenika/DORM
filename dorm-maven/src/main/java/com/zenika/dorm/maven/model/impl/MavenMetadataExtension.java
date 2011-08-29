@@ -23,15 +23,15 @@ public final class MavenMetadataExtension implements DormMetadataExtension {
     /**
      * Metadata names
      */
-    public static final transient String METADATA_GROUPID = "groupId";
-    public static final transient String METADATA_ARTIFACTID = "artifactId";
-    public static final transient String METADATA_VERSION = "version";
-    public static final transient String METADATA_CLASSIFIER = "classifier";
-    public static final transient String METADATA_PACKAGING = "packaging";
-    public static final transient String METADATA_TIMESTAMP = "timestamp";
-    public static final transient String METADATA_EXTENSION = "extension";
-    public static final transient String METADATA_BUILDNUMBER = "buildNumber";
-    public static final transient String METADATA_SNAPSHOT = "snapshot";
+    public static final String METADATA_GROUPID = "groupId";
+    public static final String METADATA_ARTIFACTID = "artifactId";
+    public static final String METADATA_VERSION = "version";
+    public static final String METADATA_CLASSIFIER = "classifier";
+    public static final String METADATA_PACKAGING = "packaging";
+    public static final String METADATA_TIMESTAMP = "timestamp";
+    public static final String METADATA_EXTENSION = "extension";
+    public static final String METADATA_BUILDNUMBER = "buildNumber";
+    public static final String METADATA_SNAPSHOT = "snapshot";
 
 
     private final String groupId;
@@ -44,7 +44,7 @@ public final class MavenMetadataExtension implements DormMetadataExtension {
     private final String buildNumber;
     private final boolean snapshot;
 
-    private final transient boolean mavenMetadata;
+    private final boolean mavenMetadata;
 
     /**
      * Only accessed by the builder in the same package

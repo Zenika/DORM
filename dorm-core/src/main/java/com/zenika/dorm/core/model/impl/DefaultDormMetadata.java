@@ -34,7 +34,7 @@ public final class DefaultDormMetadata implements DormMetadata {
         }
 
         this.version = DormFormatter.formatMetadataVersion(version);
-        this.type = DormFormatter.formatMetadataType(type);
+        this.type = null;//DormFormatter.formatMetadataType(type);
         this.extension = extension;
 
         String extensionQualifier = DormFormatter.formatMetadataExtensionQualifier(extension.getQualifier());

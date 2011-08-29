@@ -16,13 +16,13 @@ public class MavenFilenameFormatterUnitTest {
 
     private static final Logger LOG = LoggerFactory.getLogger(MavenFilenameFormatterUnitTest.class);
 
+    private String extension;
     private String artifactId;
     private String version;
     private String versionWithSnapshot;
     private String timestamp;
     private String buildNumber;
     private String classifier;
-    private String extension;
     private String extension2;
 
     private String filename1;

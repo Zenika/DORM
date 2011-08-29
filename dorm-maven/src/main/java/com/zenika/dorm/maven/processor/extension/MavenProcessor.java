@@ -6,11 +6,9 @@ import com.zenika.dorm.core.model.DependencyNode;
 import com.zenika.dorm.core.model.DormRequest;
 import com.zenika.dorm.core.model.DormResource;
 import com.zenika.dorm.core.model.builder.DependencyBuilderFromRequest;
-import com.zenika.dorm.core.model.builder.DormRequestBuilder;
 import com.zenika.dorm.core.model.impl.DefaultDependency;
 import com.zenika.dorm.core.model.impl.DefaultDependencyNode;
 import com.zenika.dorm.core.model.impl.DefaultDormResource;
-import com.zenika.dorm.core.model.impl.Usage;
 import com.zenika.dorm.core.processor.ProcessorExtension;
 import com.zenika.dorm.core.service.get.DormServiceGetRequest;
 import com.zenika.dorm.core.service.get.DormServiceGetResult;
@@ -124,7 +122,10 @@ public class MavenProcessor implements ProcessorExtension {
             }
         });
 
-        File mavenMetadataFile = new File("tmp/maven-tmp/maven-metadata.xml");
+        File folders = new File("tmp/maven-tmp");
+        folders.mkdirs();
+
+        File mavenMetadataFile = new File(folders, "maven-metadata.xml");
         MavenMetadataFileWriter writer = new MavenMetadataFileWriter(mavenMetadataFile);
 
         for (DependencyNode node : result.getNodes()) {
@@ -153,36 +154,17 @@ public class MavenProcessor implements ProcessorExtension {
 
         String type = extension.getExtension();
 
-        // entity dependencuy has no file
-        DormRequest entityRequest = new DormRequestBuilder(request)
-                .file(null)
-                .filename(null)
-                .build();
-
-        Dependency entityDependency = new DependencyBuilderFromRequest(entityRequest, ENTITY_TYPE,
-                extension).build();
-
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("Maven entity dependency = " + entityDependency);
-        }
-
-        // replace the default usage by the maven internal for the child dependency
-        Usage childUsage = Usage.createInternal(MavenMetadataExtension.EXTENSION_NAME);
-
         Dependency dependency = new DependencyBuilderFromRequest(request, type, extension)
-                .usage(childUsage)
                 .build();
 
         if (LOG.isDebugEnabled()) {
             LOG.debug("Maven real dependency = " + dependency);
         }
 
-        DependencyNode root = DefaultDependencyNode.create(entityDependency);
         DependencyNode node = DefaultDependencyNode.create(dependency);
-        root.addChild(node);
 
         DefaultDormServicePutRequest putRequest = new DefaultDormServicePutRequest(PROCESS_PUT_ARTIFACT);
-        putRequest.setNode(root);
+        putRequest.setNode(node);
 
         return putRequest;
     }

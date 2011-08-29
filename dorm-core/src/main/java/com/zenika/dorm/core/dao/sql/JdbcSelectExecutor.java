@@ -10,6 +10,8 @@ import com.zenika.dorm.core.model.impl.DefaultDependencyNode;
 import com.zenika.dorm.core.model.impl.DefaultDormMetadata;
 import com.zenika.dorm.core.model.impl.Usage;
 import com.zenika.dorm.core.service.get.DormServiceGetValues;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -24,6 +26,8 @@ import java.util.Map;
  * @author Antoine ROUAZE <antoine.rouaze AT zenika.com>
  */
 public class JdbcSelectExecutor extends JdbcExecutor {
+
+    private static final Logger LOG = LoggerFactory.getLogger(JdbcSelectExecutor.class);
 
     private List<DependencyNode> nodes = new ArrayList<DependencyNode>();
     private DependencyNode node;
@@ -151,6 +155,11 @@ public class JdbcSelectExecutor extends JdbcExecutor {
     }
 
     private DependencyNode createDependencyNode(DormMetadataExtension extension) {
+
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Extension attributes from database : " + extensionProperties);
+        }
+
         DormMetadataExtension extensionTmp = extension.createFromMap(extensionProperties);
         DormMetadata metadataTmp = DefaultDormMetadata.create(metadataVersion, metadataType, extensionTmp);
         Dependency dependency = DefaultDependency.create(metadataTmp, usage);
