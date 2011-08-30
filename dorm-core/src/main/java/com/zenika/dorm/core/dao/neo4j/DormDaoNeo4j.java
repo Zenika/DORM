@@ -157,7 +157,7 @@ public class DormDaoNeo4j implements DormDao {
     public Dependency getDependency(Neo4jDependency dependency, Usage usage, DormMetadataExtension extension) {
         dependency = fillNeo4jDependency(dependency, extension);
         DormMetadata metadata = DefaultDormMetadata.create(dependency.getMetadata().getVersion(),
-                dependency.getMetadata().getType(), dependency.getMetadata().getNeo4jExtension().getExtension());
+                dependency.getMetadata().getNeo4jExtension().getExtension());
         return DefaultDependency.create(metadata, usage);
     }
 
@@ -291,7 +291,7 @@ public class DormDaoNeo4j implements DormDao {
                 throw new Neo4jDaoException("Retrieve more than one dependency");
             }
             DependencyNode node = DefaultDependencyNode.create(getDependency(new URI(dependencies.get(0).getUri()), values.getUsage(), values.getMetadataExtension()));
-            if (withDependencies){
+            if (withDependencies) {
                 node = getDependencyNodeChildren(node);
             }
             return node;

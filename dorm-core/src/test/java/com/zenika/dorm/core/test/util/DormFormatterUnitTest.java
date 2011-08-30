@@ -48,7 +48,7 @@ public class DormFormatterUnitTest {
 
     @Test
     public void formatMetadataQualifier() {
-        Assertions.assertThat(DormFormatter.formatMetadataQualifier("foo", "bar", "1.0", "type"))
-                .isEqualTo("foo:bar:1.0:type");
+        Assertions.assertThat(DormFormatter.formatMetadataQualifier("foo", "bar", "1.0"))
+                .isEqualTo("foo:bar:1.0");
     }
 }

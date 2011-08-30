@@ -4,6 +4,7 @@ import com.zenika.dorm.core.exception.CoreException;
 import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.core.model.DormMetadataExtension;
 import com.zenika.dorm.core.util.DormFormatter;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
 /**
  * Immutable dorm metadata
@@ -16,30 +17,28 @@ public final class DefaultDormMetadata implements DormMetadata {
 
     private final String qualifier;
     private final String version;
-    private final String type;
 
     /**
      * The metadata extension must be immutable
      */
     private final DormMetadataExtension extension;
 
-    public static DefaultDormMetadata create(String version, String type, DormMetadataExtension extension) {
-        return new DefaultDormMetadata(version, type, extension);
+    public static DefaultDormMetadata create(String version, DormMetadataExtension extension) {
+        return new DefaultDormMetadata(version, extension);
     }
 
-    private DefaultDormMetadata(String version, String type, DormMetadataExtension extension) {
+    private DefaultDormMetadata(String version, DormMetadataExtension extension) {
 
         if (null == version || null == extension || null == extension.getQualifier() || null == extension.getExtensionName()) {
             throw new CoreException("Properties are missing for metadata");
         }
 
         this.version = DormFormatter.formatMetadataVersion(version);
-        this.type = null;//DormFormatter.formatMetadataType(type);
         this.extension = extension;
 
         String extensionQualifier = DormFormatter.formatMetadataExtensionQualifier(extension.getQualifier());
         qualifier = DormFormatter.formatMetadataQualifier(extension.getExtensionName(),
-                extensionQualifier, version, type);
+                extensionQualifier, version);
     }
 
     @Override
@@ -53,13 +52,18 @@ public final class DefaultDormMetadata implements DormMetadata {
     }
 
     @Override
-    public String getType() {
-        return type;
+    public DormMetadataExtension getExtension() {
+        return extension;
     }
 
     @Override
-    public DormMetadataExtension getExtension() {
-        return extension;
+    public String toString() {
+        return new ToStringBuilder(this)
+                .append("qualifier", qualifier)
+                .append("version", version)
+                .append("extension", extension)
+                .appendSuper(super.toString())
+                .toString();
     }
 
     @Override
@@ -73,7 +77,6 @@ public final class DefaultDormMetadata implements DormMetadata {
             return false;
         if (qualifier != null ? !qualifier.equals(metadata.qualifier) : metadata.qualifier != null)
             return false;
-        if (type != null ? !type.equals(metadata.type) : metadata.type != null) return false;
         if (version != null ? !version.equals(metadata.version) : metadata.version != null) return false;
 
         return true;
@@ -83,16 +86,7 @@ public final class DefaultDormMetadata implements DormMetadata {
     public int hashCode() {
         int result = qualifier != null ? qualifier.hashCode() : 0;
         result = 31 * result + (version != null ? version.hashCode() : 0);
-        result = 31 * result + (type != null ? type.hashCode() : 0);
         result = 31 * result + (extension != null ? extension.hashCode() : 0);
         return result;
-    }
-
-    @Override
-    public String toString() {
-        return "DormMetadata { " +
-                "qualifier = " + qualifier +
-                "type = " + type +
-                " }";
     }
 }

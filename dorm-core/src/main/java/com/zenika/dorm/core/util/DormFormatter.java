@@ -100,9 +100,9 @@ public final class DormFormatter {
     }
 
     public static String formatMetadataQualifier(String extensionName, String extensionQualifier,
-                                                 String version, String type) {
+                                                 String version) {
 
-        String qualifier = extensionName + ":" + extensionQualifier + ":" + version + ":" + type;
+        String qualifier = extensionName + ":" + extensionQualifier + ":" + version;
 
         if (LOG.isDebugEnabled()) {
             LOG.debug("Formatted metadata qualifier : " + qualifier);

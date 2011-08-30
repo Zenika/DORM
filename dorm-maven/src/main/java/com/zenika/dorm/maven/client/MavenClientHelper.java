@@ -25,7 +25,7 @@ public class MavenClientHelper {
 
         ArtifactType type = new DefaultArtifactType(extension.getExtension());
         Artifact artifact = new DefaultArtifact(extension.getGroupId(), extension.getArtifactId(),
-                "toto", dependency.getMetadata().getType(), extension.getVersion(), type);
+                "toto", extension.getExtension(), extension.getVersion(), type);
 
         if (dependency.hasResource()) {
             return artifact.setFile(dependency.getResource().getFile());

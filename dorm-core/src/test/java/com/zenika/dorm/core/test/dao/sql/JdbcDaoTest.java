@@ -115,7 +115,7 @@ public class JdbcDaoTest {
 
     private DependencyNode createDependencyNode(String name, String version) {
         DormMetadataExtension extension = new DefaultDormMetadataExtension(name);
-        DormMetadata metadata = DefaultDormMetadata.create(version, "dorm", extension);
+        DormMetadata metadata = DefaultDormMetadata.create(version, extension);
         Dependency dependency = DefaultDependency.create(metadata, usage);
         DependencyNode dependencyNode = DefaultDependencyNode.create(dependency);
         return dependencyNode;

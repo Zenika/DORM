@@ -1,6 +1,6 @@
 package com.zenika.dorm.maven.test.ws.resource;
 
-import com.zenika.dorm.core.model.DormRequest;
+import com.zenika.dorm.core.model.DormWebServiceRequest;
 import com.zenika.dorm.core.model.builder.DormRequestBuilder;
 import com.zenika.dorm.core.processor.Processor;
 import com.zenika.dorm.maven.exception.MavenException;
@@ -37,7 +37,7 @@ public class MavenResourceUnitTest extends AbstractUnitTest {
     @Test
     public void pushValidMetadata() {
 
-        DormRequest request = fixtures.getRequestWithFile();
+        DormWebServiceRequest request = fixtures.getRequestWithFile();
         LOG.trace("Test request = " + request);
 
         when(processor.push(request)).thenReturn(true);
@@ -53,7 +53,7 @@ public class MavenResourceUnitTest extends AbstractUnitTest {
 
     @Test(expected = MavenException.class)
     public void pushInvalidMetadata() {
-        DormRequest request = new DormRequestBuilder(fixtures.getRequestWithFile())
+        DormWebServiceRequest request = new DormRequestBuilder(fixtures.getRequestWithFile())
                 .property(MavenMetadataExtension.METADATA_ARTIFACTID, null)
                 .build();
 
@@ -70,7 +70,7 @@ public class MavenResourceUnitTest extends AbstractUnitTest {
     @Ignore 
     public void pushValidMetadataWithoutFile() {
 
-        DormRequest request = fixtures.getRequestWithoutFile();
+        DormWebServiceRequest request = fixtures.getRequestWithoutFile();
         LOG.trace("Test request = " + request);
 
         when(processor.push(request)).thenThrow(new MavenException());
@@ -83,7 +83,7 @@ public class MavenResourceUnitTest extends AbstractUnitTest {
 
     public void getWithValidMetadata() {
 
-        DormRequest request = fixtures.getRequestWithoutFile();
+        DormWebServiceRequest request = fixtures.getRequestWithoutFile();
         LOG.trace("Test request = " + request);
 
         when(processor.get(request)).thenReturn(fixtures.getDependencyWithResource());
@@ -101,7 +101,7 @@ public class MavenResourceUnitTest extends AbstractUnitTest {
     @Ignore
     public void getWithInvalidMetadata() {
 
-        DormRequest request = new DormRequestBuilder(fixtures.getRequestWithoutFile())
+        DormWebServiceRequest request = new DormRequestBuilder(fixtures.getRequestWithoutFile())
                 .property(MavenMetadataExtension.METADATA_ARTIFACTID, null)
                 .build();
 

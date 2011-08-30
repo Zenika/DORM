@@ -27,8 +27,8 @@ public class DormProcessor implements ProcessorExtension {
      * @param request
      * @return the node containing the extension and file if exists
      */
-    
-    public DependencyNode push(DormRequest request) {
+
+    public DependencyNode push(DormWebServiceRequest request) {
 
         if (LOG.isDebugEnabled()) {
             LOG.debug("Dorm request to push = " + request);
@@ -57,16 +57,17 @@ public class DormProcessor implements ProcessorExtension {
      * @return
      * @deprecated
      */
-    public DormMetadata getMetadata(DormRequest request) {
+    public DormMetadata getMetadata(DormWebServiceRequest request) {
 
         DefaultDormMetadataExtension extension = new DefaultDormMetadataExtension(
                 request.getProperty(DefaultDormMetadataExtension.METADATA_NAME));
 
-        return DefaultDormMetadata.create(request.getVersion(), request.getType(), extension);
+        //todo: fix null version
+        return DefaultDormMetadata.create(null, extension);
     }
 
     @Override
-    public DormServiceGetRequest buildGetRequest(DormRequest request) {
+    public DormServiceGetRequest buildGetRequest(DormWebServiceRequest request) {
         throw new UnsupportedOperationException();
     }
 
@@ -76,7 +77,7 @@ public class DormProcessor implements ProcessorExtension {
     }
 
     @Override
-    public DormServicePutRequest buildPutRequest(DormRequest request) {
+    public DormServicePutRequest buildPutRequest(DormWebServiceRequest request) {
         return null;
     }
 }

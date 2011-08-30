@@ -1,7 +1,7 @@
 package com.zenika.dorm.core.processor;
 
 import com.zenika.dorm.core.model.Dependency;
-import com.zenika.dorm.core.model.DormRequest;
+import com.zenika.dorm.core.model.DormWebServiceRequest;
 
 /**
  * Is this interface usefull ?
@@ -10,7 +10,7 @@ import com.zenika.dorm.core.model.DormRequest;
  */
 public interface Processor {
 
-    public Boolean push(DormRequest request);
+    public Boolean push(DormWebServiceRequest request);
 
-    public Dependency get(DormRequest request);
+    public Dependency get(DormWebServiceRequest request);
 }

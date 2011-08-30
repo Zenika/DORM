@@ -1,6 +1,6 @@
 package com.zenika.dorm.maven.model.impl;
 
-import com.zenika.dorm.core.model.DormRequest;
+import com.zenika.dorm.core.model.DormWebServiceRequest;
 import com.zenika.dorm.maven.helper.MavenSpecificHelper;
 import com.zenika.dorm.maven.model.formatter.MavenFilenameFormatter;
 
@@ -28,7 +28,7 @@ public class MavenMetadataExtensionBuilder {
         this.version = version;
     }
 
-    public MavenMetadataExtensionBuilder(DormRequest request) {
+    public MavenMetadataExtensionBuilder(DormWebServiceRequest request) {
 
         groupId = request.getProperty(MavenMetadataExtension.METADATA_GROUPID);
         artifactId = request.getProperty(MavenMetadataExtension.METADATA_ARTIFACTID);

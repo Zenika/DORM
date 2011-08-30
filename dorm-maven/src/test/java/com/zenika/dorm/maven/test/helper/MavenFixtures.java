@@ -10,7 +10,6 @@ import com.zenika.dorm.core.test.helper.ExtensionFixtures;
 import com.zenika.dorm.maven.model.impl.MavenConstant;
 import com.zenika.dorm.maven.model.impl.MavenMetadataExtension;
 import com.zenika.dorm.maven.model.impl.MavenMetadataExtensionBuilder;
-import com.zenika.dorm.maven.processor.extension.MavenProcessor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -64,7 +63,7 @@ public class MavenFixtures extends ExtensionFixtures {
                 .property(MavenMetadataExtension.METADATA_VERSION, mavenVersion);
     }
 
-    public DormRequest getRequestWithFilename() {
+    public DormWebServiceRequest getRequestWithFilename() {
         return getRequestBuilder()
                 .filename(mavenFilename)
                 .build();
@@ -84,7 +83,7 @@ public class MavenFixtures extends ExtensionFixtures {
 
     public Dependency getSnapshotDependencyWithResource() {
         Usage usage = Usage.createInternal(MavenMetadataExtension.EXTENSION_NAME);
-        return DefaultDependency.create(DefaultDormMetadata.create(getRequestVersion(), getType(),
+        return DefaultDependency.create(DefaultDormMetadata.create(getRequestVersion(),
                 getSnapshotMetadataExtension()), usage, getDormResource());
     }
 
@@ -93,7 +92,7 @@ public class MavenFixtures extends ExtensionFixtures {
     }
 
     public DormMetadata getEntityMetadata() {
-        return DefaultDormMetadata.create(mavenVersion, MavenProcessor.ENTITY_TYPE, getEntityExtension());
+        return DefaultDormMetadata.create(mavenVersion, getEntityExtension());
     }
 
     /**

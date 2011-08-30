@@ -3,7 +3,7 @@ package com.zenika.dorm.core.model.builder;
 import com.zenika.dorm.core.model.Dependency;
 import com.zenika.dorm.core.model.DependencyNode;
 import com.zenika.dorm.core.model.DormMetadataExtension;
-import com.zenika.dorm.core.model.DormRequest;
+import com.zenika.dorm.core.model.DormWebServiceRequest;
 import com.zenika.dorm.core.model.impl.DefaultDependencyNode;
 
 /**
@@ -15,7 +15,7 @@ public class DependencyNodeBuilderFromRequest {
 
     private Dependency dependency;
 
-    public DependencyNodeBuilderFromRequest(DormRequest request, String type,
+    public DependencyNodeBuilderFromRequest(DormWebServiceRequest request, String type,
                                             DormMetadataExtension extension) {
         this.dependency = new DependencyBuilderFromRequest(request, type, extension).build();
     }

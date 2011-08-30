@@ -14,6 +14,6 @@ public class DormFactoryHelper {
 
     public static Dependency createSimpleDependency(String version, String type,
                                                     DormMetadataExtension extension) {
-        return DefaultDependency.create(DefaultDormMetadata.create(version, type, extension));
+        return DefaultDependency.create(DefaultDormMetadata.create(version, extension));
     }
 }

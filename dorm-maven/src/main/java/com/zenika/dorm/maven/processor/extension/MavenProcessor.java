@@ -3,7 +3,7 @@ package com.zenika.dorm.maven.processor.extension;
 import com.zenika.dorm.core.exception.DormProcessException;
 import com.zenika.dorm.core.model.Dependency;
 import com.zenika.dorm.core.model.DependencyNode;
-import com.zenika.dorm.core.model.DormRequest;
+import com.zenika.dorm.core.model.DormWebServiceRequest;
 import com.zenika.dorm.core.model.DormResource;
 import com.zenika.dorm.core.model.builder.DependencyBuilderFromRequest;
 import com.zenika.dorm.core.model.impl.DefaultDependency;
@@ -52,7 +52,7 @@ public class MavenProcessor implements ProcessorExtension {
     public static final String ENTITY_TYPE = "entity";
 
     @Override
-    public DormServiceGetRequest buildGetRequest(DormRequest request) {
+    public DormServiceGetRequest buildGetRequest(DormWebServiceRequest request) {
 
         if (LOG.isDebugEnabled()) {
             LOG.debug("Build maven get request from webservice request : " + request);
@@ -140,7 +140,7 @@ public class MavenProcessor implements ProcessorExtension {
     }
 
     @Override
-    public DormServicePutRequest buildPutRequest(DormRequest request) {
+    public DormServicePutRequest buildPutRequest(DormWebServiceRequest request) {
 
         if (LOG.isDebugEnabled()) {
             LOG.debug("Maven push with request : " + request);

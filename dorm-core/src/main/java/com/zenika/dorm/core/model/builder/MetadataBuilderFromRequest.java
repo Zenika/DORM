@@ -2,7 +2,7 @@ package com.zenika.dorm.core.model.builder;
 
 import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.core.model.DormMetadataExtension;
-import com.zenika.dorm.core.model.DormRequest;
+import com.zenika.dorm.core.model.DormWebServiceRequest;
 import com.zenika.dorm.core.model.impl.DefaultDormMetadata;
 
 /**
@@ -13,16 +13,13 @@ import com.zenika.dorm.core.model.impl.DefaultDormMetadata;
 public class MetadataBuilderFromRequest {
 
     private String version;
-    private String type;
     private DormMetadataExtension extension;
 
-    public MetadataBuilderFromRequest(String type, DormRequest request, DormMetadataExtension extension) {
-        this.type = type;
-        this.version = request.getVersion();
+    public MetadataBuilderFromRequest(String type, DormWebServiceRequest request, DormMetadataExtension extension) {
         this.extension = extension;
     }
 
     public DormMetadata build() {
-        return DefaultDormMetadata.create(version, type, extension);
+        return DefaultDormMetadata.create(version, extension);
     }
 }

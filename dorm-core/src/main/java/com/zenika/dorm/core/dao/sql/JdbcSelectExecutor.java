@@ -161,7 +161,7 @@ public class JdbcSelectExecutor extends JdbcExecutor {
         }
 
         DormMetadataExtension extensionTmp = extension.createFromMap(extensionProperties);
-        DormMetadata metadataTmp = DefaultDormMetadata.create(metadataVersion, metadataType, extensionTmp);
+        DormMetadata metadataTmp = DefaultDormMetadata.create(metadataVersion, extensionTmp);
         Dependency dependency = DefaultDependency.create(metadataTmp, usage);
         return DefaultDependencyNode.create(dependency);
     }

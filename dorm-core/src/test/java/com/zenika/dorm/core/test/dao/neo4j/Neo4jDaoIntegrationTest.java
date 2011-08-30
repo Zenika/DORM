@@ -1,17 +1,12 @@
 package com.zenika.dorm.core.test.dao.neo4j;
 
 import com.zenika.dorm.core.dao.neo4j.DormDaoNeo4j;
-import com.zenika.dorm.core.dao.sql.DormDaoJdbc;
 import com.zenika.dorm.core.graph.visitor.impl.DependenciesNodeCollector;
 import com.zenika.dorm.core.model.Dependency;
 import com.zenika.dorm.core.model.DependencyNode;
 import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.core.model.DormMetadataExtension;
-import com.zenika.dorm.core.model.impl.DefaultDependency;
-import com.zenika.dorm.core.model.impl.DefaultDependencyNode;
-import com.zenika.dorm.core.model.impl.DefaultDormMetadata;
-import com.zenika.dorm.core.model.impl.DefaultDormMetadataExtension;
-import com.zenika.dorm.core.model.impl.Usage;
+import com.zenika.dorm.core.model.impl.*;
 import com.zenika.dorm.core.service.get.DormServiceGetValues;
 import com.zenika.dorm.core.service.impl.get.DefaultDormServiceGetValues;
 import org.junit.Before;
@@ -21,16 +16,8 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
-
-import static org.fest.assertions.Assertions.assertThat;
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.mock;
 
 /**
  * @author Antoine ROUAZE <antoine.rouaze AT zenika.com>
@@ -107,12 +94,12 @@ public class Neo4jDaoIntegrationTest {
     @Test
     public void testPushWithManyChildren() {
         DormMetadataExtension extension19Response = new DefaultDormMetadataExtension("maven");
-        DormMetadata metadata20Response = DefaultDormMetadata.create("1.0.0", "dorm", extension19Response);
+        DormMetadata metadata20Response = DefaultDormMetadata.create("1.0.0", extension19Response);
         Dependency dependency21Response = DefaultDependency.create(metadata20Response, Usage.create("DEFAULT"));
         DependencyNode dependencyNode = DefaultDependencyNode.create(dependency21Response);
         for (int i = 1; i < 100; i++) {
             DormMetadataExtension extensionBis = new DefaultDormMetadataExtension("maven" + (i * 10));
-            DormMetadata metadataBis = DefaultDormMetadata.create("1.0.0", "dorm", extensionBis);
+            DormMetadata metadataBis = DefaultDormMetadata.create("1.0.0", extensionBis);
             Dependency dependencyBis = DefaultDependency.create(metadataBis, Usage.create("DEFAULT"));
             DependencyNode dependencyNodeBis = DefaultDependencyNode.create(dependencyBis);
             dependencyNode.addChild(dependencyNodeBis);
@@ -185,7 +172,7 @@ public class Neo4jDaoIntegrationTest {
 
     private DependencyNode createDependencyNode(String name, String version) {
         DormMetadataExtension extension19Response = new DefaultDormMetadataExtension(name);
-        DormMetadata metadata20Response = DefaultDormMetadata.create(version, "dorm", extension19Response);
+        DormMetadata metadata20Response = DefaultDormMetadata.create(version, extension19Response);
         Dependency dependency21Response = DefaultDependency.create(metadata20Response, usage);
         DependencyNode dependencyNode = DefaultDependencyNode.create(dependency21Response);
         return dependencyNode;

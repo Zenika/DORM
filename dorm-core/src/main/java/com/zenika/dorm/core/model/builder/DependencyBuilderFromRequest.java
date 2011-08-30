@@ -18,7 +18,7 @@ public class DependencyBuilderFromRequest {
     private DormResource resource;
     private Usage usage;
 
-    private DependencyBuilderFromRequest(DormRequest request) {
+    private DependencyBuilderFromRequest(DormWebServiceRequest request) {
 
         // by default use the usage of the request if exists,
         // but can be overriden by the usage() of the builder
@@ -30,12 +30,12 @@ public class DependencyBuilderFromRequest {
         }
     }
 
-    public DependencyBuilderFromRequest(DormRequest request, DormMetadata metadata) {
+    public DependencyBuilderFromRequest(DormWebServiceRequest request, DormMetadata metadata) {
         this(request);
         this.metadata = metadata;
     }
 
-    public DependencyBuilderFromRequest(DormRequest request, String type, DormMetadataExtension extension) {
+    public DependencyBuilderFromRequest(DormWebServiceRequest request, String type, DormMetadataExtension extension) {
         this(request);
         this.metadata = new MetadataBuilderFromRequest(type, request, extension).build();
     }

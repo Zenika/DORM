@@ -8,7 +8,7 @@ import java.util.Map;
  *
  * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>
  */
-public interface DormRequest {
+public interface DormWebServiceRequest {
 
     public final static String VERSION = "version";
     public final static String USAGE = "usage";
@@ -17,26 +17,15 @@ public interface DormRequest {
 
     public String getOrigin();
 
+    public String getUsage();
+
     public String getFilename();
 
     public File getFile();
 
     public boolean hasFile();
 
-    public String getVersion();
-
-    public String getType();
-
-    public String getUsage();
-
     public String getProperty(String key);
 
-    public boolean isPostHandler();
-
-    /**
-     * The request properties in read only mode
-     *
-     * @return the request properties
-     */
     public Map<String, String> getProperties();
 }

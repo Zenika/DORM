@@ -1,7 +1,7 @@
 package com.zenika.dorm.core.model.builder;
 
-import com.zenika.dorm.core.model.DormRequest;
-import com.zenika.dorm.core.model.impl.DefaultDormRequest;
+import com.zenika.dorm.core.model.DormWebServiceRequest;
+import com.zenika.dorm.core.model.impl.DefaultDormWebServiceRequest;
 
 import java.io.File;
 import java.util.HashMap;
@@ -14,23 +14,18 @@ import java.util.Map;
  */
 public class DormRequestBuilder {
 
-    private String version;
-    private String type;
     private String origin;
     private String usage;
     private String filename;
     private File file;
-    private boolean postHandler;
     private Map<String, String> properties = new HashMap<String, String>();
 
     /**
-     * Start builder with required metadatas : version and origin
+     * Start builder with required metadatas : origin
      *
-     * @param version
      * @param origin
      */
-    public DormRequestBuilder(String version, String origin) {
-        this.version = version;
+    public DormRequestBuilder(String origin) {
         this.origin = origin;
     }
 
@@ -39,24 +34,12 @@ public class DormRequestBuilder {
      *
      * @param request
      */
-    public DormRequestBuilder(DormRequest request) {
-        this.version = request.getVersion();
-        this.type = request.getType();
+    public DormRequestBuilder(DormWebServiceRequest request) {
         this.origin = request.getOrigin();
         this.usage = request.getUsage();
         this.filename = request.getFilename();
         this.file = request.getFile();
         this.properties.putAll(request.getProperties());
-    }
-
-    public DormRequestBuilder version(String version) {
-        this.version = version;
-        return this;
-    }
-
-    public DormRequestBuilder type(String type) {
-        this.type = type;
-        return this;
     }
 
     public DormRequestBuilder origin(String origin) {
@@ -84,21 +67,8 @@ public class DormRequestBuilder {
         return this;
     }
 
-    public DormRequestBuilder postHandler(boolean postHandler){
-        this.postHandler = true;
-        return this;
-    }
-
-    public DormRequest build() {
-        return new DefaultDormRequest(this);
-    }
-
-    public String getVersion() {
-        return version;
-    }
-
-    public String getType() {
-        return type;
+    public DormWebServiceRequest build() {
+        return new DefaultDormWebServiceRequest(this);
     }
 
     public String getOrigin() {
@@ -119,9 +89,5 @@ public class DormRequestBuilder {
 
     public Map<String, String> getProperties() {
         return properties;
-    }
-
-    public boolean getPostHandler(){
-        return postHandler;
     }
 }

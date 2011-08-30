@@ -3,7 +3,7 @@ package com.zenika.dorm.core.ws.resource;
 import com.google.inject.Inject;
 import com.sun.jersey.multipart.FormDataParam;
 import com.zenika.dorm.core.exception.DormProcessException;
-import com.zenika.dorm.core.model.DormRequest;
+import com.zenika.dorm.core.model.DormWebServiceRequest;
 import com.zenika.dorm.core.model.builder.DormRequestBuilder;
 import com.zenika.dorm.core.model.impl.DefaultDormMetadataExtension;
 import com.zenika.dorm.core.processor.Processor;
@@ -66,7 +66,7 @@ public class DormResource extends AbstractResource {
 
         LOG.trace("POST with params : name = " + name + "; version = " + version);
 
-        DormRequest request = new DormRequestBuilder(version, DefaultDormMetadataExtension.EXTENSION_NAME)
+        DormWebServiceRequest request = new DormRequestBuilder(DefaultDormMetadataExtension.EXTENSION_NAME)
                 .property(DefaultDormMetadataExtension.METADATA_NAME, name)
                 .build();
 
@@ -92,7 +92,7 @@ public class DormResource extends AbstractResource {
 
         LOG.trace("POST with params : name = " + name + "; version = " + version);
 
-        DormRequest request = new DormRequestBuilder(version, DefaultDormMetadataExtension.EXTENSION_NAME)
+        DormWebServiceRequest request = new DormRequestBuilder(DefaultDormMetadataExtension.EXTENSION_NAME)
                 .filename(filename)
                 .file(file)
                 .property(DefaultDormMetadataExtension.METADATA_NAME, name)
@@ -145,7 +145,7 @@ public class DormResource extends AbstractResource {
         return Response.status(Response.Status.SERVICE_UNAVAILABLE).build();
     }
 
-    private Response pushRequest(DormRequest request) {
+    private Response pushRequest(DormWebServiceRequest request) {
 
         LOG.debug("Request to push = " + request);
 

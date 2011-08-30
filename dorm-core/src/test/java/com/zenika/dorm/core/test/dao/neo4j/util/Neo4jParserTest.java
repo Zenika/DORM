@@ -24,7 +24,7 @@ public class Neo4jParserTest {
     @Before
     public void setUp(){
         origin = new DefaultDormMetadataExtension("DEFAULT");
-        dormMetadata = DefaultDormMetadata.create("1.0.0", "jar", origin);
+        dormMetadata = DefaultDormMetadata.create("1.0.0", origin);
 
     }
 

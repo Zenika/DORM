@@ -1,16 +1,11 @@
 package com.zenika.dorm.core.test.processor;
 
-import com.zenika.dorm.core.exception.CoreException;
-import com.zenika.dorm.core.model.DependencyNode;
-import com.zenika.dorm.core.model.DormRequest;
 import com.zenika.dorm.core.processor.Processor;
 import com.zenika.dorm.core.processor.ProcessorExtension;
 import com.zenika.dorm.core.processor.impl.DefaultProcessor;
 import com.zenika.dorm.core.service.DormService;
 import com.zenika.dorm.core.test.unit.AbstractUnitTest;
-import org.fest.assertions.Assertions;
 import org.junit.Ignore;
-import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 

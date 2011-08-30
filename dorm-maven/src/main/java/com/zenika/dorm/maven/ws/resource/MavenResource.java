@@ -2,7 +2,7 @@ package com.zenika.dorm.maven.ws.resource;
 
 import com.google.inject.Inject;
 import com.zenika.dorm.core.model.Dependency;
-import com.zenika.dorm.core.model.DormRequest;
+import com.zenika.dorm.core.model.DormWebServiceRequest;
 import com.zenika.dorm.core.model.builder.DormRequestBuilder;
 import com.zenika.dorm.core.processor.Processor;
 import com.zenika.dorm.core.ws.resource.AbstractResource;
@@ -41,7 +41,7 @@ public class MavenResource extends AbstractResource {
 
         LOG.info("Call to maven web service : GET");
 
-        DormRequest request = new DormRequestBuilder(version, MavenMetadataExtension.EXTENSION_NAME)
+        DormWebServiceRequest request = new DormRequestBuilder(version)
                 .filename(filename)
                 .property(MavenMetadataExtension.METADATA_GROUPID, MavenResourceHelper.formatGroupId(groupId))
                 .property(MavenMetadataExtension.METADATA_ARTIFACTID, artifactId)
@@ -77,7 +77,7 @@ public class MavenResource extends AbstractResource {
 
         LOG.info("Call to maven web service : PUT");
 
-        DormRequest request = new DormRequestBuilder(version, MavenMetadataExtension.EXTENSION_NAME)
+        DormWebServiceRequest request = new DormRequestBuilder(version)
                 .file(file)
                 .filename(fileName)
                 .property(MavenMetadataExtension.METADATA_GROUPID, MavenResourceHelper.formatGroupId(groupId))

@@ -110,7 +110,7 @@ public class JdbcPushExecutor extends JdbcExecutor {
             statement = connection.prepareStatement("INSERT INTO dorm_metadata (metadata_qualifier, metadata_version, metadata_type) VALUES (?, ?, ?);", Statement.RETURN_GENERATED_KEYS);
             statement.setString(1, metadata.getQualifier());
             statement.setString(2, metadata.getVersion());
-            statement.setString(3, metadata.getType());
+//            statement.setString(3, metadata.getType());
             if (statement.executeUpdate() > 0) {
                 ResultSet resultSet = statement.getGeneratedKeys();
                 if (resultSet.next()) {

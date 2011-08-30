@@ -13,27 +13,27 @@ import com.zenika.dorm.core.model.impl.DefaultDormMetadataExtension;
 public class DormGraphFixtures extends DormFixtures {
 
     public Dependency getDependencyWithResource2() {
-        return DefaultDependency.create(DefaultDormMetadata.create(getRequestVersion(), getType(),
+        return DefaultDependency.create(DefaultDormMetadata.create(getRequestVersion(),
                 new DefaultDormMetadataExtension("dependency with file 2")), getDormResource());
     }
 
     public Dependency getDependencyWithResource3() {
-        return DefaultDependency.create(DefaultDormMetadata.create(getRequestVersion(), getType(),
+        return DefaultDependency.create(DefaultDormMetadata.create(getRequestVersion(),
                 new DefaultDormMetadataExtension("dependency with file 3")), getDormResource());
     }
 
     public Dependency getDependencyWithResource4() {
-        return DefaultDependency.create(DefaultDormMetadata.create(getRequestVersion(), getType(),
+        return DefaultDependency.create(DefaultDormMetadata.create(getRequestVersion(),
                 new DefaultDormMetadataExtension("dependency with file 4")), getDormResource());
     }
 
     public Dependency getDependencyWithResource5() {
-        return DefaultDependency.create(DefaultDormMetadata.create(getRequestVersion(), getType(),
+        return DefaultDependency.create(DefaultDormMetadata.create(getRequestVersion(),
                 new DefaultDormMetadataExtension("dependency with file 5")), getDormResource());
     }
 
     public Dependency getDependencyWithoutResource2() {
-        return DefaultDependency.create(DefaultDormMetadata.create(getRequestVersion(), getType(),
+        return DefaultDependency.create(DefaultDormMetadata.create(getRequestVersion(),
                 new DefaultDormMetadataExtension("dependency without file 1")));
     }
 

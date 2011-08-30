@@ -4,7 +4,7 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.zenika.dorm.core.exception.CoreException;
 import com.zenika.dorm.core.model.Dependency;
-import com.zenika.dorm.core.model.DormRequest;
+import com.zenika.dorm.core.model.DormWebServiceRequest;
 import com.zenika.dorm.core.model.impl.Usage;
 import com.zenika.dorm.core.processor.Processor;
 import com.zenika.dorm.core.processor.ProcessorExtension;
@@ -38,7 +38,7 @@ public class DefaultProcessor implements Processor {
     private DormService service;
 
     @Override
-    public Boolean push(DormRequest request) {
+    public Boolean push(DormWebServiceRequest request) {
 
         if (null == request) {
             throw new CoreException("Request is required");
@@ -51,7 +51,7 @@ public class DefaultProcessor implements Processor {
     }
 
     @Override
-    public Dependency get(DormRequest request) {
+    public Dependency get(DormWebServiceRequest request) {
 
         if (null == request) {
             throw new CoreException("Request is required");
@@ -90,7 +90,7 @@ public class DefaultProcessor implements Processor {
      * @param request
      * @return the extension corresponding to the origin
      */
-    private ProcessorExtension getExtension(DormRequest request) {
+    private ProcessorExtension getExtension(DormWebServiceRequest request) {
 
         String origin = request.getOrigin();
 

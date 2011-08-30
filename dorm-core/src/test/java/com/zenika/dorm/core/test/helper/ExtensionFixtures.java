@@ -58,23 +58,23 @@ public abstract class ExtensionFixtures {
     }
 
     public DormRequestBuilder getRequestBuilder() {
-        return new DormRequestBuilder(getRequestVersion(), getMetadataExtension().getExtensionName());
+        return new DormRequestBuilder(getRequestVersion());
     }
 
     public DormRequestBuilder getRequestBuilderWithFile() {
         return getRequestBuilder().filename(filenameWithExtension).file(file);
     }
 
-    public DormRequest getRequestWithoutFile() {
+    public DormWebServiceRequest getRequestWithoutFile() {
         return getRequestBuilder().build();
     }
 
-    public DormRequest getRequestWithFile() {
+    public DormWebServiceRequest getRequestWithFile() {
         return getRequestBuilderWithFile().build();
     }
 
     public DormMetadata getMetadata() {
-        return DefaultDormMetadata.create(getRequestVersion(), getType(), getMetadataExtension());
+        return DefaultDormMetadata.create(getRequestVersion(), getMetadataExtension());
     }
 
     public DormResource getDormResource() {

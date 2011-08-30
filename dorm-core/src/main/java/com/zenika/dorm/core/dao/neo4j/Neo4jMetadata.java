@@ -8,7 +8,6 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -34,12 +33,12 @@ public class Neo4jMetadata extends Neo4jNode implements DormMetadata {
 
     public Neo4jMetadata(DormMetadata metadata) {
         version = metadata.getVersion();
-        // todo: Delete when the model will fix
-        if (metadata.getType() == null) {
-            type = "default";
-        } else {
-            type = metadata.getType();
-        }
+//        // todo: Delete when the model will fix
+//        if (metadata.getType() == null) {
+//            type = "default";
+//        } else {
+//            type = metadata.getType();
+//        }
         qualifier = metadata.getQualifier();
         extension = new Neo4jMetadataExtension(metadata.getExtension());
     }
@@ -62,11 +61,6 @@ public class Neo4jMetadata extends Neo4jNode implements DormMetadata {
 
     public String getVersion() {
         return version;
-    }
-
-    @Override
-    public String getType() {
-        return type;
     }
 
     public void setType(String type) {

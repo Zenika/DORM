@@ -236,7 +236,7 @@ public class    Neo4jDaoTestProvider {
         usage = Usage.create("DEFAULT");
         extension = new DefaultDormMetadataExtension("habi-base");
         neo4jExtension = new Neo4jMetadataExtension(extension);
-        metadata = DefaultDormMetadata.create("0.6", "jar", extension);
+        metadata = DefaultDormMetadata.create("0.6", extension);
         neo4jMetadata = new Neo4jMetadata(metadata);
         neo4jMetadata.setExtension(neo4jExtension);
         dependency = DefaultDependency.create(metadata, usage);

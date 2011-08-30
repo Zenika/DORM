@@ -14,12 +14,6 @@ public interface DormMetadata {
 
     public String getVersion();
 
-    /**
-     * The type of the medatada, commonly the extension of the file associated to the metadata
-     *
-     * @return the type
-     */
-    public String getType();
 
     public DormMetadataExtension getExtension();
 }
