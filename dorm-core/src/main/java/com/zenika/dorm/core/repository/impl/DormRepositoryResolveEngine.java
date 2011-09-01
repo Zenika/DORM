@@ -30,7 +30,7 @@ public class DormRepositoryResolveEngine {
         File file = FileUtil.resolveFile(repository.getBase(), path);
         // todo: has to check
 //        if (file.exists()) {
-            return new DefaultDormRepositoryResource(file, repository);
+            return new DormRepositoryResource(file, repository);
 //        } else {
 //            throw new RepositoryException("File doesn't exist in the repo").type(CoreException.Type.NULL);
 //        }

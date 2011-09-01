@@ -57,7 +57,7 @@ public class DefaultDormRepository implements DormRepository {
         }
 
         String location = getPathFromMetadata(metadata);
-        DormRepositoryResource resource = new DefaultDormRepositoryResource(file.getFile(), this, location);
+        DormRepositoryResource resource = new DormRepositoryResource(file.getFile(), this, location);
 
         deployEngine.deploy(resource);
 
@@ -98,7 +98,7 @@ public class DefaultDormRepository implements DormRepository {
 
         String location = foldersPath + "/" + FilenameUtils.normalizeNoEndSeparator(resource.getFilename());
 
-        DormRepositoryResource repositoryResource = new DefaultDormRepositoryResource(resource.getFile(), this, location);
+        DormRepositoryResource repositoryResource = new DormRepositoryResource(resource.getFile(), this, location);
         deployEngine.deploy(repositoryResource);
 
         return true;
