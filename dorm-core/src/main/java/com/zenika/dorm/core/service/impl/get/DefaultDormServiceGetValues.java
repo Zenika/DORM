@@ -2,6 +2,7 @@ package com.zenika.dorm.core.service.impl.get;
 
 import com.zenika.dorm.core.model.DormMetadataExtension;
 import com.zenika.dorm.core.model.impl.Usage;
+import com.zenika.dorm.core.service.DormServiceValues;
 import com.zenika.dorm.core.service.get.DormServiceGetValues;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
@@ -11,7 +12,7 @@ import java.util.Map;
 /**
  * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>
  */
-public class DefaultDormServiceGetValues implements DormServiceGetValues {
+public class DefaultDormServiceGetValues extends DormServiceValues implements DormServiceGetValues {
 
     private String version;
     private String qualifier;
@@ -20,6 +21,7 @@ public class DefaultDormServiceGetValues implements DormServiceGetValues {
     private Map<String, String> metadataExtensionClauses = new HashMap<String, String>();
 
     public DefaultDormServiceGetValues(DormMetadataExtension metadataExtension) {
+        super(metadataExtension.getExtensionName());
         this.metadataExtension = metadataExtension;
     }
 

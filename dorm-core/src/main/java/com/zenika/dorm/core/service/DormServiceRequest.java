@@ -6,4 +6,6 @@ package com.zenika.dorm.core.service;
 public interface DormServiceRequest extends DormServiceProcess {
 
     public boolean isRepositoryRequest();
+
+    public boolean isDatabaseRequest();
 }

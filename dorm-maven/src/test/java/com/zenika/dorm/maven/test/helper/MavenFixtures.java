@@ -7,9 +7,9 @@ import com.zenika.dorm.core.model.impl.DefaultDependencyNode;
 import com.zenika.dorm.core.model.impl.DefaultDormMetadata;
 import com.zenika.dorm.core.model.impl.Usage;
 import com.zenika.dorm.core.test.helper.ExtensionFixtures;
+import com.zenika.dorm.maven.model.builder.MavenMetadataBuilder;
 import com.zenika.dorm.maven.model.impl.MavenConstant;
 import com.zenika.dorm.maven.model.impl.MavenMetadataExtension;
-import com.zenika.dorm.maven.model.impl.MavenMetadataExtensionBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,11 +32,16 @@ public class MavenFixtures extends ExtensionFixtures {
 
     @Override
     public DormMetadataExtension getMetadataExtension() {
-        return new MavenMetadataExtensionBuilder(groupId, artifactId, mavenVersion).build();
+        return new MavenMetadataBuilder(artifactId)
+                .groupId(groupId)
+                .version(mavenVersion)
+                .build();
     }
 
     public DormMetadataExtension getSnapshotMetadataExtension() {
-        return new MavenMetadataExtensionBuilder(groupId, artifactId, mavenVersion)
+        return new MavenMetadataBuilder(artifactId)
+                .groupId(groupId)
+                .version(mavenVersion)
                 .snapshot(true)
                 .extension("jar")
                 .buildNumber("1")
@@ -88,7 +93,10 @@ public class MavenFixtures extends ExtensionFixtures {
     }
 
     public MavenMetadataExtension getEntityExtension() {
-        return new MavenMetadataExtensionBuilder(groupId, artifactId, mavenVersion).build();
+        return new MavenMetadataBuilder(artifactId)
+                .groupId(groupId)
+                .version(mavenVersion)
+                .build();
     }
 
     public DormMetadata getEntityMetadata() {

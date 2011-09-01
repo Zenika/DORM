@@ -1,6 +1,6 @@
 package com.zenika.dorm.maven.writer;
 
-import com.zenika.dorm.maven.builder.MavenMetadataBuilder;
+import com.zenika.dorm.maven.converter.MavenDormMetadataConverter;
 import com.zenika.dorm.maven.model.impl.MavenMetadataExtension;
 import org.apache.maven.artifact.repository.metadata.Metadata;
 import org.apache.maven.artifact.repository.metadata.io.xpp3.MetadataXpp3Writer;
@@ -23,7 +23,7 @@ public class MavenMetadataFileWriter {
     public File write(MavenMetadataExtension metadata) {
 
         MetadataXpp3Writer writer = new MetadataXpp3Writer();
-        Metadata mavenMetadata = MavenMetadataBuilder.buildMetadata(metadata);
+        Metadata mavenMetadata = MavenDormMetadataConverter.dormToMaven(metadata);
 
         try {
             writer.write(new FileOutputStream(file), mavenMetadata);

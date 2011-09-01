@@ -10,11 +10,6 @@ import java.util.Map;
  */
 public interface DormWebServiceRequest {
 
-    public final static String VERSION = "version";
-    public final static String USAGE = "usage";
-    public final static String ORIGIN = "origin";
-    public final static String FILENAME = "filename";
-
     public String getOrigin();
 
     public String getUsage();

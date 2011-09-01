@@ -3,21 +3,18 @@ package com.zenika.dorm.maven.processor.extension;
 import com.zenika.dorm.core.exception.DormProcessException;
 import com.zenika.dorm.core.model.Dependency;
 import com.zenika.dorm.core.model.DependencyNode;
-import com.zenika.dorm.core.model.DormWebServiceRequest;
 import com.zenika.dorm.core.model.DormResource;
-import com.zenika.dorm.core.model.builder.DependencyBuilderFromRequest;
+import com.zenika.dorm.core.model.DormWebServiceRequest;
 import com.zenika.dorm.core.model.impl.DefaultDependency;
-import com.zenika.dorm.core.model.impl.DefaultDependencyNode;
 import com.zenika.dorm.core.model.impl.DefaultDormResource;
 import com.zenika.dorm.core.processor.ProcessorExtension;
 import com.zenika.dorm.core.service.get.DormServiceGetRequest;
 import com.zenika.dorm.core.service.get.DormServiceGetResult;
-import com.zenika.dorm.core.service.impl.put.DefaultDormServicePutRequest;
 import com.zenika.dorm.core.service.put.DormServicePutRequest;
+import com.zenika.dorm.core.service.put.DormServicePutValues;
 import com.zenika.dorm.maven.exception.MavenException;
 import com.zenika.dorm.maven.model.impl.MavenConstant;
 import com.zenika.dorm.maven.model.impl.MavenMetadataExtension;
-import com.zenika.dorm.maven.model.impl.MavenMetadataExtensionBuilder;
 import com.zenika.dorm.maven.processor.comparator.MavenSnapshotTimestampComparator;
 import com.zenika.dorm.maven.processor.helper.MavenProcessorHelper;
 import com.zenika.dorm.maven.service.get.MavenServiceGetRequestBuilder;
@@ -49,8 +46,6 @@ public class MavenProcessor implements ProcessorExtension {
     private static final String PROCESS_GET_ARTIFACT = "get_artifact";
     private static final String PROCESS_PUT_ARTIFACT = "put_artifact";
 
-    public static final String ENTITY_TYPE = "entity";
-
     @Override
     public DormServiceGetRequest buildGetRequest(DormWebServiceRequest request) {
 
@@ -58,7 +53,7 @@ public class MavenProcessor implements ProcessorExtension {
             LOG.debug("Build maven get request from webservice request : " + request);
         }
 
-        MavenMetadataExtension mavenMetadata = new MavenMetadataExtensionBuilder(request).build();
+        MavenMetadataExtension mavenMetadata = null;// MavenMetadataBuilder(request).build();
 
         if (LOG.isDebugEnabled()) {
             LOG.debug("Maven metadata : " + mavenMetadata);
@@ -143,29 +138,45 @@ public class MavenProcessor implements ProcessorExtension {
     public DormServicePutRequest buildPutRequest(DormWebServiceRequest request) {
 
         if (LOG.isDebugEnabled()) {
-            LOG.debug("Maven push with request : " + request);
+            LOG.debug("Maven webservice put request : " + request);
         }
 
         if (!request.hasFile()) {
             throw new MavenException("File is required.");
         }
 
-        MavenMetadataExtension extension = new MavenMetadataExtensionBuilder(request).build();
+        DormResource resource = DefaultDormResource.create(request.getFilename(), request.getFile());
 
-        String type = extension.getExtension();
+        DormServicePutRequest putRequest = new DormServicePutRequest(PROCESS_PUT_ARTIFACT, resource);
+        putRequest.setDatabaseRequest(false);
+        putRequest.setRepositoryRequest(true);
 
-        Dependency dependency = new DependencyBuilderFromRequest(request, type, extension)
-                .build();
+        DormServicePutValues values = new DormServicePutValues(MavenMetadataExtension.EXTENSION_NAME);
+        values.setResourcePath(request.getProperty("path"));
+        values.setResourceInternal(true);
+        putRequest.setValues(values);
 
         if (LOG.isDebugEnabled()) {
-            LOG.debug("Maven real dependency = " + dependency);
+            LOG.debug("Maven service put request to store artifact as this without any logic : " +
+                    putRequest);
         }
 
-        DependencyNode node = DefaultDependencyNode.create(dependency);
-
-        DefaultDormServicePutRequest putRequest = new DefaultDormServicePutRequest(PROCESS_PUT_ARTIFACT);
-        putRequest.setNode(node);
-
         return putRequest;
+
+//        MavenMetadataExtension extension = new MavenMetadataBuilder(request).build();
+//
+//        String type = extension.getExtension();
+//
+//        Dependency dependency = new DependencyBuilderFromRequest(request, type, extension)
+//                .build();
+//
+//        if (LOG.isDebugEnabled()) {
+//            LOG.debug("Maven real dependency = " + dependency);
+//        }
+//
+//        DependencyNode node = DefaultDependencyNode.create(dependency);
+//
+//        DefaultDormServicePutRequest putRequest = new DefaultDormServicePutRequest(PROCESS_PUT_ARTIFACT);
+//        putRequest.setNode(node);
     }
 }

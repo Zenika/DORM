@@ -1,7 +1,6 @@
 package com.zenika.dorm.maven.ws.resource;
 
 import com.google.inject.Inject;
-import com.zenika.dorm.core.model.Dependency;
 import com.zenika.dorm.core.model.DormWebServiceRequest;
 import com.zenika.dorm.core.model.builder.DormRequestBuilder;
 import com.zenika.dorm.core.processor.Processor;
@@ -33,64 +32,83 @@ public class MavenResource extends AbstractResource {
 
     @GET
     @Produces(MediaType.APPLICATION_OCTET_STREAM)
-    @Path("{groupId:.*}/{artifactId}/{version}/{filename}")
-    public Response get(@PathParam("groupId") String groupId,
-                        @PathParam("artifactId") String artifactId,
-                        @PathParam("version") String version,
+    @Path("{path:.*}/{filename}")
+    public Response get(@PathParam("path") String path,
                         @PathParam("filename") String filename) {
 
         LOG.info("Call to maven web service : GET");
 
-        DormWebServiceRequest request = new DormRequestBuilder(version)
-                .filename(filename)
-                .property(MavenMetadataExtension.METADATA_GROUPID, MavenResourceHelper.formatGroupId(groupId))
-                .property(MavenMetadataExtension.METADATA_ARTIFACTID, artifactId)
-                .property(MavenMetadataExtension.METADATA_VERSION, version)
-                .build();
+        return Response.status(Response.Status.NOT_FOUND).build();
 
-        if (LOG.isInfoEnabled()) {
-            LOG.info("GET request to the maven web service : " + request);
-        }
-
-        Dependency dependency = processor.get(request);
-
-        if (null == dependency.getResource() || null == dependency.getResource().getFile() || !dependency.getResource().getFile().exists()) {
-            LOG.info("Return http response 404");
-            return Response.status(Response.Status.NOT_FOUND).build();
-        }
-
-        if (LOG.isInfoEnabled()) {
-            LOG.info("Return response http 200 with the dependency : " + dependency);
-        }
-
-        return Response.status(Response.Status.OK).entity(dependency.getResource().getFile()).build();
+//        DormWebServiceRequest request = new DormRequestBuilder(version)
+//                .filename(filename)
+//                .property(MavenMetadataExtension.METADATA_GROUPID, MavenResourceHelper.formatGroupId(groupId))
+//                .property(MavenMetadataExtension.METADATA_ARTIFACTID, artifactId)
+//                .property(MavenMetadataExtension.METADATA_VERSION, version)
+//                .build();
+//
+//        if (LOG.isInfoEnabled()) {
+//            LOG.info("GET request to the maven web service : " + request);
+//        }
+//
+//        Dependency dependency = processor.get(request);
+//
+//        if (null == dependency.getResource() || null == dependency.getResource().getFile() || !dependency.getResource().getFile().exists()) {
+//            LOG.info("Return http response 404");
+//            return Response.status(Response.Status.NOT_FOUND).build();
+//        }
+//
+//        if (LOG.isInfoEnabled()) {
+//            LOG.info("Return response http 200 with the dependency : " + dependency);
+//        }
+//
+//        return Response.status(Response.Status.OK).entity(dependency.getResource().getFile()).build();
     }
+
+//    @PUT
+//    @Consumes(MediaType.APPLICATION_OCTET_STREAM)
+//    @Path("{groupId:.*}/{artifactId}/{version}/{fileName}")
+//    public Response put(File file,
+//                        @PathParam("groupId") String groupId,
+//                        @PathParam("artifactId") String artifactId,
+//                        @PathParam("version") String version,
+//                        @PathParam("fileName") String fileName) {
+//
+//        LOG.info("Call to maven web service : PUT");
+//
+//        DormWebServiceRequest request = new DormRequestBuilder(MavenMetadataExtension.EXTENSION_NAME)
+//                .file(file)
+//                .filename(fileName)
+//                .property(MavenMetadataExtension.METADATA_GROUPID, MavenResourceHelper.formatGroupId(groupId))
+//                .property(MavenMetadataExtension.METADATA_ARTIFACTID, artifactId)
+//                .property(MavenMetadataExtension.METADATA_VERSION, version)
+//                .build();
+//
+//        LOG.info("PUT request to the maven web service : " + request);
+//
+//        if (processor.push(request)) {
+//            return Response.status(Response.Status.OK).build();
+//        }
+//
+//        return Response.status(Response.Status.NOT_FOUND).build();
+//    }
+
 
     @PUT
     @Consumes(MediaType.APPLICATION_OCTET_STREAM)
-    @Path("{groupId:.*}/{artifactId}/{version}/{fileName}")
-    public Response put(File file,
-                        @PathParam("groupId") String groupId,
-                        @PathParam("artifactId") String artifactId,
-                        @PathParam("version") String version,
-                        @PathParam("fileName") String fileName) {
+    @Path("{path:.*}/{filename}")
+    public Response put(@PathParam("path") String path,
+                        @PathParam("filename") String filename,
+                        File file) {
 
-        LOG.info("Call to maven web service : PUT");
-
-        DormWebServiceRequest request = new DormRequestBuilder(version)
+        DormWebServiceRequest request = new DormRequestBuilder(MavenMetadataExtension.EXTENSION_NAME)
                 .file(file)
-                .filename(fileName)
-                .property(MavenMetadataExtension.METADATA_GROUPID, MavenResourceHelper.formatGroupId(groupId))
-                .property(MavenMetadataExtension.METADATA_ARTIFACTID, artifactId)
-                .property(MavenMetadataExtension.METADATA_VERSION, version)
+                .filename(filename)
+                .property("path", path)
                 .build();
 
-        LOG.info("PUT request to the maven web service : " + request);
+        processor.push(request);
 
-        if (processor.push(request)) {
-            return Response.status(Response.Status.OK).build();
-        }
-
-        return Response.status(Response.Status.NOT_FOUND).build();
+        return Response.status(Response.Status.OK).build();
     }
 }

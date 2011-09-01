@@ -10,6 +10,7 @@ public abstract class DefaultDormServiceRequest extends DefaultDormServiceProces
         implements DormServiceRequest {
 
     private boolean repositoryRequest;
+    private boolean databaseRequest;
 
     protected DefaultDormServiceRequest(String processName) {
         super(processName);
@@ -22,6 +23,15 @@ public abstract class DefaultDormServiceRequest extends DefaultDormServiceProces
 
     public void setRepositoryRequest(boolean repositoryRequest) {
         this.repositoryRequest = repositoryRequest;
+    }
+
+    @Override
+    public boolean isDatabaseRequest() {
+        return databaseRequest;
+    }
+
+    public void setDatabaseRequest(boolean databaseRequest) {
+        this.databaseRequest = databaseRequest;
     }
 
     @Override

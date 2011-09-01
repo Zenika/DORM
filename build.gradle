@@ -47,6 +47,12 @@ ideaProject {
 versions = [
         slf4j: '1.6.1',
         logback: '0.9.29',
+
+        commons_lang3: '3.0.1',
+        commons_io: '2.0.1',
+        commons_beanutils: '1.8.3',
+        commons_collections: '3.2.1',
+
         servlet_api: '2.5',
         jersey: '1.8',
         jackson: '1.8.4',
@@ -59,10 +65,7 @@ versions = [
         mockito: '1.8.5',
         morphia: '0.99',
         tomcat: '7.0.19',
-        commons_lang3: '3.0.1',
-        commons_io: '2.0.1',
-        commons_beanutils: '1.8.3',
-        postgresql: '9.0-801.jdbc4'
+        postgresql: '9.0-801.jdbc4',
 ]
 
 // 2nd step, introducing libraries
@@ -73,6 +76,11 @@ libraries = [
         slf4j_log4j: 'org.slf4j:log4j-over-slf4j:' + versions.slf4j,
         logback_core: 'ch.qos.logback:logback-core:' + versions.logback,
         logback_classic: 'ch.qos.logback:logback-classic:' + versions.logback,
+
+        commons_lang3: 'org.apache.commons:commons-lang3:' + versions.commons_lang3,
+        commons_io: 'commons-io:commons-io:' + versions.commons_io,
+        commons_beanutils: 'commons-beanutils:commons-beanutils:' + versions.commons_beanutils,
+        commons_collections: 'commons-collections:commons-collections:' + versions.commons_collections,
 
         servlet_api: 'javax.servlet:servlet-api:' + versions.servlet_api,
 
@@ -96,10 +104,6 @@ libraries = [
         tomcat_embeded_core: 'org.apache.tomcat.embed:tomcat-embed-core:' + versions.tomcat,
         tomcat_embeded_juli: 'org.apache.tomcat.embed:tomcat-embed-logging-juli:' + versions.tomcat,
 
-        commons_lang3: 'org.apache.commons:commons-lang3:' + versions.commons_lang3,
-        commons_io: 'commons-io:commons-io:' + versions.commons_io,
-        commons_beanutils: 'commons-beanutils:commons-beanutils:' + versions.commons_beanutils,
-
         postgresql: 'postgresql:postgresql:' + versions.postgresql
 ]
 
@@ -119,6 +123,7 @@ subprojects {
         compile libraries.commons_lang3
         compile libraries.commons_io
         compile libraries.commons_beanutils
+        compile libraries.commons_collections
 
         // logging
         compile libraries.slf4j_api

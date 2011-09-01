@@ -7,6 +7,7 @@ package com.zenika.dorm.maven.model.impl;
 import com.zenika.dorm.core.model.DormMetadataExtension;
 import com.zenika.dorm.core.util.DormStringUtils;
 import com.zenika.dorm.maven.exception.MavenException;
+import com.zenika.dorm.maven.model.builder.MavenMetadataBuilder;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
@@ -49,9 +50,9 @@ public final class MavenMetadataExtension implements DormMetadataExtension {
     /**
      * Only accessed by the builder in the same package
      */
-    MavenMetadataExtension(String groupId, String artifactId, String version, String extension,
-                           String packaging, String classifier, String timestamp, String buildNumber,
-                           boolean mavenMetadata, boolean snapshot) {
+    public MavenMetadataExtension(String groupId, String artifactId, String version, String extension,
+                                  String packaging, String classifier, String timestamp, String buildNumber,
+                                  boolean mavenMetadata, boolean snapshot) {
 
         if (DormStringUtils.areBlanks(groupId, artifactId, version)) {
             throw new MavenException("Following metadatas are required : groupId, artifactId, versionId");
@@ -143,8 +144,9 @@ public final class MavenMetadataExtension implements DormMetadataExtension {
 
     @Override
     public DormMetadataExtension createFromMap(Map<String, String> properties) {
-        return new MavenMetadataExtensionBuilder(properties.get(METADATA_GROUPID),
-                properties.get(METADATA_ARTIFACTID), properties.get(METADATA_VERSION))
+        return new MavenMetadataBuilder(properties.get(METADATA_ARTIFACTID))
+                .groupId(properties.get(METADATA_GROUPID))
+                .version(properties.get(METADATA_VERSION))
                 .packaging(properties.get(METADATA_PACKAGING))
                 .classifier(properties.get(METADATA_CLASSIFIER))
                 .extension(properties.get(METADATA_EXTENSION))

@@ -15,4 +15,6 @@ public class MavenException extends CoreException {
     public MavenException(String message, Throwable throwable) {
         super(message, throwable);
     }
+
+
 }

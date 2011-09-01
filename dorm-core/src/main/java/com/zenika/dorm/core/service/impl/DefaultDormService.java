@@ -15,7 +15,6 @@ import com.zenika.dorm.core.service.DormService;
 import com.zenika.dorm.core.service.get.DormServiceGetRequest;
 import com.zenika.dorm.core.service.get.DormServiceGetResult;
 import com.zenika.dorm.core.service.impl.get.DefaultDormServiceGetResult;
-import com.zenika.dorm.core.service.impl.put.DefaultDormServicePutResult;
 import com.zenika.dorm.core.service.put.DormServicePutRequest;
 import com.zenika.dorm.core.service.put.DormServicePutResult;
 import org.slf4j.Logger;
@@ -84,21 +83,53 @@ public class DefaultDormService implements DormService {
     @Override
     public DormServicePutResult put(DormServicePutRequest request) {
 
-        DependencyNode node = request.getNode();
-
-        if (null == node) {
-            throw new CoreException("There is no node to put");
+        if (null == request || null == request.getValues()) {
+            throw new CoreException("Service put request or values are null");
         }
 
-        if (request.isRepositoryRequest()) {
-            repositoryPut(node);
+        if (request.isEmpty()) {
+            throw new CoreException("Service put request is empty");
         }
 
-        dao.push(node);
+        DormResource resource = null;
 
-        DefaultDormServicePutResult result = new DefaultDormServicePutResult(request.getProcessName());
-        result.setSavedNode(node);
+        // database request
+        if (request.isDatabaseRequest()) {
 
+            DependencyNode node = request.getNode();
+            if (null == node) {
+                throw new CoreException("Node to save to database is null");
+            }
+
+            dao.push(node);
+
+            // database request + repository request
+            if (request.isRepositoryRequest()) {
+                if (null != node.getDependency() && null != node.getDependency().getResource()) {
+                    resource = node.getDependency().getResource();
+                } else {
+                    LOG.error("Request is repository request but node's resource is null, ignored");
+                }
+            }
+        }
+
+        // repository request only
+        else {
+
+            if (request.isRepositoryRequest()) {
+                if (null != request.getResource()) {
+                    resource = request.getResource();
+                } else {
+                    LOG.error("Request is repository request only but resource is null, ignored");
+                }
+            }
+        }
+
+        if (null != resource) {
+            repository.store(resource, request.getValues());
+        }
+
+        DormServicePutResult result = new DormServicePutResult(request.getProcessName());
         return result;
     }
 

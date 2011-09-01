@@ -1,8 +1,8 @@
 package com.zenika.dorm.maven.test.model;
 
 import com.zenika.dorm.core.model.DormMetadataExtension;
+import com.zenika.dorm.maven.model.builder.MavenMetadataBuilder;
 import com.zenika.dorm.maven.model.impl.MavenMetadataExtension;
-import com.zenika.dorm.maven.model.impl.MavenMetadataExtensionBuilder;
 import com.zenika.dorm.maven.test.unit.AbstractUnitTest;
 import org.fest.assertions.Assertions;
 import org.junit.Ignore;
@@ -25,7 +25,11 @@ public class MavenMetadataExtensionUnitTest extends AbstractUnitTest {
         properties.put(MavenMetadataExtension.METADATA_ARTIFACTID, fixtures.getArtifactId());
         properties.put(MavenMetadataExtension.METADATA_VERSION, fixtures.getMavenVersion());
 
-        DormMetadataExtension dummyExtension = new MavenMetadataExtensionBuilder("a", "b", "c").build();
+        DormMetadataExtension dummyExtension = new MavenMetadataBuilder("a")
+                .groupId("b")
+                .version("c")
+                .build();
+
         DormMetadataExtension extension = dummyExtension.createFromMap(properties);
 
         Assertions.assertThat(extension).isEqualTo(fixtures.getMetadataExtension());
