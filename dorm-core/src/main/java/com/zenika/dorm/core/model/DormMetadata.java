@@ -14,6 +14,5 @@ public interface DormMetadata {
 
     public String getVersion();
 
-
     public DormMetadataExtension getExtension();
 }

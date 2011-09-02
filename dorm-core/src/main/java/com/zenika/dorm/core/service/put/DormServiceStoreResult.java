@@ -6,11 +6,11 @@ import com.zenika.dorm.core.service.impl.DefaultDormServiceProcess;
 /**
  * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>
  */
-public class DormServicePutResult extends DefaultDormServiceProcess {
+public class DormServiceStoreResult extends DefaultDormServiceProcess {
 
     private DependencyNode savedNode;
 
-    public DormServicePutResult(String processName) {
+    public DormServiceStoreResult(String processName) {
         super(processName);
     }
 

@@ -6,28 +6,14 @@ import com.zenika.dorm.core.model.Dependency;
 import com.zenika.dorm.core.model.DependencyNode;
 import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.core.model.DormMetadataExtension;
-import com.zenika.dorm.core.model.impl.DefaultDependency;
-import com.zenika.dorm.core.model.impl.DefaultDependencyNode;
-import com.zenika.dorm.core.model.impl.DefaultDormMetadata;
-import com.zenika.dorm.core.model.impl.DefaultDormMetadataExtension;
-import com.zenika.dorm.core.model.impl.Usage;
-import com.zenika.dorm.core.service.get.DormServiceGetValues;
-import com.zenika.dorm.core.service.impl.get.DefaultDormServiceGetValues;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Ignore;
-import org.junit.Test;
+import com.zenika.dorm.core.model.impl.*;
+import org.junit.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 /**
- * @author Antoine ROUAZE <antoine.rouaze AT zenika.com>
- */
+* @author Antoine ROUAZE <antoine.rouaze AT zenika.com>
+*/
 @Ignore
 public class JdbcDaoTest {
 
@@ -89,23 +75,23 @@ public class JdbcDaoTest {
 
     @Test
     public void testGetOne() {
-        DormServiceGetValues values = new DefaultDormServiceGetValues(new DefaultDormMetadataExtension("dorm"));
-        values.setUsage(usage);
-        values.setQualifier(habi_base.getDependency().getMetadata().getQualifier());
-        DependencyNode node = dao.getOne(values, false);
-        LOG.trace("Dependency : " + node.getDependency());
+//        DormServiceGetValues values = new DefaultDormServiceGetValues(new DefaultDormMetadataExtension("dorm"));
+//        values.setUsage(usage);
+//        values.setQualifier(habi_base.getDependency().getMetadata().getQualifier());
+//        DependencyNode node = dao.getOne(values, false);
+//        LOG.trace("Dependency : " + node.getDependency());
     }
 
     @Test
     public void testGet() {
-        DormServiceGetValues values = new DefaultDormServiceGetValues(new DefaultDormMetadataExtension("dorm"));
-        values.setUsage(usage);
-        values.addMetadataExtensionClause("groupId", "test");
-        values.addMetadataExtensionClause("versionId", "1.0.0");
-        List<DependencyNode> nodes = dao.get(values, false);
-        for (DependencyNode node : nodes) {
-            LOG.trace("Node : " + node);
-        }
+//        DormServiceGetValues values = new DefaultDormServiceGetValues(new DefaultDormMetadataExtension("dorm"));
+//        values.setUsage(usage);
+//        values.addMetadataExtensionClause("groupId", "test");
+//        values.addMetadataExtensionClause("versionId", "1.0.0");
+//        List<DependencyNode> nodes = dao.get(values, false);
+//        for (DependencyNode node : nodes) {
+//            LOG.trace("Node : " + node);
+//        }
     }
 
     @AfterClass

@@ -1,7 +1,6 @@
 package com.zenika.dorm.core.model.ws;
 
 import com.zenika.dorm.core.model.ws.builder.DormWebServiceRequestBuilder;
-import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import java.io.File;
 

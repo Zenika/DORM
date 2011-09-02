@@ -1,31 +1,20 @@
 package com.zenika.dorm.maven.processor.extension;
 
-import com.zenika.dorm.core.exception.DormProcessException;
 import com.zenika.dorm.core.model.Dependency;
-import com.zenika.dorm.core.model.DependencyNode;
+import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.core.model.DormResource;
-import com.zenika.dorm.core.model.ws.DormWebServiceRequest;
-import com.zenika.dorm.core.model.impl.DefaultDependency;
+import com.zenika.dorm.core.model.impl.DefaultDormMetadata;
 import com.zenika.dorm.core.model.impl.DefaultDormResource;
+import com.zenika.dorm.core.model.ws.DormWebServiceRequest;
+import com.zenika.dorm.core.model.ws.DormWebServiceResult;
+import com.zenika.dorm.core.model.ws.builder.DormWebServiceResultBuilder;
 import com.zenika.dorm.core.processor.ProcessorExtension;
-import com.zenika.dorm.core.service.get.DormServiceGetRequest;
+import com.zenika.dorm.core.service.config.DormServiceStoreResourceConfig;
+import com.zenika.dorm.core.service.get.DormServiceGetMetadataValues;
 import com.zenika.dorm.core.service.get.DormServiceGetResult;
-import com.zenika.dorm.core.service.put.DormServicePutRequest;
-import com.zenika.dorm.core.service.put.DormServicePutValues;
-import com.zenika.dorm.maven.exception.MavenException;
-import com.zenika.dorm.maven.model.impl.MavenConstant;
 import com.zenika.dorm.maven.model.impl.MavenMetadataExtension;
-import com.zenika.dorm.maven.processor.comparator.MavenSnapshotTimestampComparator;
-import com.zenika.dorm.maven.processor.helper.MavenProcessorHelper;
-import com.zenika.dorm.maven.service.get.MavenServiceGetRequestBuilder;
-import com.zenika.dorm.maven.writer.MavenMetadataFileWriter;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.io.File;
-import java.util.Collections;
-import java.util.Comparator;
 
 /**
  * The maven processor needs to create an abstract dependency node which will be the parent of the
@@ -42,141 +31,200 @@ public class MavenProcessor extends ProcessorExtension {
 
     private static final Logger LOG = LoggerFactory.getLogger(MavenProcessor.class);
 
-    private static final String PROCESS_GET_METADATAXML_FILE = "get_metadataxml_file";
-    private static final String PROCESS_GET_ARTIFACT = "get_artifact";
-    private static final String PROCESS_PUT_ARTIFACT = "put_artifact";
-
+    /**
+     * Process:
+     * 1. Try to get maven artifact corresponding to the url identifier
+     * 2. If yes, override file only
+     * 3. If no, add file
+     * 4. In both case check if maven deploy is complete. It means :
+     * - presence of
+     * -- jar
+     * -- jar.md5
+     * -- jar.sha1
+     * -- pom
+     * -- pom.md5
+     * -- pom.sha1
+     * -- maven-metadata.xml
+     *
+     * @param request
+     * @return
+     */
     @Override
-    public DormServiceGetRequest buildGetRequest(DormWebServiceRequest request) {
+    public DormWebServiceResult push(DormWebServiceRequest request) {
 
         if (LOG.isDebugEnabled()) {
-            LOG.debug("Build maven get request from webservice request : " + request);
+            LOG.debug("Maven webservice get request : " + request);
         }
 
-        MavenMetadataExtension mavenMetadata = null;// MavenMetadataBuilder(request).build();
+        // create maven metadata from url
+        String url = request.getProperty("path") + request.getFilename();
+        MavenMetadataExtension mavenMetadata = new MavenMetadataExtension(url);
+        DormMetadata metadata = DefaultDormMetadata.create(null, mavenMetadata);
 
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("Maven metadata : " + mavenMetadata);
-        }
+        // try to get from database
+        DormServiceGetMetadataValues values = new DormServiceGetMetadataValues(metadata);
+        DormServiceGetResult getMetadataResult = service.getMetadata(values);
 
-        DormServiceGetRequest getRequest;
+        if (getMetadataResult.hasResult()) {
 
-        if (mavenMetadata.isMavenMetadata()) {
-            LOG.trace("Maven metadata is maven-metadata.xml file");
-            getRequest = new MavenServiceGetRequestBuilder(PROCESS_GET_METADATAXML_FILE, mavenMetadata)
-                    .withArtifactId()
-                    .withGroupId()
-                    .withVersion()
-                    .repositoryRequest(false)
-                    .build();
-        } else {
-            LOG.trace("Maven metadata is representation of an maven artifact");
-            getRequest = new MavenServiceGetRequestBuilder(PROCESS_GET_ARTIFACT, mavenMetadata)
-                    .withAll()
-                    .repositoryRequest(true)
-                    .build();
-        }
+            Dependency dependencyFromDatabase = getMetadataResult.getUniqueNode().getDependency();
+            MavenMetadataExtension mavenMetadataFromDatabase = (MavenMetadataExtension) dependencyFromDatabase
+                    .getMetadata().getExtension();
 
-        if (LOG.isInfoEnabled()) {
-            LOG.info("Maven get request : " + getRequest);
-        }
+            if (mavenMetadataFromDatabase.isComplete()) {
 
-        return getRequest;
-    }
+                // override previous file only
+                DormResource resource = DefaultDormResource.create(request.getFile());
+                DormServiceStoreResourceConfig config = new DormServiceStoreResourceConfig()
+                        .metadata(dependencyFromDatabase.getMetadata())
+                        .override(true);
 
-    @Override
-    public Dependency buildDependency(DormServiceGetResult result) {
-
-        if (!result.hasResult()) {
-            throw new DormProcessException("No result").type(DormProcessException.Type.NULL);
-        }
-
-        Dependency dependency;
-        if (StringUtils.equals(result.getProcessName(), PROCESS_GET_METADATAXML_FILE)) {
-            dependency = buildMavenMetadataFile(result);
-        } else if (StringUtils.equals(result.getProcessName(), PROCESS_GET_ARTIFACT)) {
-            dependency = result.getUniqueNode().getDependency();
-        } else {
-            throw new MavenException("Cannot find builder for maven process : " + result.getProcessName());
-        }
-
-        return dependency;
-    }
-
-    private Dependency buildMavenMetadataFile(DormServiceGetResult result) {
-
-        Collections.sort(result.getNodes(), new Comparator<DependencyNode>() {
-
-            @Override
-            public int compare(DependencyNode node1, DependencyNode node2) {
-
-                MavenMetadataExtension extension1 = MavenProcessorHelper.getMavenMetadata(node1);
-                MavenMetadataExtension extension2 = MavenProcessorHelper.getMavenMetadata(node2);
-
-                return new MavenSnapshotTimestampComparator().compare(extension1, extension2);
+                service.storeResource(resource, config);
+                return new DormWebServiceResultBuilder(MavenMetadataExtension.EXTENSION_NAME)
+                        .success(true)
+                        .build();
             }
-        });
-
-        File folders = new File("tmp/maven-tmp");
-        folders.mkdirs();
-
-        File mavenMetadataFile = new File(folders, "maven-metadata.xml");
-        MavenMetadataFileWriter writer = new MavenMetadataFileWriter(mavenMetadataFile);
-
-        for (DependencyNode node : result.getNodes()) {
-            MavenMetadataExtension metadata = MavenProcessorHelper.getMavenMetadata(node);
-            writer.write(metadata);
         }
 
-        DormResource resource = DefaultDormResource.create(MavenConstant.Special.MAVEN_METADATA_XML,
-                mavenMetadataFile);
-
-        return DefaultDependency.create(result.getNodes().get(0).getDependency().getMetadata(), resource);
+        return null;
     }
 
     @Override
-    public DormServicePutRequest buildPutRequest(DormWebServiceRequest request) {
+    public DormWebServiceResult get(DormWebServiceRequest request) {
+        return null;
+    }
 
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("Maven webservice put request : " + request);
-        }
-
-        if (!request.hasFile()) {
-            throw new MavenException("File is required.");
-        }
-
-        DormResource resource = DefaultDormResource.create(request.getFilename(), request.getFile());
-
-        DormServicePutRequest putRequest = new DormServicePutRequest(PROCESS_PUT_ARTIFACT, resource);
-        putRequest.setDatabaseRequest(false);
-        putRequest.setRepositoryRequest(true);
-
-        DormServicePutValues values = new DormServicePutValues(MavenMetadataExtension.EXTENSION_NAME);
-        values.setResourcePath(request.getProperty("path"));
-        values.setResourceInternal(true);
-        putRequest.setValues(values);
-
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("Maven service put request to store artifact as this without any logic : " +
-                    putRequest);
-        }
-
-        return putRequest;
-
-//        MavenMetadataExtension extension = new MavenMetadataBuilder(request).build();
-//
-//        String type = extension.getExtension();
-//
-//        Dependency dependency = new DependencyBuilderFromRequest(request, type, extension)
-//                .build();
+//    @Override
+//    public DormServiceGetRequest buildGetRequest(DormWebServiceRequest request) {
 //
 //        if (LOG.isDebugEnabled()) {
-//            LOG.debug("Maven real dependency = " + dependency);
+//            LOG.debug("Build maven get request from webservice request : " + request);
 //        }
 //
-//        DependencyNode node = DefaultDependencyNode.create(dependency);
+//        MavenMetadataExtension mavenMetadata = null;// MavenMetadataBuilder(request).build();
 //
-//        DefaultDormServicePutRequest putRequest = new DefaultDormServicePutRequest(PROCESS_PUT_ARTIFACT);
-//        putRequest.setNode(node);
-    }
+//        if (LOG.isDebugEnabled()) {
+//            LOG.debug("Maven metadata : " + mavenMetadata);
+//        }
+//
+//        DormServiceGetRequest getRequest;
+//
+//        if (mavenMetadata.isMavenMetadata()) {
+//            LOG.trace("Maven metadata is maven-metadata.xml file");
+//            getRequest = new MavenServiceGetRequestBuilder(PROCESS_GET_METADATAXML_FILE, mavenMetadata)
+//                    .withArtifactId()
+//                    .withGroupId()
+//                    .withVersion()
+//                    .repositoryRequest(false)
+//                    .build();
+//        } else {
+//            LOG.trace("Maven metadata is representation of an maven artifact");
+//            getRequest = new MavenServiceGetRequestBuilder(PROCESS_GET_ARTIFACT, mavenMetadata)
+//                    .withAll()
+//                    .repositoryRequest(true)
+//                    .build();
+//        }
+//
+//        if (LOG.isInfoEnabled()) {
+//            LOG.info("Maven get request : " + getRequest);
+//        }
+//
+//        return getRequest;
+//    }
+//
+//    @Override
+//    public Dependency buildDependency(DormServiceGetResult result) {
+//
+//        if (!result.hasResult()) {
+//            throw new DormProcessException("No result").type(DormProcessException.Type.NULL);
+//        }
+//
+//        Dependency dependency;
+//        if (StringUtils.equals(result.getProcessName(), PROCESS_GET_METADATAXML_FILE)) {
+//            dependency = buildMavenMetadataFile(result);
+//        } else if (StringUtils.equals(result.getProcessName(), PROCESS_GET_ARTIFACT)) {
+//            dependency = result.getUniqueNode().getDependency();
+//        } else {
+//            throw new MavenException("Cannot find builder for maven process : " + result.getProcessName());
+//        }
+//
+//        return dependency;
+//    }
+//
+//    private Dependency buildMavenMetadataFile(DormServiceGetResult result) {
+//
+//        Collections.sort(result.getNodes(), new Comparator<DependencyNode>() {
+//
+//            @Override
+//            public int compare(DependencyNode node1, DependencyNode node2) {
+//
+//                MavenMetadataExtension extension1 = MavenProcessorHelper.getMavenMetadata(node1);
+//                MavenMetadataExtension extension2 = MavenProcessorHelper.getMavenMetadata(node2);
+//
+//                return new MavenSnapshotTimestampComparator().compare(extension1, extension2);
+//            }
+//        });
+//
+//        File folders = new File("tmp/maven-tmp");
+//        folders.mkdirs();
+//
+//        File mavenMetadataFile = new File(folders, "maven-metadata.xml");
+//        MavenMetadataFileWriter writer = new MavenMetadataFileWriter(mavenMetadataFile);
+//
+//        for (DependencyNode node : result.getNodes()) {
+//            MavenMetadataExtension metadata = MavenProcessorHelper.getMavenMetadata(node);
+//            writer.write(metadata);
+//        }
+//
+//        DormResource resource = DefaultDormResource.create(MavenConstant.Special.MAVEN_METADATA_XML,
+//                mavenMetadataFile);
+//
+//        return DefaultDependency.create(result.getNodes().get(0).getDependency().getMetadata(), resource);
+//    }
+//
+//    @Override
+//    public DormServicePutRequest buildPutRequest(DormWebServiceRequest request) {
+//
+//        if (LOG.isDebugEnabled()) {
+//            LOG.debug("Maven webservice put request : " + request);
+//        }
+//
+//        if (!request.hasFile()) {
+//            throw new MavenException("File is required.");
+//        }
+//
+//        DormResource resource = DefaultDormResource.create(request.getFilename(), request.getFile());
+//
+//        DormServicePutRequest putRequest = new DormServicePutRequest(PROCESS_PUT_ARTIFACT, resource);
+//        putRequest.setDatabaseRequest(false);
+//        putRequest.setRepositoryRequest(true);
+//
+//        DormServicePutValues values = new DormServicePutValues(MavenMetadataExtension.EXTENSION_NAME);
+//        values.setResourcePath(request.getProperty("path"));
+//        values.setResourceInternal(true);
+//        putRequest.setValues(values);
+//
+//        if (LOG.isDebugEnabled()) {
+//            LOG.debug("Maven service put request to store artifact as this without any logic : " +
+//                    putRequest);
+//        }
+//
+//        return putRequest;
+//
+////        MavenMetadataExtension extension = new MavenMetadataBuilder(request).build();
+////
+////        String type = extension.getExtension();
+////
+////        Dependency dependency = new DependencyBuilderFromRequest(request, type, extension)
+////                .build();
+////
+////        if (LOG.isDebugEnabled()) {
+////            LOG.debug("Maven real dependency = " + dependency);
+////        }
+////
+////        DependencyNode node = DefaultDependencyNode.create(dependency);
+////
+////        DefaultDormServicePutRequest putRequest = new DefaultDormServicePutRequest(PROCESS_PUT_ARTIFACT);
+////        putRequest.setNode(node);
+//    }
 }

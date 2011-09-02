@@ -1,14 +1,11 @@
 package com.zenika.dorm.core.test.dao.neo4j;
 
 import com.zenika.dorm.core.dao.neo4j.DormDaoNeo4j;
-import com.zenika.dorm.core.graph.visitor.impl.DependenciesNodeCollector;
 import com.zenika.dorm.core.model.Dependency;
 import com.zenika.dorm.core.model.DependencyNode;
 import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.core.model.DormMetadataExtension;
 import com.zenika.dorm.core.model.impl.*;
-import com.zenika.dorm.core.service.get.DormServiceGetValues;
-import com.zenika.dorm.core.service.impl.get.DefaultDormServiceGetValues;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
@@ -16,12 +13,9 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.List;
-import java.util.Set;
-
 /**
- * @author Antoine ROUAZE <antoine.rouaze AT zenika.com>
- */
+* @author Antoine ROUAZE <antoine.rouaze AT zenika.com>
+*/
 @Ignore
 public class Neo4jDaoIntegrationTest {
 
@@ -112,32 +106,32 @@ public class Neo4jDaoIntegrationTest {
     //
     @Test
     public void testGet() {
-        DormServiceGetValues values = new DefaultDormServiceGetValues(new DefaultDormMetadataExtension("dorm"));
-        values.setUsage(usage);
-        values.addMetadataExtensionClause("groupId", "test");
-        values.addMetadataExtensionClause("versionId", "1.0.0");
-        List<DependencyNode> nodes = dao.get(values, false);
-        for (DependencyNode node : nodes) {
-            LOG.trace("Dependency : " + node.getDependency());
-        }
+//        DormServiceGetValues values = new DefaultDormServiceGetValues(new DefaultDormMetadataExtension("dorm"));
+//        values.setUsage(usage);
+//        values.addMetadataExtensionClause("groupId", "test");
+//        values.addMetadataExtensionClause("versionId", "1.0.0");
+//        List<DependencyNode> nodes = dao.get(values, false);
+//        for (DependencyNode node : nodes) {
+//            LOG.trace("Dependency : " + node.getDependency());
+//        }
     }
 
     @Test
     public void testGetWithChildren() {
-        DormServiceGetValues values = new DefaultDormServiceGetValues(new DefaultDormMetadataExtension("dorm"));
-        values.setUsage(usage);
-        values.addMetadataExtensionClause("groupId", "test");
-        values.addMetadataExtensionClause("versionId", "1.0.0");
-        List<DependencyNode> nodes = dao.get(values, true);
-        for (DependencyNode node : nodes) {
-            LOG.trace("Dependency : " + node.getDependency());
-            DependenciesNodeCollector visitor = new DependenciesNodeCollector(node.getDependency().getUsage());
-            node.accept(visitor);
-            Set<DependencyNode> children = visitor.getDependencies();
-            for (DependencyNode child : children) {
-                LOG.trace("Dependency Child : " + child.getDependency());
-            }
-        }
+//        DormServiceGetValues values = new DefaultDormServiceGetValues(new DefaultDormMetadataExtension("dorm"));
+//        values.setUsage(usage);
+//        values.addMetadataExtensionClause("groupId", "test");
+//        values.addMetadataExtensionClause("versionId", "1.0.0");
+//        List<DependencyNode> nodes = dao.get(values, true);
+//        for (DependencyNode node : nodes) {
+//            LOG.trace("Dependency : " + node.getDependency());
+//            DependenciesNodeCollector visitor = new DependenciesNodeCollector(node.getDependency().getUsage());
+//            node.accept(visitor);
+//            Set<DependencyNode> children = visitor.getDependencies();
+//            for (DependencyNode child : children) {
+//                LOG.trace("Dependency Child : " + child.getDependency());
+//            }
+//        }
     }
 
     //
@@ -148,26 +142,26 @@ public class Neo4jDaoIntegrationTest {
 
     @Test
     public void testGetOne() {
-        DormServiceGetValues values = new DefaultDormServiceGetValues(new DefaultDormMetadataExtension("dorm"));
-        values.setQualifier(habi_base.getDependency().getMetadata().getQualifier());
-        values.setUsage(usage);
-        DependencyNode node = dao.getOne(values, false);
-        LOG.trace("Dependency : " + node.getDependency());
+//        DormServiceGetValues values = new DefaultDormServiceGetValues(new DefaultDormMetadataExtension("dorm"));
+//        values.setQualifier(habi_base.getDependency().getMetadata().getQualifier());
+//        values.setUsage(usage);
+//        DependencyNode node = dao.getOne(values, false);
+//        LOG.trace("Dependency : " + node.getDependency());
     }
 
     @Test
     public void testGetOneWithChildren() {
-        DormServiceGetValues values = new DefaultDormServiceGetValues(new DefaultDormMetadataExtension("dorm"));
-        values.setQualifier(habi_base.getDependency().getMetadata().getQualifier());
-        values.setUsage(usage);
-        DependencyNode node = dao.getOne(values, true);
-        LOG.trace("Dependency : " + node.getDependency());
-        DependenciesNodeCollector visitor = new DependenciesNodeCollector(node.getDependency().getUsage());
-        node.accept(visitor);
-        Set<DependencyNode> children = visitor.getDependencies();
-        for (DependencyNode child : children) {
-            LOG.trace("Dependency Child : " + child.getDependency());
-        }
+//        DormServiceGetValues values = new DefaultDormServiceGetValues(new DefaultDormMetadataExtension("dorm"));
+//        values.setQualifier(habi_base.getDependency().getMetadata().getQualifier());
+//        values.setUsage(usage);
+//        DependencyNode node = dao.getOne(values, true);
+//        LOG.trace("Dependency : " + node.getDependency());
+//        DependenciesNodeCollector visitor = new DependenciesNodeCollector(node.getDependency().getUsage());
+//        node.accept(visitor);
+//        Set<DependencyNode> children = visitor.getDependencies();
+//        for (DependencyNode child : children) {
+//            LOG.trace("Dependency Child : " + child.getDependency());
+//        }
     }
 
     private DependencyNode createDependencyNode(String name, String version) {

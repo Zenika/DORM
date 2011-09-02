@@ -5,13 +5,10 @@ import com.google.inject.Singleton;
 import com.zenika.dorm.core.exception.CoreException;
 import com.zenika.dorm.core.model.Dependency;
 import com.zenika.dorm.core.model.ws.DormWebServiceRequest;
-import com.zenika.dorm.core.model.impl.Usage;
+import com.zenika.dorm.core.model.ws.DormWebServiceResult;
 import com.zenika.dorm.core.processor.Processor;
 import com.zenika.dorm.core.processor.ProcessorExtension;
 import com.zenika.dorm.core.service.DormService;
-import com.zenika.dorm.core.service.get.DormServiceGetRequest;
-import com.zenika.dorm.core.service.get.DormServiceGetResult;
-import com.zenika.dorm.core.service.put.DormServicePutRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,49 +35,23 @@ public class DefaultProcessor implements Processor {
     private DormService service;
 
     @Override
-    public Boolean push(DormWebServiceRequest request) {
+    public DormWebServiceResult push(DormWebServiceRequest request) {
 
         if (null == request) {
             throw new CoreException("Request is required");
         }
 
-        DormServicePutRequest putRequest = getExtension(request).buildPutRequest(request);
-        service.put(putRequest);
-
-        return true;
+        return getExtension(request).push(request);
     }
 
     @Override
-    public Dependency get(DormWebServiceRequest request) {
+    public DormWebServiceResult get(DormWebServiceRequest request) {
 
         if (null == request) {
             throw new CoreException("Request is required");
         }
 
-        ProcessorExtension processorExtension = getExtension(request);
-
-        DormServiceGetRequest getRequest = processorExtension.buildGetRequest(request);
-
-        Usage usage = Usage.create(request.getUsage());
-        getRequest.getValues().setUsage(usage);
-
-        if (LOG.isInfoEnabled()) {
-            LOG.info("Get request : " + getRequest);
-        }
-
-        DormServiceGetResult getResult = service.get(getRequest);
-
-        if (LOG.isInfoEnabled()) {
-            LOG.info("Get result : " + getResult);
-        }
-
-        Dependency dependency = processorExtension.buildDependency(getResult);
-
-        if (LOG.isInfoEnabled()) {
-            LOG.info("Dependency from get result : " + dependency);
-        }
-
-        return dependency;
+        return getExtension(request).get(request);
     }
 
     /**

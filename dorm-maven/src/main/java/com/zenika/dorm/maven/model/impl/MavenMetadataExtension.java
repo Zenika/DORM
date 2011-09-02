@@ -33,7 +33,7 @@ public final class MavenMetadataExtension implements DormMetadataExtension {
     public static final String METADATA_EXTENSION = "extension";
     public static final String METADATA_BUILDNUMBER = "buildNumber";
     public static final String METADATA_SNAPSHOT = "snapshot";
-
+    public static final String METADATA_URL = "url";
 
     private final String groupId;
     private final String artifactId;
@@ -43,18 +43,16 @@ public final class MavenMetadataExtension implements DormMetadataExtension {
     private final String timestamp;
     private final String extension;
     private final String buildNumber;
+    private final String url;
     private final boolean snapshot;
 
     private final boolean mavenMetadata;
 
-    /**
-     * Only accessed by the builder in the same package
-     */
     public MavenMetadataExtension(String groupId, String artifactId, String version, String extension,
                                   String packaging, String classifier, String timestamp, String buildNumber,
-                                  boolean mavenMetadata, boolean snapshot) {
+                                  String url, boolean mavenMetadata, boolean snapshot) {
 
-        if (DormStringUtils.areBlanks(groupId, artifactId, version)) {
+        if (DormStringUtils.oneIsBlank(groupId, artifactId, version)) {
             throw new MavenException("Following metadatas are required : groupId, artifactId, versionId");
         }
 
@@ -72,8 +70,24 @@ public final class MavenMetadataExtension implements DormMetadataExtension {
         this.timestamp = StringUtils.defaultIfBlank(timestamp, "");
         this.buildNumber = StringUtils.defaultIfBlank(buildNumber, "");
 
+        this.url = StringUtils.defaultIfBlank(url, "");
+
         this.mavenMetadata = mavenMetadata;
         this.snapshot = snapshot;
+    }
+
+    public MavenMetadataExtension(String url) {
+        this.url = url;
+        this.groupId = null;
+        this.artifactId = null;
+        this.version = null;
+        this.packaging = null;
+        this.extension = null;
+        this.classifier = null;
+        this.timestamp = null;
+        this.buildNumber = null;
+        this.mavenMetadata = false;
+        this.snapshot = false;
     }
 
     @Override
@@ -99,6 +113,16 @@ public final class MavenMetadataExtension implements DormMetadataExtension {
     @Override
     public String getExtensionName() {
         return EXTENSION_NAME;
+    }
+
+    /**
+     * Complete metadata contains groupdid and other attributes,
+     * Not complete contains only url
+     *
+     * @return
+     */
+    public boolean isComplete() {
+        return null != groupId;
     }
 
     public String getGroupId() {

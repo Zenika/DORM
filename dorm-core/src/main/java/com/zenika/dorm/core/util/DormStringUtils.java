@@ -11,7 +11,7 @@ public final class DormStringUtils {
 
     }
 
-    public static boolean areBlanks(String... strings) {
+    public static boolean oneIsBlank(String... strings) {
 
         for (String string : strings) {
             if (StringUtils.isBlank(string)) {

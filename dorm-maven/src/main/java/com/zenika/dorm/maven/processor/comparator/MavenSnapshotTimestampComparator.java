@@ -18,7 +18,7 @@ public class MavenSnapshotTimestampComparator implements Comparator<MavenMetadat
     @Override
     public int compare(MavenMetadataExtension extension1, MavenMetadataExtension extension2) {
 
-        if (DormStringUtils.areBlanks(extension1.getTimestamp(), extension2.getTimestamp())) {
+        if (DormStringUtils.oneIsBlank(extension1.getTimestamp(), extension2.getTimestamp())) {
             throw new MavenException("Timestamp is missing in maven snapshot metadata");
         }
 

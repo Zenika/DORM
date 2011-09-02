@@ -12,11 +12,14 @@ import com.zenika.dorm.core.model.DormResource;
 import com.zenika.dorm.core.model.impl.DefaultDependency;
 import com.zenika.dorm.core.repository.DormRepository;
 import com.zenika.dorm.core.service.DormService;
+import com.zenika.dorm.core.service.config.DormServiceGetResourceConfig;
+import com.zenika.dorm.core.service.config.DormServiceStoreResourceConfig;
+import com.zenika.dorm.core.service.get.DormServiceGetMetadataValues;
 import com.zenika.dorm.core.service.get.DormServiceGetRequest;
 import com.zenika.dorm.core.service.get.DormServiceGetResult;
 import com.zenika.dorm.core.service.impl.get.DefaultDormServiceGetResult;
 import com.zenika.dorm.core.service.put.DormServicePutRequest;
-import com.zenika.dorm.core.service.put.DormServicePutResult;
+import com.zenika.dorm.core.service.put.DormServiceStoreResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,6 +40,30 @@ public class DefaultDormService implements DormService {
     private DormRepository repository;
 
     @Override
+    public DormServiceStoreResult store(DormServicePutRequest request) {
+        return null;
+    }
+
+    @Override
+    public DormServiceStoreResult storeMetadata(DormMetadata metadata) {
+        return null;
+    }
+
+    @Override
+    public DormServiceStoreResult storeResource(DormResource resource, DormServiceStoreResourceConfig config) {
+        return null;
+    }
+
+    @Override
+    public DormServiceGetResult getMetadata(DormServiceGetMetadataValues values) {
+        return null;
+    }
+
+    @Override
+    public DormServiceGetResult getResource(DormMetadata metadata, DormServiceGetResourceConfig config) {
+        return null;
+    }
+
     public DormServiceGetResult get(DormServiceGetRequest request) {
 
         if (LOG.isDebugEnabled()) {
@@ -80,8 +107,7 @@ public class DefaultDormService implements DormService {
         return result;
     }
 
-    @Override
-    public DormServicePutResult put(DormServicePutRequest request) {
+    public DormServiceStoreResult put(DormServicePutRequest request) {
 
         if (null == request || null == request.getValues()) {
             throw new CoreException("Service put request or values are null");
@@ -129,7 +155,7 @@ public class DefaultDormService implements DormService {
             repository.store(resource, request.getValues());
         }
 
-        DormServicePutResult result = new DormServicePutResult(request.getProcessName());
+        DormServiceStoreResult result = new DormServiceStoreResult(request.getProcessName());
         return result;
     }
 

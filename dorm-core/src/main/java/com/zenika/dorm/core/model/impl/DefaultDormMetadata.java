@@ -4,6 +4,8 @@ import com.zenika.dorm.core.exception.CoreException;
 import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.core.model.DormMetadataExtension;
 import com.zenika.dorm.core.util.DormFormatter;
+import com.zenika.dorm.core.util.DormStringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 /**
@@ -29,11 +31,13 @@ public final class DefaultDormMetadata implements DormMetadata {
 
     private DefaultDormMetadata(String version, DormMetadataExtension extension) {
 
-        if (null == version || null == extension || null == extension.getQualifier() || null == extension.getExtensionName()) {
+        if (null == extension ||
+                DormStringUtils.oneIsBlank(extension.getQualifier(), extension.getExtensionName())) {
             throw new CoreException("Properties are missing for metadata");
         }
 
-        this.version = DormFormatter.formatMetadataVersion(version);
+        this.version = StringUtils.defaultIfBlank(DormFormatter.formatMetadataVersion(version),
+                "no-version");
         this.extension = extension;
 
         String extensionQualifier = DormFormatter.formatMetadataExtensionQualifier(extension.getQualifier());

@@ -17,6 +17,7 @@ public class MavenMetadataBuilder {
     protected String packaging;
     protected String timestamp;
     protected String buildNumber;
+    protected String url;
     protected boolean mavenMetadata;
     protected boolean snapshot;
 
@@ -59,6 +60,11 @@ public class MavenMetadataBuilder {
         return this;
     }
 
+    public MavenMetadataBuilder url(String url) {
+        this.url = url;
+        return this;
+    }
+
     public MavenMetadataBuilder mavenMetadata(boolean mavenMetadata) {
         this.mavenMetadata = mavenMetadata;
         return this;
@@ -71,6 +77,6 @@ public class MavenMetadataBuilder {
 
     public MavenMetadataExtension build() {
         return new MavenMetadataExtension(groupId, artifactId, version, extension, packaging, classifier,
-                timestamp, buildNumber, mavenMetadata, snapshot);
+                timestamp, buildNumber, url, mavenMetadata, snapshot);
     }
 }

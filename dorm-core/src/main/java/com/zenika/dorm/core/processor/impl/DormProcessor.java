@@ -1,15 +1,15 @@
 package com.zenika.dorm.core.processor.impl;
 
 import com.zenika.dorm.core.exception.CoreException;
-import com.zenika.dorm.core.model.*;
+import com.zenika.dorm.core.model.DependencyNode;
+import com.zenika.dorm.core.model.DormMetadata;
+import com.zenika.dorm.core.model.DormMetadataExtension;
 import com.zenika.dorm.core.model.builder.DependencyNodeBuilderFromRequest;
 import com.zenika.dorm.core.model.impl.DefaultDormMetadata;
 import com.zenika.dorm.core.model.impl.DefaultDormMetadataExtension;
 import com.zenika.dorm.core.model.ws.DormWebServiceRequest;
+import com.zenika.dorm.core.model.ws.DormWebServiceResult;
 import com.zenika.dorm.core.processor.ProcessorExtension;
-import com.zenika.dorm.core.service.get.DormServiceGetRequest;
-import com.zenika.dorm.core.service.get.DormServiceGetResult;
-import com.zenika.dorm.core.service.put.DormServicePutRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,7 +29,7 @@ public class DormProcessor extends ProcessorExtension {
      * @return the node containing the extension and file if exists
      */
 
-    public DependencyNode push(DormWebServiceRequest request) {
+    public DormWebServiceResult push(DormWebServiceRequest request) {
 
         if (LOG.isDebugEnabled()) {
             LOG.debug("Dorm request to push = " + request);
@@ -50,7 +50,7 @@ public class DormProcessor extends ProcessorExtension {
             LOG.debug("Dorm dependency = " + node.getDependency());
         }
 
-        return node;
+        return null;
     }
 
     /**
@@ -68,17 +68,7 @@ public class DormProcessor extends ProcessorExtension {
     }
 
     @Override
-    public DormServiceGetRequest buildGetRequest(DormWebServiceRequest request) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public Dependency buildDependency(DormServiceGetResult result) {
-        return result.getUniqueNode().getDependency();
-    }
-
-    @Override
-    public DormServicePutRequest buildPutRequest(DormWebServiceRequest request) {
+    public DormWebServiceResult get(DormWebServiceRequest request) {
         return null;
     }
 }

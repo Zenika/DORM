@@ -11,6 +11,7 @@ import java.io.File;
 public class DormWebServiceResultBuilder extends DormWebServiceBuilder<DormWebServiceResultBuilder> {
 
     private File file;
+    private boolean success;
 
     public DormWebServiceResultBuilder(String origin) {
         super(origin);
@@ -30,8 +31,21 @@ public class DormWebServiceResultBuilder extends DormWebServiceBuilder<DormWebSe
         return this;
     }
 
+    public DormWebServiceResultBuilder success(boolean success) {
+        this.success = success;
+        return this;
+    }
+
     @Override
     public DormWebServiceResult build() {
         return new DormWebServiceResult(this);
+    }
+
+    public File getFile() {
+        return file;
+    }
+
+    public boolean getSuccess() {
+        return success;
     }
 }

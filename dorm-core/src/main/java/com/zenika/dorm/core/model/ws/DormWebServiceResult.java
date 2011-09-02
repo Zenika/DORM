@@ -7,7 +7,10 @@ import com.zenika.dorm.core.model.ws.builder.DormWebServiceResultBuilder;
  */
 public class DormWebServiceResult extends DormWebServiceProcess {
 
+    private final boolean success;
+
     public DormWebServiceResult(DormWebServiceResultBuilder builder) {
         super(builder);
+        this.success = builder.getSuccess();
     }
 }
