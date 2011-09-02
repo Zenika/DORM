@@ -64,6 +64,16 @@ public class DormDaoJdbc implements DormDao {
         return executor.getNode();
     }
 
+    @Override
+    public DormMetadata getByQualifier(String qualifier, Usage usage) {
+        return null;
+    }
+
+    @Override
+    public List<DormMetadata> getByMetadataExtension(String extensionName, Map<String, String> extensionClauses, Usage usage) {
+        return null;
+    }
+
     private Connection getConnection() {
         try {
             return dataSource.getConnection();

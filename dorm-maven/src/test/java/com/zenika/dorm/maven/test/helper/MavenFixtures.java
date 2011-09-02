@@ -1,12 +1,15 @@
 package com.zenika.dorm.maven.test.helper;
 
-import com.zenika.dorm.core.model.*;
-import com.zenika.dorm.core.model.ws.builder.DormWebServiceRequestBuilder;
+import com.zenika.dorm.core.model.Dependency;
+import com.zenika.dorm.core.model.DependencyNode;
+import com.zenika.dorm.core.model.DormMetadata;
+import com.zenika.dorm.core.model.DormMetadataExtension;
 import com.zenika.dorm.core.model.impl.DefaultDependency;
 import com.zenika.dorm.core.model.impl.DefaultDependencyNode;
 import com.zenika.dorm.core.model.impl.DefaultDormMetadata;
 import com.zenika.dorm.core.model.impl.Usage;
 import com.zenika.dorm.core.model.ws.DormWebServiceRequest;
+import com.zenika.dorm.core.model.ws.builder.DormWebServiceRequestBuilder;
 import com.zenika.dorm.core.test.helper.ExtensionFixtures;
 import com.zenika.dorm.maven.model.builder.MavenMetadataBuilder;
 import com.zenika.dorm.maven.model.impl.MavenConstant;
@@ -33,6 +36,7 @@ public class MavenFixtures extends ExtensionFixtures {
 
     @Override
     public DormMetadataExtension getMetadataExtension() {
+
         return new MavenMetadataBuilder(artifactId)
                 .groupId(groupId)
                 .version(mavenVersion)

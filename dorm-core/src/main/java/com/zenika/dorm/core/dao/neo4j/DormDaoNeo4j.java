@@ -304,4 +304,14 @@ public class DormDaoNeo4j implements DormDao {
             throw new Neo4jDaoException("URI syntax exception", e);
         }
     }
+
+    @Override
+    public DormMetadata getByQualifier(String qualifier, Usage usage) {
+        return null;
+    }
+
+    @Override
+    public List<DormMetadata> getByMetadataExtension(String extensionName, Map<String, String> extensionClauses, Usage usage) {
+        return null;
+    }
 }

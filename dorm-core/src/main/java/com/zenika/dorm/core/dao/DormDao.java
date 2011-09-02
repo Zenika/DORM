@@ -22,4 +22,9 @@ public interface DormDao {
     public List<DependencyNode> get(DormServiceGetValues values, boolean withDependencies);
 
     public DependencyNode getOne(DormServiceGetValues values, boolean withDependencies);
+
+    public DormMetadata getByQualifier(String qualifier, Usage usage);
+
+    public List<DormMetadata> getByMetadataExtension(String extensionName, Map<String,
+            String> extensionClauses, Usage usage);
 }

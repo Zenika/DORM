@@ -10,6 +10,7 @@ import com.zenika.dorm.core.model.DependencyNode;
 import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.core.model.DormResource;
 import com.zenika.dorm.core.model.impl.DefaultDependency;
+import com.zenika.dorm.core.model.impl.Usage;
 import com.zenika.dorm.core.repository.DormRepository;
 import com.zenika.dorm.core.service.DormService;
 import com.zenika.dorm.core.service.config.DormServiceGetResourceConfig;
@@ -17,7 +18,6 @@ import com.zenika.dorm.core.service.config.DormServiceStoreResourceConfig;
 import com.zenika.dorm.core.service.get.DormServiceGetMetadataValues;
 import com.zenika.dorm.core.service.get.DormServiceGetRequest;
 import com.zenika.dorm.core.service.get.DormServiceGetResult;
-import com.zenika.dorm.core.service.impl.get.DefaultDormServiceGetResult;
 import com.zenika.dorm.core.service.put.DormServicePutRequest;
 import com.zenika.dorm.core.service.put.DormServiceStoreResult;
 import org.slf4j.Logger;
@@ -56,6 +56,19 @@ public class DefaultDormService implements DormService {
 
     @Override
     public DormServiceGetResult getMetadata(DormServiceGetMetadataValues values) {
+
+        DormServiceGetResult result = new DormServiceGetResult();
+
+        // if null then get by all usages
+        Usage usage = values.getUsage();
+
+        if (values.isGetByQualifier()) {
+            dao.getByQualifier(values.getMetadata().getQualifier(), usage);
+        } else {
+            List<DormMetadata> metadatas = dao.getByMetadataExtension(values.getMetadata().getExtension()
+                    .getExtensionName(), values.getMetadataExtensionClauses(), usage);
+        }
+
         return null;
     }
 
@@ -70,7 +83,7 @@ public class DefaultDormService implements DormService {
             LOG.debug("Get request : " + request);
         }
 
-        DormServiceGetResult result = new DefaultDormServiceGetResult(request.getProcessName());
+        DormServiceGetResult result = new DormServiceGetResult();
 
         if (request.isUniqueResultRequest()) {
 
