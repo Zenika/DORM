@@ -1,7 +1,7 @@
 package com.zenika.dorm.core.model.builder;
 
 import com.zenika.dorm.core.model.DormResource;
-import com.zenika.dorm.core.model.DormWebServiceRequest;
+import com.zenika.dorm.core.model.ws.DormWebServiceRequest;
 import com.zenika.dorm.core.model.impl.DefaultDormResource;
 
 import java.io.File;

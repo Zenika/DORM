@@ -1,7 +1,7 @@
 package com.zenika.dorm.core.test.resource;
 
-import com.zenika.dorm.core.model.DormWebServiceRequest;
-import com.zenika.dorm.core.model.builder.DormRequestBuilder;
+import com.zenika.dorm.core.model.ws.DormWebServiceRequest;
+import com.zenika.dorm.core.model.ws.builder.DormWebServiceRequestBuilder;
 import com.zenika.dorm.core.model.impl.DefaultDormMetadataExtension;
 import com.zenika.dorm.core.processor.Processor;
 import com.zenika.dorm.core.test.unit.AbstractUnitTest;
@@ -51,7 +51,7 @@ public class DormResourceUnitTest extends AbstractUnitTest {
     @Test
     public void pushInvalidMetadata() {
 
-        DormWebServiceRequest request = new DormRequestBuilder(fixtures.getRequestWithoutFile()).property
+        DormWebServiceRequest request = new DormWebServiceRequestBuilder(fixtures.getRequestWithoutFile()).property
                 (DefaultDormMetadataExtension.METADATA_NAME, null).build();
 
         LOG.trace("Test request = " + request);

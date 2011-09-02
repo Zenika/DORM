@@ -4,6 +4,7 @@ import com.zenika.dorm.core.model.*;
 import com.zenika.dorm.core.model.impl.DefaultDependency;
 import com.zenika.dorm.core.model.impl.DefaultDormResource;
 import com.zenika.dorm.core.model.impl.Usage;
+import com.zenika.dorm.core.model.ws.DormWebServiceRequest;
 
 import java.io.File;
 

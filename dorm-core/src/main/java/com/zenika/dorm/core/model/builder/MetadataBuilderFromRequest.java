@@ -2,7 +2,7 @@ package com.zenika.dorm.core.model.builder;
 
 import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.core.model.DormMetadataExtension;
-import com.zenika.dorm.core.model.DormWebServiceRequest;
+import com.zenika.dorm.core.model.ws.DormWebServiceRequest;
 import com.zenika.dorm.core.model.impl.DefaultDormMetadata;
 
 /**

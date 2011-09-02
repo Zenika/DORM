@@ -1,6 +1,6 @@
 package com.zenika.dorm.maven.model.builder;
 
-import com.zenika.dorm.core.model.DormWebServiceRequest;
+import com.zenika.dorm.core.model.ws.DormWebServiceRequest;
 import com.zenika.dorm.maven.helper.MavenSpecificHelper;
 import com.zenika.dorm.maven.model.formatter.MavenFilenameFormatter;
 import com.zenika.dorm.maven.model.impl.MavenMetadataExtension;

@@ -1,8 +1,8 @@
 package com.zenika.dorm.maven.ws.resource;
 
 import com.google.inject.Inject;
-import com.zenika.dorm.core.model.DormWebServiceRequest;
-import com.zenika.dorm.core.model.builder.DormRequestBuilder;
+import com.zenika.dorm.core.model.ws.DormWebServiceRequest;
+import com.zenika.dorm.core.model.ws.builder.DormWebServiceRequestBuilder;
 import com.zenika.dorm.core.processor.Processor;
 import com.zenika.dorm.core.ws.resource.AbstractResource;
 import com.zenika.dorm.maven.model.impl.MavenMetadataExtension;
@@ -101,7 +101,7 @@ public class MavenResource extends AbstractResource {
                         @PathParam("filename") String filename,
                         File file) {
 
-        DormWebServiceRequest request = new DormRequestBuilder(MavenMetadataExtension.EXTENSION_NAME)
+        DormWebServiceRequest request = new DormWebServiceRequestBuilder(MavenMetadataExtension.EXTENSION_NAME)
                 .file(file)
                 .filename(filename)
                 .property("path", path)

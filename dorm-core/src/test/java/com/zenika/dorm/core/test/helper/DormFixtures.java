@@ -1,7 +1,7 @@
 package com.zenika.dorm.core.test.helper;
 
 import com.zenika.dorm.core.model.DormMetadataExtension;
-import com.zenika.dorm.core.model.builder.DormRequestBuilder;
+import com.zenika.dorm.core.model.ws.builder.DormWebServiceRequestBuilder;
 import com.zenika.dorm.core.model.impl.DefaultDormMetadataExtension;
 
 /**
@@ -29,7 +29,7 @@ public class DormFixtures extends ExtensionFixtures {
     }
 
     @Override
-    public DormRequestBuilder getRequestBuilder() {
+    public DormWebServiceRequestBuilder getRequestBuilder() {
         return super.getRequestBuilder()
                 .property(DefaultDormMetadataExtension.METADATA_NAME, name);
     }

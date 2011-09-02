@@ -1,7 +1,7 @@
 package com.zenika.dorm.core.test.model;
 
-import com.zenika.dorm.core.model.DormWebServiceRequest;
-import com.zenika.dorm.core.model.builder.DormRequestBuilder;
+import com.zenika.dorm.core.model.ws.DormWebServiceRequest;
+import com.zenika.dorm.core.model.ws.builder.DormWebServiceRequestBuilder;
 import com.zenika.dorm.core.test.unit.AbstractUnitTest;
 import org.fest.assertions.Assertions;
 import org.junit.Ignore;
@@ -27,7 +27,7 @@ public class DormRequestUnitTest extends AbstractUnitTest {
         File newFile = new File("tmp/file-new.jar");
 
         // get the default request as model for tests
-        DormWebServiceRequest request = new DormRequestBuilder(fixtures.getVersion())
+        DormWebServiceRequest request = new DormWebServiceRequestBuilder(fixtures.getVersion())
                 .file(fixtures.getFile())
                 .filename(fixtures.getFilenameWithExtension())
                 .build();
@@ -36,13 +36,13 @@ public class DormRequestUnitTest extends AbstractUnitTest {
             TEST BY EDITING THE VERSION
          */
 
-        DormWebServiceRequest requestNewVersionModel = new DormRequestBuilder(newVersion)
+        DormWebServiceRequest requestNewVersionModel = new DormWebServiceRequestBuilder(newVersion)
                 .file(fixtures.getFile())
                 .filename(fixtures.getFilenameWithExtension())
                 .build();
 
         // create new request with the new version
-        DormWebServiceRequest requestNewVersion = new DormRequestBuilder(request)
+        DormWebServiceRequest requestNewVersion = new DormWebServiceRequestBuilder(request)
 //                .version(newVersion)
                 .build();
 
@@ -54,13 +54,13 @@ public class DormRequestUnitTest extends AbstractUnitTest {
             TEST BY EDITING THE FILE
         */
 
-        DormWebServiceRequest requestNewFileModel = new DormRequestBuilder(fixtures.getVersion())
+        DormWebServiceRequest requestNewFileModel = new DormWebServiceRequestBuilder(fixtures.getVersion())
                 .file(newFile)
                 .filename(fixtures.getFilenameWithExtension())
                 .build();
 
         // create new request with the new file
-        DormWebServiceRequest requestNewFile = new DormRequestBuilder(request)
+        DormWebServiceRequest requestNewFile = new DormWebServiceRequestBuilder(request)
                 .file(newFile)
                 .build();
 
@@ -72,13 +72,13 @@ public class DormRequestUnitTest extends AbstractUnitTest {
             TEST BY EDITING THE VERSION AND THE FILE
         */
 
-        DormWebServiceRequest requestNewVersionAndFileModel = new DormRequestBuilder(newVersion)
+        DormWebServiceRequest requestNewVersionAndFileModel = new DormWebServiceRequestBuilder(newVersion)
                 .file(newFile)
                 .filename(fixtures.getFilenameWithExtension())
                 .build();
 
         // create new request with both the new version and file
-        DormWebServiceRequest requestNewVersionAndFile = new DormRequestBuilder(request)
+        DormWebServiceRequest requestNewVersionAndFile = new DormWebServiceRequestBuilder(request)
 //                .version(newVersion)
                 .file(newFile)
                 .build();

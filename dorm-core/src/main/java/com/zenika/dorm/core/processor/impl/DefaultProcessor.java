@@ -4,7 +4,7 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.zenika.dorm.core.exception.CoreException;
 import com.zenika.dorm.core.model.Dependency;
-import com.zenika.dorm.core.model.DormWebServiceRequest;
+import com.zenika.dorm.core.model.ws.DormWebServiceRequest;
 import com.zenika.dorm.core.model.impl.Usage;
 import com.zenika.dorm.core.processor.Processor;
 import com.zenika.dorm.core.processor.ProcessorExtension;

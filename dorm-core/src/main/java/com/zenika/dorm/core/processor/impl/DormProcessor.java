@@ -5,6 +5,7 @@ import com.zenika.dorm.core.model.*;
 import com.zenika.dorm.core.model.builder.DependencyNodeBuilderFromRequest;
 import com.zenika.dorm.core.model.impl.DefaultDormMetadata;
 import com.zenika.dorm.core.model.impl.DefaultDormMetadataExtension;
+import com.zenika.dorm.core.model.ws.DormWebServiceRequest;
 import com.zenika.dorm.core.processor.ProcessorExtension;
 import com.zenika.dorm.core.service.get.DormServiceGetRequest;
 import com.zenika.dorm.core.service.get.DormServiceGetResult;
@@ -17,7 +18,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>
  */
-public class DormProcessor implements ProcessorExtension {
+public class DormProcessor extends ProcessorExtension {
 
     private static final Logger LOG = LoggerFactory.getLogger(DormProcessor.class);
 

@@ -1,11 +1,12 @@
 package com.zenika.dorm.maven.test.helper;
 
 import com.zenika.dorm.core.model.*;
-import com.zenika.dorm.core.model.builder.DormRequestBuilder;
+import com.zenika.dorm.core.model.ws.builder.DormWebServiceRequestBuilder;
 import com.zenika.dorm.core.model.impl.DefaultDependency;
 import com.zenika.dorm.core.model.impl.DefaultDependencyNode;
 import com.zenika.dorm.core.model.impl.DefaultDormMetadata;
 import com.zenika.dorm.core.model.impl.Usage;
+import com.zenika.dorm.core.model.ws.DormWebServiceRequest;
 import com.zenika.dorm.core.test.helper.ExtensionFixtures;
 import com.zenika.dorm.maven.model.builder.MavenMetadataBuilder;
 import com.zenika.dorm.maven.model.impl.MavenConstant;
@@ -60,7 +61,7 @@ public class MavenFixtures extends ExtensionFixtures {
     }
 
     @Override
-    public DormRequestBuilder getRequestBuilder() {
+    public DormWebServiceRequestBuilder getRequestBuilder() {
         return super.getRequestBuilder()
                 .origin(origin)
                 .property(MavenMetadataExtension.METADATA_GROUPID, groupId)

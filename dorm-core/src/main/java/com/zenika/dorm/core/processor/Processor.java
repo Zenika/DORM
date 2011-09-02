@@ -1,7 +1,7 @@
 package com.zenika.dorm.core.processor;
 
 import com.zenika.dorm.core.model.Dependency;
-import com.zenika.dorm.core.model.DormWebServiceRequest;
+import com.zenika.dorm.core.model.ws.DormWebServiceRequest;
 
 /**
  * Is this interface usefull ?

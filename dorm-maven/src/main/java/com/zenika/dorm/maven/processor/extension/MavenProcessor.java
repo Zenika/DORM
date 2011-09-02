@@ -4,7 +4,7 @@ import com.zenika.dorm.core.exception.DormProcessException;
 import com.zenika.dorm.core.model.Dependency;
 import com.zenika.dorm.core.model.DependencyNode;
 import com.zenika.dorm.core.model.DormResource;
-import com.zenika.dorm.core.model.DormWebServiceRequest;
+import com.zenika.dorm.core.model.ws.DormWebServiceRequest;
 import com.zenika.dorm.core.model.impl.DefaultDependency;
 import com.zenika.dorm.core.model.impl.DefaultDormResource;
 import com.zenika.dorm.core.processor.ProcessorExtension;
@@ -38,7 +38,7 @@ import java.util.Comparator;
  *
  * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>
  */
-public class MavenProcessor implements ProcessorExtension {
+public class MavenProcessor extends ProcessorExtension {
 
     private static final Logger LOG = LoggerFactory.getLogger(MavenProcessor.class);
 

@@ -3,9 +3,9 @@ package com.zenika.dorm.core.ws.resource;
 import com.google.inject.Inject;
 import com.sun.jersey.multipart.FormDataParam;
 import com.zenika.dorm.core.exception.DormProcessException;
-import com.zenika.dorm.core.model.DormWebServiceRequest;
-import com.zenika.dorm.core.model.builder.DormRequestBuilder;
 import com.zenika.dorm.core.model.impl.DefaultDormMetadataExtension;
+import com.zenika.dorm.core.model.ws.DormWebServiceRequest;
+import com.zenika.dorm.core.model.ws.builder.DormWebServiceRequestBuilder;
 import com.zenika.dorm.core.processor.Processor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -66,7 +66,8 @@ public class DormResource extends AbstractResource {
 
         LOG.trace("POST with params : name = " + name + "; version = " + version);
 
-        DormWebServiceRequest request = new DormRequestBuilder(DefaultDormMetadataExtension.EXTENSION_NAME)
+        DormWebServiceRequest request = new DormWebServiceRequestBuilder(DefaultDormMetadataExtension
+                .EXTENSION_NAME)
                 .property(DefaultDormMetadataExtension.METADATA_NAME, name)
                 .build();
 
@@ -92,7 +93,7 @@ public class DormResource extends AbstractResource {
 
         LOG.trace("POST with params : name = " + name + "; version = " + version);
 
-        DormWebServiceRequest request = new DormRequestBuilder(DefaultDormMetadataExtension.EXTENSION_NAME)
+        DormWebServiceRequest request = new DormWebServiceRequestBuilder(DefaultDormMetadataExtension.EXTENSION_NAME)
                 .filename(filename)
                 .file(file)
                 .property(DefaultDormMetadataExtension.METADATA_NAME, name)

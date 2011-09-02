@@ -1,7 +1,9 @@
 package com.zenika.dorm.core.processor;
 
+import com.google.inject.Inject;
 import com.zenika.dorm.core.model.Dependency;
-import com.zenika.dorm.core.model.DormWebServiceRequest;
+import com.zenika.dorm.core.model.ws.DormWebServiceRequest;
+import com.zenika.dorm.core.service.DormService;
 import com.zenika.dorm.core.service.get.DormServiceGetRequest;
 import com.zenika.dorm.core.service.get.DormServiceGetResult;
 import com.zenika.dorm.core.service.put.DormServicePutRequest;
@@ -9,11 +11,14 @@ import com.zenika.dorm.core.service.put.DormServicePutRequest;
 /**
  * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>
  */
-public interface ProcessorExtension {
+public abstract class ProcessorExtension {
 
-    public DormServicePutRequest buildPutRequest(DormWebServiceRequest request);
+    @Inject
+    protected DormService service;
 
-    public DormServiceGetRequest buildGetRequest(DormWebServiceRequest request);
+    public abstract DormServicePutRequest buildPutRequest(DormWebServiceRequest request);
 
-    public Dependency buildDependency(DormServiceGetResult result);
+    public abstract DormServiceGetRequest buildGetRequest(DormWebServiceRequest request);
+
+    public abstract Dependency buildDependency(DormServiceGetResult result);
 }

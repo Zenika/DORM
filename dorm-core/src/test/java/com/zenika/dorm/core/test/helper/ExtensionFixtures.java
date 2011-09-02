@@ -2,11 +2,12 @@ package com.zenika.dorm.core.test.helper;
 
 import com.zenika.dorm.core.exception.CoreException;
 import com.zenika.dorm.core.model.*;
-import com.zenika.dorm.core.model.builder.DormRequestBuilder;
+import com.zenika.dorm.core.model.ws.builder.DormWebServiceRequestBuilder;
 import com.zenika.dorm.core.model.impl.DefaultDependency;
 import com.zenika.dorm.core.model.impl.DefaultDependencyNode;
 import com.zenika.dorm.core.model.impl.DefaultDormMetadata;
 import com.zenika.dorm.core.model.impl.DefaultDormResource;
+import com.zenika.dorm.core.model.ws.DormWebServiceRequest;
 
 import java.io.File;
 import java.io.IOException;
@@ -57,11 +58,11 @@ public abstract class ExtensionFixtures {
         return type;
     }
 
-    public DormRequestBuilder getRequestBuilder() {
-        return new DormRequestBuilder(getRequestVersion());
+    public DormWebServiceRequestBuilder getRequestBuilder() {
+        return new DormWebServiceRequestBuilder(getRequestVersion());
     }
 
-    public DormRequestBuilder getRequestBuilderWithFile() {
+    public DormWebServiceRequestBuilder getRequestBuilderWithFile() {
         return getRequestBuilder().filename(filenameWithExtension).file(file);
     }
 
