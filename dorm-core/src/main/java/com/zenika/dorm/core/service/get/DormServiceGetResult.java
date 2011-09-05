@@ -20,8 +20,8 @@ public class DormServiceGetResult {
 
     public DependencyNode getUniqueNode() {
 
-        if (isResultSet()) {
-            throw new CoreException("Result is not unique, use the getResultSet() method");
+        if (isManyResult()) {
+            throw new CoreException("Result is not unique, use the getNodes() method");
         }
 
         return nodes.get(0);
@@ -35,7 +35,7 @@ public class DormServiceGetResult {
         this.nodes = nodes;
     }
 
-    public boolean isResultSet() {
+    public boolean isManyResult() {
         return nodes.size() > 1;
     }
 

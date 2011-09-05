@@ -14,7 +14,6 @@ import org.slf4j.LoggerFactory;
 /**
  * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>
  */
-@Ignore
 public abstract class AbstractIntegrationTest {
 
     private static final Logger LOG = LoggerFactory.getLogger(AbstractIntegrationTest.class);
@@ -32,13 +31,13 @@ public abstract class AbstractIntegrationTest {
         }
     }
 
-    @Test
-    public void simplePing() {
-        LOG.debug("Ping resource : " + getResourceUrl());
-        WebResource resource = client.resource(getResourceUrl() + "/ping");
-        ClientResponse response = resource.get(ClientResponse.class);
-
-        Assertions.assertThat(response.getStatus()).isEqualTo(ClientResponse.Status.OK.getStatusCode());
-        Assertions.assertThat(response.getEntity(String.class)).isEqualTo("pong");
-    }
+//    @Test
+//    public void simplePing() {
+//        LOG.debug("Ping resource : " + getResourceUrl());
+//        WebResource resource = client.resource(getResourceUrl() + "/ping");
+//        ClientResponse response = resource.get(ClientResponse.class);
+//
+//        Assertions.assertThat(response.getStatus()).isEqualTo(ClientResponse.Status.OK.getStatusCode());
+//        Assertions.assertThat(response.getEntity(String.class)).isEqualTo("pong");
+//    }
 }

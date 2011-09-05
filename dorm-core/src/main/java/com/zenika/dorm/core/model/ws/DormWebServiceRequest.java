@@ -1,6 +1,7 @@
 package com.zenika.dorm.core.model.ws;
 
 import com.zenika.dorm.core.model.ws.builder.DormWebServiceRequestBuilder;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
 
@@ -37,6 +38,6 @@ public final class DormWebServiceRequest extends DormWebServiceProcess {
     }
 
     public boolean hasFile() {
-        return file != null && filename != null;
+        return file != null && file.exists() && StringUtils.isNotBlank(filename);
     }
 }

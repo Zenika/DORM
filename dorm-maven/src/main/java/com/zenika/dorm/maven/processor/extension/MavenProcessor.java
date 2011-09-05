@@ -1,18 +1,14 @@
 package com.zenika.dorm.maven.processor.extension;
 
-import com.zenika.dorm.core.model.Dependency;
-import com.zenika.dorm.core.model.DormMetadata;
-import com.zenika.dorm.core.model.DormResource;
-import com.zenika.dorm.core.model.impl.DefaultDormMetadata;
-import com.zenika.dorm.core.model.impl.DefaultDormResource;
+import com.google.inject.Inject;
 import com.zenika.dorm.core.model.ws.DormWebServiceRequest;
 import com.zenika.dorm.core.model.ws.DormWebServiceResult;
 import com.zenika.dorm.core.model.ws.builder.DormWebServiceResultBuilder;
 import com.zenika.dorm.core.processor.ProcessorExtension;
-import com.zenika.dorm.core.service.config.DormServiceStoreResourceConfig;
-import com.zenika.dorm.core.service.get.DormServiceGetMetadataValues;
-import com.zenika.dorm.core.service.get.DormServiceGetResult;
+import com.zenika.dorm.maven.exception.MavenException;
+import com.zenika.dorm.maven.helper.MavenFormatHelper;
 import com.zenika.dorm.maven.model.impl.MavenMetadataExtension;
+import com.zenika.dorm.maven.service.MavenService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,6 +26,9 @@ import org.slf4j.LoggerFactory;
 public class MavenProcessor extends ProcessorExtension {
 
     private static final Logger LOG = LoggerFactory.getLogger(MavenProcessor.class);
+
+    @Inject
+    private MavenService mavenService;
 
     /**
      * Process:
@@ -56,37 +55,94 @@ public class MavenProcessor extends ProcessorExtension {
             LOG.debug("Maven webservice get request : " + request);
         }
 
-        // create maven metadata from url
-        String url = request.getProperty("path") + request.getFilename();
-        MavenMetadataExtension mavenMetadata = new MavenMetadataExtension(url);
-        DormMetadata metadata = DefaultDormMetadata.create(null, mavenMetadata);
-
-        // try to get from database
-        DormServiceGetMetadataValues values = new DormServiceGetMetadataValues(metadata);
-        DormServiceGetResult getMetadataResult = service.getMetadata(values);
-
-        if (getMetadataResult.hasResult()) {
-
-            Dependency dependencyFromDatabase = getMetadataResult.getUniqueNode().getDependency();
-            MavenMetadataExtension mavenMetadataFromDatabase = (MavenMetadataExtension) dependencyFromDatabase
-                    .getMetadata().getExtension();
-
-            if (mavenMetadataFromDatabase.isComplete()) {
-
-                // override previous file only
-                DormResource resource = DefaultDormResource.create(request.getFile());
-                DormServiceStoreResourceConfig config = new DormServiceStoreResourceConfig()
-                        .metadata(dependencyFromDatabase.getMetadata())
-                        .override(true);
-
-                service.storeResource(resource, config);
-                return new DormWebServiceResultBuilder(MavenMetadataExtension.EXTENSION_NAME)
-                        .success(true)
-                        .build();
-            }
+        if (!request.hasFile()) {
+            throw new MavenException("File is required");
         }
 
-        return null;
+        String url = MavenFormatHelper.formatUrl(request.getProperty("path"), request.getFilename());
+
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Maven url : " + url);
+        }
+
+        MavenMetadataExtension mavenMetadata = mavenService.getMetadataByUrl(url);
+
+        if (null == mavenMetadata) {
+            mavenService.storeMavenFile(url, request.getFile());
+            return new DormWebServiceResultBuilder(MavenMetadataExtension.EXTENSION_NAME)
+                    .succeeded()
+                    .build();
+        }
+
+        return new DormWebServiceResultBuilder(MavenMetadataExtension.EXTENSION_NAME)
+                .failed()
+                .build();
+
+
+//        MavenMetadataExtension mavenMetadata = new MavenMetadataExtension(url);
+//
+//
+//        DormMetadata metadata = DefaultDormMetadata.create(null, mavenMetadata);
+//
+//        // try to get from database
+//        DormServiceGetMetadataValues values = new DormServiceGetMetadataValues(metadata);
+//        DormServiceGetResult getMetadataResult = service.getMetadata(values);
+//
+//        if (getMetadataResult.hasResult()) {
+//
+//            Dependency dependencyFromDatabase = getMetadataResult.getUniqueNode().getDependency();
+//            MavenMetadataExtension mavenMetadataFromDatabase = (MavenMetadataExtension) dependencyFromDatabase
+//                    .getMetadata().getExtension();
+//
+//            if (LOG.isDebugEnabled()) {
+//                LOG.debug("Maven metadata from dorm database : " + mavenMetadataFromDatabase);
+//            }
+//
+//            if (mavenMetadataFromDatabase.isComplete()) {
+//
+//                // override previous file only
+//                DormResource resource = DefaultDormResource.create(request.getFile());
+//                DormServiceStoreResourceConfig config = new DormServiceStoreResourceConfig()
+//                        .metadata(dependencyFromDatabase.getMetadata())
+//                        .override(true);
+//
+//                service.storeResource(resource, config);
+//                return new DormWebServiceResultBuilder(MavenMetadataExtension.EXTENSION_NAME)
+//                        .succeeded()
+//                        .build();
+//            } else {
+//                LOG.error("Maven metadata in dorm database is not complete : " + mavenMetadataFromDatabase);
+//                return new DormWebServiceResultBuilder(MavenMetadataExtension.EXTENSION_NAME)
+//                        .failed()
+//                        .build();
+//            }
+//        }
+//
+//        // no result
+//        else {
+//            LOG.trace("Store maven file as it comes");
+//            DormResource resource = DefaultDormResource.create(request.getFile());
+//            DormServiceStoreResourceConfig config = new DormServiceStoreResourceConfig()
+//                    .resourcePath(url, MavenMetadataExtension.EXTENSION_NAME);
+//            service.storeResource(resource, config);
+//
+//            if (mavenDeployIsComplete()) {
+//                convertMavenToDorm();
+//            }
+//
+//            return new DormWebServiceResultBuilder(MavenMetadataExtension.EXTENSION_NAME)
+//                    .succeeded()
+//                    .build();
+//        }
+    }
+
+    private boolean mavenDeployIsComplete() {
+
+        return false;
+    }
+
+    private void convertMavenToDorm() {
+
     }
 
     @Override

@@ -27,18 +27,20 @@ public class MavenResource extends AbstractResource {
     private Processor processor;
 
     public MavenResource() {
-        LOG.info("Init maven resource as web service");
+        if (LOG.isInfoEnabled()) {
+            LOG.info("Call to maven webservice");
+        }
     }
 
-    @GET
-    @Produces(MediaType.APPLICATION_OCTET_STREAM)
-    @Path("{path:.*}/{filename}")
-    public Response get(@PathParam("path") String path,
-                        @PathParam("filename") String filename) {
-
-        LOG.info("Call to maven web service : GET");
-
-        return Response.status(Response.Status.NOT_FOUND).build();
+//    @GET
+//    @Produces(MediaType.APPLICATION_OCTET_STREAM)
+//    @Path("{path:.*}/{filename}")
+//    public Response get(@PathParam("path") String path,
+//                        @PathParam("filename") String filename) {
+//
+//        LOG.info("Call to maven web service : GET");
+//
+//        return Response.status(Response.Status.NOT_FOUND).build();
 
 //        DormWebServiceRequest request = new DormRequestBuilder(version)
 //                .filename(filename)
@@ -63,7 +65,7 @@ public class MavenResource extends AbstractResource {
 //        }
 //
 //        return Response.status(Response.Status.OK).entity(dependency.getResource().getFile()).build();
-    }
+//    }
 
 //    @PUT
 //    @Consumes(MediaType.APPLICATION_OCTET_STREAM)
@@ -99,7 +101,11 @@ public class MavenResource extends AbstractResource {
     @Path("{path:.*}/{filename}")
     public Response put(@PathParam("path") String path,
                         @PathParam("filename") String filename,
-                        File file) {
+                        @FormParam("file") File file) {
+
+        if (LOG.isInfoEnabled()) {
+            LOG.info("Maven webservice GET with path : " + path + " and filename : " + filename);
+        }
 
         DormWebServiceRequest request = new DormWebServiceRequestBuilder(MavenMetadataExtension.EXTENSION_NAME)
                 .file(file)

@@ -16,7 +16,11 @@ public interface DormRepository {
 
     public boolean store(DormResource resource, DormServicePutValues values);
 
+    public void store(String extension, String path, DormResource resource, boolean override);
+
     public DormResource get(DormMetadata metadata);
+
+    public DormResource get(String extension, String path);
 
     public File getBase();
 }

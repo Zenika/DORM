@@ -98,16 +98,15 @@ public final class MavenMetadataExtension implements DormMetadataExtension {
                 .append(artifactId).append(separator)
                 .append(packaging).append(separator);
 
-        if (!classifier.isEmpty()) {
+        if (StringUtils.isNotBlank(classifier)) {
             qualifier.append(classifier).append(separator);
         }
 
-        if (!timestamp.isEmpty()) {
+        if (!StringUtils.isNotBlank(timestamp)) {
             qualifier.append(timestamp).append(separator);
         }
 
-        return qualifier.append(packaging).append(separator)
-                .append(version).toString();
+        return qualifier.append(packaging).append(separator).append(version).toString();
     }
 
     @Override
@@ -122,7 +121,7 @@ public final class MavenMetadataExtension implements DormMetadataExtension {
      * @return
      */
     public boolean isComplete() {
-        return null != groupId;
+        return !DormStringUtils.oneIsBlank(groupId, artifactId, version);
     }
 
     public String getGroupId() {

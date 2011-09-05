@@ -11,32 +11,39 @@ public class DormRepositoryResource {
 
     private String path;
     private File file;
-    private DormRepository repository;
+    private boolean override;
 
-    public DormRepositoryResource(File file, DormRepository repository) {
+    public DormRepositoryResource(String path, File file) {
+        this.path = path;
         this.file = file;
-        this.repository = repository;
     }
 
-    public DormRepositoryResource(File file, DormRepository repository, String path) {
-        this(file, repository);
-        this.path = path;
+    public boolean exists() {
+        return null != file && file.exists();
     }
 
     public String getPath() {
-        return repository.getBase() + "/" + path;
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
     }
 
     public File getFile() {
         return file;
     }
 
-    public DormRepository getRepository() {
-        return repository;
+    public void setFile(File file) {
+        this.file = file;
     }
 
-    public boolean exists() {
-        return (null != file);
+    public boolean isOverride() {
+        return override;
+    }
+
+    public void setOverride(boolean override) {
+        this.override = override;
     }
 
     @Override
@@ -44,7 +51,6 @@ public class DormRepositoryResource {
         return new ToStringBuilder(this)
                 .append("path", path)
                 .append("file", file)
-                .append("repository", repository)
                 .appendSuper(super.toString())
                 .toString();
     }

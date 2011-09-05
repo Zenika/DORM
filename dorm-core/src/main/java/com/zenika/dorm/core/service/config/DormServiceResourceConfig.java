@@ -1,7 +1,7 @@
 package com.zenika.dorm.core.service.config;
 
 import com.zenika.dorm.core.model.DormMetadata;
-import org.apache.commons.lang3.StringUtils;
+import com.zenika.dorm.core.util.DormStringUtils;
 
 /**
  * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>
@@ -26,7 +26,7 @@ public abstract class DormServiceResourceConfig<T extends DormServiceResourceCon
     }
 
     public boolean isInternalResource() {
-        return StringUtils.isNotBlank(resourcePath);
+        return !DormStringUtils.oneIsBlank(extensionName, resourcePath);
     }
 
     public String getResourcePath() {

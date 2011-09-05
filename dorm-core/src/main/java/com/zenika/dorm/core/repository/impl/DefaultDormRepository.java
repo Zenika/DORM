@@ -9,6 +9,7 @@ import com.zenika.dorm.core.model.impl.DefaultDormResource;
 import com.zenika.dorm.core.repository.DormRepository;
 import com.zenika.dorm.core.repository.DormRepositoryResource;
 import com.zenika.dorm.core.service.put.DormServicePutValues;
+import com.zenika.dorm.core.util.DormStringUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -57,7 +58,7 @@ public class DefaultDormRepository implements DormRepository {
         }
 
         String location = getPathFromMetadata(metadata);
-        DormRepositoryResource resource = new DormRepositoryResource(file.getFile(), this, location);
+        DormRepositoryResource resource = new DormRepositoryResource(location, file.getFile());
 
         deployEngine.deploy(resource);
 
@@ -98,10 +99,45 @@ public class DefaultDormRepository implements DormRepository {
 
         String location = foldersPath + "/" + FilenameUtils.normalizeNoEndSeparator(resource.getFilename());
 
-        DormRepositoryResource repositoryResource = new DormRepositoryResource(resource.getFile(), this, location);
+        DormRepositoryResource repositoryResource = new DormRepositoryResource(location, resource.getFile());
         deployEngine.deploy(repositoryResource);
 
         return true;
+    }
+
+    @Override
+    public void store(String extension, String path, DormResource resource, boolean override) {
+
+        if (DormStringUtils.oneIsBlank(extension, path)) {
+            throw new RepositoryException("Extension and path are required to store internal resource");
+        }
+
+        if (null == resource || null == resource.getFile()) {
+            throw new RepositoryException("File to store to the repository is required");
+        }
+
+        String fullPath = getBaseBuilder().append(INTERNAL_PATH_PREFIX)
+                .append(extension)
+                .append("/")
+                .append(path)
+                .toString();
+
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Full path to store resource : " + fullPath);
+        }
+
+        String folders = FilenameUtils.getPath(fullPath);
+
+        DormRepositoryResource repositoryResource = new DormRepositoryResource(folders, resource.getFile());
+        repositoryResource.setOverride(override);
+
+        deployEngine.deploy(repositoryResource);
+    }
+
+    private StringBuilder getBaseBuilder() {
+        return new StringBuilder(100)
+                .append(base.getAbsolutePath())
+                .append("/");
     }
 
     @Override
@@ -119,6 +155,17 @@ public class DefaultDormRepository implements DormRepository {
         }
 
         return DefaultDormResource.create(resource.getFile());
+    }
+
+    @Override
+    public DormResource get(String extension, String path) {
+
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Get resource from repository with extension : " + extension + " and path : " + path);
+        }
+
+
+        return null;
     }
 
     @Override

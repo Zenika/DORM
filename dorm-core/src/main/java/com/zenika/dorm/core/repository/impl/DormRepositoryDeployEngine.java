@@ -1,8 +1,6 @@
 package com.zenika.dorm.core.repository.impl;
 
-import com.google.inject.Inject;
 import com.zenika.dorm.core.exception.RepositoryException;
-import com.zenika.dorm.core.repository.DormRepository;
 import com.zenika.dorm.core.repository.DormRepositoryResource;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.ivy.util.CopyProgressEvent;
@@ -23,10 +21,10 @@ public class DormRepositoryDeployEngine {
 
     public boolean deploy(DormRepositoryResource resource) {
 
-        LOG.debug("Deploy resource to the repository : " + resource);
+        String path = resource.getPath();
 
-        String path = FilenameUtils.normalizeNoEndSeparator(resource.getPath());
-        LOG.trace("Deploy normalized path : " + path);
+        File folders = new File(FilenameUtils.getPath(path));
+        folders.mkdirs();
 
         File destination = new File(path);
 

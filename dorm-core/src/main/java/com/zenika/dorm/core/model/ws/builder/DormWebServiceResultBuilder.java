@@ -31,8 +31,13 @@ public class DormWebServiceResultBuilder extends DormWebServiceBuilder<DormWebSe
         return this;
     }
 
-    public DormWebServiceResultBuilder success(boolean success) {
-        this.success = success;
+    public DormWebServiceResultBuilder succeeded() {
+        this.success = true;
+        return this;
+    }
+
+    public DormWebServiceResultBuilder failed() {
+        this.success = false;
         return this;
     }
 

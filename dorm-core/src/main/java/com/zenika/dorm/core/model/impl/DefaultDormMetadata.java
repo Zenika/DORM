@@ -36,8 +36,7 @@ public final class DefaultDormMetadata implements DormMetadata {
             throw new CoreException("Properties are missing for metadata");
         }
 
-        this.version = StringUtils.defaultIfBlank(DormFormatter.formatMetadataVersion(version),
-                "no-version");
+        this.version = StringUtils.defaultIfBlank(version, "no-version");
         this.extension = extension;
 
         String extensionQualifier = DormFormatter.formatMetadataExtensionQualifier(extension.getQualifier());

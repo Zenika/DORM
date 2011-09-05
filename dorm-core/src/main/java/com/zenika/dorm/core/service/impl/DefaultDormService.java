@@ -15,6 +15,7 @@ import com.zenika.dorm.core.repository.DormRepository;
 import com.zenika.dorm.core.service.DormService;
 import com.zenika.dorm.core.service.config.DormServiceGetResourceConfig;
 import com.zenika.dorm.core.service.config.DormServiceStoreResourceConfig;
+import com.zenika.dorm.core.service.get.DormServiceGetMetadataResult;
 import com.zenika.dorm.core.service.get.DormServiceGetMetadataValues;
 import com.zenika.dorm.core.service.get.DormServiceGetRequest;
 import com.zenika.dorm.core.service.get.DormServiceGetResult;
@@ -23,6 +24,7 @@ import com.zenika.dorm.core.service.put.DormServiceStoreResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -50,30 +52,56 @@ public class DefaultDormService implements DormService {
     }
 
     @Override
-    public DormServiceStoreResult storeResource(DormResource resource, DormServiceStoreResourceConfig config) {
-        return null;
+    public void storeResource(DormResource resource, DormServiceStoreResourceConfig config) {
+
+        if (config.isInternalResource()) {
+            repository.store(config.getExtensionName(), config.getResourcePath(), resource, config.isOverride());
+        }
     }
 
     @Override
-    public DormServiceGetResult getMetadata(DormServiceGetMetadataValues values) {
+    public DormServiceGetMetadataResult getMetadata(DormServiceGetMetadataValues values) {
 
-        DormServiceGetResult result = new DormServiceGetResult();
+        DormServiceGetMetadataResult result = new DormServiceGetMetadataResult();
 
         // if null then get by all usages
         Usage usage = values.getUsage();
 
+        List<DormMetadata> metadatas = null;
+
         if (values.isGetByQualifier()) {
-            dao.getByQualifier(values.getMetadata().getQualifier(), usage);
+
+            DormMetadata metadata = dao.getByQualifier(values.getMetadata().getQualifier(), usage);
+
+            if (null != metadata) {
+                metadatas = new ArrayList<DormMetadata>();
+                metadatas.add(metadata);
+            }
+
         } else {
-            List<DormMetadata> metadatas = dao.getByMetadataExtension(values.getMetadata().getExtension()
-                    .getExtensionName(), values.getMetadataExtensionClauses(), usage);
+            metadatas = dao.getByMetadataExtension(values.getMetadata().getExtension().getExtensionName(),
+                    values.getMetadataExtensionClauses(), usage);
         }
 
+        result.setMetadatas(metadatas);
+
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Result from database : " + result);
+        }
+        
+        return result;
+    }
+
+    @Override
+    public DormResource getResource(DormMetadata metadata, DormServiceGetResourceConfig config) {
+
+//        repository.get(metadata)
         return null;
     }
 
     @Override
-    public DormServiceGetResult getResource(DormMetadata metadata, DormServiceGetResourceConfig config) {
+    public DormResource getResource(String extension, String path, DormServiceGetResourceConfig config) {
+//        repository.get()
         return null;
     }
 

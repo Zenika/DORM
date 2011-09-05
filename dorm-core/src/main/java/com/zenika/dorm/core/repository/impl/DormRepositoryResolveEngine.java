@@ -1,8 +1,6 @@
 package com.zenika.dorm.core.repository.impl;
 
 import com.google.inject.Inject;
-import com.zenika.dorm.core.exception.CoreException;
-import com.zenika.dorm.core.exception.RepositoryException;
 import com.zenika.dorm.core.repository.DormRepository;
 import com.zenika.dorm.core.repository.DormRepositoryResource;
 import org.apache.ivy.util.FileUtil;
@@ -30,7 +28,7 @@ public class DormRepositoryResolveEngine {
         File file = FileUtil.resolveFile(repository.getBase(), path);
         // todo: has to check
 //        if (file.exists()) {
-            return new DormRepositoryResource(file, repository);
+        return null;//new DormRepositoryResource(file, repository);
 //        } else {
 //            throw new RepositoryException("File doesn't exist in the repo").type(CoreException.Type.NULL);
 //        }
