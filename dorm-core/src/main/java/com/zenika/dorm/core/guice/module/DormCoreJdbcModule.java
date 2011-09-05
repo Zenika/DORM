@@ -1,4 +1,4 @@
-package com.zenika.dorm.guice.module;
+package com.zenika.dorm.core.guice.module;
 
 import com.google.inject.AbstractModule;
 import com.zenika.dorm.core.dao.DormDao;
@@ -11,6 +11,8 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
+
+import static com.google.inject.jndi.JndiIntegration.fromJndi;
 
 /**
  * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>
@@ -26,16 +28,20 @@ public class DormCoreJdbcModule extends AbstractModule {
             LOG.info("Configure dorm jdbc guice module");
         }
 
-        DataSource dataSource = null;
-
+        Context context;
         try {
-            Context context = new InitialContext();
-            dataSource = (DataSource) context.lookup("java:/comp/env/jdbc/postgres");
+            context = new InitialContext();
         } catch (NamingException e) {
-            throw new JDBCException("Unable to find the datasource", e);
+            throw new JDBCException("Unable to initate the JNDI context", e);
         }
 
-        bind(DataSource.class).toInstance(dataSource);
+        if (null == context) {
+            throw new JDBCException("JNDI context is null");
+        }
+
+        bind(Context.class).toInstance(context);
+        bind(DataSource.class).toProvider(fromJndi(DataSource.class, "java:/comp/env/jdbc/postgres"));
+
         bind(DormDao.class).to(DormDaoJdbc.class);
     }
 }

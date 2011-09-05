@@ -93,6 +93,8 @@ libraries = [
 
         guice: 'com.google.inject:guice:' + versions.guice,
         guice_assistedinject: 'com.google.inject.extensions:guice-assistedinject:' + versions.guice,
+        guice_multibindings: 'com.google.inject.extensions:guice-multibindings:' + versions.guice,
+        guice_jndi: 'com.google.inject.extensions:guice-jndi:' + versions.guice,
 
         ivy: 'org.apache.ivy:ivy:' + versions.ivy,
         junit: 'junit:junit:' + versions.junit,

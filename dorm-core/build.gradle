@@ -9,6 +9,9 @@ dependencies {
     compile libraries.jackson_mrbean
 
     compile libraries.guice
+    compile libraries.guice_multibindings
+    compile libraries.guice_jndi
+
     compile libraries.postgresql
 
     compile group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.1.2'

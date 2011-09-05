@@ -1,4 +1,4 @@
-package com.zenika.dorm.guice.module;
+package com.zenika.dorm.core.guice.module;
 
 import com.google.inject.AbstractModule;
 import com.zenika.dorm.core.dao.DormDao;

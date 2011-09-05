@@ -3,7 +3,6 @@ package com.zenika.dorm.core.processor.impl;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.zenika.dorm.core.exception.CoreException;
-import com.zenika.dorm.core.model.Dependency;
 import com.zenika.dorm.core.model.ws.DormWebServiceRequest;
 import com.zenika.dorm.core.model.ws.DormWebServiceResult;
 import com.zenika.dorm.core.processor.Processor;
@@ -33,6 +32,14 @@ public class DefaultProcessor implements Processor {
 
     @Inject
     private DormService service;
+
+    public DefaultProcessor() {
+    }
+
+    @Inject
+    public DefaultProcessor(Map<String, ProcessorExtension> extensions) {
+        this.extensions = extensions;
+    }
 
     @Override
     public DormWebServiceResult push(DormWebServiceRequest request) {
