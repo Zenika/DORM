@@ -1,21 +1,20 @@
 package com.zenika.dorm.maven.ws.resource;
 
 import com.google.inject.Inject;
-import com.sun.jersey.multipart.FormDataParam;
 import com.zenika.dorm.core.model.ws.DormWebServiceRequest;
 import com.zenika.dorm.core.model.ws.builder.DormWebServiceRequestBuilder;
 import com.zenika.dorm.core.processor.Processor;
-import com.zenika.dorm.core.ws.helper.DormFileUploadHelper;
 import com.zenika.dorm.core.ws.resource.AbstractResource;
 import com.zenika.dorm.maven.model.impl.MavenMetadataExtension;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
 import java.io.File;
-import java.io.InputStream;
 
 /**
  * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>
@@ -29,21 +28,27 @@ public class MavenResource extends AbstractResource {
     @Inject
     private Processor processor;
 
+    @Context
+    private UriInfo uriInfo;
+
     public MavenResource() {
         if (LOG.isInfoEnabled()) {
             LOG.info("Call to maven webservice");
         }
     }
 
-//    @GET
-//    @Produces(MediaType.APPLICATION_OCTET_STREAM)
-//    @Path("{path:.*}/{filename}")
-//    public Response get(@PathParam("path") String path,
-//                        @PathParam("filename") String filename) {
-//
-//        LOG.info("Call to maven web service : GET");
-//
-//        return Response.status(Response.Status.NOT_FOUND).build();
+    @GET
+    @Produces(MediaType.APPLICATION_OCTET_STREAM)
+    @Path("{path:.*}/{filename}")
+    public Response get(@PathParam("path") String path,
+                        @PathParam("filename") String filename) {
+
+        if (LOG.isInfoEnabled()) {
+            LOG.info("Maven webservice GET with path : " + path + " and filename : " + filename);
+        }
+
+        return Response.status(Response.Status.NOT_FOUND).build();
+    }
 
 //        DormWebServiceRequest request = new DormRequestBuilder(version)
 //                .filename(filename)
@@ -99,25 +104,57 @@ public class MavenResource extends AbstractResource {
 //    }
 
 
+//    @PUT
+//    @Consumes(MediaType.APPLICATION_OCTET_STREAM)
+//    @Path("{path:.*}/{filename}")
+//    public Response put(
+//            @PathParam("path") String path,
+//            @PathParam("filename") String filename,
+//            @FormParam("file") File file) {
+////                        @PathParam("file") InputStream inputStream) {
+//
+//        if (LOG.isInfoEnabled()) {
+//            LOG.info("Maven webservice PUT with path : " + path + " and filename : " + filename);
+//        }
+//
+////        File file = DormFileUploadHelper.getUploadedFile(inputStream);
+//
+//        DormWebServiceRequest request = new DormWebServiceRequestBuilder(MavenMetadataExtension.EXTENSION_NAME)
+//                .file(file)
+//                .filename(filename)
+//                .property("path", path)
+//                .build();
+//
+//        processor.push(request);
+//
+//        return Response.status(Response.Status.OK).build();
+//    }
+
     @PUT
-    @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Path("{path:.*}/{filename}")
     public Response put(@PathParam("path") String path,
                         @PathParam("filename") String filename,
-                        @FormDataParam("file") InputStream inputStream) {
+                        File file) {
+
+        String uri = path + "/" + filename;
 
         if (LOG.isInfoEnabled()) {
-            LOG.info("Maven webservice GET with path : " + path + " and filename : " + filename);
+            LOG.info("Maven webservice PUT with uri : " + uri);
         }
 
-        File file = DormFileUploadHelper.getUploadedFile(inputStream);
+        DormWebServiceRequestBuilder requestBuilder = new DormWebServiceRequestBuilder
+                (MavenMetadataExtension.EXTENSION_NAME)
+                .property("uri", uri);
 
-        DormWebServiceRequest request = new DormWebServiceRequestBuilder(MavenMetadataExtension.EXTENSION_NAME)
-                .file(file)
-                .filename(filename)
-                .property("path", path)
-                .build();
+        if (file.length() > 0) {
+            requestBuilder.file(file);
+        }
 
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Size of the uploaded file : " + file.length());
+        }
+
+        DormWebServiceRequest request = requestBuilder.build();
         processor.push(request);
 
         return Response.status(Response.Status.OK).build();
