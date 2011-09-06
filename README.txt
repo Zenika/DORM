@@ -32,5 +32,5 @@ Web service :
         curl -X POST -F"file=artifact.jar" http://localhost:8080/dorm/foo/1.0/foo-1.0.jar
 
 - Maven :
-
-
+    - Deploy :
+        curl -X PUT -F"file="wicket-1.4.9.jar" http://localhost:8080/maven/org/apache/wicket/wicket/1.4.9/wicket-1.4.9.jar

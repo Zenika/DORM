@@ -1,9 +1,11 @@
 package com.zenika.dorm.maven.ws.resource;
 
 import com.google.inject.Inject;
+import com.sun.jersey.multipart.FormDataParam;
 import com.zenika.dorm.core.model.ws.DormWebServiceRequest;
 import com.zenika.dorm.core.model.ws.builder.DormWebServiceRequestBuilder;
 import com.zenika.dorm.core.processor.Processor;
+import com.zenika.dorm.core.ws.helper.DormFileUploadHelper;
 import com.zenika.dorm.core.ws.resource.AbstractResource;
 import com.zenika.dorm.maven.model.impl.MavenMetadataExtension;
 import org.slf4j.Logger;
@@ -13,6 +15,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.File;
+import java.io.InputStream;
 
 /**
  * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>
@@ -97,15 +100,17 @@ public class MavenResource extends AbstractResource {
 
 
     @PUT
-    @Consumes(MediaType.APPLICATION_OCTET_STREAM)
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Path("{path:.*}/{filename}")
     public Response put(@PathParam("path") String path,
                         @PathParam("filename") String filename,
-                        @FormParam("file") File file) {
+                        @FormDataParam("file") InputStream inputStream) {
 
         if (LOG.isInfoEnabled()) {
             LOG.info("Maven webservice GET with path : " + path + " and filename : " + filename);
         }
+
+        File file = DormFileUploadHelper.getUploadedFile(inputStream);
 
         DormWebServiceRequest request = new DormWebServiceRequestBuilder(MavenMetadataExtension.EXTENSION_NAME)
                 .file(file)
