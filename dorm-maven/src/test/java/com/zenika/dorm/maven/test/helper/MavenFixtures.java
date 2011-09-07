@@ -40,6 +40,7 @@ public class MavenFixtures extends ExtensionFixtures {
         return new MavenMetadataBuilder(artifactId)
                 .groupId(groupId)
                 .version(mavenVersion)
+                .extension(mavenType)
                 .build();
     }
 

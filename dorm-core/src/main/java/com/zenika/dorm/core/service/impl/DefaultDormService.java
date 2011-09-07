@@ -88,7 +88,7 @@ public class DefaultDormService implements DormService {
         if (LOG.isDebugEnabled()) {
             LOG.debug("Result from database : " + result);
         }
-        
+
         return result;
     }
 
@@ -100,8 +100,7 @@ public class DefaultDormService implements DormService {
     }
 
     @Override
-    public DormResource getResource(String extension, String path, DormServiceGetResourceConfig config) {
-//        repository.get()
+    public DormResource getResource(String extension, String path) {
         return null;
     }
 

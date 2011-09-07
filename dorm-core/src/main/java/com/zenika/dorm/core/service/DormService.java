@@ -24,5 +24,5 @@ public interface DormService {
 
     public DormResource getResource(DormMetadata metadata, DormServiceGetResourceConfig config);
 
-    public DormResource getResource(String extension, String path, DormServiceGetResourceConfig config);
+    public DormResource getResource(String extension, String path);
 }

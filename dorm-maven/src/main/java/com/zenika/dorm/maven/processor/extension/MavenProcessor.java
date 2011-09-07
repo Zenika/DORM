@@ -6,9 +6,11 @@ import com.zenika.dorm.core.model.ws.DormWebServiceResult;
 import com.zenika.dorm.core.model.ws.builder.DormWebServiceResultBuilder;
 import com.zenika.dorm.core.processor.ProcessorExtension;
 import com.zenika.dorm.maven.exception.MavenException;
-import com.zenika.dorm.maven.helper.MavenFormatHelper;
+import com.zenika.dorm.maven.model.MavenUri;
+import com.zenika.dorm.maven.model.impl.MavenConstant;
 import com.zenika.dorm.maven.model.impl.MavenMetadataExtension;
 import com.zenika.dorm.maven.service.MavenService;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -59,23 +61,24 @@ public class MavenProcessor extends ProcessorExtension {
             throw new MavenException("File is required");
         }
 
-        String url = MavenFormatHelper.formatUrl(request.getProperty("path"), request.getFilename());
+        DormWebServiceResultBuilder responseBuilder = new DormWebServiceResultBuilder(
+                MavenMetadataExtension.EXTENSION_NAME);
+
+        MavenUri mavenUri = new MavenUri(request.getProperty("uri"));
 
         if (LOG.isDebugEnabled()) {
-            LOG.debug("Maven url : " + url);
+            LOG.debug("Maven uri : " + mavenUri);
         }
 
-        MavenMetadataExtension mavenMetadata = mavenService.getMetadataByUrl(url);
-
-        if (null == mavenMetadata) {
-            mavenService.storeMavenFile(url, request.getFile());
-            return new DormWebServiceResultBuilder(MavenMetadataExtension.EXTENSION_NAME)
-                    .succeeded()
-                    .build();
+        // ignore put's of maven-medata.xml file
+        if (StringUtils.equals(mavenUri.getFilename(), MavenConstant.Special.MAVEN_METADATA_XML)) {
+            return responseBuilder.succeeded().build();
         }
+
+        mavenService.storeFromUri(mavenUri, request.getFile());
 
         return new DormWebServiceResultBuilder(MavenMetadataExtension.EXTENSION_NAME)
-                .failed()
+                .succeeded()
                 .build();
 
 

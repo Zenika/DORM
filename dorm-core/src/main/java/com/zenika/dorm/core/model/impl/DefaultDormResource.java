@@ -18,7 +18,7 @@ public final class DefaultDormResource implements DormResource {
     private final File file;
 
     public static DormResource create(File file) {
-        return create(file.getName(), file);
+        return create("default-name.foo", file);
     }
 
     public static DefaultDormResource create(String filename, File file) {

@@ -28,6 +28,19 @@ public class DormRepositoryDeployEngine {
 
         File destination = new File(path);
 
+        if (resource.isOverride() && destination.exists()) {
+
+            if (LOG.isTraceEnabled()) {
+                LOG.trace("Override existing file at : " + destination.getAbsolutePath());
+            }
+
+            destination.delete();
+        }
+
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Deploy file to : " + destination.getAbsolutePath());
+        }
+
         try {
             FileUtil.copy(resource.getFile().getAbsoluteFile(), destination.getAbsoluteFile(), new CopyProgressListener() {
 

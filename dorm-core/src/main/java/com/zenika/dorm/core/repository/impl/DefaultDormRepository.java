@@ -126,9 +126,7 @@ public class DefaultDormRepository implements DormRepository {
             LOG.debug("Full path to store resource : " + fullPath);
         }
 
-        String folders = FilenameUtils.getPath(fullPath);
-
-        DormRepositoryResource repositoryResource = new DormRepositoryResource(folders, resource.getFile());
+        DormRepositoryResource repositoryResource = new DormRepositoryResource(fullPath, resource.getFile());
         repositoryResource.setOverride(override);
 
         deployEngine.deploy(repositoryResource);

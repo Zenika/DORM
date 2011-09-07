@@ -21,4 +21,15 @@ public final class DormStringUtils {
 
         return false;
     }
+
+    public static boolean equlasOne(String model, String... values) {
+
+        for (String value : values) {
+            if (StringUtils.equals(model, value)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }
