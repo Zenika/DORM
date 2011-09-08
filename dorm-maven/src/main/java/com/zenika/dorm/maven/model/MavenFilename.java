@@ -5,6 +5,10 @@ import com.zenika.dorm.maven.exception.MavenException;
 import com.zenika.dorm.maven.model.impl.MavenConstant;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>
@@ -12,38 +16,43 @@ import org.apache.commons.lang3.StringUtils;
 public class MavenFilename {
 
     private static final String REGEX_TIMESTAMP = "^[0-9]*(\\.)[0-9]*$";
+    private static final Pattern PATTERN_BUILDNUMBER = Pattern.compile("^(\\d+)\\D.*$");
 
-    private String fullFilename;
     private String filename;
     private String extension;
     private String classifier;
-    private String packaging;
     private String timestamp;
     private String buildNumber;
 
     private MavenUri uri;
 
-    public MavenFilename(MavenUri uri) {
+    public MavenFilename(MavenUri uri, String filename) {
         this.uri = uri;
-        this.fullFilename = uri.getFilename();
+        this.filename = filename;
         extractFields();
     }
 
     private void extractFields() {
 
-        String filenameBeginning = uri.getArtifactId() + "-" + uri.getVersion() + "-";
+        if (StringUtils.equals(filename, MavenConstant.Special.MAVEN_METADATA_XML)) {
+            extension = "xml";
+            return;
+        }
 
-        if (!fullFilename.startsWith(filenameBeginning)) {
+        String filenameBeginning = uri.getArtifactId() + "-" + uri.getVersionWithtoutSnapshot();
+
+        if (!filename.startsWith(filenameBeginning)) {
             throw new MavenException("Maven filename must start with : " + filenameBeginning);
         }
 
         // remove artifactid and version from the current filename
-        String filenameInWork = fullFilename.substring(fullFilename.indexOf(filenameBeginning +
-                filenameBeginning.length()));
+        String filenameInWork = filename.substring(filename.indexOf(filenameBeginning)
+                + filenameBeginning.length());
 
+        // is snapshot
         if (uri.isSnapshot()) {
 
-            String[] elements = filenameInWork.split("-");
+            String[] elements = filenameInWork.substring(1).split("-", 2);
 
             if (elements.length < 2 || DormStringUtils.oneIsBlank(elements[0], elements[1])) {
                 throw new MavenException("Maven snaphost filename must contain at least a timestamp and buildnumber");
@@ -54,45 +63,56 @@ public class MavenFilename {
                 throw new MavenException("Maven snapshot timestamp is invalid : " + timestamp);
             }
 
-            buildNumber = elements[1];
+            Matcher matcher = PATTERN_BUILDNUMBER.matcher(elements[1]);
+
+            if (!matcher.find()) {
+                throw new MavenException("Maven snapshot buildnumber is required in : " + filename);
+            }
+
+            buildNumber = matcher.group(1);
+
             if (!StringUtils.isNumeric(buildNumber)) {
                 throw new MavenException("Maven snapshot buildnumber is invalid : " + buildNumber);
             }
 
             // remove timestamp and buildnumber occurences from the current filename
-            String snapshotElements = timestamp + "-" + buildNumber;
-            filenameInWork = filenameInWork.substring(filenameInWork.indexOf(snapshotElements +
-                    snapshotElements.length()));
+            String snapshotElements = "-" + timestamp + "-" + buildNumber;
+            filenameInWork = filenameInWork.substring(filenameInWork.indexOf(snapshotElements) +
+                    snapshotElements.length());
         }
 
-        if (filenameInWork.startsWith("-")) {
-            classifier = filenameInWork.substring(1, filenameInWork.indexOf(".") - 1);
-        }
-
-        
-
+        // get extension
         extension = FilenameUtils.getExtension(filenameInWork);
 
         if (StringUtils.isBlank(extension)) {
             throw new MavenException("Maven extension is required in : " + filenameInWork);
         }
 
-        // extension is hash file
-        if (DormStringUtils.equlasOne(extension, MavenConstant.FileExtension.SHA1,
-                MavenConstant.FileExtension.MD5)) {
+        filenameInWork = FilenameUtils.removeExtension(filenameInWork);
 
-            // get previous extension
-            packaging = FilenameUtils.getExtension(FilenameUtils.removeExtension(filenameInWork));
+        // is classifier
+        if (filenameInWork.startsWith("-")) {
+
+            // extension is hash file
+            if (DormStringUtils.equlasOne(extension, MavenConstant.FileExtension.SHA1,
+                    MavenConstant.FileExtension.MD5)) {
+
+                extension = FilenameUtils.getExtension(filenameInWork) + "." + extension;
+                filenameInWork = FilenameUtils.removeExtension(filenameInWork);
+            }
+
+            classifier = filenameInWork.substring(1);
         }
 
-        // packaging is extension
+        // no classifier
         else {
-            packaging = extension;
+            String extensionElement;
+            while (StringUtils.isNotBlank(extensionElement = FilenameUtils.getExtension(filenameInWork))) {
+                extension = extensionElement + "." + extension;
+                filenameInWork = filenameInWork.substring(0,
+                        filenameInWork.length() - (extensionElement.length() + 1));
+            }
         }
-    }
-
-    public String getFullFilename() {
-        return fullFilename;
     }
 
     public String getFilename() {
@@ -107,15 +127,24 @@ public class MavenFilename {
         return classifier;
     }
 
-    public String getPackaging() {
-        return packaging;
-    }
-
     public String getTimestamp() {
         return timestamp;
     }
 
     public String getBuildNumber() {
         return buildNumber;
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this)
+                .append("filename", filename)
+                .append("extension", extension)
+                .append("classifier", classifier)
+                .append("timestamp", timestamp)
+                .append("buildNumber", buildNumber)
+                .append("uri", uri)
+                .appendSuper(super.toString())
+                .toString();
     }
 }

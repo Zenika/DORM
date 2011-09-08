@@ -71,7 +71,7 @@ public class MavenProcessor extends ProcessorExtension {
         }
 
         // ignore put's of maven-medata.xml file
-        if (StringUtils.equals(mavenUri.getFilename(), MavenConstant.Special.MAVEN_METADATA_XML)) {
+        if (StringUtils.equals(mavenUri.getFilename().getFilename(), MavenConstant.Special.MAVEN_METADATA_XML)) {
             return responseBuilder.succeeded().build();
         }
 

@@ -13,6 +13,7 @@ import com.zenika.dorm.core.service.get.DormServiceGetMetadataValues;
 import com.zenika.dorm.maven.model.impl.MavenMetadataExtension;
 import com.zenika.dorm.maven.processor.extension.MavenProcessor;
 import com.zenika.dorm.maven.test.unit.AbstractUnitTest;
+import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.InjectMocks;
@@ -37,19 +38,28 @@ public class MavenProcessorUnitTest extends AbstractUnitTest {
 
     private static final Logger LOG = LoggerFactory.getLogger(MavenProcessorUnitTest.class);
 
-    private String path = "org/apache/wicket/wicket/1.4.9";
-    private String filename = "wicket-1.4.9.jar";
-    private String url = path + "/" + filename;
+    private String path;
+    private String filename;
+    private String url;
+    private DormWebServiceRequest request;
+    private MavenMetadataExtension metadataExtension;
+    private DormMetadata metadata;
+    private DormServiceGetMetadataValues getValues;
 
-    private DormWebServiceRequest request = new DormWebServiceRequestBuilder("maven")
-            .property("path", path)
-            .filename(filename)
-            .file(fixtures.getFile())
-            .build();
-
-    private MavenMetadataExtension metadataExtension = new MavenMetadataExtension(url);
-    private DormMetadata metadata = DefaultDormMetadata.create(null, metadataExtension);
-    private DormServiceGetMetadataValues getValues = new DormServiceGetMetadataValues(metadata);
+    @Before
+    public void before() {
+        path = "org/apache/wicket/wicket/1.4.9";
+        filename = "wicket-1.4.9.jar";
+        url = path + "/" + filename;
+        request = new DormWebServiceRequestBuilder("maven")
+                .property("path", path)
+                .filename(filename)
+                .file(fixtures.getFile())
+                .build();
+        metadataExtension = new MavenMetadataExtension(url);
+        metadata = DefaultDormMetadata.create(null, metadataExtension);
+        getValues = new DormServiceGetMetadataValues(metadata);
+    }
 
     @Mock
     private DormService service;
@@ -80,6 +90,7 @@ public class MavenProcessorUnitTest extends AbstractUnitTest {
     }
 
     @Test
+    @Ignore
     public void pushNewMavenArtifact() {
 
         // empty result

@@ -1,7 +1,8 @@
 package com.zenika.dorm.maven.model;
 
+import com.zenika.dorm.maven.exception.MavenException;
 import com.zenika.dorm.maven.model.impl.MavenConstant;
-import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 /**
@@ -14,8 +15,9 @@ public class MavenUri {
     private String groupId;
     private String artifactId;
     private String version;
-    private String filename;
     private boolean snapshot;
+
+    private MavenFilename filename;
 
     public MavenUri(String uri) {
         this.uri = uri;
@@ -24,10 +26,12 @@ public class MavenUri {
 
     private void extractFields() {
 
-        String[] pathParams = FilenameUtils.removeExtension(uri).split("/");
-        int paramsNumber = pathParams.length;
+        if (StringUtils.isBlank(uri)) {
+            throw new MavenException("Maven uri is required");
+        }
 
-        filename = pathParams[paramsNumber - 1];
+        String[] pathParams = uri.split("/");
+        int paramsNumber = pathParams.length;
 
         version = pathParams[paramsNumber - 2];
         if (version.endsWith("-" + MavenConstant.Special.SNAPSHOT)) {
@@ -42,6 +46,22 @@ public class MavenUri {
         for (int i = groupidParam - 1; i >= 0; i--) {
             groupId = pathParams[i] + "/" + groupId;
         }
+
+        this.filename = new MavenFilename(this, pathParams[paramsNumber - 1]);
+    }
+
+    /**
+     * Remove "-SNAPSHOT" from version if exists
+     *
+     * @return
+     */
+    public String getVersionWithtoutSnapshot() {
+
+        if (!snapshot) {
+            return version;
+        }
+
+        return version.substring(0, version.length() - (MavenConstant.Special.SNAPSHOT.length() + 1));
     }
 
     public String getUri() {
@@ -65,7 +85,7 @@ public class MavenUri {
         return version;
     }
 
-    public String getFilename() {
+    public MavenFilename getFilename() {
         return filename;
     }
 
@@ -80,8 +100,8 @@ public class MavenUri {
                 .append("groupId", groupId)
                 .append("artifactId", artifactId)
                 .append("version", version)
-                .append("filename", filename)
                 .append("snapshot", snapshot)
+                .append("filename", filename)
                 .appendSuper(super.toString())
                 .toString();
     }
