@@ -1,46 +1,48 @@
 package com.zenika.dorm.maven.test.model;
 
+import com.zenika.dorm.maven.model.MavenUri;
 import com.zenika.dorm.maven.test.model.fixtures.MavenPathFixtures;
-import com.zenika.dorm.maven.test.model.fixtures.MavenUriFixture;
 import com.zenika.dorm.maven.test.unit.AbstractUnitTest;
-import org.junit.Before;
-import org.junit.Ignore;
+import org.fest.assertions.Assertions;
 import org.junit.Test;
 
 /**
  * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>
  */
-@Ignore
 public class MavenUriUnitTest extends AbstractUnitTest {
 
-    private MavenUriFixture uriFixture1;
-    private MavenUriFixture uriFixture2;
-    private MavenUriFixture uriFixture3;
-    private MavenUriFixture uriFixture4;
-    private MavenUriFixture uriFixture5;
-    private MavenUriFixture uriFixture6;
+    @Test
+    public void testMavenUriSimple() throws Exception {
 
-    @Before
-    public void setUp() throws Exception {
-        uriFixture1 = new MavenUriFixture(MavenPathFixtures.URI1);
-        uriFixture2 = new MavenUriFixture(MavenPathFixtures.URI2);
-        uriFixture3 = new MavenUriFixture(MavenPathFixtures.URI3);
-        uriFixture4 = new MavenUriFixture(MavenPathFixtures.URI4);
-        uriFixture5 = new MavenUriFixture(MavenPathFixtures.URI_SNAPSHOT1);
-        uriFixture6 = new MavenUriFixture(MavenPathFixtures.URI_SNAPSHOT1);
+        MavenUri mavenUri = new MavenUri(MavenPathFixtures.getSimple1());
+        compareUriWith(mavenUri, MavenPathFixtures.GROUPID1, MavenPathFixtures.ARTIFACTID1,
+                MavenPathFixtures.VERSION_SIMPLE, false);
+
+        mavenUri = new MavenUri(MavenPathFixtures.getSimple2());
+        compareUriWith(mavenUri, MavenPathFixtures.GROUPID2, MavenPathFixtures.ARTIFACTID2,
+                MavenPathFixtures.VERSION_SIMPLE, false);
     }
 
     @Test
-    public void testValidMavenUri() throws Exception {
-        uriFixture1.compare();
-        uriFixture2.compare();
-        uriFixture3.compare();
-        uriFixture4.compare();
+    public void testMavenUriWithSpecialVersion() throws Exception {
+
+        // text version "-xxx"
+        MavenUri mavenUri = new MavenUri(MavenPathFixtures.getSimpleWithTextVersion());
+        compareUriWith(mavenUri, MavenPathFixtures.GROUPID1, MavenPathFixtures.ARTIFACTID1,
+                MavenPathFixtures.VERSION_TEXT, false);
+
+        // snapshot "-SNAPSHOT"
+        mavenUri = new MavenUri(MavenPathFixtures.getWithSnapshot());
+        compareUriWith(mavenUri, MavenPathFixtures.GROUPID1, MavenPathFixtures.ARTIFACTID1,
+                MavenPathFixtures.VERSION_SNAPSHOT, true);
     }
 
-    @Test
-    public void testValidMavenSnapshotUri() throws Exception {
-        uriFixture5.compare();
-        uriFixture6.compare();
+    private void compareUriWith(MavenUri uri, String groupId, String artifactId, String version,
+                                boolean snapshot) {
+
+        Assertions.assertThat(uri.getGroupId()).as("groupid").isEqualTo(groupId);
+        Assertions.assertThat(uri.getArtifactId()).as("artifactid").isEqualTo(artifactId);
+        Assertions.assertThat(uri.getVersion()).as("version").isEqualTo(version);
+        Assertions.assertThat(uri.isSnapshot()).as("is snapshot").isEqualTo(snapshot);
     }
 }
