@@ -1,0 +1,23 @@
+apply plugin: 'war'
+
+dependencies {
+    // Internal dependencies
+    compile project(':core:core'), project(':plugins:maven')
+
+    // External dependencies
+    // FIXME : servlet-api should not be in configuration compile (we need something like maven's provided)
+    compile libraries.servlet_api
+    compile libraries.jersey_guice
+    compile libraries.guice_assistedinject
+
+    testCompile libraries.tomcat_embeded_core
+    testCompile libraries.tomcat_embeded_juli
+
+    testCompile project(path: ':core:core', configuration: 'sharedTests')
+    testCompile project(path: ':plugins:maven', configuration: 'sharedTests')
+}
+
+test {
+    excludes = ['SuiteIntegrationTest', // temporary ignored
+            'MavenResourceIntegrationTest', 'DormResourceIntegrationTest']
+}
