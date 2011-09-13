@@ -39,7 +39,6 @@ public final class MavenMetadata implements DormMetadataExtension {
     private final String artifactId;
     private final String version;
     private final String classifier;
-    private final String packaging;
     private final String timestamp;
     private final String extension;
     private final String buildNumber;
@@ -49,7 +48,7 @@ public final class MavenMetadata implements DormMetadataExtension {
     private final boolean mavenMetadata;
 
     public MavenMetadata(String groupId, String artifactId, String version, String extension,
-                         String packaging, String classifier, String timestamp, String buildNumber,
+                         String classifier, String timestamp, String buildNumber,
                          String url, boolean mavenMetadata, boolean snapshot) {
 
         if (DormStringUtils.oneIsBlank(groupId, artifactId, version)) {
@@ -64,7 +63,6 @@ public final class MavenMetadata implements DormMetadataExtension {
         this.artifactId = artifactId;
         this.version = version;
 
-        this.packaging = StringUtils.defaultIfBlank(packaging, MavenConstant.Packaging.JAR);
         this.extension = StringUtils.defaultIfBlank(extension, "");
         this.classifier = StringUtils.defaultIfBlank(classifier, "");
         this.timestamp = StringUtils.defaultIfBlank(timestamp, "");
@@ -81,7 +79,6 @@ public final class MavenMetadata implements DormMetadataExtension {
         this.groupId = null;
         this.artifactId = null;
         this.version = null;
-        this.packaging = null;
         this.extension = null;
         this.classifier = null;
         this.timestamp = null;
@@ -92,21 +89,24 @@ public final class MavenMetadata implements DormMetadataExtension {
 
     @Override
     public String getQualifier() {
+
         String separator = ":";
+
         StringBuilder qualifier = new StringBuilder()
                 .append(groupId).append(separator)
                 .append(artifactId).append(separator)
-                .append(packaging).append(separator);
+                .append(version);
 
         if (StringUtils.isNotBlank(classifier)) {
-            qualifier.append(classifier).append(separator);
+            qualifier.append(separator).append(classifier);
         }
 
-        if (!StringUtils.isNotBlank(timestamp)) {
-            qualifier.append(timestamp).append(separator);
+        if (!StringUtils.isNotBlank(timestamp) && !StringUtils.isNotBlank(buildNumber)) {
+            qualifier.append(separator).append(timestamp)
+                    .append(separator).append(buildNumber);
         }
 
-        return qualifier.append(packaging).append(separator).append(version).toString();
+        return qualifier.toString();
     }
 
     @Override
@@ -138,10 +138,6 @@ public final class MavenMetadata implements DormMetadataExtension {
 
     public String getExtension() {
         return extension;
-    }
-
-    public String getPackaging() {
-        return packaging;
     }
 
     public String getClassifier() {
@@ -197,8 +193,6 @@ public final class MavenMetadata implements DormMetadataExtension {
         if (extension != null ? !extension.equals(extension1.extension) : extension1.extension != null)
             return false;
         if (groupId != null ? !groupId.equals(extension1.groupId) : extension1.groupId != null) return false;
-        if (packaging != null ? !packaging.equals(extension1.packaging) : extension1.packaging != null)
-            return false;
         if (timestamp != null ? !timestamp.equals(extension1.timestamp) : extension1.timestamp != null)
             return false;
         if (version != null ? !version.equals(extension1.version) : extension1.version != null) return false;
@@ -212,7 +206,6 @@ public final class MavenMetadata implements DormMetadataExtension {
         result = 31 * result + (artifactId != null ? artifactId.hashCode() : 0);
         result = 31 * result + (version != null ? version.hashCode() : 0);
         result = 31 * result + (classifier != null ? classifier.hashCode() : 0);
-        result = 31 * result + (packaging != null ? packaging.hashCode() : 0);
         result = 31 * result + (timestamp != null ? timestamp.hashCode() : 0);
         result = 31 * result + (extension != null ? extension.hashCode() : 0);
         result = 31 * result + (buildNumber != null ? buildNumber.hashCode() : 0);
@@ -228,7 +221,6 @@ public final class MavenMetadata implements DormMetadataExtension {
                 .append("artifactId", artifactId)
                 .append("version", version)
                 .append("classifier", classifier)
-                .append("packaging", packaging)
                 .append("timestamp", timestamp)
                 .append("extension", extension)
                 .append("buildNumber", buildNumber)

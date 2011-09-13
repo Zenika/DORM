@@ -76,7 +76,7 @@ public class MavenMetadataBuilder {
     }
 
     public MavenMetadata build() {
-        return new MavenMetadata(groupId, artifactId, version, extension, packaging, classifier,
+        return new MavenMetadata(groupId, artifactId, version, extension, classifier,
                 timestamp, buildNumber, url, mavenMetadata, snapshot);
     }
 }
