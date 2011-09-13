@@ -2,7 +2,7 @@ package com.zenika.dorm.maven.client;
 
 import com.zenika.dorm.core.model.Dependency;
 import com.zenika.dorm.maven.exception.MavenException;
-import com.zenika.dorm.maven.model.impl.MavenMetadataExtension;
+import com.zenika.dorm.maven.model.MavenMetadata;
 import org.sonatype.aether.artifact.Artifact;
 import org.sonatype.aether.artifact.ArtifactType;
 import org.sonatype.aether.util.artifact.DefaultArtifact;
@@ -15,10 +15,10 @@ public class MavenClientHelper {
 
     public static Artifact fromDependencyToArtifact(Dependency dependency) {
 
-        MavenMetadataExtension extension;
+        MavenMetadata extension;
 
         try {
-            extension = (MavenMetadataExtension) dependency.getMetadata().getExtension();
+            extension = (MavenMetadata) dependency.getMetadata().getExtension();
         } catch (ClassCastException e) {
             throw new MavenException("Extension is not maven");
         }

@@ -1,8 +1,8 @@
 package com.zenika.dorm.maven.test.model.formatter;
 
 import com.zenika.dorm.maven.exception.MavenFormatterException;
+import com.zenika.dorm.maven.model.MavenConstant;
 import com.zenika.dorm.maven.model.formatter.MavenFilenameFormatter;
-import com.zenika.dorm.maven.model.impl.MavenConstant;
 import org.fest.assertions.Assertions;
 import org.junit.Before;
 import org.junit.Test;

@@ -10,7 +10,7 @@ import com.zenika.dorm.core.model.ws.builder.DormWebServiceRequestBuilder;
 import com.zenika.dorm.core.service.DormService;
 import com.zenika.dorm.core.service.get.DormServiceGetMetadataResult;
 import com.zenika.dorm.core.service.get.DormServiceGetMetadataValues;
-import com.zenika.dorm.maven.model.impl.MavenMetadataExtension;
+import com.zenika.dorm.maven.model.MavenMetadata;
 import com.zenika.dorm.maven.processor.extension.MavenProcessor;
 import com.zenika.dorm.maven.test.unit.AbstractUnitTest;
 import org.junit.Before;
@@ -42,7 +42,7 @@ public class MavenProcessorUnitTest extends AbstractUnitTest {
     private String filename;
     private String url;
     private DormWebServiceRequest request;
-    private MavenMetadataExtension metadataExtension;
+    private MavenMetadata metadataExtension;
     private DormMetadata metadata;
     private DormServiceGetMetadataValues getValues;
 
@@ -56,7 +56,7 @@ public class MavenProcessorUnitTest extends AbstractUnitTest {
                 .filename(filename)
                 .file(fixtures.getFile())
                 .build();
-        metadataExtension = new MavenMetadataExtension(url);
+        metadataExtension = new MavenMetadata(url);
         metadata = DefaultDormMetadata.create(null, metadataExtension);
         getValues = new DormServiceGetMetadataValues(metadata);
     }
@@ -82,7 +82,7 @@ public class MavenProcessorUnitTest extends AbstractUnitTest {
         List<DormMetadata> metadatas = new ArrayList<DormMetadata>();
         metadatas.add(metadata);
 
-        when(dao.getByMetadataExtension("maven", where, null)).thenReturn(metadatas);
+        when(dao.getMetadataByExtension("maven", where, null)).thenReturn(metadatas);
 
         DormWebServiceResult result = processor.push(request);
 

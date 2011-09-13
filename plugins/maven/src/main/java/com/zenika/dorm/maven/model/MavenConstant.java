@@ -1,4 +1,4 @@
-package com.zenika.dorm.maven.model.impl;
+package com.zenika.dorm.maven.model;
 
 import java.util.Arrays;
 

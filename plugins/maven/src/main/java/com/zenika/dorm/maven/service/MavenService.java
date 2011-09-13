@@ -11,9 +11,10 @@ import com.zenika.dorm.core.service.get.DormServiceGetMetadataResult;
 import com.zenika.dorm.core.service.get.DormServiceGetMetadataValues;
 import com.zenika.dorm.core.util.DormUtils;
 import com.zenika.dorm.maven.exception.MavenException;
+import com.zenika.dorm.maven.model.MavenConstant;
+import com.zenika.dorm.maven.model.MavenMetadata;
 import com.zenika.dorm.maven.model.MavenUri;
-import com.zenika.dorm.maven.model.impl.MavenConstant;
-import com.zenika.dorm.maven.model.impl.MavenMetadataExtension;
+import com.zenika.dorm.maven.model.builder.MavenMetadataUriBuilder;
 import org.apache.commons.io.FilenameUtils;
 
 import java.io.File;
@@ -26,9 +27,9 @@ public class MavenService {
     @Inject
     private DormService service;
 
-    public MavenMetadataExtension getMetadataByUrl(String url) {
+    public MavenMetadata getMetadataByUrl(String url) {
 
-        MavenMetadataExtension mavenMetadata = new MavenMetadataExtension(url);
+        MavenMetadata mavenMetadata = new MavenMetadata(url);
         DormMetadata metadata = DefaultDormMetadata.create(null, mavenMetadata);
 
         DormServiceGetMetadataValues values = new DormServiceGetMetadataValues(metadata)
@@ -41,10 +42,10 @@ public class MavenService {
         }
 
         DormMetadata metadataFromResult = result.getUniqueMetadata();
-        MavenMetadataExtension mavenMetadataFromResult;
+        MavenMetadata mavenMetadataFromResult;
 
         try {
-            mavenMetadataFromResult = (MavenMetadataExtension) metadataFromResult.getExtension();
+            mavenMetadataFromResult = (MavenMetadata) metadataFromResult.getExtension();
         } catch (ClassCastException e) {
             throw new MavenException("Metadata extension is not maven", e);
         }
@@ -56,7 +57,7 @@ public class MavenService {
 
         DormResource resource = DefaultDormResource.create(file);
         DormServiceStoreResourceConfig config = new DormServiceStoreResourceConfig()
-                .resourcePath(url, MavenMetadataExtension.EXTENSION_NAME)
+                .resourcePath(url, MavenMetadata.EXTENSION_NAME)
                 .override(override);
 
         service.storeResource(resource, config);
@@ -72,17 +73,17 @@ public class MavenService {
         String pomMd5 = url + "." + MavenConstant.FileExtension.MD5;
         String metadataXml = url + MavenConstant.Special.MAVEN_METADATA_XML;
 
-        DormResource jarSha1Resource = service.getResource(MavenMetadataExtension.METADATA_EXTENSION,
+        DormResource jarSha1Resource = service.getResource(MavenMetadata.METADATA_EXTENSION,
                 jarSha1);
-        DormResource jarMd5Resource = service.getResource(MavenMetadataExtension.METADATA_EXTENSION,
+        DormResource jarMd5Resource = service.getResource(MavenMetadata.METADATA_EXTENSION,
                 jarSha1);
-        DormResource pomResource = service.getResource(MavenMetadataExtension.METADATA_EXTENSION,
+        DormResource pomResource = service.getResource(MavenMetadata.METADATA_EXTENSION,
                 jarSha1);
-        DormResource pomSha1Resource = service.getResource(MavenMetadataExtension.METADATA_EXTENSION,
+        DormResource pomSha1Resource = service.getResource(MavenMetadata.METADATA_EXTENSION,
                 jarSha1);
-        DormResource pomMd5Resource = service.getResource(MavenMetadataExtension.METADATA_EXTENSION,
+        DormResource pomMd5Resource = service.getResource(MavenMetadata.METADATA_EXTENSION,
                 jarSha1);
-        DormResource metadataXmlResource = service.getResource(MavenMetadataExtension.METADATA_EXTENSION,
+        DormResource metadataXmlResource = service.getResource(MavenMetadata.METADATA_EXTENSION,
                 jarSha1);
 
         if (DormUtils.isNullIn(jarSha1Resource, jarMd5Resource, pomResource, pomSha1Resource,
@@ -98,5 +99,15 @@ public class MavenService {
 
     public void storeFromUri(MavenUri mavenUri, File file) {
 
+        MavenMetadata mavenMetadata = MavenMetadataUriBuilder.buildMavenMetadata(mavenUri);
+        DormMetadata metadata = DefaultDormMetadata.create(null, mavenMetadata);
+
+        DormResource resource = DefaultDormResource.create(file);
+        DormServiceStoreResourceConfig storeResourceConfig = new DormServiceStoreResourceConfig()
+                .override(true)
+                .metadata(metadata);
+
+        service.storeMetadata(metadata);
+        service.storeResource(resource, storeResourceConfig);
     }
 }

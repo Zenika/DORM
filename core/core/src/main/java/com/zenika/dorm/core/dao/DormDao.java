@@ -15,7 +15,7 @@ import java.util.Map;
  */
 public interface DormDao {
 
-    public Boolean push(Dependency node);
+    public Boolean push(Dependency dependency);
 
     public Boolean push(DependencyNode node);
 
@@ -23,8 +23,11 @@ public interface DormDao {
 
     public DependencyNode getOne(DormServiceGetValues values, boolean withDependencies);
 
-    public DormMetadata getByQualifier(String qualifier, Usage usage);
 
-    public List<DormMetadata> getByMetadataExtension(String extensionName, Map<String,
+    public DormMetadata getMetadataByQualifier(String qualifier, Usage usage);
+
+    public List<DormMetadata> getMetadataByExtension(String extensionName, Map<String,
             String> extensionClauses, Usage usage);
+
+    public void saveMetadata(DormMetadata metadata);
 }

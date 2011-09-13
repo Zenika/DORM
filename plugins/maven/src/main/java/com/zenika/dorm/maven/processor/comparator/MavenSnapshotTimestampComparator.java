@@ -2,7 +2,7 @@ package com.zenika.dorm.maven.processor.comparator;
 
 import com.zenika.dorm.core.util.DormStringUtils;
 import com.zenika.dorm.maven.exception.MavenException;
-import com.zenika.dorm.maven.model.impl.MavenMetadataExtension;
+import com.zenika.dorm.maven.model.MavenMetadata;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -11,12 +11,12 @@ import java.util.Comparator;
 /**
  * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>
  */
-public class MavenSnapshotTimestampComparator implements Comparator<MavenMetadataExtension> {
+public class MavenSnapshotTimestampComparator implements Comparator<MavenMetadata> {
 
     private static final Logger LOG = LoggerFactory.getLogger(MavenSnapshotTimestampComparator.class);
 
     @Override
-    public int compare(MavenMetadataExtension extension1, MavenMetadataExtension extension2) {
+    public int compare(MavenMetadata extension1, MavenMetadata extension2) {
 
         if (DormStringUtils.oneIsBlank(extension1.getTimestamp(), extension2.getTimestamp())) {
             throw new MavenException("Timestamp is missing in maven snapshot metadata");

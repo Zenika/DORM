@@ -1,4 +1,4 @@
-package com.zenika.dorm.maven.model.impl;
+package com.zenika.dorm.maven.model;
 
 /**
  * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>
@@ -17,7 +17,7 @@ import java.util.Map;
  * Maven immutable extension point to the dorm model
  * Add maven specific metadatas
  */
-public final class MavenMetadataExtension implements DormMetadataExtension {
+public final class MavenMetadata implements DormMetadataExtension {
 
     public static final transient String EXTENSION_NAME = "maven";
 
@@ -48,9 +48,9 @@ public final class MavenMetadataExtension implements DormMetadataExtension {
 
     private final boolean mavenMetadata;
 
-    public MavenMetadataExtension(String groupId, String artifactId, String version, String extension,
-                                  String packaging, String classifier, String timestamp, String buildNumber,
-                                  String url, boolean mavenMetadata, boolean snapshot) {
+    public MavenMetadata(String groupId, String artifactId, String version, String extension,
+                         String packaging, String classifier, String timestamp, String buildNumber,
+                         String url, boolean mavenMetadata, boolean snapshot) {
 
         if (DormStringUtils.oneIsBlank(groupId, artifactId, version)) {
             throw new MavenException("Following metadatas are required : groupId, artifactId, versionId");
@@ -76,7 +76,7 @@ public final class MavenMetadataExtension implements DormMetadataExtension {
         this.snapshot = snapshot;
     }
 
-    public MavenMetadataExtension(String url) {
+    public MavenMetadata(String url) {
         this.url = url;
         this.groupId = null;
         this.artifactId = null;
@@ -184,7 +184,7 @@ public final class MavenMetadataExtension implements DormMetadataExtension {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        MavenMetadataExtension extension1 = (MavenMetadataExtension) o;
+        MavenMetadata extension1 = (MavenMetadata) o;
 
         if (mavenMetadata != extension1.mavenMetadata) return false;
         if (snapshot != extension1.snapshot) return false;

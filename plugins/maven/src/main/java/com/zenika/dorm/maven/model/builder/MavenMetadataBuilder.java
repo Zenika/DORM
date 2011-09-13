@@ -1,7 +1,6 @@
 package com.zenika.dorm.maven.model.builder;
 
-import com.zenika.dorm.maven.model.MavenUri;
-import com.zenika.dorm.maven.model.impl.MavenMetadataExtension;
+import com.zenika.dorm.maven.model.MavenMetadata;
 
 /**
  * Builder for maven metadata extension
@@ -24,10 +23,6 @@ public class MavenMetadataBuilder {
 
     public MavenMetadataBuilder(String artifactId) {
         this.artifactId = artifactId;
-    }
-
-    public MavenMetadataBuilder(MavenUri uri) {
-        
     }
 
     public MavenMetadataBuilder groupId(String groupId) {
@@ -80,8 +75,8 @@ public class MavenMetadataBuilder {
         return this;
     }
 
-    public MavenMetadataExtension build() {
-        return new MavenMetadataExtension(groupId, artifactId, version, extension, packaging, classifier,
+    public MavenMetadata build() {
+        return new MavenMetadata(groupId, artifactId, version, extension, packaging, classifier,
                 timestamp, buildNumber, url, mavenMetadata, snapshot);
     }
 }

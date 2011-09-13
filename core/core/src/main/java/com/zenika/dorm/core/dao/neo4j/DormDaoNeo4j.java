@@ -306,12 +306,16 @@ public class DormDaoNeo4j implements DormDao {
     }
 
     @Override
-    public DormMetadata getByQualifier(String qualifier, Usage usage) {
+    public DormMetadata getMetadataByQualifier(String qualifier, Usage usage) {
         return null;
     }
 
     @Override
-    public List<DormMetadata> getByMetadataExtension(String extensionName, Map<String, String> extensionClauses, Usage usage) {
+    public List<DormMetadata> getMetadataByExtension(String extensionName, Map<String, String> extensionClauses, Usage usage) {
         return null;
+    }
+
+    @Override
+    public void saveMetadata(DormMetadata metadata) {
     }
 }

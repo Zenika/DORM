@@ -13,7 +13,6 @@ import org.slf4j.LoggerFactory;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
@@ -65,13 +64,18 @@ public class DormDaoJdbc implements DormDao {
     }
 
     @Override
-    public DormMetadata getByQualifier(String qualifier, Usage usage) {
+    public DormMetadata getMetadataByQualifier(String qualifier, Usage usage) {
         return null;
     }
 
     @Override
-    public List<DormMetadata> getByMetadataExtension(String extensionName, Map<String, String> extensionClauses, Usage usage) {
+    public List<DormMetadata> getMetadataByExtension(String extensionName, Map<String, String> extensionClauses, Usage usage) {
         return null;
+    }
+
+    @Override
+    public void saveMetadata(DormMetadata metadata) {
+
     }
 
     private Connection getConnection() {

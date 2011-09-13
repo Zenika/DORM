@@ -2,7 +2,6 @@ package com.zenika.dorm.core.service.impl;
 
 import com.google.inject.Inject;
 import com.zenika.dorm.core.dao.DormDao;
-import com.zenika.dorm.core.exception.CoreException;
 import com.zenika.dorm.core.graph.visitor.filter.WithResourceDependencyVisitorFilter;
 import com.zenika.dorm.core.graph.visitor.impl.DependenciesCollector;
 import com.zenika.dorm.core.model.Dependency;
@@ -48,15 +47,13 @@ public class DefaultDormService implements DormService {
 
     @Override
     public DormServiceStoreResult storeMetadata(DormMetadata metadata) {
+        dao.saveMetadata(metadata);
         return null;
     }
 
     @Override
     public void storeResource(DormResource resource, DormServiceStoreResourceConfig config) {
-
-        if (config.isInternalResource()) {
-            repository.store(config.getExtensionName(), config.getResourcePath(), resource, config.isOverride());
-        }
+        repository.store(resource, config);
     }
 
     @Override
@@ -71,7 +68,7 @@ public class DefaultDormService implements DormService {
 
         if (values.isGetByQualifier()) {
 
-            DormMetadata metadata = dao.getByQualifier(values.getMetadata().getQualifier(), usage);
+            DormMetadata metadata = dao.getMetadataByQualifier(values.getMetadata().getQualifier(), usage);
 
             if (null != metadata) {
                 metadatas = new ArrayList<DormMetadata>();
@@ -79,7 +76,7 @@ public class DefaultDormService implements DormService {
             }
 
         } else {
-            metadatas = dao.getByMetadataExtension(values.getMetadata().getExtension().getExtensionName(),
+            metadatas = dao.getMetadataByExtension(values.getMetadata().getExtension().getExtensionName(),
                     values.getMetadataExtensionClauses(), usage);
         }
 
@@ -144,58 +141,6 @@ public class DefaultDormService implements DormService {
             LOG.info("Get result : " + result);
         }
 
-        return result;
-    }
-
-    public DormServiceStoreResult put(DormServicePutRequest request) {
-
-        if (null == request || null == request.getValues()) {
-            throw new CoreException("Service put request or values are null");
-        }
-
-        if (request.isEmpty()) {
-            throw new CoreException("Service put request is empty");
-        }
-
-        DormResource resource = null;
-
-        // database request
-        if (request.isDatabaseRequest()) {
-
-            DependencyNode node = request.getNode();
-            if (null == node) {
-                throw new CoreException("Node to save to database is null");
-            }
-
-            dao.push(node);
-
-            // database request + repository request
-            if (request.isRepositoryRequest()) {
-                if (null != node.getDependency() && null != node.getDependency().getResource()) {
-                    resource = node.getDependency().getResource();
-                } else {
-                    LOG.error("Request is repository request but node's resource is null, ignored");
-                }
-            }
-        }
-
-        // repository request only
-        else {
-
-            if (request.isRepositoryRequest()) {
-                if (null != request.getResource()) {
-                    resource = request.getResource();
-                } else {
-                    LOG.error("Request is repository request only but resource is null, ignored");
-                }
-            }
-        }
-
-        if (null != resource) {
-            repository.store(resource, request.getValues());
-        }
-
-        DormServiceStoreResult result = new DormServiceStoreResult(request.getProcessName());
         return result;
     }
 

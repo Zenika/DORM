@@ -5,7 +5,7 @@ import com.zenika.dorm.core.model.ws.DormWebServiceRequest;
 import com.zenika.dorm.core.model.ws.builder.DormWebServiceRequestBuilder;
 import com.zenika.dorm.core.processor.Processor;
 import com.zenika.dorm.core.ws.resource.AbstractResource;
-import com.zenika.dorm.maven.model.impl.MavenMetadataExtension;
+import com.zenika.dorm.maven.model.MavenMetadata;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -143,7 +143,7 @@ public class MavenResource extends AbstractResource {
         }
 
         DormWebServiceRequestBuilder requestBuilder = new DormWebServiceRequestBuilder
-                (MavenMetadataExtension.EXTENSION_NAME)
+                (MavenMetadata.EXTENSION_NAME)
                 .property("uri", uri);
 
         if (file.length() > 0) {

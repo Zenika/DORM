@@ -1,6 +1,6 @@
 package com.zenika.dorm.maven.test.model;
 
-import com.zenika.dorm.maven.model.impl.MavenConstant;
+import com.zenika.dorm.maven.model.MavenConstant;
 import org.fest.assertions.Assertions;
 import org.junit.Test;
 

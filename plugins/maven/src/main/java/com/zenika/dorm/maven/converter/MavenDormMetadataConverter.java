@@ -1,8 +1,8 @@
 package com.zenika.dorm.maven.converter;
 
 import com.zenika.dorm.maven.exception.MavenException;
+import com.zenika.dorm.maven.model.MavenMetadata;
 import com.zenika.dorm.maven.model.builder.MavenMetadataBuilder;
-import com.zenika.dorm.maven.model.impl.MavenMetadataExtension;
 import org.apache.maven.artifact.repository.metadata.Metadata;
 import org.apache.maven.artifact.repository.metadata.Snapshot;
 import org.apache.maven.artifact.repository.metadata.Versioning;
@@ -20,7 +20,7 @@ public class MavenDormMetadataConverter {
 
     private static final Logger LOG = LoggerFactory.getLogger(MavenDormMetadataConverter.class);
 
-    public static Metadata dormToMaven(MavenMetadataExtension dormMetadata) {
+    public static Metadata dormToMaven(MavenMetadata dormMetadata) {
 
         Metadata metadata = new Metadata();
         metadata.setArtifactId(dormMetadata.getArtifactId());
@@ -40,7 +40,7 @@ public class MavenDormMetadataConverter {
         return metadata;
     }
 
-    public static MavenMetadataExtension mavenToDorm(File mavenMetadataFile) {
+    public static MavenMetadata mavenToDorm(File mavenMetadataFile) {
 
         Metadata metadata;
 
@@ -54,7 +54,7 @@ public class MavenDormMetadataConverter {
         return mavenToDorm(metadata);
     }
 
-    public static MavenMetadataExtension mavenToDorm(Metadata metadata) {
+    public static MavenMetadata mavenToDorm(Metadata metadata) {
 
         if (null != metadata.getPlugins() && !metadata.getPlugins().isEmpty()) {
             throw new UnsupportedOperationException("Maven plugins are not yet supported");

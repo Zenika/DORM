@@ -8,6 +8,7 @@ import com.zenika.dorm.core.model.DormResource;
 import com.zenika.dorm.core.model.impl.DefaultDormResource;
 import com.zenika.dorm.core.repository.DormRepository;
 import com.zenika.dorm.core.repository.DormRepositoryResource;
+import com.zenika.dorm.core.service.config.DormServiceStoreResourceConfig;
 import com.zenika.dorm.core.service.put.DormServicePutValues;
 import com.zenika.dorm.core.util.DormStringUtils;
 import org.apache.commons.io.FilenameUtils;
@@ -171,13 +172,13 @@ public class DefaultDormRepository implements DormRepository {
         return base;
     }
 
-    /**
-     * Pattern from metadata
-     *
-     * @param metadata
-     * @return
-     */
     private String getPathFromMetadata(DormMetadata metadata) {
         return metadata.getQualifier() + "/" + metadata.getExtension().getQualifier();
+    }
+
+    @Override
+    public void store(DormResource resource, DormServiceStoreResourceConfig config) {
+
+
     }
 }

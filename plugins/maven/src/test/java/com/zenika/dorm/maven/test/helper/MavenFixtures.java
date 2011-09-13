@@ -11,9 +11,9 @@ import com.zenika.dorm.core.model.impl.Usage;
 import com.zenika.dorm.core.model.ws.DormWebServiceRequest;
 import com.zenika.dorm.core.model.ws.builder.DormWebServiceRequestBuilder;
 import com.zenika.dorm.core.test.helper.ExtensionFixtures;
+import com.zenika.dorm.maven.model.MavenConstant;
+import com.zenika.dorm.maven.model.MavenMetadata;
 import com.zenika.dorm.maven.model.builder.MavenMetadataBuilder;
-import com.zenika.dorm.maven.model.impl.MavenConstant;
-import com.zenika.dorm.maven.model.impl.MavenMetadataExtension;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,7 +32,7 @@ public class MavenFixtures extends ExtensionFixtures {
     private String mavenVersion = "1.0-SNAPSHOT";
     private String mavenType = MavenConstant.FileExtension.JAR;
     private String mavenFilename = artifactId + "." + mavenType;
-    private String origin = MavenMetadataExtension.EXTENSION_NAME;
+    private String origin = MavenMetadata.EXTENSION_NAME;
 
     @Override
     public DormMetadataExtension getMetadataExtension() {
@@ -69,9 +69,9 @@ public class MavenFixtures extends ExtensionFixtures {
     public DormWebServiceRequestBuilder getRequestBuilder() {
         return super.getRequestBuilder()
                 .origin(origin)
-                .property(MavenMetadataExtension.METADATA_GROUPID, groupId)
-                .property(MavenMetadataExtension.METADATA_ARTIFACTID, artifactId)
-                .property(MavenMetadataExtension.METADATA_VERSION, mavenVersion);
+                .property(MavenMetadata.METADATA_GROUPID, groupId)
+                .property(MavenMetadata.METADATA_ARTIFACTID, artifactId)
+                .property(MavenMetadata.METADATA_VERSION, mavenVersion);
     }
 
     public DormWebServiceRequest getRequestWithFilename() {
@@ -88,17 +88,17 @@ public class MavenFixtures extends ExtensionFixtures {
      */
     @Override
     public Dependency getDependencyWithResource() {
-        Usage usage = Usage.createInternal(MavenMetadataExtension.EXTENSION_NAME);
+        Usage usage = Usage.createInternal(MavenMetadata.EXTENSION_NAME);
         return DefaultDependency.create(getMetadata(), usage, getDormResource());
     }
 
     public Dependency getSnapshotDependencyWithResource() {
-        Usage usage = Usage.createInternal(MavenMetadataExtension.EXTENSION_NAME);
+        Usage usage = Usage.createInternal(MavenMetadata.EXTENSION_NAME);
         return DefaultDependency.create(DefaultDormMetadata.create(getRequestVersion(),
                 getSnapshotMetadataExtension()), usage, getDormResource());
     }
 
-    public MavenMetadataExtension getEntityExtension() {
+    public MavenMetadata getEntityExtension() {
         return new MavenMetadataBuilder(artifactId)
                 .groupId(groupId)
                 .version(mavenVersion)

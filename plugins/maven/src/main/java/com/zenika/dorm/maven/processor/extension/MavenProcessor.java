@@ -6,9 +6,9 @@ import com.zenika.dorm.core.model.ws.DormWebServiceResult;
 import com.zenika.dorm.core.model.ws.builder.DormWebServiceResultBuilder;
 import com.zenika.dorm.core.processor.ProcessorExtension;
 import com.zenika.dorm.maven.exception.MavenException;
+import com.zenika.dorm.maven.model.MavenConstant;
+import com.zenika.dorm.maven.model.MavenMetadata;
 import com.zenika.dorm.maven.model.MavenUri;
-import com.zenika.dorm.maven.model.impl.MavenConstant;
-import com.zenika.dorm.maven.model.impl.MavenMetadataExtension;
 import com.zenika.dorm.maven.service.MavenService;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -62,7 +62,7 @@ public class MavenProcessor extends ProcessorExtension {
         }
 
         DormWebServiceResultBuilder responseBuilder = new DormWebServiceResultBuilder(
-                MavenMetadataExtension.EXTENSION_NAME);
+                MavenMetadata.EXTENSION_NAME);
 
         MavenUri mavenUri = new MavenUri(request.getProperty("uri"));
 
@@ -77,7 +77,7 @@ public class MavenProcessor extends ProcessorExtension {
 
         mavenService.storeFromUri(mavenUri, request.getFile());
 
-        return new DormWebServiceResultBuilder(MavenMetadataExtension.EXTENSION_NAME)
+        return new DormWebServiceResultBuilder(MavenMetadata.EXTENSION_NAME)
                 .succeeded()
                 .build();
 

@@ -1,6 +1,6 @@
 package com.zenika.dorm.maven.test.writer;
 
-import com.zenika.dorm.maven.model.impl.MavenMetadataExtension;
+import com.zenika.dorm.maven.model.MavenMetadata;
 import com.zenika.dorm.maven.test.unit.AbstractUnitTest;
 import com.zenika.dorm.maven.writer.MavenMetadataFileWriter;
 import org.junit.Test;
@@ -23,6 +23,6 @@ public class MavenMetadataFileWriterUnitTest extends AbstractUnitTest {
         file.createNewFile();
 
         MavenMetadataFileWriter writer = new MavenMetadataFileWriter(file);
-        writer.write((MavenMetadataExtension) fixtures.getSnapshotMetadataExtension());
+        writer.write((MavenMetadata) fixtures.getSnapshotMetadataExtension());
     }
 }

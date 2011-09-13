@@ -2,7 +2,7 @@ package com.zenika.dorm.maven.model.formatter;
 
 import com.zenika.dorm.maven.exception.MavenException;
 import com.zenika.dorm.maven.exception.MavenFormatterException;
-import com.zenika.dorm.maven.model.impl.MavenConstant;
+import com.zenika.dorm.maven.model.MavenConstant;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
