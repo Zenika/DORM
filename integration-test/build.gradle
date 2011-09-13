@@ -1,0 +1,6 @@
+dependencies {
+
+    testCompile libraries.commons_http
+    testCompile libraries.jackson_mapper
+    testCompile libraries.opencsv
+}

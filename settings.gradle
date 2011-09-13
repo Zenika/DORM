@@ -1,1 +1,1 @@
-include 'core:core', 'core:webapp', 'plugins:maven', 'admin:maven-importer'
+include 'integration-test', 'core:core', 'core:webapp', 'plugins:maven', 'admin:maven-importer'

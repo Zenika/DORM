@@ -1,0 +1,233 @@
+[
+    {
+        "configuration":{
+            "target.hostname":"192.168.182.129",
+            "target.port":"8081",
+            "target.baseUrl":"artifactory/libs-snapshot-local",
+            "proxy.hostname":"192.168.182.1",
+            "proxy.port":"8008",
+            "proxy.active":true
+        },
+        "resources":[
+            {
+                "type": "putResource",
+                "pomUrl": "commons-io/commons-io/1.0.0/commons-io-1.0.0.pom",
+                "pomSha1Url": "commons-io/commons-io/1.0.0/commons-io-1.0.0.pom.sha1",
+                "pomMd5Url": "commons-io/commons-io/1.0.0/commons-io-1.0.0.pom.md5",
+                "jarUrl": "commons-io/commons-io/1.0.0/commons-io-1.0.0.jar",
+                "jarSha1Url": "commons-io/commons-io/1.0.0/commons-io-1.0.0.jar.sha1",
+                "jarMd5Url": "commons-io/commons-io/1.0.0/commons-io-1.0.0.jar.md5",
+                "filePath": "files/sample.jar",
+                "expectedResult": {
+                    "httpCode": "404"
+                }
+            },
+            {
+                "type": "putResource",
+                "pomUrl": "org/apache/tomcat/tomcat-server/1.0.2-M1/tomcat-server-1.0.2-M1.pom",
+                "pomSha1Url": "org/apache/tomcat/tomcat-server/1.0.2-M1/tomcat-server-1.0.2-M1.pom.sha1",
+                "pomMd5Url": "org/apache/tomcat/tomcat-server/1.0.2-M1/tomcat-server-1.0.2-M1.pom.md5",
+                "jarUrl": "org/apache/tomcat/tomcat-server/1.0.2-M1/tomcat-server-1.0.2-M1.jar",
+                "jarSha1Url": "org/apache/tomcat/tomcat-server/1.0.2-M1/tomcat-server-1.0.2-M1.jar.sha1",
+                "jarMd5Url": "org/apache/tomcat/tomcat-server/1.0.2-M1/tomcat-server-1.0.2-M1.jar.md5",
+                "filePath": "files/sample.jar",
+                "expectedResult": {
+                    "httpCode": "200"
+                }
+            },
+            {
+                "type": "putResource",
+                "pomUrl": "com/javax-mail/javax-mail/1.0.0/javax-mail-1.0.0.pom",
+                "pomSha1Url": "com/javax-mail/javax-mail/1.0.0/javax-mail-1.0.0.pom.sha1",
+                "pomMd5Url": "com/javax-mail/javax-mail/1.0.0/javax-mail-1.0.0.pom.md5",
+                "jarUrl": "com/javax-mail/javax-mail/1.0.0/javax-mail-1.0.0.jar",
+                "jarSha1Url": "com/javax-mail/javax-mail/1.0.0/javax-mail-1.0.0.jar.sha1",
+                "jarMd5Url": "com/javax-mail/javax-mail/1.0.0/javax-mail-1.0.0.jar.md5",
+                "filePath": "files/sample.jar",
+                "expectedResult": {
+                    "httpCode": "200"
+                }
+            },
+            {
+                "type": "putResource",
+                "pomUrl": "com/zenika/test/test/my-version-1/test-my-version-1.pom",
+                "pomSha1Url": "com/zenika/test/test/my-version-1/test-my-version-1.pom.sha1",
+                "pomMd5Url": "com/zenika/test/test/my-version-1/test-my-version-1.pom.md5",
+                "jarUrl": "com/zenika/test/test/my-version-1/test-my-version-1.jar",
+                "jarSha1Url": "com/zenika/test/test/my-version-1/test-my-version-1.jar.sha1",
+                "jarMd5Url": "com/zenika/test/test/my-version-1/test-my-version-1.jar.md5",
+                "filePath": "files/sample.jar",
+                "expectedResult": {
+                    "httpCode": "200"
+                }
+            },
+            {
+                "type": "putResource",
+                "pomUrl": "com/zenika/other-test/test/my-version-SNAPSHOT/test-my-version-20100319.094859-1.pom",
+                "pomSha1Url": "com/zenika/other-test/test/my-version-SNAPSHOT/test-my-version-20100319.094859-1.pom.sha1",
+                "pomMd5Url": "com/zenika/other-test/test/my-version-SNAPSHOT/test-my-version-20100319.094859-1.pom.md5",
+                "jarUrl": "com/zenika/other-test/test/my-version-SNAPSHOT/test-my-version-20100319.094859-1.jar",
+                "jarSha1Url": "com/zenika/other-test/test/my-version-SNAPSHOT/test-my-version-20100319.094859-1.jar.sha1",
+                "jarMd5Url": "com/zenika/other-test/test/my-version-SNAPSHOT/test-my-version-20100319.094859-1.jar.md5",
+                "filePath": "files/sample.jar",
+                "expectedResult": {
+                    "httpCode": "200"
+                }
+            },
+            {
+                "type": "putResource",
+                "pomUrl": "com/zenika/other-test/test/my-version-SNAPSHOT/test-my-version-20100319.094859-1.pom",
+                "pomSha1Url": "com/zenika/other-test/test/my-version-SNAPSHOT/test-my-version-20100319.094859-1.pom.sha1",
+                "pomMd5Url": "com/zenika/other-test/test/my-version-SNAPSHOT/test-my-version-20100319.094859-1.pom.md5",
+                "jarUrl": "com/zenika/other-test/test/my-version-SNAPSHOT/test-my-version-20100319.094859-1.jar",
+                "jarSha1Url": "com/zenika/other-test/test/my-version-SNAPSHOT/test-my-version-20100319.094859-1.jar.sha1",
+                "jarMd5Url": "com/zenika/other-test/test/my-version-SNAPSHOT/test-my-version-20100319.094859-1.jar.md5",
+                "filePath": "files/sample.jar",
+                "expectedResult": {
+                    "httpCode": "200"
+                }
+            },
+            {
+                "type": "putResource",
+                "pomUrl": "com/javax-mail/javax-mail/1.0.0/javax-mail-1.0.0-bin.pom",
+                "pomSha1Url": "com/javax-mail/javax-mail/1.0.0/javax-mail-1.0.0-bin.pom.sha1",
+                "pomMd5Url": "com/javax-mail/javax-mail/1.0.0/javax-mail-1.0.0-bin.pom.md5",
+                "jarUrl": "com/javax-mail/javax-mail/1.0.0/javax-mail-1.0.0-bin.jar",
+                "jarSha1Url": "com/javax-mail/javax-mail/1.0.0/javax-mail-1.0.0-bin.jar.sha1",
+                "jarMd5Url": "com/javax-mail/javax-mail/1.0.0/javax-mail-1.0.0-bin.jar.md5",
+                "filePath": "files/sample.jar",
+                "expectedResult": {
+                    "httpCode": "200"
+                }
+            },
+            {
+                "type": "putResource",
+                "pomUrl": "com/zenika/other-test/test/an-other-test-SNAPSHOT/an-other-test-20100319.094859-3874-doc.pom",
+                "pomSha1Url": "com/zenika/other-test/test/an-other-test-SNAPSHOT/an-other-test-20100319.094859-3874-doc.pom.sha1",
+                "pomMd5Url": "com/zenika/other-test/test/an-other-test-SNAPSHOT/an-other-test-20100319.094859-3874-doc.pom.md5",
+                "jarUrl": "com/zenika/other-test/test/an-other-test-SNAPSHOT/an-other-test-20100319.094859-3874-doc.jar",
+                "jarSha1Url": "com/zenika/other-test/test/an-other-test-SNAPSHOT/an-other-test-20100319.094859-3874-doc.jar.sha1",
+                "jarMd5Url": "com/zenika/other-test/test/an-other-test-SNAPSHOT/an-other-test-20100319.094859-3874-doc.jar.md5",
+                "filePath": "files/sample.jar",
+                "expectedResult": {
+                    "httpCode": "200"
+                }
+            }
+        ]
+    },
+    {
+        "configuration":{
+            "target.hostname":"192.168.182.129",
+            "target.port":"8081",
+            "target.baseUrl":"artifactory/repo1",
+            "proxy.hostname":"192.168.182.1",
+            "proxy.port":"8008",
+            "proxy.active":true
+        },
+        "resources":[
+            {
+                "type": "getResource",
+                "pomUrl": "org.apache.commons/commons-io/1.0.0/commons-io-1.0.0.pom",
+                "pomSha1Url": "org.apache.commons/commons-io/1.0.0/commons-io-1.0.0.pom.sha1",
+                "pomMd5Url": "org.apache.commons/commons-io/1.0.0/commons-io-1.0.0.pom.md5",
+                "jarUrl": "org.apache.commons/commons-io/1.0.0/commons-io-1.0.0.jar",
+                "jarSha1Url": "org.apache.commons/commons-io/1.0.0/commons-io-1.0.0.jar.sha1",
+                "jarMd5Url": "org.apache.commons/commons-io/1.0.0/commons-io-1.0.0.jar.md5",
+                "expectedResult": {
+                    "httpCode": 404
+                }
+            },
+            {
+                "type": "getResource",
+                "pomUrl": "org/apache/tomcat/tomcat-server/1.0.2-M1/tomcat-server-1.0.2-M1.pom",
+                "pomSha1Url": "org/apache/tomcat/tomcat-server/1.0.2-M1/tomcat-server-1.0.2-M1.pom.sha1",
+                "pomMd5Url": "org/apache/tomcat/tomcat-server/1.0.2-M1/tomcat-server-1.0.2-M1.pom.md5",
+                "jarUrl": "org/apache/tomcat/tomcat-server/1.0.2-M1/tomcat-server-1.0.2-M1.jar",
+                "jarSha1Url": "org/apache/tomcat/tomcat-server/1.0.2-M1/tomcat-server-1.0.2-M1.jar.sha1",
+                "jarMd5Url": "org/apache/tomcat/tomcat-server/1.0.2-M1/tomcat-server-1.0.2-M1.jar.md5",
+                "expectedResult": {
+                    "httpCode": 200,
+                    "contentType":"contentType='text/html;charset=ISO-8859-1'"
+                }
+            },
+            {
+                "type": "getResource",
+                "pomUrl": "com/javax-mail/javax-mail/1.0.0/javax-mail-1.0.0.pom",
+                "pomSha1Url": "com/javax-mail/javax-mail/1.0.0/javax-mail-1.0.0.pom.sha1",
+                "pomMd5Url": "com/javax-mail/javax-mail/1.0.0/javax-mail-1.0.0.pom.md5",
+                "jarUrl": "com/javax-mail/javax-mail/1.0.0/javax-mail-1.0.0.jar",
+                "jarSha1Url": "com/javax-mail/javax-mail/1.0.0/javax-mail-1.0.0.jar.sha1",
+                "jarMd5Url": "com/javax-mail/javax-mail/1.0.0/javax-mail-1.0.0.jar.md5",
+                "expectedResult": {
+                    "httpCode": 200,
+                    "contentType":"contentType='text/html;charset=ISO-8859-1'"
+                }
+            },
+            {
+                "type": "getResource",
+                "pomUrl": "com/zenika/test/test/my-version-1/test-my-version-1.pom",
+                "pomSha1Url": "com/zenika/test/test/my-version-1/test-my-version-1.pom.sha1",
+                "pomMd5Url": "com/zenika/test/test/my-version-1/test-my-version-1.pom.md5",
+                "jarUrl": "com/zenika/test/test/my-version-1/test-my-version-1.jar",
+                "jarSha1Url": "com/zenika/test/test/my-version-1/test-my-version-1.jar.sha1",
+                "jarMd5Url": "com/zenika/test/test/my-version-1/test-my-version-1.jar.md5",
+                "expectedResult": {
+                    "httpCode": 200,
+                    "contentType":"contentType='text/html;charset=ISO-8859-1'"
+                }
+            },
+            {
+                "type": "getResource",
+                "pomUrl": "com/zenika/other-test/test/my-version-SNAPSHOT/test-my-version-20100319.094859-1.pom",
+                "pomSha1Url": "com/zenika/other-test/test/my-version-SNAPSHOT/test-my-version-20100319.094859-1.pom.sha1",
+                "pomMd5Url": "com/zenika/other-test/test/my-version-SNAPSHOT/test-my-version-20100319.094859-1.pom.md5",
+                "jarUrl": "com/zenika/other-test/test/my-version-SNAPSHOT/test-my-version-20100319.094859-1.jar",
+                "jarSha1Url": "com/zenika/other-test/test/my-version-SNAPSHOT/test-my-version-20100319.094859-1.jar.sha1",
+                "jarMd5Url": "com/zenika/other-test/test/my-version-SNAPSHOT/test-my-version-20100319.094859-1.jar.md5",
+                "expectedResult": {
+                    "httpCode": 200,
+                    "contentType":"contentType='text/html;charset=ISO-8859-1'"
+                }
+            },
+            {
+                "type": "getResource",
+                "pomUrl": "com/zenika/other-test/test/my-version-SNAPSHOT/test-my-version-20100319.094859-1.pom",
+                "pomSha1Url": "com/zenika/other-test/test/my-version-SNAPSHOT/test-my-version-20100319.094859-1.pom.sha1",
+                "pomMd5Url": "com/zenika/other-test/test/my-version-SNAPSHOT/test-my-version-20100319.094859-1.pom.md5",
+                "jarUrl": "com/zenika/other-test/test/my-version-SNAPSHOT/test-my-version-20100319.094859-1.jar",
+                "jarSha1Url": "com/zenika/other-test/test/my-version-SNAPSHOT/test-my-version-20100319.094859-1.jar.sha1",
+                "jarMd5Url": "com/zenika/other-test/test/my-version-SNAPSHOT/test-my-version-20100319.094859-1.jar.md5",
+                "expectedResult": {
+                    "httpCode": 200,
+                    "contentType":"contentType='text/html;charset=ISO-8859-1'"
+                }
+            },
+            {
+                "type": "getResource",
+                "pomUrl": "com/javax-mail/javax-mail/1.0.0/javax-mail-1.0.0-bin.pom",
+                "pomSha1Url": "com/javax-mail/javax-mail/1.0.0/javax-mail-1.0.0-bin.pom.sha1",
+                "pomMd5Url": "com/javax-mail/javax-mail/1.0.0/javax-mail-1.0.0-bin.pom.md5",
+                "jarUrl": "com/javax-mail/javax-mail/1.0.0/javax-mail-1.0.0-bin.jar",
+                "jarSha1Url": "com/javax-mail/javax-mail/1.0.0/javax-mail-1.0.0-bin.jar.sha1",
+                "jarMd5Url": "com/javax-mail/javax-mail/1.0.0/javax-mail-1.0.0-bin.jar.md5",
+                "expectedResult": {
+                    "httpCode": 200,
+                    "contentType":"contentType='text/html;charset=ISO-8859-1'"
+                }
+            },
+            {
+                "type": "getResource",
+                "pomUrl": "com/zenika/other-test/test/an-other-test-SNAPSHOT/an-other-test-20100319.094859-3874-doc.pom",
+                "pomSha1Url": "com/zenika/other-test/test/an-other-test-SNAPSHOT/an-other-test-20100319.094859-3874-doc.pom.sha1",
+                "pomMd5Url": "com/zenika/other-test/test/an-other-test-SNAPSHOT/an-other-test-20100319.094859-3874-doc.pom.md5",
+                "jarUrl": "com/zenika/other-test/test/an-other-test-SNAPSHOT/an-other-test-20100319.094859-3874-doc.jar",
+                "jarSha1Url": "com/zenika/other-test/test/an-other-test-SNAPSHOT/an-other-test-20100319.094859-3874-doc.jar.sha1",
+                "jarMd5Url": "com/zenika/other-test/test/an-other-test-SNAPSHOT/an-other-test-20100319.094859-3874-doc.jar.md5",
+                "expectedResult": {
+                    "httpCode": 200,
+                    "contentType":"contentType='text/html;charset=ISO-8859-1'"
+                }
+            }
+        ]
+    }
+]

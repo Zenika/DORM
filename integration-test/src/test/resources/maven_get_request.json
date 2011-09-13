@@ -1,0 +1,24 @@
+{
+    "configuration":{
+        "target.hostname":"192.168.182.129",
+        "target.port":"8081",
+        "target.baseUrl":"artifactory/repo1",
+        "proxy.hostname":"192.168.182.1",
+        "proxy.port":"8008",
+        "proxy.active":true
+    },
+    "resources":[
+        {
+            "type": "getResource",
+            "pomUrl": "org.apache.commons/commons-io/1.0.0/commons-io-1.0.0.pom",
+            "pomSha1Url": "org.apache.commons/commons-io/1.0.0/commons-io-1.0.0.pom.sha1",
+            "pomMd5Url": "org.apache.commons/commons-io/1.0.0/commons-io-1.0.0.pom.md5",
+            "jarUrl": "org.apache.commons/commons-io/1.0.0/commons-io-1.0.0.jar",
+            "jarSha1Url": "org.apache.commons/commons-io/1.0.0/commons-io-1.0.0.jar.sha1",
+            "jarMd5Url": "org.apache.commons/commons-io/1.0.0/commons-io-1.0.0.jar.md5",
+            "expectedResult": {
+                "httpCode": 404
+            }
+        }
+    ]
+}

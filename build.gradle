@@ -52,6 +52,7 @@ versions = [
         commons_io: '2.0.1',
         commons_beanutils: '1.8.3',
         commons_collections: '3.2.1',
+        commons_http: '1.1',
 
         servlet_api: '2.5',
         jersey: '1.8',
@@ -66,6 +67,8 @@ versions = [
         morphia: '0.99',
         tomcat: '7.0.19',
         postgresql: '9.0-801.jdbc4',
+        jackson_mapper: '1.8.5',
+        opencsv: '2.3'
 ]
 
 // 2nd step, introducing libraries
@@ -81,6 +84,7 @@ libraries = [
         commons_io: 'commons-io:commons-io:' + versions.commons_io,
         commons_beanutils: 'commons-beanutils:commons-beanutils:' + versions.commons_beanutils,
         commons_collections: 'commons-collections:commons-collections:' + versions.commons_collections,
+        commons_http: 'commons-http:commons-http:' + versions.commons_http,
 
         servlet_api: 'javax.servlet:servlet-api:' + versions.servlet_api,
 
@@ -90,6 +94,7 @@ libraries = [
         jersey_multipart: 'com.sun.jersey.contribs:jersey-multipart:' + versions.jersey,
         jersey_guice: 'com.sun.jersey.contribs:jersey-guice:' + versions.jersey,
         jackson_mrbean: 'org.codehaus.jackson:jackson-mrbean:' + versions.jackson,
+        jackson_mapper: 'org.codehaus.jackson:jackson-mapper-lgpl:' + versions.jackson_mapper,
 
         guice: 'com.google.inject:guice:' + versions.guice,
         guice_assistedinject: 'com.google.inject.extensions:guice-assistedinject:' + versions.guice,
@@ -106,7 +111,9 @@ libraries = [
         tomcat_embeded_core: 'org.apache.tomcat.embed:tomcat-embed-core:' + versions.tomcat,
         tomcat_embeded_juli: 'org.apache.tomcat.embed:tomcat-embed-logging-juli:' + versions.tomcat,
 
-        postgresql: 'postgresql:postgresql:' + versions.postgresql
+        postgresql: 'postgresql:postgresql:' + versions.postgresql,
+
+        opencsv: 'net.sf.opencsv:opencsv:' + versions.opencsv
 ]
 
 subprojects {
