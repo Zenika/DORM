@@ -27,5 +27,6 @@ public class MavenModule extends DormExtensionModule {
         bind(MavenService.class);
 
         processorBinder.addBinding(MavenMetadata.EXTENSION_NAME).to(MavenProcessor.class);
+        metadataExtensionBinder.addBinding(MavenMetadata.EXTENSION_NAME).toInstance(MavenMetadata.class);
     }
 }

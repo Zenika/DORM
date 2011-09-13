@@ -3,6 +3,7 @@ package com.zenika.dorm.core.dao.sql;
 import com.google.inject.Inject;
 import com.zenika.dorm.core.dao.DormDao;
 import com.zenika.dorm.core.exception.JDBCException;
+import com.zenika.dorm.core.factory.MetadataExtensionFactory;
 import com.zenika.dorm.core.model.Dependency;
 import com.zenika.dorm.core.model.DependencyNode;
 import com.zenika.dorm.core.model.DormMetadata;
@@ -24,9 +25,8 @@ public class DormDaoJdbc implements DormDao {
 
     private static final Logger LOG = LoggerFactory.getLogger(DormDaoJdbc.class);
 
-    private static final String DB_URL = "jdbc:postgresql://localhost:5555/DORM_DATA";
-    private static final String DB_USER = "dorm";
-    private static final String DB_PASSWORD = "dormadmin";
+    @Inject
+    private MetadataExtensionFactory metadataExtensionFactory;
 
     @Inject
     private DataSource dataSource;

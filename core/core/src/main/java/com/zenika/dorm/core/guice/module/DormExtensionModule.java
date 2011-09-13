@@ -10,9 +10,11 @@ import com.zenika.dorm.core.processor.ProcessorExtension;
 public abstract class DormExtensionModule extends AbstractModule {
 
     protected MapBinder<String, ProcessorExtension> processorBinder;
+    protected MapBinder<String, Class> metadataExtensionBinder;
 
     @Override
     protected void configure() {
         processorBinder = MapBinder.newMapBinder(binder(), String.class, ProcessorExtension.class);
+        metadataExtensionBinder = MapBinder.newMapBinder(binder(), String.class, Class.class);
     }
 }
