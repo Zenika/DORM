@@ -3,8 +3,6 @@ package com.zenika.dorm.core.dao.sql;
 import com.google.inject.Inject;
 import com.zenika.dorm.core.exception.CoreException;
 import com.zenika.dorm.core.model.DormMetadata;
-import com.zenika.dorm.core.model.DormMetadataExtension;
-import com.zenika.dorm.core.model.impl.DefaultDormMetadata;
 import org.apache.commons.dbutils.DbUtils;
 
 import java.sql.Connection;
@@ -20,6 +18,11 @@ public class JDBCRetrieveByQualifierService extends JDBCAbstractService {
     @Inject
     private String qualifier;
 
+    /**
+     * todo: fix from refactoring
+     *
+     * @return
+     */
     @Override
     public DormMetadata execute() {
         Connection connection = null;
@@ -47,8 +50,9 @@ public class JDBCRetrieveByQualifierService extends JDBCAbstractService {
             if (metadataQualifier == null) {
                 throw new CoreException("Cannot find the dependency with this Qualifier : " + qualifier);
             }
-            DormMetadataExtension extensionTmp = metadataExtensionFactory.getInstanceOf(extensionName).createFromMap(extensionProperties);
-            return DefaultDormMetadata.create(metadataVersion, extensionTmp);
+//            DormMetadata extensionTmp = dormMetadataFactory.getInstanceOf(extensionName).createFromMap(extensionProperties);
+//            return DefaultDormMetadata.create(metadataVersion, extensionTmp);
+            return null;
         } catch (SQLException e) {
             throw new CoreException("Unable to execute request", e);
         } finally {

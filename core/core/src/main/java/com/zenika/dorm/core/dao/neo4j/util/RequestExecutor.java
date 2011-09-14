@@ -9,10 +9,9 @@ import com.zenika.dorm.core.dao.neo4j.Neo4jNode;
 import com.zenika.dorm.core.dao.neo4j.Neo4jRelationship;
 import com.zenika.dorm.core.dao.neo4j.Neo4jResponse;
 import com.zenika.dorm.core.dao.neo4j.Neo4jTraverse;
-import com.zenika.dorm.core.model.DormMetadataExtension;
+import com.zenika.dorm.core.model.DormMetadata;
 
 import java.lang.reflect.Type;
-import java.net.ConnectException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -40,7 +39,7 @@ public interface RequestExecutor {
 
     <T extends Neo4jNode> T getNode(URI uri, Type type);
 
-    public Neo4jMetadataExtension getExtension(URI uri, DormMetadataExtension dormExtension) throws ClientHandlerException, UniformInterfaceException;
+    public Neo4jMetadataExtension getExtension(URI uri, DormMetadata dormExtension) throws ClientHandlerException, UniformInterfaceException;
 
     <T extends Neo4jNode> T getNode(URI uri);
 

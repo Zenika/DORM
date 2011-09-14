@@ -1,45 +1,20 @@
 package com.zenika.dorm.core.dao.neo4j.util;
 
-import com.sun.jersey.api.client.Client;
-import com.sun.jersey.api.client.ClientHandlerException;
-import com.sun.jersey.api.client.ClientResponse;
-import com.sun.jersey.api.client.GenericType;
-import com.sun.jersey.api.client.UniformInterfaceException;
-import com.sun.jersey.api.client.WebResource;
-import com.sun.jersey.api.client.config.ClientConfig;
-import com.sun.jersey.api.client.config.DefaultClientConfig;
+import com.sun.jersey.api.client.*;
 import com.sun.jersey.api.json.JSONConfiguration;
-import com.sun.jersey.client.apache.config.DefaultApacheHttpClientConfig;
 import com.sun.jersey.client.apache.ApacheHttpClient;
+import com.sun.jersey.client.apache.config.DefaultApacheHttpClientConfig;
 import com.zenika.dorm.core.dao.neo4j.*;
 import com.zenika.dorm.core.exception.CoreException;
-import com.zenika.dorm.core.model.DormMetadataExtension;
-import org.apache.lucene.search.spans.NearSpansOrdered;
+import com.zenika.dorm.core.model.DormMetadata;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.print.attribute.standard.Media;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
 import java.lang.reflect.Type;
-import java.net.ConnectException;
-import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-import java.util.ResourceBundle;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @author Antoine ROUAZE <antoine.rouaze AT zenika.com>
@@ -77,9 +52,10 @@ public class Neo4jRequestExecutor implements RequestExecutor {
                 .accept(MediaType.APPLICATION_JSON_TYPE)
                 .type(MediaType.APPLICATION_JSON_TYPE)
                 .entity(buildGremlinScriptToJson(script))
-                .post(new GenericType<List<Neo4jResponse<Neo4jDependency>>>() {});
+                .post(new GenericType<List<Neo4jResponse<Neo4jDependency>>>() {
+                });
         List<Neo4jDependency> dependencies = new ArrayList<Neo4jDependency>();
-        for (Neo4jResponse<Neo4jDependency> response : responses){
+        for (Neo4jResponse<Neo4jDependency> response : responses) {
             Neo4jDependency dependency = response.getData();
             dependency.setResponse(response);
             dependencies.add(dependency);
@@ -138,9 +114,9 @@ public class Neo4jRequestExecutor implements RequestExecutor {
     }
 
     @Override
-    public List<Neo4jRelationship> getDependencyRelationship(URI uri){
+    public List<Neo4jRelationship> getDependencyRelationship(URI uri) {
         List<Neo4jRelationship> relationships = resource.uri(uri).accept(MediaType.APPLICATION_JSON_TYPE).get(new GenericType<List<Neo4jRelationship>>() {
-                });
+        });
         return relationships;
     }
 
@@ -168,15 +144,25 @@ public class Neo4jRequestExecutor implements RequestExecutor {
         return node;
     }
 
+    /**
+     * todo: fix from refactoring
+     *
+     * @param uri
+     * @param dormExtension
+     * @return
+     * @throws ClientHandlerException
+     * @throws UniformInterfaceException
+     */
     @Override
-    public Neo4jMetadataExtension getExtension(URI uri, DormMetadataExtension dormExtension) throws ClientHandlerException, UniformInterfaceException {
-        Neo4jResponse<Map<String, String>> response = resource.uri(uri).accept(MediaType.APPLICATION_JSON).get(new GenericType<Neo4jResponse<Map<String, String>>>() {
-        });
-        Neo4jMetadataExtension extension = new Neo4jMetadataExtension();
-        extension.setExtension(dormExtension.createFromMap(response.getData()));
-        extension.setResponse(response);
-        logRequest("GET", uri);
-        return extension;
+    public Neo4jMetadataExtension getExtension(URI uri, DormMetadata dormExtension) throws ClientHandlerException, UniformInterfaceException {
+//        Neo4jResponse<Map<String, String>> response = resource.uri(uri).accept(MediaType.APPLICATION_JSON).get(new GenericType<Neo4jResponse<Map<String, String>>>() {
+//        });
+//        Neo4jMetadataExtension extension = new Neo4jMetadataExtension();
+//        extension.setExtension(dormExtension.createFromMap(response.getData()));
+//        extension.setResponse(response);
+//        logRequest("GET", uri);
+//        return extension;
+        return null;
     }
 
     @Override

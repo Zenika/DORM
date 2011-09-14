@@ -3,7 +3,6 @@ package com.zenika.dorm.maven.test.processor.extension;
 
 import com.zenika.dorm.core.dao.DormDao;
 import com.zenika.dorm.core.model.DormMetadata;
-import com.zenika.dorm.core.model.impl.DefaultDormMetadata;
 import com.zenika.dorm.core.model.ws.DormWebServiceRequest;
 import com.zenika.dorm.core.model.ws.DormWebServiceResult;
 import com.zenika.dorm.core.service.DormService;
@@ -56,7 +55,7 @@ public class MavenProcessorUnitTest extends AbstractUnitTest {
                 .file(fixtures.getFile())
                 .build();
 //        metadataExtension = new MavenMetadata(url);
-        metadata = DefaultDormMetadata.create(null, metadataExtension);
+//        metadata = DefaultDormMetadata.create(null, metadataExtension);
         getValues = new DormServiceGetMetadataValues(metadata);
     }
 

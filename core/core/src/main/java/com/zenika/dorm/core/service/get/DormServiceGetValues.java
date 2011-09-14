@@ -1,6 +1,6 @@
 package com.zenika.dorm.core.service.get;
 
-import com.zenika.dorm.core.model.DormMetadataExtension;
+import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.core.model.impl.Usage;
 
 import java.util.Map;
@@ -20,7 +20,7 @@ public interface DormServiceGetValues {
 
     public Map<String, String> getMetadataExtensionClauses();
 
-    public DormMetadataExtension getMetadataExtension();
+    public DormMetadata getMetadataExtension();
 
     public Usage getUsage();
 

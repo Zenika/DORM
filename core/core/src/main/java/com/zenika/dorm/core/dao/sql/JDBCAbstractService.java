@@ -1,7 +1,7 @@
 package com.zenika.dorm.core.dao.sql;
 
 import com.google.inject.Inject;
-import com.zenika.dorm.core.factory.MetadataExtensionFactory;
+import com.zenika.dorm.core.factory.DormMetadataFactory;
 
 import javax.sql.DataSource;
 
@@ -15,7 +15,7 @@ public abstract class JDBCAbstractService {
     public static final String METADATA_VERSION_COLUMN = "metadata_version";
 
     @Inject
-    protected MetadataExtensionFactory metadataExtensionFactory;
+    protected DormMetadataFactory dormMetadataFactory;
 
     @Inject
     protected DataSource dataSource;

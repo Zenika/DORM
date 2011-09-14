@@ -2,11 +2,8 @@ package com.zenika.dorm.core.service.impl;
 
 import com.google.inject.Inject;
 import com.zenika.dorm.core.dao.DormDao;
-import com.zenika.dorm.core.model.Dependency;
-import com.zenika.dorm.core.model.DependencyNode;
 import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.core.model.DormResource;
-import com.zenika.dorm.core.model.impl.DefaultDependency;
 import com.zenika.dorm.core.model.impl.Usage;
 import com.zenika.dorm.core.repository.DormRepository;
 import com.zenika.dorm.core.service.DormService;
@@ -80,7 +77,7 @@ public class DefaultDormService implements DormService {
             }
 
         } else {
-            metadatas = dao.getMetadataByExtension(values.getMetadata().getExtension().getExtensionName(),
+            metadatas = dao.getMetadataByExtension(values.getMetadata().getExtensionName(),
                     values.getMetadataExtensionClauses(), usage);
         }
 
@@ -103,25 +100,5 @@ public class DefaultDormService implements DormService {
     @Override
     public DormResource getResource(String extension, String path) {
         return null;
-    }
-
-    private Dependency getDependencyWithResource(DependencyNode node) {
-
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("Get resource for node : " + node);
-        }
-
-        DormMetadata metadata = node.getDependency().getMetadata();
-        DormResource resource = repository.get(metadata);
-
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("Resource from the repository : " + resource);
-        }
-
-        if (null == resource) {
-            return node.getDependency();
-        }
-
-        return DefaultDependency.create(metadata, resource);
     }
 }

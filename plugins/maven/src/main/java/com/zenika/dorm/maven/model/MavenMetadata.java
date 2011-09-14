@@ -4,20 +4,17 @@ package com.zenika.dorm.maven.model;
  * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>
  */
 
-import com.zenika.dorm.core.model.DormMetadataExtension;
+import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.core.util.DormStringUtils;
 import com.zenika.dorm.maven.exception.MavenException;
-import com.zenika.dorm.maven.model.builder.MavenMetadataBuilder;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
-
-import java.util.Map;
 
 /**
  * Maven immutable extension point to the dorm model
  * Add maven specific metadatas
  */
-public final class MavenMetadata implements DormMetadataExtension {
+public final class MavenMetadata implements DormMetadata {
 
     public static final transient String EXTENSION_NAME = "maven";
 
@@ -91,6 +88,11 @@ public final class MavenMetadata implements DormMetadataExtension {
     }
 
     @Override
+    public String getVersion() {
+        return version;
+    }
+
+    @Override
     public String getExtensionName() {
         return EXTENSION_NAME;
     }
@@ -113,10 +115,6 @@ public final class MavenMetadata implements DormMetadataExtension {
         return artifactId;
     }
 
-    public String getVersion() {
-        return version;
-    }
-
     public String getExtension() {
         return extension;
     }
@@ -136,19 +134,6 @@ public final class MavenMetadata implements DormMetadataExtension {
 
     public boolean isSnapshot() {
         return snapshot;
-    }
-
-    @Override
-    public DormMetadataExtension createFromMap(Map<String, String> properties) {
-        return new MavenMetadataBuilder(properties.get(METADATA_ARTIFACTID))
-                .groupId(properties.get(METADATA_GROUPID))
-                .version(properties.get(METADATA_VERSION))
-                .classifier(properties.get(METADATA_CLASSIFIER))
-                .extension(properties.get(METADATA_EXTENSION))
-                .snapshot(Boolean.valueOf(properties.get(METADATA_SNAPSHOT)))
-                .timestamp(properties.get(METADATA_TIMESTAMP))
-                .buildNumber(properties.get(METADATA_BUILDNUMBER))
-                .build();
     }
 
     @Override

@@ -2,7 +2,6 @@ package com.zenika.dorm.core.dao.neo4j;
 
 import com.zenika.dorm.core.dao.neo4j.exception.Neo4jDaoException;
 import com.zenika.dorm.core.model.DormMetadata;
-import com.zenika.dorm.core.model.DormMetadataExtension;
 import com.zenika.dorm.core.model.impl.Usage;
 import org.codehaus.jackson.annotate.JsonIgnore;
 
@@ -22,7 +21,7 @@ public class Neo4jMetadata extends Neo4jNode implements DormMetadata {
     public static final Usage RELATIONSHIP_TYPE = Usage.create("METADATA");
 
     private Neo4jMetadataExtension extension;
-    private DormMetadataExtension dormExtension;
+    private DormMetadata dormExtension;
 
     private String qualifier;
     private String version;
@@ -40,7 +39,7 @@ public class Neo4jMetadata extends Neo4jNode implements DormMetadata {
 //            type = metadata.getType();
 //        }
         qualifier = metadata.getQualifier();
-        extension = new Neo4jMetadataExtension(metadata.getExtension());
+        extension = new Neo4jMetadataExtension(metadata);
     }
 
     public static URI generateIndexURI(String fullQualifier, Neo4jIndex index) {
@@ -73,11 +72,14 @@ public class Neo4jMetadata extends Neo4jNode implements DormMetadata {
     }
 
     @JsonIgnore
-    @Override
-    public DormMetadataExtension getExtension() {
+    public DormMetadata getExtension() {
         throw new UnsupportedOperationException();
     }
 
+    @Override
+    public String getExtensionName() {
+        return null;
+    }
 
     public void setQualifier(String qualifier) {
         this.qualifier = qualifier;

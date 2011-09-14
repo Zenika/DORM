@@ -1,9 +1,7 @@
 package com.zenika.dorm.maven.service;
 
 import com.google.inject.Inject;
-import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.core.model.DormResource;
-import com.zenika.dorm.core.model.impl.DefaultDormMetadata;
 import com.zenika.dorm.core.model.impl.DefaultDormResource;
 import com.zenika.dorm.core.service.DormService;
 import com.zenika.dorm.core.service.config.DormServiceStoreResourceConfig;
@@ -23,13 +21,11 @@ public class MavenService {
     @Inject
     private DormService service;
 
-    public void storeMetadataWithArtifact(MavenMetadata mavenMetadata, File file) {
+    public void storeMetadataWithArtifact(MavenMetadata metadata, File file) {
 
         if (LOG.isDebugEnabled()) {
-            LOG.debug("Store maven metadata with artifact : " + mavenMetadata);
+            LOG.debug("Store maven metadata with artifact : " + metadata);
         }
-
-        DormMetadata metadata = DefaultDormMetadata.create(null, mavenMetadata);
 
         DormResource resource = DefaultDormResource.create(file);
         DormServiceStoreResourceConfig storeResourceConfig = new DormServiceStoreResourceConfig()
@@ -40,13 +36,11 @@ public class MavenService {
         service.storeResource(resource, storeResourceConfig);
     }
 
-    public void storeArtifact(MavenMetadata mavenMetadata, File file) {
+    public void storeArtifact(MavenMetadata metadata, File file) {
 
         if (LOG.isDebugEnabled()) {
-            LOG.debug("Store maven artifact for metadata : " + mavenMetadata);
+            LOG.debug("Store maven artifact for metadata : " + metadata);
         }
-
-        DormMetadata metadata = DefaultDormMetadata.create(null, mavenMetadata);
 
         DormResource resource = DefaultDormResource.create(file);
         DormServiceStoreResourceConfig storeResourceConfig = new DormServiceStoreResourceConfig()

@@ -2,15 +2,12 @@ package com.zenika.dorm.core.dao.sql;
 
 import com.zenika.dorm.core.exception.CoreException;
 import com.zenika.dorm.core.model.DormMetadata;
-import com.zenika.dorm.core.model.DormMetadataExtension;
-import com.zenika.dorm.core.model.mapper.MetadataExtensionMapper;
 import org.apache.commons.dbutils.DbUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 import java.sql.*;
-import java.util.Map;
 
 public class JDBCSinglePushService extends JDBCAbstractService {
 
@@ -80,17 +77,24 @@ public class JDBCSinglePushService extends JDBCAbstractService {
         return id;
     }
 
+    /**
+     * todo: fix from refactoring
+     *
+     * @param connection
+     * @param metadataId
+     * @throws SQLException
+     */
     private void insertExtension(Connection connection, Long metadataId) throws SQLException {
-        DormMetadataExtension extension = metadata.getExtension();
-        PreparedStatement statement = connection.prepareStatement("INSERT INTO dorm_extension (property_key, property_value, extension_qualifier, extension_name, metadata_id) VALUES (?, ?, ?, ?, ?)");
-        for (Map.Entry<String, String> properties : MetadataExtensionMapper.fromExtension(extension).entrySet()) {
-            statement.setString(1, properties.getKey());
-            statement.setString(2, properties.getValue());
-            statement.setString(3, extension.getQualifier());
-            statement.setString(4, extension.getExtensionName());
-            statement.setLong(5, metadataId);
-            statement.execute();
-            statement.clearParameters();
-        }
+//        DormMetadata extension = metadata.getExtension();
+//        PreparedStatement statement = connection.prepareStatement("INSERT INTO dorm_extension (property_key, property_value, extension_qualifier, extension_name, metadata_id) VALUES (?, ?, ?, ?, ?)");
+//        for (Map.Entry<String, String> properties : MetadataExtensionMapper.fromExtension(extension).entrySet()) {
+//            statement.setString(1, properties.getKey());
+//            statement.setString(2, properties.getValue());
+//            statement.setString(3, extension.getQualifier());
+//            statement.setString(4, extension.getExtensionName());
+//            statement.setLong(5, metadataId);
+//            statement.execute();
+//            statement.clearParameters();
+//        }
     }
 }

@@ -1,7 +1,7 @@
 package com.zenika.dorm.core.dao.neo4j;
 
 import com.zenika.dorm.core.model.impl.Usage;
-import com.zenika.dorm.core.model.DormMetadataExtension;
+import com.zenika.dorm.core.model.DormMetadata;
 import org.codehaus.jackson.annotate.JsonIgnore;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -21,13 +21,13 @@ public class Neo4jMetadataExtension extends Neo4jNode {
     @JsonIgnore
     private Map<String, String> properties;
 
-    private DormMetadataExtension extension;
+    private DormMetadata extension;
 
     public Neo4jMetadataExtension() {
 
     }
 
-    public Neo4jMetadataExtension(DormMetadataExtension extension) {
+    public Neo4jMetadataExtension(DormMetadata extension) {
         this.extension = extension;
     }
 
@@ -65,11 +65,11 @@ public class Neo4jMetadataExtension extends Neo4jNode {
 //        this.setQualifier(getResponse().getData().getQualifier());
     }
 
-    public DormMetadataExtension getExtension() {
+    public DormMetadata getExtension() {
         return extension;
     }
 
-    public void setExtension(DormMetadataExtension extension) {
+    public void setExtension(DormMetadata extension) {
         this.extension = extension;
     }
 }

@@ -1,6 +1,7 @@
 package com.zenika.dorm.maven.guice.module;
 
 import com.zenika.dorm.core.guice.module.DormExtensionModule;
+import com.zenika.dorm.maven.factory.MavenMetadataFactory;
 import com.zenika.dorm.maven.model.MavenMetadata;
 import com.zenika.dorm.maven.processor.extension.MavenProcessor;
 import com.zenika.dorm.maven.service.MavenService;
@@ -27,6 +28,9 @@ public class MavenModule extends DormExtensionModule {
         bind(MavenService.class);
 
         processorBinder.addBinding(MavenMetadata.EXTENSION_NAME).to(MavenProcessor.class);
+        metadataFactories.addBinding(MavenMetadata.EXTENSION_NAME).to(MavenMetadataFactory.class);
+
+        // should be deprecated
         metadataExtensionBinder.addBinding(MavenMetadata.EXTENSION_NAME).toInstance(MavenMetadata.class);
     }
 }

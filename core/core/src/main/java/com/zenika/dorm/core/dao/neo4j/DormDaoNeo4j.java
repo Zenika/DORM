@@ -9,17 +9,13 @@ import com.zenika.dorm.core.dao.neo4j.exception.Neo4jDaoException;
 import com.zenika.dorm.core.dao.neo4j.util.Neo4jRequestExecutor;
 import com.zenika.dorm.core.dao.neo4j.util.RequestExecutor;
 import com.zenika.dorm.core.exception.CoreException;
-import com.zenika.dorm.core.graph.visitor.impl.DependenciesNodeCollector;
 import com.zenika.dorm.core.model.Dependency;
 import com.zenika.dorm.core.model.DependencyNode;
 import com.zenika.dorm.core.model.DormMetadata;
-import com.zenika.dorm.core.model.DormMetadataExtension;
 import com.zenika.dorm.core.model.impl.DefaultDependency;
 import com.zenika.dorm.core.model.impl.DefaultDependencyNode;
-import com.zenika.dorm.core.model.impl.DefaultDormMetadata;
 import com.zenika.dorm.core.model.impl.Usage;
 import com.zenika.dorm.core.model.mapper.MetadataExtensionMapper;
-import com.zenika.dorm.core.service.get.DormServiceGetValues;
 import org.apache.commons.lang3.StringUtils;
 import org.codehaus.jackson.type.TypeReference;
 import org.slf4j.Logger;
@@ -29,7 +25,10 @@ import javax.ws.rs.core.Response;
 import java.lang.reflect.Type;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>
@@ -65,7 +64,6 @@ public class DormDaoNeo4j implements DormDao {
     }
 
 
-
     public Neo4jDependency postDependency(Dependency dormDependency) {
         Usage usage = dormDependency.getUsage();
         Neo4jDependency dependency = null;
@@ -84,7 +82,7 @@ public class DormDaoNeo4j implements DormDao {
                 dependency = searchNode(dependency.getIndexURI(index),
                         new TypeReference<List<Neo4jResponse<Neo4jDependency>>>() {
                         }.getType());
-                fillNeo4jDependency(dependency, dormDependency.getMetadata().getExtension());
+                fillNeo4jDependency(dependency, dormDependency.getMetadata());
                 dependency.setUsage(usage);
             }
         } catch (URISyntaxException e) {
@@ -121,7 +119,7 @@ public class DormDaoNeo4j implements DormDao {
         return nodes;
     }
 
-    public Neo4jDependency fillNeo4jDependency(Neo4jDependency dependency, DormMetadataExtension extensionPlug) {
+    public Neo4jDependency fillNeo4jDependency(Neo4jDependency dependency, DormMetadata extensionPlug) {
         try {
             Neo4jRelationship dependencyMetadata = getSingleRelationship(dependency.getResponse()
                     .getOutgoing_typed_relationships(Neo4jMetadata.RELATIONSHIP_TYPE));
@@ -138,16 +136,14 @@ public class DormDaoNeo4j implements DormDao {
         }
     }
 
-    public Dependency getDependency(URI uri, Usage usage, DormMetadataExtension extension) throws URISyntaxException {
+    public Dependency getDependency(URI uri, Usage usage, DormMetadata extension) throws URISyntaxException {
         Neo4jDependency dependency = executor.getNode(uri, new TypeReference<Neo4jResponse<Neo4jDependency>>() {
         }.getType());
         return getDependency(dependency, usage, extension);
     }
 
-    public Dependency getDependency(Neo4jDependency dependency, Usage usage, DormMetadataExtension extension) {
-        dependency = fillNeo4jDependency(dependency, extension);
-        DormMetadata metadata = DefaultDormMetadata.create(dependency.getMetadata().getVersion(),
-                dependency.getMetadata().getNeo4jExtension().getExtension());
+    public Dependency getDependency(Neo4jDependency dependency, Usage usage, DormMetadata metadata) {
+        dependency = fillNeo4jDependency(dependency, metadata);
         return DefaultDependency.create(metadata, usage);
     }
 
@@ -157,7 +153,7 @@ public class DormDaoNeo4j implements DormDao {
         return relationships.get(0);
     }
 
-    public void putChild(Usage usage, Map<String, DependencyNode> dependencyNodeMap, List<Neo4jRelationship> relationships, DormMetadataExtension extension) throws URISyntaxException {
+    public void putChild(Usage usage, Map<String, DependencyNode> dependencyNodeMap, List<Neo4jRelationship> relationships, DormMetadata extension) throws URISyntaxException {
         for (Neo4jRelationship relationship : relationships) {
             DependencyNode dependencyParent = dependencyNodeMap.get(relationship.getStart().toString());
             DependencyNode dependencyChild = dependencyNodeMap.get(relationship.getEnd().toString());
@@ -214,7 +210,7 @@ public class DormDaoNeo4j implements DormDao {
     private DependencyNode getDependencyNodeChildren(DependencyNode node) {
         Usage usage = node.getDependency().getUsage();
         DormMetadata metadata = node.getDependency().getMetadata();
-        DormMetadataExtension extension = metadata.getExtension();
+        DormMetadata extension = metadata;
         Map<String, DependencyNode> dependencyNodeMap = new HashMap<String, DependencyNode>();
         Neo4jDependency dependency = null;
         try {

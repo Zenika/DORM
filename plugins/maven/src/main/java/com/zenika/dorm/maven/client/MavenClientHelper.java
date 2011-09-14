@@ -18,7 +18,7 @@ public class MavenClientHelper {
         MavenMetadata extension;
 
         try {
-            extension = (MavenMetadata) dependency.getMetadata().getExtension();
+            extension = (MavenMetadata) dependency.getMetadata();
         } catch (ClassCastException e) {
             throw new MavenException("Extension is not maven");
         }

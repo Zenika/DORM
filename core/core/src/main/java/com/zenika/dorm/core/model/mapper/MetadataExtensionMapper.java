@@ -1,7 +1,7 @@
 package com.zenika.dorm.core.model.mapper;
 
 import com.zenika.dorm.core.exception.CoreException;
-import com.zenika.dorm.core.model.DormMetadataExtension;
+import com.zenika.dorm.core.model.DormMetadata;
 import org.apache.commons.beanutils.BeanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,7 +23,7 @@ public final class MetadataExtensionMapper {
 
     }
 
-    public static <T extends DormMetadataExtension> Map<String, String> fromExtension(T extension) {
+    public static <T extends DormMetadata> Map<String, String> fromExtension(T extension) {
         try {
             return BeanUtils.describe(extension);
         } catch (Exception e) {
@@ -63,9 +63,9 @@ public final class MetadataExtensionMapper {
 //        return properties;
 //    }
 
-    public static <T extends DormMetadataExtension> T toExtension(T extension, Map<String, String> properties) {
+    public static <T extends DormMetadata> T toExtension(T extension, Map<String, String> properties) {
 
-        Class<? extends DormMetadataExtension> reflect = extension.getClass();
+        Class<? extends DormMetadata> reflect = extension.getClass();
 
         for (Field field : reflect.getDeclaredFields()) {
 

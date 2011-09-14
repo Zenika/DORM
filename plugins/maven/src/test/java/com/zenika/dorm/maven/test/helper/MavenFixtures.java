@@ -3,10 +3,8 @@ package com.zenika.dorm.maven.test.helper;
 import com.zenika.dorm.core.model.Dependency;
 import com.zenika.dorm.core.model.DependencyNode;
 import com.zenika.dorm.core.model.DormMetadata;
-import com.zenika.dorm.core.model.DormMetadataExtension;
 import com.zenika.dorm.core.model.impl.DefaultDependency;
 import com.zenika.dorm.core.model.impl.DefaultDependencyNode;
-import com.zenika.dorm.core.model.impl.DefaultDormMetadata;
 import com.zenika.dorm.core.model.impl.Usage;
 import com.zenika.dorm.core.model.ws.DormWebServiceRequest;
 import com.zenika.dorm.core.test.helper.ExtensionFixtures;
@@ -34,7 +32,7 @@ public class MavenFixtures extends ExtensionFixtures {
     private String origin = MavenMetadata.EXTENSION_NAME;
 
     @Override
-    public DormMetadataExtension getMetadataExtension() {
+    public DormMetadata getMetadataExtension() {
 
         return new MavenMetadataBuilder(artifactId)
                 .groupId(groupId)
@@ -43,7 +41,7 @@ public class MavenFixtures extends ExtensionFixtures {
                 .build();
     }
 
-    public DormMetadataExtension getSnapshotMetadataExtension() {
+    public DormMetadata getSnapshotMetadataExtension() {
         return new MavenMetadataBuilder(artifactId)
                 .groupId(groupId)
                 .version(mavenVersion)
@@ -92,9 +90,10 @@ public class MavenFixtures extends ExtensionFixtures {
     }
 
     public Dependency getSnapshotDependencyWithResource() {
-        Usage usage = Usage.createInternal(MavenMetadata.EXTENSION_NAME);
-        return DefaultDependency.create(DefaultDormMetadata.create(getRequestVersion(),
-                getSnapshotMetadataExtension()), usage, getDormResource());
+//        Usage usage = Usage.createInternal(MavenMetadata.EXTENSION_NAME);
+//        return DefaultDependency.create(DefaultDormMetadata.create(getRequestVersion(),
+//                getSnapshotMetadataExtension()), usage, getDormResource());
+        return null;
     }
 
     public MavenMetadata getEntityExtension() {
@@ -105,7 +104,8 @@ public class MavenFixtures extends ExtensionFixtures {
     }
 
     public DormMetadata getEntityMetadata() {
-        return DefaultDormMetadata.create(mavenVersion, getEntityExtension());
+//        return DefaultDormMetadata.create(mavenVersion, getEntityExtension());
+        return null;
     }
 
     /**
