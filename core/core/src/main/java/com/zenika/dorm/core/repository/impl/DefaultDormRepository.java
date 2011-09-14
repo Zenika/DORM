@@ -2,17 +2,13 @@ package com.zenika.dorm.core.repository.impl;
 
 import com.google.inject.Inject;
 import com.zenika.dorm.core.exception.RepositoryException;
-import com.zenika.dorm.core.model.Dependency;
 import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.core.model.DormResource;
 import com.zenika.dorm.core.model.impl.DefaultDormResource;
 import com.zenika.dorm.core.repository.DormRepository;
 import com.zenika.dorm.core.repository.DormRepositoryResource;
 import com.zenika.dorm.core.service.config.DormServiceStoreResourceConfig;
-import com.zenika.dorm.core.service.put.DormServicePutValues;
 import com.zenika.dorm.core.util.DormStringUtils;
-import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -45,68 +41,6 @@ public class DefaultDormRepository implements DormRepository {
     }
 
     @Override
-    public boolean put(Dependency dependency) {
-
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("Put dependency = " + dependency);
-        }
-
-        DormResource file = dependency.getResource();
-        DormMetadata metadata = dependency.getMetadata();
-
-        if (file == null) {
-            throw new RepositoryException("Dorm file is required");
-        }
-
-        String location = getPathFromMetadata(metadata);
-        DormRepositoryResource resource = new DormRepositoryResource(location, file.getFile());
-
-        deployEngine.deploy(resource);
-
-        LOG.debug("File is stored to the repository : " + resource.getPath());
-
-        return true;
-    }
-
-    @Override
-    public boolean store(DormResource resource, DormServicePutValues values) {
-
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("Resource to store to the repository : " + resource);
-        }
-
-        StringBuilder builder = new StringBuilder(50);
-        builder.append("/");
-
-        if (values.isResourceInternal()) {
-
-            if (StringUtils.isBlank(values.getExtensionName())) {
-                throw new RepositoryException("Resource is internal but value's extension name is null");
-            }
-
-            String extensionName = FilenameUtils.normalizeNoEndSeparator(values.getExtensionName());
-
-            builder.append(INTERNAL_PATH_PREFIX)
-                    .append(extensionName)
-                    .append("/");
-        }
-
-        builder.append(values.getResourcePath());
-
-        String foldersPath = FilenameUtils.normalizeNoEndSeparator(builder.toString());
-
-        File folders = new File(foldersPath);
-        folders.mkdirs();
-
-        String location = foldersPath + "/" + FilenameUtils.normalizeNoEndSeparator(resource.getFilename());
-
-        DormRepositoryResource repositoryResource = new DormRepositoryResource(location, resource.getFile());
-        deployEngine.deploy(repositoryResource);
-
-        return true;
-    }
-
-    @Override
     public void store(String extension, String path, DormResource resource, boolean override) {
 
         if (DormStringUtils.oneIsBlank(extension, path)) {
@@ -133,10 +67,11 @@ public class DefaultDormRepository implements DormRepository {
         deployEngine.deploy(repositoryResource);
     }
 
-    private StringBuilder getBaseBuilder() {
-        return new StringBuilder(100)
-                .append(base.getAbsolutePath())
-                .append("/");
+    @Override
+    public void store(DormResource resource, DormServiceStoreResourceConfig config) {
+
+        String fullPath = getPathFromMetadata(config.getMetadata());
+
     }
 
     @Override
@@ -156,29 +91,17 @@ public class DefaultDormRepository implements DormRepository {
         return DefaultDormResource.create(resource.getFile());
     }
 
-    @Override
-    public DormResource get(String extension, String path) {
-
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("Get resource from repository with extension : " + extension + " and path : " + path);
-        }
-
-
-        return null;
-    }
-
-    @Override
-    public File getBase() {
-        return base;
-    }
-
     private String getPathFromMetadata(DormMetadata metadata) {
-        return metadata.getQualifier() + "/" + metadata.getExtension().getQualifier();
+        return getBaseBuilder()
+                .append(metadata.getExtension().getExtensionName())
+                .append("/")
+                .append(metadata.getExtension().getQualifier())
+                .toString();
     }
 
-    @Override
-    public void store(DormResource resource, DormServiceStoreResourceConfig config) {
-
-
+    private StringBuilder getBaseBuilder() {
+        return new StringBuilder(100)
+                .append(base.getAbsolutePath())
+                .append("/");
     }
 }
