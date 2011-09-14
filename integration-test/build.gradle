@@ -1,6 +1,8 @@
 dependencies {
 
-    testCompile libraries.commons_http
+    testCompile libraries.commons_httpcore
+    testCompile libraries.commons_httpclient
+
     testCompile libraries.jackson_mapper
     testCompile libraries.opencsv
 }

@@ -14,6 +14,8 @@ dependencies {
 
     compile libraries.postgresql
 
+    compile libraries.commons_dbUtils
+
     compile group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.1.2'
 
     // compile group: 'com.tinkerpop', name: 'gremlin', version: '1.1'
