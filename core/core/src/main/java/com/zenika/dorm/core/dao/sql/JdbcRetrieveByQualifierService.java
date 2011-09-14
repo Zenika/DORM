@@ -6,8 +6,6 @@ import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.core.model.DormMetadataExtension;
 import com.zenika.dorm.core.model.impl.DefaultDormMetadata;
 import org.apache.commons.dbutils.DbUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -16,20 +14,14 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * @author Antoine ROUAZE <antoine.rouaze AT zenika.com>
- */
-public class JdbcRetrieveByQualifierService extends JdbcAbstractService {
+public class JDBCRetrieveByQualifierService extends JDBCAbstractService {
 
-//    private static final Logger LOG = LoggerFactory.getLogger(JdbcSelectAbstractService.class);
 
     @Inject
     private String qualifier;
 
-    private DormMetadata metadata;
-
     @Override
-    public void execute() {
+    public DormMetadata execute() {
         Connection connection = null;
         try {
             connection = dataSource.getConnection();
@@ -56,7 +48,7 @@ public class JdbcRetrieveByQualifierService extends JdbcAbstractService {
                 throw new CoreException("Cannot find the dependency with this Qualifier : " + qualifier);
             }
             DormMetadataExtension extensionTmp = metadataExtensionFactory.getInstanceOf(extensionName).createFromMap(extensionProperties);
-            metadata = DefaultDormMetadata.create(metadataVersion, extensionTmp);
+            return DefaultDormMetadata.create(metadataVersion, extensionTmp);
         } catch (SQLException e) {
             throw new CoreException("Unable to execute request", e);
         } finally {
@@ -70,7 +62,4 @@ public class JdbcRetrieveByQualifierService extends JdbcAbstractService {
         }
     }
 
-    public DormMetadata getMetadata(){
-        return metadata;
-    }
 }

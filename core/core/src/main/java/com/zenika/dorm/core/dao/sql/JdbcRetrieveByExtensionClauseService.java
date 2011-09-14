@@ -2,12 +2,8 @@ package com.zenika.dorm.core.dao.sql;
 
 import com.google.inject.Inject;
 import com.zenika.dorm.core.exception.CoreException;
-import com.zenika.dorm.core.model.Dependency;
-import com.zenika.dorm.core.model.DependencyNode;
 import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.core.model.DormMetadataExtension;
-import com.zenika.dorm.core.model.impl.DefaultDependency;
-import com.zenika.dorm.core.model.impl.DefaultDependencyNode;
 import com.zenika.dorm.core.model.impl.DefaultDormMetadata;
 import org.apache.commons.dbutils.DbUtils;
 
@@ -23,7 +19,7 @@ import java.util.Map;
 /**
  * @author Antoine ROUAZE <antoine.rouaze AT zenika.com>
  */
-public class JdbcRetrieveByExtensionClauseService extends JdbcAbstractService {
+public class JDBCRetrieveByExtensionClauseService extends JDBCAbstractService {
 
     @Inject
     private String extensionName;
@@ -31,10 +27,11 @@ public class JdbcRetrieveByExtensionClauseService extends JdbcAbstractService {
     @Inject
     private Map<String, String> extensionClause;
 
-    private List<DormMetadata> metadatas;
-
     @Override
-    public void execute() {
+    public List<DormMetadata> execute() {
+
+        List<DormMetadata> result = new ArrayList<DormMetadata>();
+
         Connection connection = null;
         try {
             connection = dataSource.getConnection();
@@ -55,7 +52,7 @@ public class JdbcRetrieveByExtensionClauseService extends JdbcAbstractService {
             while (resultSet.next()) {
                 if (!resultSet.getString(METADATA_QUALIFIER_COLUMN).equals(metadataQualifier)) {
                     if (!resultSet.isFirst()) {
-                        addMetadata(metadataVersion, extensionProperties);
+                        addMetadata(result, metadataVersion, extensionProperties);
                         extensionProperties = new HashMap<String, String>();
                     }
                     metadataQualifier = resultSet.getString(METADATA_QUALIFIER_COLUMN);
@@ -63,9 +60,11 @@ public class JdbcRetrieveByExtensionClauseService extends JdbcAbstractService {
                 }
                 extensionProperties.put(resultSet.getString(PROPERTY_KEY_COLUMN), resultSet.getString(PROPERTY_VALUE_COLUMN));
                 if (resultSet.isLast()) {
-                    addMetadata(metadataVersion, extensionProperties);
+                    addMetadata(result, metadataVersion, extensionProperties);
                 }
             }
+
+            return result;
         } catch (SQLException e) {
             throw new CoreException("Unable to execute request", e);
         } finally {
@@ -79,11 +78,8 @@ public class JdbcRetrieveByExtensionClauseService extends JdbcAbstractService {
         }
     }
 
-    public List<DormMetadata> getMetadatas() {
-        return metadatas;
-    }
 
-    private void addMetadata(String metadataVersion, Map<String, String> extensionProperties) {
+    private void addMetadata(List<DormMetadata> metadatas, String metadataVersion, Map<String, String> extensionProperties) {
         DormMetadataExtension extensionTmp = metadataExtensionFactory.getInstanceOf(extensionName).createFromMap(extensionProperties);
         DormMetadata metadata = DefaultDormMetadata.create(metadataVersion, extensionTmp);
         metadatas.add(metadata);

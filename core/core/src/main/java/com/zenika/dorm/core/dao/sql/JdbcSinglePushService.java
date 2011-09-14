@@ -19,15 +19,15 @@ import java.util.Map;
 /**
  * @author Antoine ROUAZE <antoine.rouaze AT zenika.com>
  */
-public class JdbcSinglePushService extends JdbcAbstractService {
+public class JDBCSinglePushService extends JDBCAbstractService {
 
-    private static final Logger LOG = LoggerFactory.getLogger(JdbcSinglePushService.class);
+    private static final Logger LOG = LoggerFactory.getLogger(JDBCSinglePushService.class);
 
     @Inject
     private DormMetadata metadata;
 
     @Override
-    public void execute() {
+    public Void execute() {
         Connection connection = null;
         try {
             connection = dataSource.getConnection();
@@ -58,6 +58,7 @@ public class JdbcSinglePushService extends JdbcAbstractService {
                 }
             }
         }
+        return null;
     }
 
     private Long getDependencyId(Connection connection) throws SQLException {
