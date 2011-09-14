@@ -2,7 +2,6 @@ package com.zenika.dorm.maven.ws.resource;
 
 import com.google.inject.Inject;
 import com.zenika.dorm.core.model.ws.DormWebServiceRequest;
-import com.zenika.dorm.core.model.ws.builder.DormWebServiceRequestBuilder;
 import com.zenika.dorm.core.processor.Processor;
 import com.zenika.dorm.core.ws.resource.AbstractResource;
 import com.zenika.dorm.maven.model.MavenMetadata;
@@ -142,7 +141,7 @@ public class MavenResource extends AbstractResource {
             LOG.info("Maven webservice PUT with uri : " + uri);
         }
 
-        DormWebServiceRequestBuilder requestBuilder = new DormWebServiceRequestBuilder
+        DormWebServiceRequest.Builder requestBuilder = new DormWebServiceRequest.Builder
                 (MavenMetadata.EXTENSION_NAME)
                 .property("uri", uri);
 

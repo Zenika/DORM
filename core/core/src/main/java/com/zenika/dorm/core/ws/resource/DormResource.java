@@ -1,22 +1,11 @@
 package com.zenika.dorm.core.ws.resource;
 
-import com.google.inject.Inject;
-import com.sun.jersey.multipart.FormDataParam;
-import com.zenika.dorm.core.exception.DormProcessException;
-import com.zenika.dorm.core.model.impl.DefaultDormMetadataExtension;
-import com.zenika.dorm.core.model.ws.DormWebServiceRequest;
-import com.zenika.dorm.core.model.ws.builder.DormWebServiceRequestBuilder;
-import com.zenika.dorm.core.processor.Processor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.ws.rs.*;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.util.Properties;
 
 /**
  * REST resource for dorm dependency

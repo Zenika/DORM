@@ -6,7 +6,6 @@ import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.core.model.impl.DefaultDormMetadata;
 import com.zenika.dorm.core.model.ws.DormWebServiceRequest;
 import com.zenika.dorm.core.model.ws.DormWebServiceResult;
-import com.zenika.dorm.core.model.ws.builder.DormWebServiceRequestBuilder;
 import com.zenika.dorm.core.service.DormService;
 import com.zenika.dorm.core.service.get.DormServiceGetMetadataResult;
 import com.zenika.dorm.core.service.get.DormServiceGetMetadataValues;
@@ -51,12 +50,12 @@ public class MavenProcessorUnitTest extends AbstractUnitTest {
         path = "org/apache/wicket/wicket/1.4.9";
         filename = "wicket-1.4.9.jar";
         url = path + "/" + filename;
-        request = new DormWebServiceRequestBuilder("maven")
+        request = new DormWebServiceRequest.Builder("maven")
                 .property("path", path)
                 .filename(filename)
                 .file(fixtures.getFile())
                 .build();
-        metadataExtension = new MavenMetadata(url);
+//        metadataExtension = new MavenMetadata(url);
         metadata = DefaultDormMetadata.create(null, metadataExtension);
         getValues = new DormServiceGetMetadataValues(metadata);
     }

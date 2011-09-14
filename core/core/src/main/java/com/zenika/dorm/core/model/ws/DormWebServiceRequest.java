@@ -1,6 +1,6 @@
 package com.zenika.dorm.core.model.ws;
 
-import com.zenika.dorm.core.model.ws.builder.DormWebServiceRequestBuilder;
+import com.zenika.dorm.core.model.ws.builder.DormWebServiceAbstractBuilder;
 
 import java.io.File;
 
@@ -15,13 +15,13 @@ public final class DormWebServiceRequest extends DormWebServiceProcess {
     private final String filename;
     private final File file;
 
-    public DormWebServiceRequest(DormWebServiceRequestBuilder builder) {
+    public DormWebServiceRequest(Builder builder) {
 
         super(builder);
 
-        this.usage = builder.getUsage();
-        this.filename = builder.getFilename();
-        this.file = builder.getFile();
+        this.usage = builder.usage;
+        this.filename = builder.filename;
+        this.file = builder.file;
     }
 
     public String getUsage() {
@@ -38,5 +38,40 @@ public final class DormWebServiceRequest extends DormWebServiceProcess {
 
     public boolean hasFile() {
         return file != null;
+    }
+
+    public static class Builder extends DormWebServiceAbstractBuilder<Builder> {
+
+        private String usage;
+        private String filename;
+        private File file;
+
+        public Builder(String origin) {
+            super(origin);
+        }
+
+        @Override
+        protected Builder self() {
+            return this;
+        }
+
+        public Builder usage(String usage) {
+            this.usage = usage;
+            return this;
+        }
+
+        public Builder filename(String filename) {
+            this.filename = filename;
+            return this;
+        }
+
+        public Builder file(File file) {
+            this.file = file;
+            return this;
+        }
+
+        public DormWebServiceRequest build() {
+            return new DormWebServiceRequest(this);
+        }
     }
 }

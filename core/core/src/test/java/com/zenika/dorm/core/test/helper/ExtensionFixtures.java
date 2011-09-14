@@ -2,7 +2,6 @@ package com.zenika.dorm.core.test.helper;
 
 import com.zenika.dorm.core.exception.CoreException;
 import com.zenika.dorm.core.model.*;
-import com.zenika.dorm.core.model.ws.builder.DormWebServiceRequestBuilder;
 import com.zenika.dorm.core.model.impl.DefaultDependency;
 import com.zenika.dorm.core.model.impl.DefaultDependencyNode;
 import com.zenika.dorm.core.model.impl.DefaultDormMetadata;
@@ -58,11 +57,11 @@ public abstract class ExtensionFixtures {
         return type;
     }
 
-    public DormWebServiceRequestBuilder getRequestBuilder() {
-        return new DormWebServiceRequestBuilder(getRequestVersion());
+    public DormWebServiceRequest.Builder getRequestBuilder() {
+        return new DormWebServiceRequest.Builder(getRequestVersion());
     }
 
-    public DormWebServiceRequestBuilder getRequestBuilderWithFile() {
+    public DormWebServiceRequest.Builder getRequestBuilderWithFile() {
         return getRequestBuilder().filename(filenameWithExtension).file(file);
     }
 

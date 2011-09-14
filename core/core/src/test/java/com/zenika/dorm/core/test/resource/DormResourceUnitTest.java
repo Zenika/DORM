@@ -1,23 +1,9 @@
 package com.zenika.dorm.core.test.resource;
 
-import com.zenika.dorm.core.model.ws.DormWebServiceRequest;
-import com.zenika.dorm.core.model.ws.builder.DormWebServiceRequestBuilder;
-import com.zenika.dorm.core.model.impl.DefaultDormMetadataExtension;
-import com.zenika.dorm.core.processor.Processor;
 import com.zenika.dorm.core.test.unit.AbstractUnitTest;
-import com.zenika.dorm.core.ws.resource.DormResource;
-import org.fest.assertions.Assertions;
 import org.junit.Ignore;
-import org.junit.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import javax.ws.rs.core.Response;
-
-import static org.mockito.BDDMockito.when;
-import static org.mockito.Mockito.verify;
 
 /**
  * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>

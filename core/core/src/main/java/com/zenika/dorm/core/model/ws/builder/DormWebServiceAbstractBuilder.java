@@ -8,7 +8,7 @@ import java.util.Map;
 /**
  * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>
  */
-public abstract class DormWebServiceBuilder<T extends DormWebServiceBuilder> {
+public abstract class DormWebServiceAbstractBuilder<T extends DormWebServiceAbstractBuilder> {
 
     private String origin;
     private Map<String, String> properties = new HashMap<String, String>();
@@ -17,11 +17,11 @@ public abstract class DormWebServiceBuilder<T extends DormWebServiceBuilder> {
 
     public abstract DormWebServiceProcess build();
 
-    public DormWebServiceBuilder(String origin) {
+    public DormWebServiceAbstractBuilder(String origin) {
         this.origin = origin;
     }
 
-    public DormWebServiceBuilder(DormWebServiceProcess request) {
+    public DormWebServiceAbstractBuilder(DormWebServiceProcess request) {
         this.origin = request.getOrigin();
         this.properties.putAll(request.getProperties());
     }
