@@ -9,16 +9,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.Map;
 
-/**
- * @author Antoine ROUAZE <antoine.rouaze AT zenika.com>
- */
 public class JDBCSinglePushService extends JDBCAbstractService {
 
     private static final Logger LOG = LoggerFactory.getLogger(JDBCSinglePushService.class);
