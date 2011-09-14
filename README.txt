@@ -33,4 +33,4 @@ Web service :
 
 - Maven :
     - Deploy :
-        curl -X PUT -F"file="wicket-1.4.9.jar" http://localhost:8080/maven/org/apache/wicket/wicket/1.4.9/wicket-1.4.9.jar
+        curl -X PUT -F"file=wicket-1.4.9.jar" http://localhost:8080/maven/org/apache/wicket/wicket/1.4.9/wicket-1.4.9.jar
