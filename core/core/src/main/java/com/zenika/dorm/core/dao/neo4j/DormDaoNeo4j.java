@@ -65,16 +65,6 @@ public class DormDaoNeo4j implements DormDao {
     }
 
 
-    @Override
-    public Boolean push(Dependency dormDependency) {
-        try {
-            postDependency(dormDependency);
-            return true;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
 
     public Neo4jDependency postDependency(Dependency dormDependency) {
         Usage usage = dormDependency.getUsage();
@@ -221,21 +211,6 @@ public class DormDaoNeo4j implements DormDao {
         return str.toString();
     }
 
-    @Override
-    public List<DependencyNode> get(DormServiceGetValues values, boolean withDependencies) {
-        DormMetadataExtension extension = values.getMetadataExtension();
-        List<Neo4jDependency> dependencies = executor.get(buildGremlinScript(values.getMetadataExtensionClauses()));
-        List<DependencyNode> nodes = new ArrayList<DependencyNode>();
-        for (Neo4jDependency dependency : dependencies) {
-            DependencyNode node = DefaultDependencyNode.create(getDependency(dependency, values.getUsage(), extension));
-            if (withDependencies) {
-                node = getDependencyNodeChildren(node);
-            }
-            nodes.add(node);
-        }
-        return nodes;
-    }
-
     private DependencyNode getDependencyNodeChildren(DependencyNode node) {
         Usage usage = node.getDependency().getUsage();
         DormMetadata metadata = node.getDependency().getMetadata();
@@ -263,30 +238,8 @@ public class DormDaoNeo4j implements DormDao {
 
 
     @Override
-    public DependencyNode getOne(DormServiceGetValues values, boolean withDependencies) {
-        try {
-            List<Neo4jDependency> dependencies = searchNodes(Neo4jMetadata.generateIndexURI(values.getQualifier(), index), TYPE_LIST_RESPONSE_DEPENDENCY.getType());
-            if (dependencies.size() > 1) {
-                throw new Neo4jDaoException("Retrieve more than one dependency");
-            }
-            DependencyNode node = DefaultDependencyNode.create(getDependency(new URI(dependencies.get(0).getUri()), values.getUsage(), values.getMetadataExtension()));
-            if (withDependencies) {
-                node = getDependencyNodeChildren(node);
-            }
-            return node;
-        } catch (UniformInterfaceException e) {
-            if (e.getResponse().getStatus() == Response.Status.NOT_FOUND.getStatusCode()) {
-                LOG.debug("No dependency node found with this " + values.getQualifier());
-            }
-            throw e;
-        } catch (URISyntaxException e) {
-            throw new Neo4jDaoException("URI syntax exception", e);
-        }
-    }
-
-    @Override
-    public DormMetadata getMetadataByQualifier(String qualifier, Usage usage) {
-        return null;
+    public DormMetadata getMetadataByQualifier(String qualifier) {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override
