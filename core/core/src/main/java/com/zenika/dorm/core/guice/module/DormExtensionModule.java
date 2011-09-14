@@ -5,6 +5,8 @@ import com.google.inject.multibindings.MapBinder;
 import com.zenika.dorm.core.processor.ProcessorExtension;
 
 /**
+ * Extension can extends this module to inject their extension points.
+ *
  * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>
  */
 public abstract class DormExtensionModule extends AbstractModule {
