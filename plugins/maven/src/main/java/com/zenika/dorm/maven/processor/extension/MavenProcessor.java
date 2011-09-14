@@ -3,16 +3,19 @@ package com.zenika.dorm.maven.processor.extension;
 import com.google.inject.Inject;
 import com.zenika.dorm.core.model.ws.DormWebServiceRequest;
 import com.zenika.dorm.core.model.ws.DormWebServiceResult;
-import com.zenika.dorm.core.model.ws.builder.DormWebServiceResultBuilder;
 import com.zenika.dorm.core.processor.ProcessorExtension;
 import com.zenika.dorm.maven.exception.MavenException;
+import com.zenika.dorm.maven.helper.MavenExtensionHelper;
 import com.zenika.dorm.maven.model.MavenConstant;
 import com.zenika.dorm.maven.model.MavenMetadata;
 import com.zenika.dorm.maven.model.MavenUri;
+import com.zenika.dorm.maven.model.builder.MavenMetadataUriBuilder;
 import com.zenika.dorm.maven.service.MavenService;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.File;
 
 /**
  * The maven processor needs to create an abstract dependency node which will be the parent of the
@@ -54,14 +57,14 @@ public class MavenProcessor extends ProcessorExtension {
     public DormWebServiceResult push(DormWebServiceRequest request) {
 
         if (LOG.isDebugEnabled()) {
-            LOG.debug("Maven webservice get request : " + request);
+            LOG.debug("Maven webservice push request : " + request);
         }
 
         if (!request.hasFile()) {
             throw new MavenException("File is required");
         }
 
-        DormWebServiceResultBuilder responseBuilder = new DormWebServiceResultBuilder(
+        DormWebServiceResult.Builder responseBuilder = new DormWebServiceResult.Builder(
                 MavenMetadata.EXTENSION_NAME);
 
         MavenUri mavenUri = new MavenUri(request.getProperty("uri"));
@@ -75,9 +78,29 @@ public class MavenProcessor extends ProcessorExtension {
             return responseBuilder.succeeded().build();
         }
 
-        mavenService.storeFromUri(mavenUri, request.getFile());
+        MavenMetadata metadata = MavenMetadataUriBuilder.buildMavenMetadata(mavenUri);
 
-        return new DormWebServiceResultBuilder(MavenMetadata.EXTENSION_NAME)
+        File file = request.getFile();
+        String extension = metadata.getExtension();
+
+        // md5 or sha1
+        if (MavenExtensionHelper.isHash(extension)) {
+            mavenService.storeArtifact(metadata, file);
+        }
+
+        // pom
+        else if (StringUtils.equals(metadata.getExtension(), MavenConstant.FileExtension.POM)) {
+            mavenService.storePom(file);
+        }
+
+        // artifact's binary
+        else {
+            mavenService.storeMetadataWithArtifact(metadata, file);
+        }
+
+        mavenService.storeMetadataWithArtifact(metadata, request.getFile());
+
+        return new DormWebServiceResult.Builder(MavenMetadata.EXTENSION_NAME)
                 .succeeded()
                 .build();
 
@@ -139,17 +162,18 @@ public class MavenProcessor extends ProcessorExtension {
 //        }
     }
 
-    private boolean mavenDeployIsComplete() {
-
-        return false;
-    }
-
-    private void convertMavenToDorm() {
-
-    }
-
     @Override
     public DormWebServiceResult get(DormWebServiceRequest request) {
+
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Maven webservice get request : " + request);
+        }
+
+        MavenUri mavenUri = new MavenUri(request.getProperty("uri"));
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Maven uri : " + mavenUri);
+        }
+
         return null;
     }
 

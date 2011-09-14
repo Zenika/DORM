@@ -46,13 +46,22 @@ public class DefaultDormService implements DormService {
     }
 
     @Override
-    public DormServiceStoreResult storeMetadata(DormMetadata metadata) {
+    public void storeMetadata(DormMetadata metadata) {
+
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Store metadata : " + metadata);
+        }
+
         dao.saveMetadata(metadata);
-        return null;
     }
 
     @Override
     public void storeResource(DormResource resource, DormServiceStoreResourceConfig config) {
+
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Store resource : " + resource + " with config : " + config);
+        }
+
         repository.store(resource, config);
     }
 
@@ -162,15 +171,5 @@ public class DefaultDormService implements DormService {
         }
 
         return DefaultDependency.create(metadata, resource);
-    }
-
-    private void repositoryPut(DependencyNode node) {
-        DependenciesCollector visitor = new DependenciesCollector(node.getDependency().getUsage());
-        visitor.addFilter(new WithResourceDependencyVisitorFilter());
-        node.accept(visitor);
-        Set<Dependency> dependencies = visitor.getDependencies();
-        for (Dependency dependency : dependencies) {
-            repository.put(dependency);
-        }
     }
 }

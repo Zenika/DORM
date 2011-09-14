@@ -22,7 +22,7 @@ public class MavenMetadataBuilderFromRequest extends MavenMetadataBuilder {
         MavenFilenameFormatter formatter = new MavenFilenameFormatter(request.getFilename());
         classifier = formatter.getClassifier();
         extension = formatter.getExtension();
-        packaging = request.getProperty(MavenMetadata.METADATA_PACKAGING);
+//        packaging = request.getProperty(MavenMetadata.METADATA_PACKAGING);
 
         snapshot = MavenSpecificHelper.isSnapshot(version);
         if (snapshot) {

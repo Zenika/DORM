@@ -1,8 +1,7 @@
 package com.zenika.dorm.core.test.repository;
 
-import com.zenika.dorm.core.model.Dependency;
-import com.zenika.dorm.core.model.DormResource;
 import com.zenika.dorm.core.model.DormMetadata;
+import com.zenika.dorm.core.model.DormResource;
 import com.zenika.dorm.core.repository.impl.DefaultDormRepository;
 import com.zenika.dorm.core.test.unit.AbstractUnitTest;
 import org.junit.Ignore;
@@ -30,12 +29,6 @@ public class DefaultDormRepositoryUnitTest extends AbstractUnitTest {
 
         new File(REPO_TEST).delete();
         repository = new DefaultDormRepository(REPO_TEST);
-    }
-
-    @Test
-    public void putValidDependency() {
-        Dependency dependency = fixtures.getDependencyWithResource();
-        repository.put(dependency);
     }
 
     @Test

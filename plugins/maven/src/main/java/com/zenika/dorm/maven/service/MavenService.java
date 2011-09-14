@@ -7,14 +7,9 @@ import com.zenika.dorm.core.model.impl.DefaultDormMetadata;
 import com.zenika.dorm.core.model.impl.DefaultDormResource;
 import com.zenika.dorm.core.service.DormService;
 import com.zenika.dorm.core.service.config.DormServiceStoreResourceConfig;
-import com.zenika.dorm.core.service.get.DormServiceGetMetadataResult;
-import com.zenika.dorm.core.service.get.DormServiceGetMetadataValues;
 import com.zenika.dorm.core.util.DormUtils;
-import com.zenika.dorm.maven.exception.MavenException;
 import com.zenika.dorm.maven.model.MavenConstant;
 import com.zenika.dorm.maven.model.MavenMetadata;
-import com.zenika.dorm.maven.model.MavenUri;
-import com.zenika.dorm.maven.model.builder.MavenMetadataUriBuilder;
 import org.apache.commons.io.FilenameUtils;
 
 import java.io.File;
@@ -26,32 +21,6 @@ public class MavenService {
 
     @Inject
     private DormService service;
-
-    public MavenMetadata getMetadataByUrl(String url) {
-
-        MavenMetadata mavenMetadata = new MavenMetadata(url);
-        DormMetadata metadata = DefaultDormMetadata.create(null, mavenMetadata);
-
-        DormServiceGetMetadataValues values = new DormServiceGetMetadataValues(metadata)
-                .withMetadataExtensionClause("url", url);
-
-        DormServiceGetMetadataResult result = service.getMetadata(values);
-
-        if (!result.hasUniqueResult()) {
-            return null;
-        }
-
-        DormMetadata metadataFromResult = result.getUniqueMetadata();
-        MavenMetadata mavenMetadataFromResult;
-
-        try {
-            mavenMetadataFromResult = (MavenMetadata) metadataFromResult.getExtension();
-        } catch (ClassCastException e) {
-            throw new MavenException("Metadata extension is not maven", e);
-        }
-
-        return mavenMetadataFromResult;
-    }
 
     public void storeMavenFile(String url, File file, boolean override) {
 
@@ -94,12 +63,8 @@ public class MavenService {
         return true;
     }
 
-    public void convertDeployedArtifactToDorm(String url) {
-    }
+    public void storeMetadataWithArtifact(MavenMetadata mavenMetadata, File file) {
 
-    public void storeFromUri(MavenUri mavenUri, File file) {
-
-        MavenMetadata mavenMetadata = MavenMetadataUriBuilder.buildMavenMetadata(mavenUri);
         DormMetadata metadata = DefaultDormMetadata.create(null, mavenMetadata);
 
         DormResource resource = DefaultDormResource.create(file);
@@ -109,5 +74,11 @@ public class MavenService {
 
         service.storeMetadata(metadata);
         service.storeResource(resource, storeResourceConfig);
+    }
+
+    public void storeArtifact(MavenMetadata metadata, File file) {
+    }
+
+    public void storePom(File file) {
     }
 }

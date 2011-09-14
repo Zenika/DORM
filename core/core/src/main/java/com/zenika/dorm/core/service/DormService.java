@@ -16,7 +16,7 @@ public interface DormService {
 
     public DormServiceStoreResult store(DormServicePutRequest request);
 
-    public DormServiceStoreResult storeMetadata(DormMetadata metadata);
+    public void storeMetadata(DormMetadata metadata);
 
     public void storeResource(DormResource resource, DormServiceStoreResourceConfig config);
 
