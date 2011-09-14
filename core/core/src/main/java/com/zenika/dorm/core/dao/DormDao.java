@@ -17,12 +17,9 @@ public interface DormDao {
 
     public Boolean push(Dependency dependency);
 
-    public Boolean push(DependencyNode node);
-
     public List<DependencyNode> get(DormServiceGetValues values, boolean withDependencies);
 
     public DependencyNode getOne(DormServiceGetValues values, boolean withDependencies);
-
 
     public DormMetadata getMetadataByQualifier(String qualifier, Usage usage);
 

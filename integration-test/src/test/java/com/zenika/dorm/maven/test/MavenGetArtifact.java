@@ -59,7 +59,7 @@ public class MavenGetArtifact {
 
     @Test
     public void getTest() {
-        for (Iterator<MavenResource> iterator = resources.iterator(); iterator.hasNext();) {
+        for (Iterator<MavenResource> iterator = resources.iterator(); iterator.hasNext(); ) {
             MavenGetResource resource = (MavenGetResource) iterator.next();
             resource.setBaseUri(baseUri);
             executeGetRequest(resource.getPomUri(), resource.getExpectedResult());
@@ -71,23 +71,10 @@ public class MavenGetArtifact {
         }
     }
 
-    @Test
-    public void test(){
-        GrinderStatistics statistics = new GrinderStatistics();
-        statistics.setConnectTime(3423L);
-        statistics.setErrors(98707L);
-        statistics.setFirstByteTime(9870865L);
-        statistics.setResponseErrors(856965L);
-        statistics.setResponseLength(8765876L);
-        statistics.setResponseStatus(987698875L);
-        statistics.setTimedTests(9875965L);
-        GrinderResultToCSV.write(statistics, "/home/erouan/test.csv");
-    }
-
     private MavenGetResult executeGetRequest(String path, MavenGetResult expectedResult) {
         try {
-                LOG.info("|---------Test Get URL------------|");
-                LOG.info("|URL: " + path);
+            LOG.info("|---------Test Get URL------------|");
+            LOG.info("|URL: " + path);
 
             HttpGet get = new HttpGet(path);
             HttpResponse response = client.execute(get);

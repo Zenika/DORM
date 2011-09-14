@@ -1,5 +1,6 @@
 package com.zenika.dorm.core.model;
 
+
 import java.util.Map;
 
 /**

@@ -67,40 +67,11 @@ public class Neo4jDaoIntegrationTest {
     }
 
 
-    @Test
-    public void push() throws Exception {
-        dao.push(habi_base);
-    }
 
     //
     @Test
     public void pushDependencyNode() {
         //dao.push(dependencyNode);
-    }
-
-    //
-    @Test
-    public void testPushWithRecursiveChildren() {
-        dao.push(habi_base);
-    }
-
-    //
-    @Test
-    public void testPushWithManyChildren() {
-        DormMetadataExtension extension19Response = new DefaultDormMetadataExtension("maven");
-        DormMetadata metadata20Response = DefaultDormMetadata.create("1.0.0", extension19Response);
-        Dependency dependency21Response = DefaultDependency.create(metadata20Response, Usage.create("DEFAULT"));
-        DependencyNode dependencyNode = DefaultDependencyNode.create(dependency21Response);
-        for (int i = 1; i < 100; i++) {
-            DormMetadataExtension extensionBis = new DefaultDormMetadataExtension("maven" + (i * 10));
-            DormMetadata metadataBis = DefaultDormMetadata.create("1.0.0", extensionBis);
-            Dependency dependencyBis = DefaultDependency.create(metadataBis, Usage.create("DEFAULT"));
-            DependencyNode dependencyNodeBis = DefaultDependencyNode.create(dependencyBis);
-            dependencyNode.addChild(dependencyNodeBis);
-        }
-        long time = System.currentTimeMillis();
-        dao.push(dependencyNode);
-        System.out.println("Times to standard push : " + (System.currentTimeMillis() - time));
     }
 
     //
@@ -132,12 +103,6 @@ public class Neo4jDaoIntegrationTest {
 //                LOG.trace("Dependency Child : " + child.getDependency());
 //            }
 //        }
-    }
-
-    //
-    @Test
-    public void pushDependencyNodeWithChildren() {
-        dao.push(habi_base);
     }
 
     @Test

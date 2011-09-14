@@ -1,5 +1,7 @@
 package com.zenika.dorm.core.test.dao.sql;
 
+import com.google.inject.Guice;
+import com.google.inject.Injector;
 import com.zenika.dorm.core.dao.DormDao;
 import com.zenika.dorm.core.dao.sql.DormDaoJdbc;
 import com.zenika.dorm.core.model.Dependency;
@@ -11,10 +13,15 @@ import org.junit.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.sql.DataSource;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 /**
 * @author Antoine ROUAZE <antoine.rouaze AT zenika.com>
 */
-@Ignore
+//@Ignore
 public class JdbcDaoTest {
 
     private static final Logger LOG = LoggerFactory.getLogger(JdbcDaoTest.class);
@@ -22,6 +29,8 @@ public class JdbcDaoTest {
     public static DormDao dao;
 
     public Usage usage;
+
+    private static DataSource dataSource;
 
     DependencyNode habi_base;
     DependencyNode commons_cli;
@@ -35,7 +44,10 @@ public class JdbcDaoTest {
 
     @BeforeClass
     public static void setUpClass() {
-        dao = new DormDaoJdbc();
+        Injector injector = Guice.createInjector(new JdbcTestModule());
+        dao = injector.getInstance(DormDaoJdbc.class);
+//        JdbcPushExecutor executor = injector.getInstance(JdbcPushExecutor.class);
+//        LOG.info("Database source: " + executor.getDataSource());
     }
 
     @Before
@@ -65,12 +77,8 @@ public class JdbcDaoTest {
 
     @Test
     public void testPush() {
+        LOG.info("Test :!!!!!!!!!!!!!!!!!!!!!!!!!");
         dao.push(habi_base.getDependency());
-    }
-
-    @Test
-    public void testPushNode() {
-        dao.push(habi_base);
     }
 
     @Test
@@ -92,6 +100,27 @@ public class JdbcDaoTest {
 //        for (DependencyNode node : nodes) {
 //            LOG.trace("Node : " + node);
 //        }
+    }
+
+    @Test
+    public void testGetMetadataByQualifier(){
+        DormMetadata metadata = dao.getMetadataByQualifier("maven:com.zenika.test-test-jar-jar-0.0.1:0.0.1", null);
+        LOG.info("Metadata: " + metadata);
+    }
+
+    @Test
+    public void testGetMetadataByExtension(){
+        Map<String, String> map = new HashMap<String, String>();
+        map.put("version", "0.0.1");
+        List<DormMetadata> metadatas = dao.getMetadataByExtension("maven", map, null);
+        for (DormMetadata metadata:metadatas){
+            LOG.info("Metadata: " + metadata);
+        }
+    }
+
+    @Test
+    public void testSaveMetadata(){
+        dao.saveMetadata(habi_base.getDependency().getMetadata());
     }
 
     @AfterClass

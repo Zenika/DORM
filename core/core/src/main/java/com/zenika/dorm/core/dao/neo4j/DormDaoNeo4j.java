@@ -183,27 +183,6 @@ public class DormDaoNeo4j implements DormDao {
         }
     }
 
-    @Override
-    public Boolean push(DependencyNode node) {
-        // todo: fix this when dao is correct
-        if (node.getChildren().isEmpty()) {
-            return push(node.getDependency());
-        }
-
-        try {
-            DependenciesNodeCollector visitor = new DependenciesNodeCollector(node.getDependency().getUsage());
-            node.accept(visitor);
-            Set<DependencyNode> nodes = visitor.getDependencies();
-            for (DependencyNode currentNode : nodes) {
-                postNodeWithChild(currentNode);
-            }
-            return true;
-        } catch (URISyntaxException e) {
-            new Neo4jDaoException("Bad URI", e);
-        }
-        return false;
-    }
-
     private void postNodeWithChild(DependencyNode currentNode) throws URISyntaxException {
         Neo4jDependency dependency = postDependency(currentNode.getDependency());
         for (DependencyNode child : currentNode.getChildren()) {
