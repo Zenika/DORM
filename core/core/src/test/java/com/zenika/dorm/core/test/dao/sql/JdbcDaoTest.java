@@ -76,12 +76,6 @@ public class JdbcDaoTest {
     }
 
     @Test
-    public void testPush() {
-        LOG.info("Test :!!!!!!!!!!!!!!!!!!!!!!!!!");
-        dao.push(habi_base.getDependency());
-    }
-
-    @Test
     public void testGetOne() {
 //        DormServiceGetValues values = new DefaultDormServiceGetValues(new DefaultDormMetadataExtension("dorm"));
 //        values.setUsage(usage);
@@ -104,7 +98,7 @@ public class JdbcDaoTest {
 
     @Test
     public void testGetMetadataByQualifier(){
-        DormMetadata metadata = dao.getMetadataByQualifier("maven:com.zenika.test-test-jar-jar-0.0.1:0.0.1", null);
+        DormMetadata metadata = dao.getMetadataByQualifier("maven:com.zenika.test-test-jar-jar-0.0.1:0.0.1");
         LOG.info("Metadata: " + metadata);
     }
 

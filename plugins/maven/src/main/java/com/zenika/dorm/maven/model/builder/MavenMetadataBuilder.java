@@ -26,7 +26,7 @@ public class MavenMetadataBuilder {
     }
 
     public MavenMetadataBuilder groupId(String groupId) {
-        this.groupId = groupId;
+        this.groupId = groupId.replaceAll("/", "_");
         return this;
     }
 

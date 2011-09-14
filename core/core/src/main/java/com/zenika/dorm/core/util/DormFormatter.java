@@ -35,7 +35,6 @@ public final class DormFormatter {
         // - any number
         // - ":", "_", ".", "-"
         // - whitespace
-        //"^[a-zA-Z0-9 \\s]+([\\:][a-zA-Z0-9 \\s]+)*$"
         if (!qualifier.matches(REGEX_EXTENSION_QUALIFIER)) {
             LOG.error("Invalid metadata extension qualifier: " + qualifier);
             throw new CoreException("Extension qualifier can contains only letters, numbers, " +
