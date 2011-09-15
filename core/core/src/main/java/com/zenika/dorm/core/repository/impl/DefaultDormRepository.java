@@ -41,6 +41,21 @@ public class DefaultDormRepository implements DormRepository {
     }
 
     @Override
+    public void store(DormResource resource, DormMetadata metadata, DormServiceStoreResourceConfig config) {
+
+        String path = getPathFromMetadata(metadata);
+
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Store resource at location : " + path);
+        }
+
+        DormRepositoryResource repositoryResource = new DormRepositoryResource(path, resource.getFile());
+        repositoryResource.setOverride(config.isOverride());
+
+        deployEngine.deploy(repositoryResource);
+    }
+
+    @Override
     public void store(String extension, String path, DormResource resource, boolean override) {
 
         if (DormStringUtils.oneIsBlank(extension, path)) {
@@ -84,15 +99,15 @@ public class DefaultDormRepository implements DormRepository {
         return DefaultDormResource.create(resource.getFile());
     }
 
-    @Override
-    public void store(DormResource resource, DormMetadata metadata, DormServiceStoreResourceConfig config) {
-    }
-
     private String getPathFromMetadata(DormMetadata metadata) {
         return getBaseBuilder()
                 .append(metadata.getExtensionName())
                 .append("/")
-                .append(metadata.getIdentifier())
+                .append(metadata.getName())
+                .append("/")
+                .append(metadata.getVersion())
+                .append("/")
+                .append(metadata.getQualifier())
                 .toString();
     }
 
