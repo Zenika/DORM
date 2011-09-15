@@ -14,19 +14,27 @@ public class MavenMetadataBuilder {
     protected String version;
     protected String extension;
     protected String classifier;
-    protected String packaging;
     protected String timestamp;
     protected String buildNumber;
-    protected String url;
-    protected boolean mavenMetadata;
     protected boolean snapshot;
 
     public MavenMetadataBuilder(String artifactId) {
         this.artifactId = artifactId;
     }
 
+    public MavenMetadataBuilder(MavenMetadata metadata) {
+        this(metadata.getArtifactId());
+        groupId(metadata.getGroupId());
+        version(metadata.getVersion());
+        extension(metadata.getExtension());
+        classifier(metadata.getClassifier());
+        timestamp(metadata.getTimestamp());
+        buildNumber(metadata.getBuildNumber());
+        snapshot(metadata.isSnapshot());
+    }
+
     public MavenMetadataBuilder groupId(String groupId) {
-        this.groupId = groupId.replaceAll("/", "_");
+        this.groupId = groupId; //.replaceAll("/", "_");
         return this;
     }
 
@@ -45,11 +53,6 @@ public class MavenMetadataBuilder {
         return this;
     }
 
-    public MavenMetadataBuilder packaging(String packaging) {
-        this.packaging = packaging;
-        return this;
-    }
-
     public MavenMetadataBuilder timestamp(String timestamp) {
         this.timestamp = timestamp;
         return this;
@@ -60,16 +63,6 @@ public class MavenMetadataBuilder {
         return this;
     }
 
-    public MavenMetadataBuilder url(String url) {
-        this.url = url;
-        return this;
-    }
-
-    public MavenMetadataBuilder mavenMetadata(boolean mavenMetadata) {
-        this.mavenMetadata = mavenMetadata;
-        return this;
-    }
-
     public MavenMetadataBuilder snapshot(boolean snapshot) {
         this.snapshot = snapshot;
         return this;
@@ -77,6 +70,6 @@ public class MavenMetadataBuilder {
 
     public MavenMetadata build() {
         return new MavenMetadata(groupId, artifactId, version, extension, classifier,
-                timestamp, buildNumber, url, mavenMetadata, snapshot);
+                timestamp, buildNumber, snapshot);
     }
 }

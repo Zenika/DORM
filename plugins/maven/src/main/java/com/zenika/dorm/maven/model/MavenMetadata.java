@@ -40,15 +40,10 @@ public final class MavenMetadata implements DormMetadata {
     private final boolean snapshot;
 
     public MavenMetadata(String groupId, String artifactId, String version, String extension,
-                         String classifier, String timestamp, String buildNumber,
-                         String url, boolean mavenMetadata, boolean snapshot) {
+                         String classifier, String timestamp, String buildNumber, boolean snapshot) {
 
         if (DormStringUtils.oneIsBlank(groupId, artifactId, version)) {
             throw new MavenException("Following metadatas are required : groupId, artifactId, versionId");
-        }
-
-        if (!mavenMetadata && !MavenConstant.FileExtension.isMavenExtension(extension)) {
-            throw new MavenException("Extension is not allowed for a maven file : " + extension);
         }
 
         this.groupId = groupId;
@@ -95,16 +90,6 @@ public final class MavenMetadata implements DormMetadata {
     @Override
     public String getExtensionName() {
         return EXTENSION_NAME;
-    }
-
-    /**
-     * Complete metadata contains groupdid and other attributes,
-     * Not complete contains only url
-     *
-     * @return
-     */
-    public boolean isComplete() {
-        return !DormStringUtils.oneIsBlank(groupId, artifactId, version);
     }
 
     public String getGroupId() {

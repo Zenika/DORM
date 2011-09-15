@@ -4,10 +4,10 @@ import com.google.inject.Inject;
 import com.zenika.dorm.core.dao.DormDao;
 import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.core.model.DormResource;
+import com.zenika.dorm.core.model.impl.DormQualifier;
 import com.zenika.dorm.core.model.impl.Usage;
 import com.zenika.dorm.core.repository.DormRepository;
 import com.zenika.dorm.core.service.DormService;
-import com.zenika.dorm.core.service.config.DormServiceGetResourceConfig;
 import com.zenika.dorm.core.service.config.DormServiceStoreResourceConfig;
 import com.zenika.dorm.core.service.get.DormServiceGetMetadataResult;
 import com.zenika.dorm.core.service.get.DormServiceGetMetadataValues;
@@ -40,21 +40,23 @@ public class DefaultDormService implements DormService {
     @Override
     public void storeMetadata(DormMetadata metadata) {
 
+        DormQualifier qualifier = new DormQualifier(metadata);
+
         if (LOG.isDebugEnabled()) {
-            LOG.debug("Store metadata : " + metadata);
+            LOG.debug("Store metadata : " + metadata + " with qualifier : " + qualifier);
         }
 
-        dao.saveMetadata(metadata);
+        dao.saveMetadata(qualifier, metadata);
     }
 
     @Override
-    public void storeResource(DormResource resource, DormServiceStoreResourceConfig config) {
+    public void storeResource(DormResource resource, DormQualifier qualifier, DormServiceStoreResourceConfig config) {
 
         if (LOG.isDebugEnabled()) {
             LOG.debug("Store resource : " + resource + " with config : " + config);
         }
 
-        repository.store(resource, config);
+        repository.store(resource, qualifier, config);
     }
 
     @Override
@@ -91,7 +93,7 @@ public class DefaultDormService implements DormService {
     }
 
     @Override
-    public DormResource getResource(DormMetadata metadata, DormServiceGetResourceConfig config) {
+    public DormResource getResource(DormQualifier qualifier) {
 
 //        repository.get(metadata)
         return null;
