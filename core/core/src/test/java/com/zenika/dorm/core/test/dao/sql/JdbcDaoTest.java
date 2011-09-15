@@ -4,12 +4,13 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.zenika.dorm.core.dao.DormDao;
 import com.zenika.dorm.core.dao.sql.DormDaoJdbc;
-import com.zenika.dorm.core.model.Dependency;
 import com.zenika.dorm.core.model.DependencyNode;
 import com.zenika.dorm.core.model.DormMetadata;
-import com.zenika.dorm.core.model.DormMetadataExtension;
-import com.zenika.dorm.core.model.impl.*;
-import org.junit.*;
+import com.zenika.dorm.core.model.impl.Usage;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,8 +20,10 @@ import java.util.List;
 import java.util.Map;
 
 /**
-* @author Antoine ROUAZE <antoine.rouaze AT zenika.com>
-*/
+ * todo: fix from refactoring
+ *
+ * @author Antoine ROUAZE <antoine.rouaze AT zenika.com>
+ */
 //@Ignore
 public class JdbcDaoTest {
 
@@ -97,24 +100,24 @@ public class JdbcDaoTest {
     }
 
     @Test
-    public void testGetMetadataByQualifier(){
+    public void testGetMetadataByQualifier() {
         DormMetadata metadata = dao.getMetadataByQualifier("maven:com.zenika.test-test-jar-jar-0.0.1:0.0.1");
         LOG.info("Metadata: " + metadata);
     }
 
     @Test
-    public void testGetMetadataByExtension(){
+    public void testGetMetadataByExtension() {
         Map<String, String> map = new HashMap<String, String>();
         map.put("version", "0.0.1");
         List<DormMetadata> metadatas = dao.getMetadataByExtension("maven", map, null);
-        for (DormMetadata metadata:metadatas){
+        for (DormMetadata metadata : metadatas) {
             LOG.info("Metadata: " + metadata);
         }
     }
 
     @Test
-    public void testSaveMetadata(){
-        dao.saveMetadata(habi_base.getDependency().getMetadata());
+    public void testSaveMetadata() {
+        dao.saveMetadata(null, habi_base.getDependency().getMetadata());
     }
 
     @AfterClass
@@ -123,10 +126,12 @@ public class JdbcDaoTest {
     }
 
     private DependencyNode createDependencyNode(String name, String version) {
-        DormMetadataExtension extension = new DefaultDormMetadataExtension(name);
-        DormMetadata metadata = DefaultDormMetadata.create(version, extension);
-        Dependency dependency = DefaultDependency.create(metadata, usage);
-        DependencyNode dependencyNode = DefaultDependencyNode.create(dependency);
-        return dependencyNode;
+//        DormMetadata extension = new DefaultDormMetadataExtension(name);
+//        DormMetadata metadata = DefaultDormMetadata.create(version, extension);
+//        Dependency dependency = DefaultDependency.create(metadata, usage);
+//        DependencyNode dependencyNode = DefaultDependencyNode.create(dependency);
+//        return dependencyNode;
+
+        return null;
     }
 }

@@ -4,20 +4,17 @@ package com.zenika.dorm.maven.model;
  * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>
  */
 
-import com.zenika.dorm.core.model.DormMetadataExtension;
+import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.core.util.DormStringUtils;
 import com.zenika.dorm.maven.exception.MavenException;
-import com.zenika.dorm.maven.model.builder.MavenMetadataBuilder;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
-
-import java.util.Map;
 
 /**
  * Maven immutable extension point to the dorm model
  * Add maven specific metadatas
  */
-public final class MavenMetadata implements DormMetadataExtension {
+public final class MavenMetadata implements DormMetadata {
 
     public static final transient String EXTENSION_NAME = "maven";
 
@@ -43,15 +40,10 @@ public final class MavenMetadata implements DormMetadataExtension {
     private final boolean snapshot;
 
     public MavenMetadata(String groupId, String artifactId, String version, String extension,
-                         String classifier, String timestamp, String buildNumber,
-                         String url, boolean mavenMetadata, boolean snapshot) {
+                         String classifier, String timestamp, String buildNumber, boolean snapshot) {
 
         if (DormStringUtils.oneIsBlank(groupId, artifactId, version)) {
             throw new MavenException("Following metadatas are required : groupId, artifactId, versionId");
-        }
-
-        if (!mavenMetadata && !MavenConstant.FileExtension.isMavenExtension(extension)) {
-            throw new MavenException("Extension is not allowed for a maven file : " + extension);
         }
 
         this.groupId = groupId;
@@ -67,7 +59,7 @@ public final class MavenMetadata implements DormMetadataExtension {
     }
 
     @Override
-    public String getQualifier() {
+    public String getIdentifier() {
 
         String separator = ":";
 
@@ -91,18 +83,13 @@ public final class MavenMetadata implements DormMetadataExtension {
     }
 
     @Override
-    public String getExtensionName() {
-        return EXTENSION_NAME;
+    public String getVersion() {
+        return version;
     }
 
-    /**
-     * Complete metadata contains groupdid and other attributes,
-     * Not complete contains only url
-     *
-     * @return
-     */
-    public boolean isComplete() {
-        return !DormStringUtils.oneIsBlank(groupId, artifactId, version);
+    @Override
+    public String getExtensionName() {
+        return EXTENSION_NAME;
     }
 
     public String getGroupId() {
@@ -111,10 +98,6 @@ public final class MavenMetadata implements DormMetadataExtension {
 
     public String getArtifactId() {
         return artifactId;
-    }
-
-    public String getVersion() {
-        return version;
     }
 
     public String getExtension() {
@@ -136,19 +119,6 @@ public final class MavenMetadata implements DormMetadataExtension {
 
     public boolean isSnapshot() {
         return snapshot;
-    }
-
-    @Override
-    public DormMetadataExtension createFromMap(Map<String, String> properties) {
-        return new MavenMetadataBuilder(properties.get(METADATA_ARTIFACTID))
-                .groupId(properties.get(METADATA_GROUPID))
-                .version(properties.get(METADATA_VERSION))
-                .classifier(properties.get(METADATA_CLASSIFIER))
-                .extension(properties.get(METADATA_EXTENSION))
-                .snapshot(Boolean.valueOf(properties.get(METADATA_SNAPSHOT)))
-                .timestamp(properties.get(METADATA_TIMESTAMP))
-                .buildNumber(properties.get(METADATA_BUILDNUMBER))
-                .build();
     }
 
     @Override

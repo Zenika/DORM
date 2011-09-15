@@ -1,8 +1,7 @@
 package com.zenika.dorm.core.test.processor;
 
-import com.zenika.dorm.core.processor.Processor;
+import com.zenika.dorm.core.processor.DormProcessor;
 import com.zenika.dorm.core.processor.ProcessorExtension;
-import com.zenika.dorm.core.processor.impl.DefaultProcessor;
 import com.zenika.dorm.core.service.DormService;
 import com.zenika.dorm.core.test.unit.AbstractUnitTest;
 import org.junit.Ignore;
@@ -12,7 +11,6 @@ import org.mockito.Mock;
 import java.util.Map;
 
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.verify;
 
 /**
  * Unit tests for the processor
@@ -32,7 +30,7 @@ public class ProcessorUnitTest extends AbstractUnitTest {
     private DormService service;
 
     @InjectMocks
-    private Processor processor = new DefaultProcessor();
+    private DormProcessor processor = new DormProcessor();
 
     @Override
     public void before() {

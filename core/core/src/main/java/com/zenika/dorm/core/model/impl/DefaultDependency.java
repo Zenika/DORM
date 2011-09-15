@@ -2,8 +2,8 @@ package com.zenika.dorm.core.model.impl;
 
 import com.zenika.dorm.core.exception.CoreException;
 import com.zenika.dorm.core.model.Dependency;
-import com.zenika.dorm.core.model.DormResource;
 import com.zenika.dorm.core.model.DormMetadata;
+import com.zenika.dorm.core.model.DormResource;
 
 /**
  * Immutable dorm dependency
@@ -12,15 +12,8 @@ import com.zenika.dorm.core.model.DormMetadata;
  */
 public final class DefaultDependency implements Dependency {
 
-    /**
-     * Always required
-     */
     private final Usage usage;
     private final DormMetadata metadata;
-
-    /**
-     * Optionnal, may be null
-     */
     private final DormResource resource;
 
     public static DefaultDependency create(DormMetadata metadata) {

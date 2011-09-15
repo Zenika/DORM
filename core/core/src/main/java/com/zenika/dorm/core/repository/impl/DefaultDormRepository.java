@@ -5,6 +5,7 @@ import com.zenika.dorm.core.exception.RepositoryException;
 import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.core.model.DormResource;
 import com.zenika.dorm.core.model.impl.DefaultDormResource;
+import com.zenika.dorm.core.model.impl.DormQualifier;
 import com.zenika.dorm.core.repository.DormRepository;
 import com.zenika.dorm.core.repository.DormRepositoryResource;
 import com.zenika.dorm.core.service.config.DormServiceStoreResourceConfig;
@@ -68,13 +69,6 @@ public class DefaultDormRepository implements DormRepository {
     }
 
     @Override
-    public void store(DormResource resource, DormServiceStoreResourceConfig config) {
-
-        String fullPath = getPathFromMetadata(config.getMetadata());
-
-    }
-
-    @Override
     public DormResource get(DormMetadata metadata) {
 
         LOG.debug("Get dorm file by metadata : " + metadata);
@@ -91,11 +85,15 @@ public class DefaultDormRepository implements DormRepository {
         return DefaultDormResource.create(resource.getFile());
     }
 
+    @Override
+    public void store(DormResource resource, DormQualifier qualifier, DormServiceStoreResourceConfig config) {
+    }
+
     private String getPathFromMetadata(DormMetadata metadata) {
         return getBaseBuilder()
-                .append(metadata.getExtension().getExtensionName())
+                .append(metadata.getExtensionName())
                 .append("/")
-                .append(metadata.getExtension().getQualifier())
+                .append(metadata.getIdentifier())
                 .toString();
     }
 

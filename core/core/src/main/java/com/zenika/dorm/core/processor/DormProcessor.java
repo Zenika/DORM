@@ -1,12 +1,10 @@
-package com.zenika.dorm.core.processor.impl;
+package com.zenika.dorm.core.processor;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.zenika.dorm.core.exception.CoreException;
 import com.zenika.dorm.core.model.ws.DormWebServiceRequest;
 import com.zenika.dorm.core.model.ws.DormWebServiceResult;
-import com.zenika.dorm.core.processor.Processor;
-import com.zenika.dorm.core.processor.ProcessorExtension;
 import com.zenika.dorm.core.service.DormService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,9 +19,9 @@ import java.util.Map;
  * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>
  */
 @Singleton
-public class DefaultProcessor implements Processor {
+public class DormProcessor {
 
-    private static final Logger LOG = LoggerFactory.getLogger(DefaultProcessor.class);
+    private static final Logger LOG = LoggerFactory.getLogger(DormProcessor.class);
 
     /**
      * Extensions are injected in the guice module
@@ -33,15 +31,14 @@ public class DefaultProcessor implements Processor {
     @Inject
     private DormService service;
 
-    public DefaultProcessor() {
+    public DormProcessor() {
     }
 
     @Inject
-    public DefaultProcessor(Map<String, ProcessorExtension> extensions) {
+    public DormProcessor(Map<String, ProcessorExtension> extensions) {
         this.extensions = extensions;
     }
 
-    @Override
     public DormWebServiceResult push(DormWebServiceRequest request) {
 
         if (null == request) {
@@ -51,7 +48,6 @@ public class DefaultProcessor implements Processor {
         return getExtension(request).push(request);
     }
 
-    @Override
     public DormWebServiceResult get(DormWebServiceRequest request) {
 
         if (null == request) {
@@ -85,3 +81,4 @@ public class DefaultProcessor implements Processor {
         return extensions;
     }
 }
+

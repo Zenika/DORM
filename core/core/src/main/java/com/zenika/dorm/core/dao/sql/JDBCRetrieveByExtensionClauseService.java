@@ -3,8 +3,6 @@ package com.zenika.dorm.core.dao.sql;
 import com.google.inject.Inject;
 import com.zenika.dorm.core.exception.CoreException;
 import com.zenika.dorm.core.model.DormMetadata;
-import com.zenika.dorm.core.model.DormMetadataExtension;
-import com.zenika.dorm.core.model.impl.DefaultDormMetadata;
 import org.apache.commons.dbutils.DbUtils;
 
 import java.sql.Connection;
@@ -78,11 +76,17 @@ public class JDBCRetrieveByExtensionClauseService extends JDBCAbstractService {
         }
     }
 
-
+    /**
+     * todo: fix from refactoring
+     *
+     * @param metadatas
+     * @param metadataVersion
+     * @param extensionProperties
+     */
     private void addMetadata(List<DormMetadata> metadatas, String metadataVersion, Map<String, String> extensionProperties) {
-        DormMetadataExtension extensionTmp = metadataExtensionFactory.getInstanceOf(extensionName).createFromMap(extensionProperties);
-        DormMetadata metadata = DefaultDormMetadata.create(metadataVersion, extensionTmp);
-        metadatas.add(metadata);
+//        DormMetadata extensionTmp = dormMetadataFactory.getInstanceOf(extensionName).createFromMap(extensionProperties);
+//        DormMetadata metadata = DefaultDormMetadata.create(metadataVersion, extensionTmp);
+//        metadatas.add(metadata);
     }
 
     private int keyParamIndex(int i) {

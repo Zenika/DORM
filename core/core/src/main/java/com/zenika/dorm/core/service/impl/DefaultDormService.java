@@ -2,15 +2,12 @@ package com.zenika.dorm.core.service.impl;
 
 import com.google.inject.Inject;
 import com.zenika.dorm.core.dao.DormDao;
-import com.zenika.dorm.core.model.Dependency;
-import com.zenika.dorm.core.model.DependencyNode;
 import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.core.model.DormResource;
-import com.zenika.dorm.core.model.impl.DefaultDependency;
+import com.zenika.dorm.core.model.impl.DormQualifier;
 import com.zenika.dorm.core.model.impl.Usage;
 import com.zenika.dorm.core.repository.DormRepository;
 import com.zenika.dorm.core.service.DormService;
-import com.zenika.dorm.core.service.config.DormServiceGetResourceConfig;
 import com.zenika.dorm.core.service.config.DormServiceStoreResourceConfig;
 import com.zenika.dorm.core.service.get.DormServiceGetMetadataResult;
 import com.zenika.dorm.core.service.get.DormServiceGetMetadataValues;
@@ -43,21 +40,23 @@ public class DefaultDormService implements DormService {
     @Override
     public void storeMetadata(DormMetadata metadata) {
 
+        DormQualifier qualifier = new DormQualifier(metadata);
+
         if (LOG.isDebugEnabled()) {
-            LOG.debug("Store metadata : " + metadata);
+            LOG.debug("Store metadata : " + metadata + " with qualifier : " + qualifier);
         }
 
-        dao.saveMetadata(metadata);
+        dao.saveMetadata(qualifier, metadata);
     }
 
     @Override
-    public void storeResource(DormResource resource, DormServiceStoreResourceConfig config) {
+    public void storeResource(DormResource resource, DormQualifier qualifier, DormServiceStoreResourceConfig config) {
 
         if (LOG.isDebugEnabled()) {
             LOG.debug("Store resource : " + resource + " with config : " + config);
         }
 
-        repository.store(resource, config);
+        repository.store(resource, qualifier, config);
     }
 
     @Override
@@ -72,7 +71,7 @@ public class DefaultDormService implements DormService {
 
         if (values.isGetByQualifier()) {
 
-            DormMetadata metadata = dao.getMetadataByQualifier(values.getMetadata().getQualifier());
+            DormMetadata metadata = dao.getMetadataByQualifier(values.getMetadata().getIdentifier());
 
             if (null != metadata) {
                 metadatas = new ArrayList<DormMetadata>();
@@ -80,7 +79,7 @@ public class DefaultDormService implements DormService {
             }
 
         } else {
-            metadatas = dao.getMetadataByExtension(values.getMetadata().getExtension().getExtensionName(),
+            metadatas = dao.getMetadataByExtension(values.getMetadata().getExtensionName(),
                     values.getMetadataExtensionClauses(), usage);
         }
 
@@ -94,7 +93,7 @@ public class DefaultDormService implements DormService {
     }
 
     @Override
-    public DormResource getResource(DormMetadata metadata, DormServiceGetResourceConfig config) {
+    public DormResource getResource(DormQualifier qualifier) {
 
 //        repository.get(metadata)
         return null;
@@ -103,25 +102,5 @@ public class DefaultDormService implements DormService {
     @Override
     public DormResource getResource(String extension, String path) {
         return null;
-    }
-
-    private Dependency getDependencyWithResource(DependencyNode node) {
-
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("Get resource for node : " + node);
-        }
-
-        DormMetadata metadata = node.getDependency().getMetadata();
-        DormResource resource = repository.get(metadata);
-
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("Resource from the repository : " + resource);
-        }
-
-        if (null == resource) {
-            return node.getDependency();
-        }
-
-        return DefaultDependency.create(metadata, resource);
     }
 }

@@ -1,10 +1,9 @@
 package com.zenika.dorm.maven.service;
 
 import com.google.inject.Inject;
-import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.core.model.DormResource;
-import com.zenika.dorm.core.model.impl.DefaultDormMetadata;
 import com.zenika.dorm.core.model.impl.DefaultDormResource;
+import com.zenika.dorm.core.model.impl.DormQualifier;
 import com.zenika.dorm.core.service.DormService;
 import com.zenika.dorm.core.service.config.DormServiceStoreResourceConfig;
 import com.zenika.dorm.maven.model.MavenMetadata;
@@ -21,46 +20,57 @@ public class MavenService {
     private static final Logger LOG = LoggerFactory.getLogger(MavenService.class);
 
     @Inject
-    private DormService service;
+    private DormService dormService;
 
-    public void storeMetadataWithArtifact(MavenMetadata mavenMetadata, File file) {
+    @Inject
+    private MavenHashService hashService;
+
+    public void storeMetadataWithArtifact(MavenMetadata metadata, File file) {
+
+        DormQualifier qualifier = new DormQualifier(metadata);
 
         if (LOG.isDebugEnabled()) {
-            LOG.debug("Store maven metadata with artifact : " + mavenMetadata);
+            LOG.debug("Store maven metadata with artifact : " + metadata + " and qualifier : " + qualifier);
         }
-
-        DormMetadata metadata = DefaultDormMetadata.create(null, mavenMetadata);
 
         DormResource resource = DefaultDormResource.create(file);
-        DormServiceStoreResourceConfig storeResourceConfig = new DormServiceStoreResourceConfig()
-                .override(true)
-                .metadata(metadata);
+        DormServiceStoreResourceConfig config = new DormServiceStoreResourceConfig()
+                .override(true);
 
-        service.storeMetadata(metadata);
-        service.storeResource(resource, storeResourceConfig);
+        dormService.storeMetadata(metadata);
+        dormService.storeResource(resource, qualifier, config);
     }
 
-    public void storeArtifact(MavenMetadata mavenMetadata, File file) {
+    public void storeHash(MavenMetadata metadata, File file) {
+
+        DormQualifier qualifier = new DormQualifier(metadata);
 
         if (LOG.isDebugEnabled()) {
-            LOG.debug("Store maven artifact for metadata : " + mavenMetadata);
+            LOG.debug("Store maven hash for qualifier : " + qualifier);
         }
-
-        DormMetadata metadata = DefaultDormMetadata.create(null, mavenMetadata);
 
         DormResource resource = DefaultDormResource.create(file);
-        DormServiceStoreResourceConfig storeResourceConfig = new DormServiceStoreResourceConfig()
-                .override(true)
-                .metadata(metadata);
+        DormServiceStoreResourceConfig config = new DormServiceStoreResourceConfig()
+                .override(true);
 
-        service.storeResource(resource, storeResourceConfig);
+        dormService.storeResource(resource, qualifier, config);
     }
 
-    public void storePom(MavenMetadata mavenMetadata, File file) {
+    public void storePom(MavenMetadata metadata, File file) {
 
         if (LOG.isDebugEnabled()) {
-            LOG.debug("Store maven pom form metadata : " + mavenMetadata);
+            LOG.debug("Store maven pom form metadata : " + metadata);
         }
 
+        if (!hashService.compareMavenHashes(metadata, file)) {
+            if (LOG.isWarnEnabled()) {
+                LOG.warn("Pom to store is not equal to given hash");
+            }
+            return;
+        }
+
+        
     }
+
+
 }

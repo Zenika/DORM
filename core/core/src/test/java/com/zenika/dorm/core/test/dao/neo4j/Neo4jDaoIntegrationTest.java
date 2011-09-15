@@ -1,11 +1,8 @@
 package com.zenika.dorm.core.test.dao.neo4j;
 
 import com.zenika.dorm.core.dao.neo4j.DormDaoNeo4j;
-import com.zenika.dorm.core.model.Dependency;
 import com.zenika.dorm.core.model.DependencyNode;
-import com.zenika.dorm.core.model.DormMetadata;
-import com.zenika.dorm.core.model.DormMetadataExtension;
-import com.zenika.dorm.core.model.impl.*;
+import com.zenika.dorm.core.model.impl.Usage;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
@@ -14,8 +11,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
-* @author Antoine ROUAZE <antoine.rouaze AT zenika.com>
-*/
+ * @author Antoine ROUAZE <antoine.rouaze AT zenika.com>
+ */
 @Ignore
 public class Neo4jDaoIntegrationTest {
 
@@ -65,7 +62,6 @@ public class Neo4jDaoIntegrationTest {
         commons_lang.addChild(junit);
         xalan.addChild(xml_apis);
     }
-
 
 
     //
@@ -129,11 +125,19 @@ public class Neo4jDaoIntegrationTest {
 //        }
     }
 
+    /**
+     * todo: fix from refactoring
+     *
+     * @param name
+     * @param version
+     * @return
+     */
     private DependencyNode createDependencyNode(String name, String version) {
-        DormMetadataExtension extension19Response = new DefaultDormMetadataExtension(name);
-        DormMetadata metadata20Response = DefaultDormMetadata.create(version, extension19Response);
-        Dependency dependency21Response = DefaultDependency.create(metadata20Response, usage);
-        DependencyNode dependencyNode = DefaultDependencyNode.create(dependency21Response);
-        return dependencyNode;
+//        DormMetadata extension19Response = new DefaultDormMetadataExtension(name);
+//        DormMetadata metadata20Response = DefaultDormMetadata.create(version, extension19Response);
+//        Dependency dependency21Response = DefaultDependency.create(metadata20Response, usage);
+//        DependencyNode dependencyNode = DefaultDependencyNode.create(dependency21Response);
+//        return dependencyNode;
+        return null;
     }
 }

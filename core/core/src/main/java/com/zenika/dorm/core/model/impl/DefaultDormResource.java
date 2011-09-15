@@ -52,6 +52,11 @@ public final class DefaultDormResource implements DormResource {
     }
 
     @Override
+    public boolean exists() {
+        return null != file;
+    }
+
+    @Override
     public String getName() {
         return name;
     }

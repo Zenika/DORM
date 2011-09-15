@@ -2,7 +2,7 @@ package com.zenika.dorm.maven.ws.resource;
 
 import com.google.inject.Inject;
 import com.zenika.dorm.core.model.ws.DormWebServiceRequest;
-import com.zenika.dorm.core.processor.Processor;
+import com.zenika.dorm.core.processor.DormProcessor;
 import com.zenika.dorm.core.ws.resource.AbstractResource;
 import com.zenika.dorm.maven.model.MavenMetadata;
 import org.slf4j.Logger;
@@ -23,7 +23,7 @@ public class MavenResource extends AbstractResource {
     private static final Logger LOG = LoggerFactory.getLogger(MavenResource.class);
 
     @Inject
-    private Processor processor;
+    private DormProcessor processor;
 
     public MavenResource() {
         if (LOG.isInfoEnabled()) {

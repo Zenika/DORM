@@ -1,10 +1,12 @@
 package com.zenika.dorm.core.test.helper;
 
 import com.zenika.dorm.core.exception.CoreException;
-import com.zenika.dorm.core.model.*;
+import com.zenika.dorm.core.model.Dependency;
+import com.zenika.dorm.core.model.DependencyNode;
+import com.zenika.dorm.core.model.DormMetadata;
+import com.zenika.dorm.core.model.DormResource;
 import com.zenika.dorm.core.model.impl.DefaultDependency;
 import com.zenika.dorm.core.model.impl.DefaultDependencyNode;
-import com.zenika.dorm.core.model.impl.DefaultDormMetadata;
 import com.zenika.dorm.core.model.impl.DefaultDormResource;
 import com.zenika.dorm.core.model.ws.DormWebServiceRequest;
 
@@ -47,7 +49,7 @@ public abstract class ExtensionFixtures {
      *
      * @return
      */
-    public abstract DormMetadataExtension getMetadataExtension();
+    public abstract DormMetadata getMetadataExtension();
 
     public String getRequestVersion() {
         return version;
@@ -74,7 +76,8 @@ public abstract class ExtensionFixtures {
     }
 
     public DormMetadata getMetadata() {
-        return DefaultDormMetadata.create(getRequestVersion(), getMetadataExtension());
+//        return DefaultDormMetadata.create(getRequestVersion(), getMetadataExtension());
+        return null;
     }
 
     public DormResource getDormResource() {

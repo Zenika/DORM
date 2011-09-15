@@ -5,14 +5,12 @@ import com.zenika.dorm.core.dao.neo4j.util.ObjectMapperProvider;
 import com.zenika.dorm.core.model.Dependency;
 import com.zenika.dorm.core.model.DependencyNode;
 import com.zenika.dorm.core.model.DormMetadata;
-import com.zenika.dorm.core.model.DormMetadataExtension;
-import com.zenika.dorm.core.model.impl.*;
+import com.zenika.dorm.core.model.impl.Usage;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -23,7 +21,7 @@ import java.util.Map;
 /**
  * @author Antoine ROUAZE <antoine.rouaze AT zenika.com>
  */
-public class    Neo4jDaoTestProvider {
+public class Neo4jDaoTestProvider {
 
     private static final Logger LOG = LoggerFactory.getLogger(Neo4jDaoTestProvider.class);
 
@@ -122,7 +120,7 @@ public class    Neo4jDaoTestProvider {
 
     private ObjectMapper mapper;
 
-    private DormMetadataExtension dormMetadataExtension;
+    private DormMetadata dormMetadataExtension;
 
     private Usage usage;
     private Dependency dependency;
@@ -130,7 +128,7 @@ public class    Neo4jDaoTestProvider {
     private DependencyNode dependencyNode;
     private DormMetadata metadata;
     private Neo4jMetadata neo4jMetadata;
-    private DormMetadataExtension extension;
+    private DormMetadata extension;
     private Neo4jMetadataExtension neo4jExtension;
 
     public Neo4jDaoTestProvider() {
@@ -197,52 +195,58 @@ public class    Neo4jDaoTestProvider {
         };
     }
 
+    /**
+     * todo: fix from refactoring
+     */
     private void setUpNeo4jResponseObject() {
-        dormMetadataExtension = new DefaultDormMetadataExtension("Maven");
-        try {
-            dependency21Response = mapper.readValue(dependency21Url, dependencyResponseType);
-            metadata20Response = mapper.readValue(metadata20Url, metadataResponseType);
-            extension19Response = mapper.readValue(extension19Url, extensionResponseType);
-            dependency3Response = mapper.readValue(dependency3Url, dependencyResponseType);
-            metadata2Response = mapper.readValue(metadata2Url, metadataResponseType);
-            extension1Response = mapper.readValue(extension1Url, extensionResponseType);
-            relationshipsDependency21 = mapper.readValue(relationshipDependency21Url, listRelationshipType);
-            relationshipsDependency3 = mapper.readValue(relationshipDependency3Url, listRelationshipType);
-            relationshipsMetadata20 = mapper.readValue(relationshipMetadata20Url, listRelationshipType);
-            relationshipsMetadata2 = mapper.readValue(relationshipMetadata2Url, listRelationshipType);
-            relationships = mapper.readValue(traverseUrl, listRelationshipType);
-            listDependencyResponse = mapper.readValue(indexDependencyUrl, listDependencyResponseType);
-            index = mapper.readValue(indexResponse, Neo4jIndex.class);
-            traverse = new Neo4jTraverse(new Neo4jRelationship(usage));
-
-            dependency21Response.getData().setResponse(dependency21Response);
-            metadata20Response.getData().setResponse(metadata20Response);
-            extension19 = new Neo4jMetadataExtension();
-            extension19.setExtension(dormMetadataExtension.createFromMap(extension19Response.getData()));
-            extension19.setResponse(extension19Response);
-//            extension19Response.getData().setResponse(extension19Response);
-            dependency3Response.getData().setResponse(dependency3Response);
-            metadata2Response.getData().setResponse(metadata2Response);
-            extension1 = new Neo4jMetadataExtension();
-            extension1.setExtension(dormMetadataExtension.createFromMap(extension1Response.getData()));
-            extension1.setResponse(extension1Response);
-//            extension1Response.getData().setResponse(extension1Response);
-        } catch (IOException e) {
-            LOG.error("Jackson mapper error", e);
-        }
+//        dormMetadataExtension = new DefaultDormMetadataExtension("Maven");
+//        try {
+//            dependency21Response = mapper.readValue(dependency21Url, dependencyResponseType);
+//            metadata20Response = mapper.readValue(metadata20Url, metadataResponseType);
+//            extension19Response = mapper.readValue(extension19Url, extensionResponseType);
+//            dependency3Response = mapper.readValue(dependency3Url, dependencyResponseType);
+//            metadata2Response = mapper.readValue(metadata2Url, metadataResponseType);
+//            extension1Response = mapper.readValue(extension1Url, extensionResponseType);
+//            relationshipsDependency21 = mapper.readValue(relationshipDependency21Url, listRelationshipType);
+//            relationshipsDependency3 = mapper.readValue(relationshipDependency3Url, listRelationshipType);
+//            relationshipsMetadata20 = mapper.readValue(relationshipMetadata20Url, listRelationshipType);
+//            relationshipsMetadata2 = mapper.readValue(relationshipMetadata2Url, listRelationshipType);
+//            relationships = mapper.readValue(traverseUrl, listRelationshipType);
+//            listDependencyResponse = mapper.readValue(indexDependencyUrl, listDependencyResponseType);
+//            index = mapper.readValue(indexResponse, Neo4jIndex.class);
+//            traverse = new Neo4jTraverse(new Neo4jRelationship(usage));
+//
+//            dependency21Response.getData().setResponse(dependency21Response);
+//            metadata20Response.getData().setResponse(metadata20Response);
+//            extension19 = new Neo4jMetadataExtension();
+//            extension19.setExtension(dormMetadataExtension.createFromMap(extension19Response.getData()));
+//            extension19.setResponse(extension19Response);
+////            extension19Response.getData().setResponse(extension19Response);
+//            dependency3Response.getData().setResponse(dependency3Response);
+//            metadata2Response.getData().setResponse(metadata2Response);
+//            extension1 = new Neo4jMetadataExtension();
+//            extension1.setExtension(dormMetadataExtension.createFromMap(extension1Response.getData()));
+//            extension1.setResponse(extension1Response);
+////            extension1Response.getData().setResponse(extension1Response);
+//        } catch (IOException e) {
+//            LOG.error("Jackson mapper error", e);
+//        }
     }
 
+    /**
+     * todo: fix from refactoring
+     */
     private void setUpDormDependency() {
-        usage = Usage.create("DEFAULT");
-        extension = new DefaultDormMetadataExtension("habi-base");
-        neo4jExtension = new Neo4jMetadataExtension(extension);
-        metadata = DefaultDormMetadata.create("0.6", extension);
-        neo4jMetadata = new Neo4jMetadata(metadata);
-        neo4jMetadata.setExtension(neo4jExtension);
-        dependency = DefaultDependency.create(metadata, usage);
-        neo4jDependency = new Neo4jDependency(dependency);
-        neo4jDependency.setMetadata(neo4jMetadata);
-        dependencyNode = DefaultDependencyNode.create(neo4jDependency);
+//        usage = Usage.create("DEFAULT");
+//        extension = new DefaultDormMetadataExtension("habi-base");
+//        neo4jExtension = new Neo4jMetadataExtension(extension);
+//        metadata = DefaultDormMetadata.create("0.6", extension);
+//        neo4jMetadata = new Neo4jMetadata(metadata);
+//        neo4jMetadata.setExtension(neo4jExtension);
+//        dependency = DefaultDependency.create(metadata, usage);
+//        neo4jDependency = new Neo4jDependency(dependency);
+//        neo4jDependency.setMetadata(neo4jMetadata);
+//        dependencyNode = DefaultDependencyNode.create(neo4jDependency);
     }
 
     public TypeReference<Neo4jResponse<Neo4jDependency>> getDependencyResponseType() {
@@ -405,7 +409,7 @@ public class    Neo4jDaoTestProvider {
         return neo4jExtension;
     }
 
-    public DormMetadataExtension getDormMetadataExtension() {
+    public DormMetadata getDormMetadataExtension() {
         return dormMetadataExtension;
     }
 
@@ -425,7 +429,7 @@ public class    Neo4jDaoTestProvider {
         return metadata;
     }
 
-    public DormMetadataExtension getExtension() {
+    public DormMetadata getExtension() {
         return extension;
     }
 
