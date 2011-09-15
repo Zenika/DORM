@@ -5,7 +5,6 @@ import com.zenika.dorm.core.exception.RepositoryException;
 import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.core.model.DormResource;
 import com.zenika.dorm.core.model.impl.DefaultDormResource;
-import com.zenika.dorm.core.model.impl.DormQualifier;
 import com.zenika.dorm.core.repository.DormRepository;
 import com.zenika.dorm.core.repository.DormRepositoryResource;
 import com.zenika.dorm.core.service.config.DormServiceStoreResourceConfig;
@@ -86,7 +85,7 @@ public class DefaultDormRepository implements DormRepository {
     }
 
     @Override
-    public void store(DormResource resource, DormQualifier qualifier, DormServiceStoreResourceConfig config) {
+    public void store(DormResource resource, DormMetadata metadata, DormServiceStoreResourceConfig config) {
     }
 
     private String getPathFromMetadata(DormMetadata metadata) {

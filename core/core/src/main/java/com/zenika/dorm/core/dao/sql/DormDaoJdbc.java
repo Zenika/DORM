@@ -5,7 +5,6 @@ import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.zenika.dorm.core.dao.DormDao;
 import com.zenika.dorm.core.model.DormMetadata;
-import com.zenika.dorm.core.model.impl.DormQualifier;
 import com.zenika.dorm.core.model.impl.Usage;
 
 import java.util.List;
@@ -17,7 +16,7 @@ public class DormDaoJdbc implements DormDao {
     private Injector injector;
 
     @Override
-    public void saveMetadata(DormQualifier qualifier, final DormMetadata metadata) {
+    public void saveMetadata(final DormMetadata metadata) {
         JDBCSinglePushService jdbcSinglePushService = injector.createChildInjector(
                 new AbstractModule() {
                     @Override

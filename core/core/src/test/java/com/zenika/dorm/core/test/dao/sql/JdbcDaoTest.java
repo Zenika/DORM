@@ -117,7 +117,7 @@ public class JdbcDaoTest {
 
     @Test
     public void testSaveMetadata() {
-        dao.saveMetadata(null, habi_base.getDependency().getMetadata());
+        dao.saveMetadata(habi_base.getDependency().getMetadata());
     }
 
     @AfterClass

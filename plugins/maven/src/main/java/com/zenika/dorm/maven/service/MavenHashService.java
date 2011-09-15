@@ -2,7 +2,6 @@ package com.zenika.dorm.maven.service;
 
 import com.google.inject.Inject;
 import com.zenika.dorm.core.model.DormResource;
-import com.zenika.dorm.core.model.impl.DormQualifier;
 import com.zenika.dorm.core.service.DormService;
 import com.zenika.dorm.maven.exception.MavenException;
 import com.zenika.dorm.maven.model.MavenConstant;
@@ -31,8 +30,7 @@ public class MavenHashService {
                 .extension(hash)
                 .build();
 
-        DormQualifier qualifier = new DormQualifier(hashMetadata);
-        DormResource resource = service.getResource(qualifier);
+        DormResource resource = service.getResource(metadata);
 
         if (resource.exists()) {
             return false;

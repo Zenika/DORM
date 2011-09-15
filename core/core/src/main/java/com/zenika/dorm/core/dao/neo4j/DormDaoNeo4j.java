@@ -8,15 +8,12 @@ import com.zenika.dorm.core.dao.DormDao;
 import com.zenika.dorm.core.dao.neo4j.exception.Neo4jDaoException;
 import com.zenika.dorm.core.dao.neo4j.util.Neo4jRequestExecutor;
 import com.zenika.dorm.core.dao.neo4j.util.RequestExecutor;
-import com.zenika.dorm.core.exception.CoreException;
 import com.zenika.dorm.core.model.Dependency;
 import com.zenika.dorm.core.model.DependencyNode;
 import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.core.model.impl.DefaultDependency;
 import com.zenika.dorm.core.model.impl.DefaultDependencyNode;
-import com.zenika.dorm.core.model.impl.DormQualifier;
 import com.zenika.dorm.core.model.impl.Usage;
-import com.zenika.dorm.core.model.mapper.MetadataExtensionMapper;
 import org.apache.commons.lang3.StringUtils;
 import org.codehaus.jackson.type.TypeReference;
 import org.slf4j.Logger;
@@ -68,27 +65,27 @@ public class DormDaoNeo4j implements DormDao {
     public Neo4jDependency postDependency(Dependency dormDependency) {
         Usage usage = dormDependency.getUsage();
         Neo4jDependency dependency = null;
-        try {
-            dependency = new Neo4jDependency(dormDependency);
-            Neo4jMetadata metadata = dependency.getMetadata();
-            Neo4jMetadataExtension extension = dependency.getMetadata().getNeo4jExtension();
-            if (executor.get(dependency.getIndexURI(index), List.class).isEmpty()) {
-                extension.setResponse(executor.postExtension(MetadataExtensionMapper.fromExtension(extension.getExtension())));
-                executor.post(metadata);
-                executor.post(dependency);
-                executor.post(new Neo4jRelationship(metadata, extension, Neo4jMetadataExtension.RELATIONSHIP_TYPE));
-                executor.post(new Neo4jRelationship(dependency, metadata, Neo4jMetadata.RELATIONSHIP_TYPE));
-                executor.post(dependency, dependency.getIndexURI(index));
-            } else {
-                dependency = searchNode(dependency.getIndexURI(index),
-                        new TypeReference<List<Neo4jResponse<Neo4jDependency>>>() {
-                        }.getType());
-                fillNeo4jDependency(dependency, dormDependency.getMetadata());
-                dependency.setUsage(usage);
-            }
-        } catch (URISyntaxException e) {
-            throw new CoreException("URI syntax error", e);
-        }
+//        try {
+//            dependency = new Neo4jDependency(dormDependency);
+//            Neo4jMetadata metadata = dependency.getMetadata();
+//            Neo4jMetadataExtension extension = dependency.getMetadata().getNeo4jExtension();
+//            if (executor.get(dependency.getIndexURI(index), List.class).isEmpty()) {
+//                extension.setResponse(executor.postExtension(MetadataExtensionMapper.fromExtension(extension.getExtension())));
+//                executor.post(metadata);
+//                executor.post(dependency);
+//                executor.post(new Neo4jRelationship(metadata, extension, Neo4jMetadataExtension.RELATIONSHIP_TYPE));
+//                executor.post(new Neo4jRelationship(dependency, metadata, Neo4jMetadata.RELATIONSHIP_TYPE));
+//                executor.post(dependency, dependency.getIndexURI(index));
+//            } else {
+//                dependency = searchNode(dependency.getIndexURI(index),
+//                        new TypeReference<List<Neo4jResponse<Neo4jDependency>>>() {
+//                        }.getType());
+//                fillNeo4jDependency(dependency, dormDependency.getMetadata());
+//                dependency.setUsage(usage);
+//            }
+//        } catch (URISyntaxException e) {
+//            throw new CoreException("URI syntax error", e);
+//        }
         return dependency;
     }
 
@@ -245,6 +242,6 @@ public class DormDaoNeo4j implements DormDao {
     }
 
     @Override
-    public void saveMetadata(DormQualifier qualifier, DormMetadata metadata) {
+    public void saveMetadata(DormMetadata metadata) {
     }
 }

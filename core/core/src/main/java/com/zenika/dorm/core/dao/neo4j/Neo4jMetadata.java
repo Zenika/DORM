@@ -16,7 +16,7 @@ import java.net.URISyntaxException;
  */
 @XmlAccessorType(XmlAccessType.PROPERTY)
 @XmlRootElement
-public class Neo4jMetadata extends Neo4jNode implements DormMetadata {
+public class Neo4jMetadata extends Neo4jNode {
 
     public static final Usage RELATIONSHIP_TYPE = Usage.create("METADATA");
 
@@ -53,7 +53,6 @@ public class Neo4jMetadata extends Neo4jNode implements DormMetadata {
         }
     }
 
-    @Override
     public String getIdentifier() {
         return qualifier;
     }
@@ -76,7 +75,6 @@ public class Neo4jMetadata extends Neo4jNode implements DormMetadata {
         throw new UnsupportedOperationException();
     }
 
-    @Override
     public String getExtensionName() {
         return null;
     }

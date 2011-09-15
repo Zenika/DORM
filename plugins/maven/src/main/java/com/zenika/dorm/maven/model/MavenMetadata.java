@@ -14,7 +14,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
  * Maven immutable extension point to the dorm model
  * Add maven specific metadatas
  */
-public final class MavenMetadata implements DormMetadata {
+public final class MavenMetadata extends DormMetadata {
 
     public static final transient String EXTENSION_NAME = "maven";
 

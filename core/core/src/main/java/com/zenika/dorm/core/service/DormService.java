@@ -2,8 +2,6 @@ package com.zenika.dorm.core.service;
 
 import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.core.model.DormResource;
-import com.zenika.dorm.core.model.impl.DormQualifier;
-import com.zenika.dorm.core.service.config.DormServiceGetResourceConfig;
 import com.zenika.dorm.core.service.config.DormServiceStoreResourceConfig;
 import com.zenika.dorm.core.service.get.DormServiceGetMetadataResult;
 import com.zenika.dorm.core.service.get.DormServiceGetMetadataValues;
@@ -19,11 +17,11 @@ public interface DormService {
 
     public void storeMetadata(DormMetadata metadata);
 
-    public void storeResource(DormResource resource, DormQualifier qualifier, DormServiceStoreResourceConfig config);
+    public void storeResource(DormResource resource, DormMetadata metadata, DormServiceStoreResourceConfig config);
 
     public DormServiceGetMetadataResult getMetadata(DormServiceGetMetadataValues values);
 
-    public DormResource getResource(DormQualifier qualifier);
+    public DormResource getResource(DormMetadata metadata);
 
     public DormResource getResource(String extension, String path);
 }

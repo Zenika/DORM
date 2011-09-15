@@ -6,11 +6,17 @@ package com.zenika.dorm.core.model;
  *
  * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>
  */
-public interface DormMetadata {
+public abstract class DormMetadata {
 
-    public String getIdentifier();
+    public abstract String getIdentifier();
 
-    public String getVersion();
+    public abstract String getVersion();
 
-    public String getExtensionName();
+    public abstract String getExtensionName();
+
+    public final String getQualifier() {
+        return getExtensionName() + ":" +
+                getIdentifier() + ":" +
+                getVersion();
+    }
 }

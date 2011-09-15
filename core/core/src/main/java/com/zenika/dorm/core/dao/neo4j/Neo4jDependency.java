@@ -1,6 +1,7 @@
 package com.zenika.dorm.core.dao.neo4j;
 
 import com.zenika.dorm.core.model.Dependency;
+import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.core.model.DormResource;
 import com.zenika.dorm.core.model.impl.Usage;
 import org.codehaus.jackson.annotate.JsonIgnore;
@@ -44,9 +45,14 @@ public class Neo4jDependency extends Neo4jNode implements Dependency{
         this.usage = usage;
     }
 
-   @JsonIgnore
-    public Neo4jMetadata getMetadata() {
-        return metadata;
+//   @JsonIgnore
+//    public Neo4jMetadata getMetadata() {
+//        return metadata;
+//    }
+
+    @Override
+    public DormMetadata getMetadata() {
+        return null;
     }
 
     @JsonIgnore
