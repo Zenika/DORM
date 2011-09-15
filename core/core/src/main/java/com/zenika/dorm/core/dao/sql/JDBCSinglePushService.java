@@ -27,7 +27,7 @@ public class JDBCSinglePushService extends JDBCAbstractService {
                 id = insertMetadata(connection);
                 insertExtension(connection, id);
             } else {
-                LOG.debug("The dependency " + metadata.getIdentifier() + " already insert in database");
+                LOG.debug("The dependency " + metadata.getName() + " already insert in database");
             }
             connection.commit();
         } catch (SQLException e) {
@@ -54,7 +54,7 @@ public class JDBCSinglePushService extends JDBCAbstractService {
     private Long getDependencyId(Connection connection) throws SQLException {
         Long id = null;
         PreparedStatement statement = connection.prepareStatement("SELECT id FROM dorm_metadata WHERE metadata_qualifier = ?");
-        statement.setString(1, metadata.getIdentifier());
+        statement.setString(1, metadata.getName());
         ResultSet result = statement.executeQuery();
         if (result.next()) {
             id = result.getLong(ID_COLUMN);
@@ -65,7 +65,7 @@ public class JDBCSinglePushService extends JDBCAbstractService {
     private Long insertMetadata(Connection connection) throws SQLException {
         Long id = null;
         PreparedStatement statement = connection.prepareStatement("INSERT INTO dorm_metadata (metadata_qualifier, metadata_version) VALUES (?, ?);", Statement.RETURN_GENERATED_KEYS);
-        statement.setString(1, metadata.getIdentifier());
+        statement.setString(1, metadata.getName());
         statement.setString(2, metadata.getVersion());
         if (statement.executeUpdate() > 0) {
             ResultSet resultSet = statement.getGeneratedKeys();

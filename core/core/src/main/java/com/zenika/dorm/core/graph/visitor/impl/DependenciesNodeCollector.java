@@ -1,8 +1,8 @@
 package com.zenika.dorm.core.graph.visitor.impl;
 
+import com.zenika.dorm.core.graph.visitor.AbstractDependencyVisitor;
 import com.zenika.dorm.core.model.DependencyNode;
 import com.zenika.dorm.core.model.impl.Usage;
-import com.zenika.dorm.core.graph.visitor.AbstractDependencyVisitor;
 
 import java.util.HashSet;
 import java.util.Set;

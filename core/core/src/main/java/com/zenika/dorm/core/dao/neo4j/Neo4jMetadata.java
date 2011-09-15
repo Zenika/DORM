@@ -38,7 +38,7 @@ public class Neo4jMetadata extends Neo4jNode {
 //        } else {
 //            type = metadata.getType();
 //        }
-        qualifier = metadata.getIdentifier();
+        qualifier = metadata.getName();
         extension = new Neo4jMetadataExtension(metadata);
     }
 

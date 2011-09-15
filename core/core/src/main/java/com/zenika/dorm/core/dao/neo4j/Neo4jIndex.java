@@ -68,5 +68,5 @@ public class Neo4jIndex {
         return "{\n" + "\t\"template\" : \"" + template + "\",\n\t\"provider\" : \"" + provider + "\",\n\t\"type\" : \"" + type + "\"\n}";
     }
 
-  
+
 }

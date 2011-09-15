@@ -8,7 +8,7 @@ package com.zenika.dorm.core.model;
  */
 public abstract class DormMetadata {
 
-    public abstract String getIdentifier();
+    public abstract String getName();
 
     public abstract String getVersion();
 
@@ -16,7 +16,7 @@ public abstract class DormMetadata {
 
     public final String getQualifier() {
         return getExtensionName() + ":" +
-                getIdentifier() + ":" +
+                getName() + ":" +
                 getVersion();
     }
 }

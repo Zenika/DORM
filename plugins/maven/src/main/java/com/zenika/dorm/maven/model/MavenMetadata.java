@@ -59,7 +59,7 @@ public final class MavenMetadata extends DormMetadata {
     }
 
     @Override
-    public String getIdentifier() {
+    public String getName() {
 
         String separator = ":";
 

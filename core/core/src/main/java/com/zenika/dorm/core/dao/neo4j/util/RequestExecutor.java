@@ -2,13 +2,7 @@ package com.zenika.dorm.core.dao.neo4j.util;
 
 import com.sun.jersey.api.client.ClientHandlerException;
 import com.sun.jersey.api.client.UniformInterfaceException;
-import com.zenika.dorm.core.dao.neo4j.Neo4jDependency;
-import com.zenika.dorm.core.dao.neo4j.Neo4jIndex;
-import com.zenika.dorm.core.dao.neo4j.Neo4jMetadataExtension;
-import com.zenika.dorm.core.dao.neo4j.Neo4jNode;
-import com.zenika.dorm.core.dao.neo4j.Neo4jRelationship;
-import com.zenika.dorm.core.dao.neo4j.Neo4jResponse;
-import com.zenika.dorm.core.dao.neo4j.Neo4jTraverse;
+import com.zenika.dorm.core.dao.neo4j.*;
 import com.zenika.dorm.core.model.DormMetadata;
 
 import java.lang.reflect.Type;

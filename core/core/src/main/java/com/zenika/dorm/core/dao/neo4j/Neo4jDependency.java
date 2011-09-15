@@ -17,7 +17,7 @@ import java.net.URISyntaxException;
  */
 @XmlAccessorType(XmlAccessType.PROPERTY)
 @XmlRootElement
-public class Neo4jDependency extends Neo4jNode implements Dependency{
+public class Neo4jDependency extends Neo4jNode implements Dependency {
 
     private Usage usage;
     private Neo4jMetadata metadata;
@@ -84,7 +84,7 @@ public class Neo4jDependency extends Neo4jNode implements Dependency{
     public URI getTraverse(String type) throws URISyntaxException {
         return new URI(getResponse().getTraverse().replace("{returnType}", type));
     }
-    
+
     @JsonIgnore
     @Override
     public void setProperties() {

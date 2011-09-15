@@ -21,16 +21,16 @@ public class Neo4jTraverse {
     private final List<Map<String, String>> relationships;
 
 
-    public Neo4jTraverse () {
+    public Neo4jTraverse() {
         this(null);
     }
 
-    public Neo4jTraverse(Neo4jRelationship ... relationshipsArray){
+    public Neo4jTraverse(Neo4jRelationship... relationshipsArray) {
         prune_evaluator = new HashMap<String, String>();
         prune_evaluator.put("name", "none");
         prune_evaluator.put("language", "builtin");
         relationships = new ArrayList<Map<String, String>>();
-        for (Neo4jRelationship relationship : relationshipsArray){
+        for (Neo4jRelationship relationship : relationshipsArray) {
             Map<String, String> typedRelationship = new HashMap<String, String>();
             typedRelationship.put("direction", "out");
             typedRelationship.put("type", relationship.getType());
@@ -76,7 +76,8 @@ public class Neo4jTraverse {
             return false;
         if (relationships != null ? !relationships.equals(traverse.relationships) : traverse.relationships != null)
             return false;
-        if (uniqueness != null ? !uniqueness.equals(traverse.uniqueness) : traverse.uniqueness != null) return false;
+        if (uniqueness != null ? !uniqueness.equals(traverse.uniqueness) : traverse.uniqueness != null)
+            return false;
 
         return true;
     }

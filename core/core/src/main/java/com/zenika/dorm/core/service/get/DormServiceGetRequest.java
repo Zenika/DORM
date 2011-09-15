@@ -1,6 +1,5 @@
 package com.zenika.dorm.core.service.get;
 
-import com.zenika.dorm.core.service.DormServiceProcess;
 import com.zenika.dorm.core.service.DormServiceRequest;
 
 /**

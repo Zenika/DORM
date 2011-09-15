@@ -29,11 +29,11 @@ public class Neo4jRelationship {
     private Map<String, Object> extensions;
     private String end;
 
-    public Neo4jRelationship(){
+    public Neo4jRelationship() {
 
     }
 
-    public Neo4jRelationship(Usage usage){
+    public Neo4jRelationship(Usage usage) {
         this.type = usage.getName();
     }
 
@@ -43,7 +43,7 @@ public class Neo4jRelationship {
         this.type = type;
     }
 
-    public Neo4jRelationship(Neo4jNode from, Neo4jNode to, Usage usage){
+    public Neo4jRelationship(Neo4jNode from, Neo4jNode to, Usage usage) {
         this.from = from.getResponse().getCreate_relationship();
         this.to = to.getResponse().getSelf();
         this.type = usage.getName();
@@ -62,7 +62,7 @@ public class Neo4jRelationship {
         return type;
     }
 
-    public void setType(String type){
+    public void setType(String type) {
         this.type = type;
     }
 
@@ -70,7 +70,7 @@ public class Neo4jRelationship {
         return data;
     }
 
-    public void setData(Map<String, Object> data){
+    public void setData(Map<String, Object> data) {
         this.data = data;
     }
 

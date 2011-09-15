@@ -14,7 +14,7 @@ import java.net.URISyntaxException;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement
-@JsonIgnoreProperties(ignoreUnknown=true)
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Neo4jResponse<T> {
 
     private T data;
@@ -170,7 +170,8 @@ public class Neo4jResponse<T> {
             return false;
         if (outgoing_typed_relationships != null ? !outgoing_typed_relationships.equals(response.outgoing_typed_relationships) : response.outgoing_typed_relationships != null)
             return false;
-        if (properties != null ? !properties.equals(response.properties) : response.properties != null) return false;
+        if (properties != null ? !properties.equals(response.properties) : response.properties != null)
+            return false;
         if (property != null ? !property.equals(response.property) : response.property != null) return false;
         if (self != null ? !self.equals(response.self) : response.self != null) return false;
         if (traverse != null ? !traverse.equals(response.traverse) : response.traverse != null) return false;
