@@ -31,7 +31,7 @@ public class Neo4jDependency extends Neo4jNode implements Dependency{
     }
 
     public URI getIndexURI(Neo4jIndex index) throws URISyntaxException {
-        return Neo4jMetadata.generateIndexURI(metadata.getQualifier(), index);
+        return Neo4jMetadata.generateIndexURI(metadata.getIdentifier(), index);
     }
 
     @JsonIgnore

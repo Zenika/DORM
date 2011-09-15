@@ -38,7 +38,7 @@ public class Neo4jMetadata extends Neo4jNode implements DormMetadata {
 //        } else {
 //            type = metadata.getType();
 //        }
-        qualifier = metadata.getQualifier();
+        qualifier = metadata.getIdentifier();
         extension = new Neo4jMetadataExtension(metadata);
     }
 
@@ -54,7 +54,7 @@ public class Neo4jMetadata extends Neo4jNode implements DormMetadata {
     }
 
     @Override
-    public String getQualifier() {
+    public String getIdentifier() {
         return qualifier;
     }
 

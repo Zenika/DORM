@@ -93,7 +93,7 @@ public class DefaultDormRepository implements DormRepository {
         return getBaseBuilder()
                 .append(metadata.getExtensionName())
                 .append("/")
-                .append(metadata.getQualifier())
+                .append(metadata.getIdentifier())
                 .toString();
     }
 

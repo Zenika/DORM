@@ -217,14 +217,14 @@ public class DormDaoNeo4j implements DormDao {
         try {
             TypeReference<List<Neo4jResponse<Neo4jDependency>>> type = new TypeReference<List<Neo4jResponse<Neo4jDependency>>>() {
             };
-            dependency = searchNode(Neo4jMetadata.generateIndexURI(metadata.getQualifier(), index), type.getType());
+            dependency = searchNode(Neo4jMetadata.generateIndexURI(metadata.getIdentifier(), index), type.getType());
             Neo4jTraverse traverse = new Neo4jTraverse(new Neo4jRelationship(usage));
             List<Neo4jRelationship> relationships = executor.post(dependency.getTraverse(Neo4jTraverse.RELATIONSHIP_TYPE), traverse);
             dependencyNodeMap.put(dependency.getUri(), node);
             putChild(usage, dependencyNodeMap, relationships, extension);
         } catch (UniformInterfaceException e) {
             if (e.getResponse().getStatus() == Response.Status.NOT_FOUND.getStatusCode()) {
-                LOG.debug("The dependency node with this " + metadata.getQualifier() + " full qualifier doesn't " +
+                LOG.debug("The dependency node with this " + metadata.getIdentifier() + " full qualifier doesn't " +
                         "found");
             }
         } catch (URISyntaxException e) {

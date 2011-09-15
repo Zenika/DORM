@@ -11,7 +11,7 @@ public class DormQualifier {
 
     public DormQualifier(DormMetadata metadata) {
         qualifier = metadata.getExtensionName() + ":" +
-                metadata.getQualifier() + ":" +
+                metadata.getIdentifier() + ":" +
                 metadata.getVersion();
     }
 
