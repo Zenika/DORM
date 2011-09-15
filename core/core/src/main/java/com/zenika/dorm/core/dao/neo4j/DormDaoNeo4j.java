@@ -14,6 +14,7 @@ import com.zenika.dorm.core.model.DependencyNode;
 import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.core.model.impl.DefaultDependency;
 import com.zenika.dorm.core.model.impl.DefaultDependencyNode;
+import com.zenika.dorm.core.model.impl.DormQualifier;
 import com.zenika.dorm.core.model.impl.Usage;
 import com.zenika.dorm.core.model.mapper.MetadataExtensionMapper;
 import org.apache.commons.lang3.StringUtils;
@@ -244,6 +245,6 @@ public class DormDaoNeo4j implements DormDao {
     }
 
     @Override
-    public void saveMetadata(DormMetadata metadata) {
+    public void saveMetadata(DormQualifier qualifier, DormMetadata metadata) {
     }
 }

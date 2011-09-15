@@ -75,6 +75,11 @@ public class MavenProcessor extends ProcessorExtension {
 
         // ignore put's of maven-medata.xml file
         if (StringUtils.equals(mavenUri.getFilename().getFilename(), MavenConstant.Special.MAVEN_METADATA_XML)) {
+
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Ignore " + MavenConstant.Special.MAVEN_METADATA_XML);
+            }
+
             return responseBuilder.succeeded().build();
         }
 
@@ -85,7 +90,7 @@ public class MavenProcessor extends ProcessorExtension {
 
         // md5 or sha1
         if (MavenExtensionHelper.isHash(extension)) {
-            mavenService.storeArtifact(metadata, file);
+            mavenService.storeHash(metadata, file);
         }
 
         // pom

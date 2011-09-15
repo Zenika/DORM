@@ -2,6 +2,7 @@ package com.zenika.dorm.core.dao;
 
 
 import com.zenika.dorm.core.model.DormMetadata;
+import com.zenika.dorm.core.model.impl.DormQualifier;
 import com.zenika.dorm.core.model.impl.Usage;
 
 import java.util.List;
@@ -13,5 +14,5 @@ public interface DormDao {
 
     public List<DormMetadata> getMetadataByExtension(String extensionName, Map<String, String> extensionClauses, Usage usage);
 
-    public void saveMetadata(DormMetadata metadata);
+    public void saveMetadata(DormQualifier qualifier, DormMetadata metadata);
 }
