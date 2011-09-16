@@ -275,4 +275,8 @@ public class DormResource extends AbstractResource {
 //
 //        return properties;
 //    }
+
+    public String getExtensionName(){
+        return "dorm";
+    }
 }
