@@ -14,8 +14,8 @@ public abstract class JDBCAbstractService {
     public static final String METADATA_QUALIFIER_COLUMN = "metadata_qualifier";
     public static final String METADATA_VERSION_COLUMN = "metadata_version";
 
-    @Inject
-    protected DormMetadataFactory dormMetadataFactory;
+//    @Inject
+//    protected DormMetadataFactory dormMetadataFactory;
 
     @Inject
     protected DataSource dataSource;

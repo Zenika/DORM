@@ -66,17 +66,37 @@ public class JdbcDaoTest {
         commons_lang = createDependencyNode("commons-lang", "1.0");
         junit = createDependencyNode("junit", "3.8.1");
         xml_apis = createDependencyNode("xml-apis", "1.0b2");
-        habi_base.addChild(commons_cli);
-        habi_base.addChild(xercesImpl);
-        habi_base.addChild(commons_logging);
-        habi_base.addChild(jdom);
-        habi_base.addChild(junit);
-        habi_base.addChild(xalan);
-        commons_cli.addChild(commons_logging);
-        commons_cli.addChild(commons_lang);
-        commons_lang.addChild(junit);
-        xalan.addChild(xml_apis);
+//        habi_base.addChild(commons_cli);
+//        habi_base.addChild(xercesImpl);
+//        habi_base.addChild(commons_logging);
+//        habi_base.addChild(jdom);
+//        habi_base.addChild(junit);
+//        habi_base.addChild(xalan);
+//        commons_cli.addChild(commons_logging);
+//        commons_cli.addChild(commons_lang);
+//        commons_lang.addChild(junit);
+//        xalan.addChild(xml_apis);
     }
+
+    @Test
+        public void testSaveMetadata() {
+            dao.saveMetadata(new DormMetadata() {
+                @Override
+                public String getIdentifier() {
+                    return "toto";
+                }
+
+                @Override
+                public String getVersion() {
+                    return "toto-1.0.0";  //To change body of implemented methods use File | Settings | File Templates.
+                }
+
+                @Override
+                public String getExtensionName() {
+                    return "null";  //To change body of implemented methods use File | Settings | File Templates.
+                }
+            });
+        }
 
     @Test
     public void testGetOne() {
@@ -115,10 +135,6 @@ public class JdbcDaoTest {
         }
     }
 
-    @Test
-    public void testSaveMetadata() {
-        dao.saveMetadata(habi_base.getDependency().getMetadata());
-    }
 
     @AfterClass
     public static void afterClass() {

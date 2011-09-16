@@ -16,7 +16,7 @@ public class JdbcTestModule extends AbstractModule {
     protected void configure() {
 //        MapBinder<String, Class> metadataExtensionBinder = MapBinder.newMapBinder(binder(), String.class, Class.class);
 //        metadataExtensionBinder.addBinding(DefaultDormMetadataExtension.EXTENSION_NAME).toInstance(DefaultDormMetadataExtension.class);
-//        bind(DataSource.class).toInstance(createDataSource());
+        bind(DataSource.class).toInstance(createDataSource());
 //        bind(DormMetadataFactory.class);
     }
 
