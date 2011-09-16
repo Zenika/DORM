@@ -1,6 +1,7 @@
 package com.zenika.dorm.maven.test.unit;
 
-import com.zenika.dorm.maven.test.helper.MavenFixtures;
+import com.zenika.dorm.maven.test.fixtures.MavenFixtures;
+import com.zenika.dorm.maven.test.fixtures.MavenPathFixtures;
 import org.junit.Before;
 import org.mockito.MockitoAnnotations;
 
@@ -10,6 +11,7 @@ import org.mockito.MockitoAnnotations;
 public abstract class AbstractUnitTest {
 
     protected MavenFixtures fixtures;
+    protected MavenPathFixtures pathFixtures;
 
     @Before
     public void before() {
@@ -17,7 +19,7 @@ public abstract class AbstractUnitTest {
         // required by mockito
         MockitoAnnotations.initMocks(this);
 
-        // reset fixtures before every test
         fixtures = new MavenFixtures();
+        pathFixtures = new MavenPathFixtures();
     }
 }

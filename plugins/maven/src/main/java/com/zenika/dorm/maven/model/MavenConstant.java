@@ -13,7 +13,7 @@ public abstract class MavenConstant {
     public static final String EJB = "ejb";
     public static final String WAR = "war";
 
-    public static abstract class FileExtension extends MavenConstant {
+    public static abstract class Extension extends MavenConstant {
 
         public static final String SHA1 = "sha1";
         public static final String MD5 = "md5";

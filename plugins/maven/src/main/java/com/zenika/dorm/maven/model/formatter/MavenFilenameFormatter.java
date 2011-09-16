@@ -66,8 +66,8 @@ public class MavenFilenameFormatter {
         String filenameWithoutExtension = FilenameUtils.removeExtension(filename);
 
         // Fix: if filename is equal to "foo.jar.sha1" for example
-        if (extension.equals(MavenConstant.FileExtension.SHA1) ||
-                extension.equals(MavenConstant.FileExtension.MD5)) {
+        if (extension.equals(MavenConstant.Extension.SHA1) ||
+                extension.equals(MavenConstant.Extension.MD5)) {
             filenameWithoutExtension = FilenameUtils.removeExtension(filenameWithoutExtension);
         }
 

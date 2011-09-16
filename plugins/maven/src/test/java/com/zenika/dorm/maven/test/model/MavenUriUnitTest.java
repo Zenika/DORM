@@ -1,7 +1,7 @@
 package com.zenika.dorm.maven.test.model;
 
 import com.zenika.dorm.maven.model.MavenUri;
-import com.zenika.dorm.maven.test.model.fixtures.MavenPathFixtures;
+import com.zenika.dorm.maven.test.fixtures.MavenConstantFixtures;
 import com.zenika.dorm.maven.test.unit.AbstractUnitTest;
 import org.fest.assertions.Assertions;
 import org.junit.Test;
@@ -14,27 +14,27 @@ public class MavenUriUnitTest extends AbstractUnitTest {
     @Test
     public void testMavenUriSimple() throws Exception {
 
-        MavenUri mavenUri = new MavenUri(MavenPathFixtures.getSimple1());
-        compareUriWith(mavenUri, MavenPathFixtures.GROUPID1, MavenPathFixtures.ARTIFACTID1,
-                MavenPathFixtures.VERSION_SIMPLE, false);
+        MavenUri mavenUri = new MavenUri(pathFixtures.getSimple1());
+        compareUriWith(mavenUri, MavenConstantFixtures.GROUPID1, MavenConstantFixtures.ARTIFACTID1,
+                MavenConstantFixtures.VERSION_SIMPLE, false);
 
-        mavenUri = new MavenUri(MavenPathFixtures.getSimple2());
-        compareUriWith(mavenUri, MavenPathFixtures.GROUPID2, MavenPathFixtures.ARTIFACTID2,
-                MavenPathFixtures.VERSION_SIMPLE, false);
+        mavenUri = new MavenUri(pathFixtures.getSimple2());
+        compareUriWith(mavenUri, MavenConstantFixtures.GROUPID2, MavenConstantFixtures.ARTIFACTID2,
+                MavenConstantFixtures.VERSION_SIMPLE, false);
     }
 
     @Test
     public void testMavenUriWithSpecialVersion() throws Exception {
 
         // text version "-xxx"
-        MavenUri mavenUri = new MavenUri(MavenPathFixtures.getSimpleWithTextVersion());
-        compareUriWith(mavenUri, MavenPathFixtures.GROUPID1, MavenPathFixtures.ARTIFACTID1,
-                MavenPathFixtures.VERSION_TEXT, false);
+        MavenUri mavenUri = new MavenUri(pathFixtures.getSimpleWithTextVersion());
+        compareUriWith(mavenUri, MavenConstantFixtures.GROUPID1, MavenConstantFixtures.ARTIFACTID1,
+                MavenConstantFixtures.VERSION_TEXT, false);
 
         // snapshot "-SNAPSHOT"
-        mavenUri = new MavenUri(MavenPathFixtures.getWithSnapshot());
-        compareUriWith(mavenUri, MavenPathFixtures.GROUPID1, MavenPathFixtures.ARTIFACTID1,
-                MavenPathFixtures.VERSION_SNAPSHOT, true);
+        mavenUri = new MavenUri(pathFixtures.getWithSnapshot());
+        compareUriWith(mavenUri, MavenConstantFixtures.GROUPID1, MavenConstantFixtures.ARTIFACTID1,
+                MavenConstantFixtures.VERSION_SNAPSHOT, true);
     }
 
     private void compareUriWith(MavenUri uri, String groupId, String artifactId, String version,

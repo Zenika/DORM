@@ -94,7 +94,7 @@ public class MavenProcessor extends ProcessorExtension {
         }
 
         // pom
-        else if (StringUtils.equals(metadata.getExtension(), MavenConstant.FileExtension.POM)) {
+        else if (StringUtils.equals(metadata.getExtension(), MavenConstant.Extension.POM)) {
             mavenService.storePom(metadata, file);
         }
 

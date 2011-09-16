@@ -46,17 +46,17 @@ public class MavenProcessorUnitTest extends AbstractUnitTest {
 
     @Before
     public void before() {
-        path = "org/apache/wicket/wicket/1.4.9";
-        filename = "wicket-1.4.9.jar";
-        url = path + "/" + filename;
-        request = new DormWebServiceRequest.Builder("maven")
-                .property("path", path)
-                .filename(filename)
-                .file(fixtures.getFile())
-                .build();
-//        metadataExtension = new MavenMetadata(url);
-//        metadata = DefaultDormMetadata.create(null, metadataExtension);
-        getValues = new DormServiceGetMetadataValues(metadata);
+//        path = "org/apache/wicket/wicket/1.4.9";
+//        filename = "wicket-1.4.9.jar";
+//        url = path + "/" + filename;
+//        request = new DormWebServiceRequest.Builder("maven")
+//                .property("path", path)
+//                .filename(filename)
+//                .file(fixtures.getFile())
+//                .build();
+////        metadataExtension = new MavenMetadata(url);
+////        metadata = DefaultDormMetadata.create(null, metadataExtension);
+//        getValues = new DormServiceGetMetadataValues(metadata);
     }
 
     @Mock

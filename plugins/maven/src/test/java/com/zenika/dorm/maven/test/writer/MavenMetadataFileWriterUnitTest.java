@@ -13,16 +13,16 @@ import java.io.IOException;
  */
 public class MavenMetadataFileWriterUnitTest extends AbstractUnitTest {
 
-    @Test
-    public void writeMavenMetadata() throws IOException {
-
-        File folders = new File("tmp/test/maven");
-        folders.mkdirs();
-
-        File file = new File(folders, "maven-metadata.xml");
-        file.createNewFile();
-
-        MavenMetadataFileWriter writer = new MavenMetadataFileWriter(file);
-        writer.write((MavenMetadata) fixtures.getSnapshotMetadataExtension());
-    }
+//    @Test
+//    public void writeMavenMetadata() throws IOException {
+//
+//        File folders = new File("tmp/test/maven");
+//        folders.mkdirs();
+//
+//        File file = new File(folders, "maven-metadata.xml");
+//        file.createNewFile();
+//
+//        MavenMetadataFileWriter writer = new MavenMetadataFileWriter(file);
+//        writer.write((MavenMetadata) fixtures.getSnapshotMetadataExtension());
+//    }
 }

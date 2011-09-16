@@ -93,8 +93,8 @@ public class MavenFilename {
         if (filenameInWork.startsWith("-")) {
 
             // extension is hash file
-            if (DormStringUtils.equlasOne(extension, MavenConstant.FileExtension.SHA1,
-                    MavenConstant.FileExtension.MD5)) {
+            if (DormStringUtils.equlasOne(extension, MavenConstant.Extension.SHA1,
+                    MavenConstant.Extension.MD5)) {
 
                 extension = FilenameUtils.getExtension(filenameInWork) + "." + extension;
                 filenameInWork = FilenameUtils.removeExtension(filenameInWork);

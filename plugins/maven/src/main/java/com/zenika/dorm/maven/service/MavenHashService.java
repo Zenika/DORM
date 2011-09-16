@@ -20,8 +20,8 @@ public class MavenHashService {
     private DormService service;
 
     public boolean compareMavenHashes(MavenMetadata metadata, File file) {
-        return compareHash(MavenConstant.FileExtension.MD5, metadata, file) &&
-                compareHash(MavenConstant.FileExtension.SHA1, metadata, file);
+        return compareHash(MavenConstant.Extension.MD5, metadata, file) &&
+                compareHash(MavenConstant.Extension.SHA1, metadata, file);
     }
 
     private boolean compareHash(String hash, MavenMetadata metadata, File file) {
