@@ -22,8 +22,14 @@ public class MavenConstantFixtures {
     public static final String CLASSIFIER_SIMPLE = "foobar";
     public static final String CLASSIFIER_POINT = "foo.bar";
 
-    public static final String EXTENSION_SIMPLE = "jar";
-    public static final String EXTENSION_HASH = "jar.md5";
+    public static final String EXTENSION_SIMPLE_JAR = "jar";
+    public static final String EXTENSION_HASH_JAR_MD5 = "jar.md5";
+    public static final String EXTENSION_HASH_JAR_SHA1 = "jar.sha1";
+
+    public static final String EXTENSION_SIMPLE_POM = "pom";
+    public static final String EXTENSION_HASH_POM_MD5 = "pom.md5";
+    public static final String EXTENSION_HASH_POM_SHA1 = "pom.sha1";
+
     public static final String EXTENSION_MULTIPLE_HASH = "jar.asc.md5";
     public static final String EXTENSION_MULTIPLE = "a.b.c.d.e.f";
 

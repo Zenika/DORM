@@ -26,14 +26,14 @@ public class DormDaoNeo4j implements DormDao {
 
     @Override
     public void saveMetadata(final DormMetadata metadata) {
-        Neo4jSinglePushService neo4jSinglePushService = Guice.createInjector(
-                new AbstractModule() {
-                    @Override
-                    protected void configure() {
-                        bind(DormMetadata.class).toInstance(metadata);
-                    }
-                }
-        ).getInstance(Neo4jSinglePushService.class);
-        neo4jSinglePushService.execute();
+//        Neo4jSinglePushService neo4jSinglePushService = Guice.createInjector(
+//                new AbstractModule() {
+//                    @Override
+//                    protected void configure() {
+//                        bind(DormMetadata.class).toInstance(metadata);
+//                    }
+//                }
+//        ).getInstance(Neo4jSinglePushService.class);
+//        neo4jSinglePushService.execute();
     }
 }

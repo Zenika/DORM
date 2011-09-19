@@ -1,5 +1,6 @@
 package com.zenika.dorm.maven.test.fixtures;
 
+import com.zenika.dorm.maven.model.MavenConstant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,9 +23,20 @@ public class MavenPathFixtures {
 
 
     /**
+     * Samples
+     */
+    private String jar;
+    private String jarSha1Hash;
+    private String jarMd5Hash;
+    private String pom;
+    private String pomSha1Hash;
+    private String pomMd5Hash;
+    private String mavenMetadataXml;
+
+
+    /**
      * Classifier + extension
      */
-
     public String withClassifierSimpleAndExtensionSimple;
     public String withClassifierSimpleAndExtensionHash;
     public String withClassifierSimpleAndExtensionMultiple;
@@ -46,25 +58,25 @@ public class MavenPathFixtures {
     public MavenPathFixtures() {
 
         simple1 = concat(MavenConstantFixtures.GROUPID1, MavenConstantFixtures.ARTIFACTID1,
-                MavenConstantFixtures.VERSION_SIMPLE, null, null, null, MavenConstantFixtures.EXTENSION_SIMPLE);
+                MavenConstantFixtures.VERSION_SIMPLE, null, null, null, MavenConstantFixtures.EXTENSION_SIMPLE_JAR);
 
         simple2 = concat(MavenConstantFixtures.GROUPID2, MavenConstantFixtures.ARTIFACTID2, MavenConstantFixtures.VERSION_SIMPLE,
-                null, null, null, MavenConstantFixtures.EXTENSION_SIMPLE);
+                null, null, null, MavenConstantFixtures.EXTENSION_SIMPLE_JAR);
 
         simpleWithTextVersion = concat(MavenConstantFixtures.GROUPID1, MavenConstantFixtures.ARTIFACTID1, MavenConstantFixtures.VERSION_TEXT,
-                null, null, null, MavenConstantFixtures.EXTENSION_SIMPLE);
+                null, null, null, MavenConstantFixtures.EXTENSION_SIMPLE_JAR);
 
         withClassifierSimple = concat(MavenConstantFixtures.GROUPID1, MavenConstantFixtures.ARTIFACTID1, MavenConstantFixtures.VERSION_SIMPLE,
-                null, null, MavenConstantFixtures.CLASSIFIER_SIMPLE, MavenConstantFixtures.EXTENSION_SIMPLE);
+                null, null, MavenConstantFixtures.CLASSIFIER_SIMPLE, MavenConstantFixtures.EXTENSION_SIMPLE_JAR);
 
         withClassifierPoint = concat(MavenConstantFixtures.GROUPID1, MavenConstantFixtures.ARTIFACTID1, MavenConstantFixtures.VERSION_SIMPLE,
-                null, null, MavenConstantFixtures.CLASSIFIER_POINT, MavenConstantFixtures.EXTENSION_SIMPLE);
+                null, null, MavenConstantFixtures.CLASSIFIER_POINT, MavenConstantFixtures.EXTENSION_SIMPLE_JAR);
 
         withExtensionSimple = concat(MavenConstantFixtures.GROUPID1, MavenConstantFixtures.ARTIFACTID1, MavenConstantFixtures.VERSION_SIMPLE,
-                null, null, null, MavenConstantFixtures.EXTENSION_SIMPLE);
+                null, null, null, MavenConstantFixtures.EXTENSION_SIMPLE_JAR);
 
         withExtensionHash = concat(MavenConstantFixtures.GROUPID1, MavenConstantFixtures.ARTIFACTID1, MavenConstantFixtures.VERSION_SIMPLE,
-                null, null, null, MavenConstantFixtures.EXTENSION_HASH);
+                null, null, null, MavenConstantFixtures.EXTENSION_HASH_JAR_MD5);
 
         withExtensionMultipleHash = concat(MavenConstantFixtures.GROUPID1, MavenConstantFixtures.ARTIFACTID1, MavenConstantFixtures.VERSION_SIMPLE,
                 null, null, null, MavenConstantFixtures.EXTENSION_MULTIPLE_HASH);
@@ -73,10 +85,10 @@ public class MavenPathFixtures {
                 null, null, null, MavenConstantFixtures.EXTENSION_MULTIPLE);
 
         withClassifierSimpleAndExtensionSimple = concat(MavenConstantFixtures.GROUPID1, MavenConstantFixtures.ARTIFACTID1, MavenConstantFixtures.VERSION_SIMPLE, null, null,
-                MavenConstantFixtures.CLASSIFIER_SIMPLE, MavenConstantFixtures.EXTENSION_SIMPLE);
+                MavenConstantFixtures.CLASSIFIER_SIMPLE, MavenConstantFixtures.EXTENSION_SIMPLE_JAR);
 
         withClassifierSimpleAndExtensionHash = concat(MavenConstantFixtures.GROUPID1, MavenConstantFixtures.ARTIFACTID1, MavenConstantFixtures.VERSION_SIMPLE, null, null,
-                MavenConstantFixtures.CLASSIFIER_SIMPLE, MavenConstantFixtures.EXTENSION_HASH);
+                MavenConstantFixtures.CLASSIFIER_SIMPLE, MavenConstantFixtures.EXTENSION_HASH_JAR_MD5);
 
         withClassifierSimpleAndExtensionMultiple = concat(MavenConstantFixtures.GROUPID1, MavenConstantFixtures.ARTIFACTID1, MavenConstantFixtures.VERSION_SIMPLE, null, null,
                 MavenConstantFixtures.CLASSIFIER_SIMPLE, MavenConstantFixtures.EXTENSION_MULTIPLE);
@@ -85,10 +97,10 @@ public class MavenPathFixtures {
                 MavenConstantFixtures.CLASSIFIER_SIMPLE, MavenConstantFixtures.EXTENSION_MULTIPLE_HASH);
 
         withClassifierPointAndExtensionSimple = concat(MavenConstantFixtures.GROUPID1, MavenConstantFixtures.ARTIFACTID1, MavenConstantFixtures.VERSION_SIMPLE, null, null,
-                MavenConstantFixtures.CLASSIFIER_POINT, MavenConstantFixtures.EXTENSION_SIMPLE);
+                MavenConstantFixtures.CLASSIFIER_POINT, MavenConstantFixtures.EXTENSION_SIMPLE_JAR);
 
         withClassifierPointAndExtensionHash = concat(MavenConstantFixtures.GROUPID1, MavenConstantFixtures.ARTIFACTID1, MavenConstantFixtures.VERSION_SIMPLE, null, null,
-                MavenConstantFixtures.CLASSIFIER_POINT, MavenConstantFixtures.EXTENSION_HASH);
+                MavenConstantFixtures.CLASSIFIER_POINT, MavenConstantFixtures.EXTENSION_HASH_JAR_MD5);
 
         withClassifierPointAndExtensionMultiple = concat(MavenConstantFixtures.GROUPID1, MavenConstantFixtures.ARTIFACTID1, MavenConstantFixtures.VERSION_SIMPLE, null, null,
                 MavenConstantFixtures.CLASSIFIER_POINT, MavenConstantFixtures.EXTENSION_MULTIPLE);
@@ -97,16 +109,16 @@ public class MavenPathFixtures {
                 MavenConstantFixtures.CLASSIFIER_POINT, MavenConstantFixtures.EXTENSION_MULTIPLE_HASH);
 
         withSnapshot = concat(MavenConstantFixtures.GROUPID1, MavenConstantFixtures.ARTIFACTID1, MavenConstantFixtures.VERSION_SNAPSHOT, MavenConstantFixtures.TIMESTAMP,
-                MavenConstantFixtures.BUILDNUMBER, null, MavenConstantFixtures.EXTENSION_SIMPLE);
+                MavenConstantFixtures.BUILDNUMBER, null, MavenConstantFixtures.EXTENSION_SIMPLE_JAR);
 
         withSnapshotClassifierSimpleAndExtensionSimple = concat(MavenConstantFixtures.GROUPID1, MavenConstantFixtures.ARTIFACTID1, MavenConstantFixtures.VERSION_SNAPSHOT,
-                MavenConstantFixtures.TIMESTAMP, MavenConstantFixtures.BUILDNUMBER, MavenConstantFixtures.CLASSIFIER_SIMPLE, MavenConstantFixtures.EXTENSION_SIMPLE);
+                MavenConstantFixtures.TIMESTAMP, MavenConstantFixtures.BUILDNUMBER, MavenConstantFixtures.CLASSIFIER_SIMPLE, MavenConstantFixtures.EXTENSION_SIMPLE_JAR);
 
         withSnapshotClassifierPointAndExtensionSimple = concat(MavenConstantFixtures.GROUPID1, MavenConstantFixtures.ARTIFACTID1, MavenConstantFixtures.VERSION_SNAPSHOT,
-                MavenConstantFixtures.TIMESTAMP, MavenConstantFixtures.BUILDNUMBER, MavenConstantFixtures.CLASSIFIER_POINT, MavenConstantFixtures.EXTENSION_SIMPLE);
+                MavenConstantFixtures.TIMESTAMP, MavenConstantFixtures.BUILDNUMBER, MavenConstantFixtures.CLASSIFIER_POINT, MavenConstantFixtures.EXTENSION_SIMPLE_JAR);
 
         withSnapshotClassifierSimpleAndExtensionHash = concat(MavenConstantFixtures.GROUPID1, MavenConstantFixtures.ARTIFACTID1, MavenConstantFixtures.VERSION_SNAPSHOT,
-                MavenConstantFixtures.TIMESTAMP, MavenConstantFixtures.BUILDNUMBER, MavenConstantFixtures.CLASSIFIER_SIMPLE, MavenConstantFixtures.EXTENSION_HASH);
+                MavenConstantFixtures.TIMESTAMP, MavenConstantFixtures.BUILDNUMBER, MavenConstantFixtures.CLASSIFIER_SIMPLE, MavenConstantFixtures.EXTENSION_HASH_JAR_MD5);
 
         withSnapshotClassifierSimpleAndExtensionMultiple = concat(MavenConstantFixtures.GROUPID1, MavenConstantFixtures.ARTIFACTID1, MavenConstantFixtures.VERSION_SNAPSHOT,
                 MavenConstantFixtures.TIMESTAMP, MavenConstantFixtures.BUILDNUMBER, MavenConstantFixtures.CLASSIFIER_SIMPLE, MavenConstantFixtures.EXTENSION_MULTIPLE);
@@ -115,13 +127,34 @@ public class MavenPathFixtures {
                 MavenConstantFixtures.TIMESTAMP, MavenConstantFixtures.BUILDNUMBER, MavenConstantFixtures.CLASSIFIER_SIMPLE, MavenConstantFixtures.EXTENSION_MULTIPLE_HASH);
 
         withSnapshotClassifierPointAndExtensionHash = concat(MavenConstantFixtures.GROUPID1, MavenConstantFixtures.ARTIFACTID1, MavenConstantFixtures.VERSION_SNAPSHOT,
-                MavenConstantFixtures.TIMESTAMP, MavenConstantFixtures.BUILDNUMBER, MavenConstantFixtures.CLASSIFIER_POINT, MavenConstantFixtures.EXTENSION_HASH);
+                MavenConstantFixtures.TIMESTAMP, MavenConstantFixtures.BUILDNUMBER, MavenConstantFixtures.CLASSIFIER_POINT, MavenConstantFixtures.EXTENSION_HASH_JAR_MD5);
 
         withSnapshotClassifierPointAndExtensionMultiple = concat(MavenConstantFixtures.GROUPID1, MavenConstantFixtures.ARTIFACTID1, MavenConstantFixtures.VERSION_SNAPSHOT,
                 MavenConstantFixtures.TIMESTAMP, MavenConstantFixtures.BUILDNUMBER, MavenConstantFixtures.CLASSIFIER_POINT, MavenConstantFixtures.EXTENSION_MULTIPLE);
 
         withSnapshotClassifierPointAndExtensionMultipleHash = concat(MavenConstantFixtures.GROUPID1, MavenConstantFixtures.ARTIFACTID1, MavenConstantFixtures.VERSION_SNAPSHOT,
                 MavenConstantFixtures.TIMESTAMP, MavenConstantFixtures.BUILDNUMBER, MavenConstantFixtures.CLASSIFIER_POINT, MavenConstantFixtures.EXTENSION_MULTIPLE_HASH);
+
+        jar = concat(MavenConstantFixtures.GROUPID1, MavenConstantFixtures.ARTIFACTID1, MavenConstantFixtures.VERSION_SIMPLE,
+                null, null, null, MavenConstantFixtures.EXTENSION_SIMPLE_JAR);
+
+        jarMd5Hash = concat(MavenConstantFixtures.GROUPID1, MavenConstantFixtures.ARTIFACTID1, MavenConstantFixtures.VERSION_SIMPLE,
+                null, null, null, MavenConstantFixtures.EXTENSION_HASH_JAR_MD5);
+
+        jarSha1Hash = concat(MavenConstantFixtures.GROUPID1, MavenConstantFixtures.ARTIFACTID1, MavenConstantFixtures.VERSION_SIMPLE,
+                null, null, null, MavenConstantFixtures.EXTENSION_HASH_JAR_SHA1);
+
+        pom = concat(MavenConstantFixtures.GROUPID1, MavenConstantFixtures.ARTIFACTID1, MavenConstantFixtures.VERSION_SIMPLE,
+                null, null, null, MavenConstantFixtures.EXTENSION_SIMPLE_POM);
+
+        pomMd5Hash = concat(MavenConstantFixtures.GROUPID1, MavenConstantFixtures.ARTIFACTID1, MavenConstantFixtures.VERSION_SIMPLE,
+                null, null, null, MavenConstantFixtures.EXTENSION_HASH_POM_MD5);
+
+        pomSha1Hash = concat(MavenConstantFixtures.GROUPID1, MavenConstantFixtures.ARTIFACTID1, MavenConstantFixtures.VERSION_SIMPLE,
+                null, null, null, MavenConstantFixtures.EXTENSION_HASH_POM_SHA1);
+
+        mavenMetadataXml = concat(MavenConstantFixtures.GROUPID1, MavenConstantFixtures.ARTIFACTID1, MavenConstantFixtures.VERSION_SIMPLE,
+                null, null, null, MavenConstant.Special.MAVEN_METADATA_XML);
     }
 
     private String concat(String groupdId, String artifactId, String version, String timestamp,
@@ -253,5 +286,33 @@ public class MavenPathFixtures {
 
     public String getWithSnapshotClassifierPointAndExtensionMultipleHash() {
         return withSnapshotClassifierPointAndExtensionMultipleHash;
+    }
+
+    public String getJar() {
+        return jar;
+    }
+
+    public String getJarSha1Hash() {
+        return jarSha1Hash;
+    }
+
+    public String getJarMd5Hash() {
+        return jarMd5Hash;
+    }
+
+    public String getPom() {
+        return pom;
+    }
+
+    public String getPomSha1Hash() {
+        return pomSha1Hash;
+    }
+
+    public String getPomMd5Hash() {
+        return pomMd5Hash;
+    }
+
+    public String getMavenMetadataXml() {
+        return mavenMetadataXml;
     }
 }

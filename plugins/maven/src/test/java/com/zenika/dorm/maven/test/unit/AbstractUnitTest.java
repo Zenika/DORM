@@ -16,10 +16,9 @@ public abstract class AbstractUnitTest {
     @Before
     public void before() {
 
-        // required by mockito
         MockitoAnnotations.initMocks(this);
 
-        fixtures = new MavenFixtures();
         pathFixtures = new MavenPathFixtures();
+        fixtures = new MavenFixtures(pathFixtures);
     }
 }

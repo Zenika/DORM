@@ -7,7 +7,6 @@ import com.zenika.dorm.core.dao.sql.DormDaoJdbc;
 import com.zenika.dorm.core.model.DependencyNode;
 import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.core.model.impl.Usage;
-import com.zenika.dorm.core.test.model.DormMetadataTest;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -79,28 +78,67 @@ public class JdbcDaoTest {
 //        xalan.addChild(xml_apis);
     }
 
+//    @Test
+//        public void testSaveMetadata() {
+//            dao.saveMetadata(new DormMetadata() {
+//                @Override
+//                public String getIdentifier() {
+//                    return "toto";
+//                }
+//
+//                @Override
+//                public String getVersion() {
+//                    return "toto-1.0.0";  //To change body of implemented methods use File | Settings | File Templates.
+//                }
+//
+//                @Override
+//                public String getExtensionName() {
+//                    return "null";  //To change body of implemented methods use File | Settings | File Templates.
+//                }
+//            });
+//        }
+
     @Test
-    public void testSaveMetadata() {
-        DormMetadata metadata = new DormMetadataTest("1.0.0", "it's working!");
-        dao.saveMetadata(metadata);
+    public void testGetOne() {
+//        DormServiceGetValues values = new DefaultDormServiceGetValues(new DefaultDormMetadataExtension("dorm"));
+//        values.setUsage(usage);
+//        values.setQualifier(habi_base.getDependency().getMetadata().getQualifier());
+//        DependencyNode node = dao.getOne(values, false);
+//        LOG.trace("Dependency : " + node.getDependency());
     }
 
+    @Test
+    public void testGet() {
+//        DormServiceGetValues values = new DefaultDormServiceGetValues(new DefaultDormMetadataExtension("dorm"));
+//        values.setUsage(usage);
+//        values.addMetadataExtensionClause("groupId", "test");
+//        values.addMetadataExtensionClause("versionId", "1.0.0");
+//        List<DependencyNode> nodes = dao.get(values, false);
+//        for (DependencyNode node : nodes) {
+//            LOG.trace("Node : " + node);
+//        }
+    }
 
     @Test
     public void testGetMetadataByQualifier() {
-        DormMetadata metadata = dao.getMetadataByQualifier("Dorm_test-1.0.0");
+        DormMetadata metadata = dao.getMetadataByQualifier("maven:com.zenika.test-test-jar-jar-0.0.1:0.0.1");
         LOG.info("Metadata: " + metadata);
     }
 
     @Test
     public void testGetMetadataByExtension() {
-        Map<String, String> properties = new HashMap<String, String>();
-        properties.put(DormMetadataTest.METADATA_FIELD, "its working!");
-        List<DormMetadata> metadatas = dao.getMetadataByExtension(DormMetadataTest.EXTENSION_NAME, properties, null);
-        LOG.info("Metadata list size: " + metadatas.size());
+        Map<String, String> map = new HashMap<String, String>();
+        map.put("version", "0.0.1");
+        List<DormMetadata> metadatas = dao.getMetadataByExtension("maven", map, null);
         for (DormMetadata metadata : metadatas) {
             LOG.info("Metadata: " + metadata);
         }
+    }
+
+
+    @AfterClass
+    public static void afterClass() {
+//        ((DormDaoJdbc) dao).closeConnection();
     }
 
     private DependencyNode createDependencyNode(String name, String version) {

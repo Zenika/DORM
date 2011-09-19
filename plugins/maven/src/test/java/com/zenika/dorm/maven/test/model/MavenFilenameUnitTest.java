@@ -20,20 +20,20 @@ public class MavenFilenameUnitTest extends AbstractUnitTest {
     public void testMavenFilenameWithClassifier() throws Exception {
 
         MavenFilename mavenFilename = new MavenUri(pathFixtures.getWithClassifierSimple()).getFilename();
-        compareFilenameWith(mavenFilename, null, null, MavenConstantFixtures.CLASSIFIER_SIMPLE, MavenConstantFixtures.EXTENSION_SIMPLE);
+        compareFilenameWith(mavenFilename, null, null, MavenConstantFixtures.CLASSIFIER_SIMPLE, MavenConstantFixtures.EXTENSION_SIMPLE_JAR);
 
         mavenFilename = new MavenUri(pathFixtures.getWithClassifierPoint()).getFilename();
-        compareFilenameWith(mavenFilename, null, null, MavenConstantFixtures.CLASSIFIER_POINT, MavenConstantFixtures.EXTENSION_SIMPLE);
+        compareFilenameWith(mavenFilename, null, null, MavenConstantFixtures.CLASSIFIER_POINT, MavenConstantFixtures.EXTENSION_SIMPLE_JAR);
     }
 
     @Test
     public void testMavenFilenameWithExtension() throws Exception {
 
         MavenFilename mavenFilename = new MavenUri(pathFixtures.getWithExtensionSimple()).getFilename();
-        compareFilenameWith(mavenFilename, null, null, null, MavenConstantFixtures.EXTENSION_SIMPLE);
+        compareFilenameWith(mavenFilename, null, null, null, MavenConstantFixtures.EXTENSION_SIMPLE_JAR);
 
         mavenFilename = new MavenUri(pathFixtures.getWithExtensionHash()).getFilename();
-        compareFilenameWith(mavenFilename, null, null, null, MavenConstantFixtures.EXTENSION_HASH);
+        compareFilenameWith(mavenFilename, null, null, null, MavenConstantFixtures.EXTENSION_HASH_JAR_MD5);
 
         mavenFilename = new MavenUri(pathFixtures.getWithExtensionMultiple()).getFilename();
         compareFilenameWith(mavenFilename, null, null, null, MavenConstantFixtures.EXTENSION_MULTIPLE);
@@ -47,7 +47,7 @@ public class MavenFilenameUnitTest extends AbstractUnitTest {
 
         MavenFilename mavenFilename = new MavenUri(pathFixtures.getWithSnapshot()).getFilename();
         compareFilenameWith(mavenFilename, MavenConstantFixtures.TIMESTAMP, MavenConstantFixtures.BUILDNUMBER,
-                null, MavenConstantFixtures.EXTENSION_SIMPLE);
+                null, MavenConstantFixtures.EXTENSION_SIMPLE_JAR);
     }
 
     @Test
@@ -55,19 +55,19 @@ public class MavenFilenameUnitTest extends AbstractUnitTest {
 
         // normal
         MavenFilename mavenFilename = new MavenUri(pathFixtures.getWithClassifierSimpleAndExtensionSimple()).getFilename();
-        compareFilenameWith(mavenFilename, null, null, MavenConstantFixtures.CLASSIFIER_SIMPLE, MavenConstantFixtures.EXTENSION_SIMPLE);
+        compareFilenameWith(mavenFilename, null, null, MavenConstantFixtures.CLASSIFIER_SIMPLE, MavenConstantFixtures.EXTENSION_SIMPLE_JAR);
 
         mavenFilename = new MavenUri(pathFixtures.getWithClassifierPointAndExtensionSimple()).getFilename();
-        compareFilenameWith(mavenFilename, null, null, MavenConstantFixtures.CLASSIFIER_POINT, MavenConstantFixtures.EXTENSION_SIMPLE);
+        compareFilenameWith(mavenFilename, null, null, MavenConstantFixtures.CLASSIFIER_POINT, MavenConstantFixtures.EXTENSION_SIMPLE_JAR);
 
         // snapshot
         mavenFilename = new MavenUri(pathFixtures.getWithSnapshotClassifierSimpleAndExtensionSimple()).getFilename();
         compareFilenameWith(mavenFilename, MavenConstantFixtures.TIMESTAMP, MavenConstantFixtures.BUILDNUMBER,
-                MavenConstantFixtures.CLASSIFIER_SIMPLE, MavenConstantFixtures.EXTENSION_SIMPLE);
+                MavenConstantFixtures.CLASSIFIER_SIMPLE, MavenConstantFixtures.EXTENSION_SIMPLE_JAR);
 
         mavenFilename = new MavenUri(pathFixtures.getWithSnapshotClassifierPointAndExtensionSimple()).getFilename();
         compareFilenameWith(mavenFilename, MavenConstantFixtures.TIMESTAMP, MavenConstantFixtures.BUILDNUMBER,
-                MavenConstantFixtures.CLASSIFIER_POINT, MavenConstantFixtures.EXTENSION_SIMPLE);
+                MavenConstantFixtures.CLASSIFIER_POINT, MavenConstantFixtures.EXTENSION_SIMPLE_JAR);
     }
 
     /**
