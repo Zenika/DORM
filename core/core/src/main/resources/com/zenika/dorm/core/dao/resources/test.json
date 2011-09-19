@@ -1,0 +1,8 @@
+{
+    "script":"metadataVertex = g.adVertex([identifier: identifierValue, version: versionValue, extensionName: extensionNameValue]);results = metadataVertex",
+    "params": {
+        "identifierValue": "toto",
+        "versionValue": "10.0.0",
+        "extensionNameValue": "test"
+    }
+}

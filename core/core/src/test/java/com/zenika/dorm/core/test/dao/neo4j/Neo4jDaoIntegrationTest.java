@@ -1,6 +1,6 @@
 package com.zenika.dorm.core.test.dao.neo4j;
 
-import com.zenika.dorm.core.dao.neo4j.DormDaoNeo4j;
+import com.zenika.dorm.core.dao.neo4j.DormDaoNeo4jOld;
 import com.zenika.dorm.core.model.DependencyNode;
 import com.zenika.dorm.core.model.impl.Usage;
 import org.junit.Before;
@@ -31,11 +31,11 @@ public class Neo4jDaoIntegrationTest {
     private Usage usage;
 
     private Neo4jDaoTestProvider provider;
-    private static DormDaoNeo4j dao;
+    private static DormDaoNeo4jOld dao;
 
     @BeforeClass
     public static void setUpClass() {
-        dao = new DormDaoNeo4j();
+        dao = new DormDaoNeo4jOld();
     }
 
     @Before
