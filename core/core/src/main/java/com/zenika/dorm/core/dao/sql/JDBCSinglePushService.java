@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 import java.sql.*;
+import java.util.Map;
 
 public class JDBCSinglePushService extends JDBCAbstractService {
 
@@ -64,9 +65,9 @@ public class JDBCSinglePushService extends JDBCAbstractService {
 
     private Long insertMetadata(Connection connection) throws SQLException {
         Long id = null;
-        PreparedStatement statement = connection.prepareStatement("INSERT INTO dorm_metadata (metadata_qualifier, metadata_version) VALUES (?, ?);", Statement.RETURN_GENERATED_KEYS);
+        PreparedStatement statement = connection.prepareStatement("INSERT INTO dorm_metadata (metadata_qualifier, extension_name) VALUES (?, ?);", Statement.RETURN_GENERATED_KEYS);
         statement.setString(1, metadata.getName());
-        statement.setString(2, metadata.getVersion());
+        statement.setString(2, metadata.getExtensionName());
         if (statement.executeUpdate() > 0) {
             ResultSet resultSet = statement.getGeneratedKeys();
             if (resultSet.next()) {
@@ -78,23 +79,24 @@ public class JDBCSinglePushService extends JDBCAbstractService {
     }
 
     /**
-     * todo: fix from refactoring
+     *
      *
      * @param connection
      * @param metadataId
      * @throws SQLException
      */
     private void insertExtension(Connection connection, Long metadataId) throws SQLException {
-//        DormMetadata extension = metadata.getExtension();
-//        PreparedStatement statement = connection.prepareStatement("INSERT INTO dorm_extension (property_key, property_value, extension_qualifier, extension_name, metadata_id) VALUES (?, ?, ?, ?, ?)");
-//        for (Map.Entry<String, String> properties : MetadataExtensionMapper.fromExtension(extension).entrySet()) {
-//            statement.setString(1, properties.getKey());
-//            statement.setString(2, properties.getValue());
-//            statement.setString(3, extension.getQualifier());
-//            statement.setString(4, extension.getExtensionName());
-//            statement.setLong(5, metadataId);
-//            statement.execute();
-//            statement.clearParameters();
-//        }
+        Map<String, String> properties = serviceLoader
+                .getInstanceOf(metadata.getExtensionName())
+                .toMap(metadata);
+
+        PreparedStatement statement = connection.prepareStatement("INSERT INTO dorm_properties (property_key, property_value, metadata_id) VALUES (?, ?, ?)");
+        for (Map.Entry<String, String> property : properties.entrySet()) {
+            statement.setString(1, property.getKey());
+            statement.setString(2, property.getValue());
+            statement.setLong(3, metadataId);
+            statement.execute();
+            statement.clearParameters();
+        }
     }
 }

@@ -28,31 +28,27 @@ public class JDBCRetrieveByQualifierService extends JDBCAbstractService {
         Connection connection = null;
         try {
             connection = dataSource.getConnection();
-            PreparedStatement statement = connection.prepareStatement("SELECT e.property_key, e.property_value, e.extension_name, m.metadata_version, m.metadata_qualifier " +
-                    "FROM dorm_metadata m JOIN dorm_extension e ON e.metadata_id = m.id " +
+            PreparedStatement statement = connection.prepareStatement("SELECT e.property_key, e.property_value, m.metadata_qualifier, m.extension_name " +
+                    "FROM dorm_metadata m JOIN dorm_properties e ON e.metadata_id = m.id " +
                     "WHERE m.metadata_qualifier = ?");
             statement.setString(1, qualifier);
             ResultSet resultSet = statement.executeQuery();
 
             Map<String, String> extensionProperties = new HashMap<String, String>();
             String metadataQualifier = null;
-            String metadataVersion = null;
             String extensionName = null;
 
             while (resultSet.next()) {
                 extensionProperties.put(resultSet.getString(PROPERTY_KEY_COLUMN), resultSet.getString(PROPERTY_VALUE_COLUMN));
                 if (resultSet.isFirst()) {
                     metadataQualifier = resultSet.getString(METADATA_QUALIFIER_COLUMN);
-                    metadataVersion = resultSet.getString(METADATA_VERSION_COLUMN);
                     extensionName = resultSet.getString(EXTENSION_NAME_COLUMN);
                 }
             }
             if (metadataQualifier == null) {
                 throw new CoreException("Cannot find the dependency with this Qualifier : " + qualifier);
-            }
-//            DormMetadata extensionTmp = dormMetadataFactory.getInstanceOf(extensionName).createFromMap(extensionProperties);
-//            return DefaultDormMetadata.create(metadataVersion, extensionTmp);
-            return null;
+            }            
+            return serviceLoader.getInstanceOf(extensionName).createFromProperties(extensionProperties);
         } catch (SQLException e) {
             throw new CoreException("Unable to execute request", e);
         } finally {

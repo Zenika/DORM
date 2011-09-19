@@ -1,6 +1,7 @@
 package com.zenika.dorm.core.test.dao.sql;
 
 import com.google.inject.AbstractModule;
+import com.zenika.dorm.core.service.spi.ExtensionFactoryServiceLoader;
 import org.postgresql.ds.PGSimpleDataSource;
 
 import javax.sql.DataSource;
@@ -17,6 +18,7 @@ public class JdbcTestModule extends AbstractModule {
 //        MapBinder<String, Class> metadataExtensionBinder = MapBinder.newMapBinder(binder(), String.class, Class.class);
 //        metadataExtensionBinder.addBinding(DefaultDormMetadataExtension.EXTENSION_NAME).toInstance(DefaultDormMetadataExtension.class);
         bind(DataSource.class).toInstance(createDataSource());
+        bind(ExtensionFactoryServiceLoader.class);
 //        bind(DormMetadataFactory.class);
     }
 

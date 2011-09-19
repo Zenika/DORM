@@ -8,6 +8,7 @@ import com.zenika.dorm.core.repository.DormRepository;
 import com.zenika.dorm.core.repository.impl.DefaultDormRepository;
 import com.zenika.dorm.core.service.DormService;
 import com.zenika.dorm.core.service.impl.DefaultDormService;
+import com.zenika.dorm.core.service.spi.ExtensionFactoryServiceLoader;
 import com.zenika.dorm.core.ws.provider.CoreExceptionMapper;
 import com.zenika.dorm.core.ws.provider.DormProcessExceptionMapper;
 import org.slf4j.Logger;
@@ -30,6 +31,8 @@ public class DormCoreModule extends AbstractModule {
         // exception mapper
         bind(CoreExceptionMapper.class);
         bind(DormProcessExceptionMapper.class);
+
+        bind(ExtensionFactoryServiceLoader.class);
 
         bind(DormProcessor.class);
 

@@ -1,4 +1,4 @@
-package com.zenika.dorm.core.util;
+package com.zenika.dorm.core.service.spi;
 
 import javax.print.DocFlavor;
 
