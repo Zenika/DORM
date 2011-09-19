@@ -5,7 +5,7 @@ import com.zenika.dorm.core.service.spi.ExtensionFactoryServiceLoader;
 
 import javax.sql.DataSource;
 
-public abstract class JDBCAbstractService {
+public abstract class JDBCAbstractTask {
 
     public static final String ID_COLUMN = "id";
     public static final String PROPERTY_KEY_COLUMN = "property_key";

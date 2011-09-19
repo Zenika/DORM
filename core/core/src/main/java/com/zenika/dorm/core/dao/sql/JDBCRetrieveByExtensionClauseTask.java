@@ -1,7 +1,6 @@
 package com.zenika.dorm.core.dao.sql;
 
 import com.google.inject.Inject;
-import com.sun.xml.bind.v2.util.QNameMap;
 import com.zenika.dorm.core.exception.CoreException;
 import com.zenika.dorm.core.model.DormMetadata;
 import org.apache.commons.dbutils.DbUtils;
@@ -20,9 +19,9 @@ import java.util.Map;
 /**
  * @author Antoine ROUAZE <antoine.rouaze AT zenika.com>
  */
-public class JDBCRetrieveByExtensionClauseService extends JDBCAbstractService {
+public class JDBCRetrieveByExtensionClauseTask extends JDBCAbstractTask {
 
-    private static final Logger LOG = LoggerFactory.getLogger(JDBCRetrieveByExtensionClauseService.class);
+    private static final Logger LOG = LoggerFactory.getLogger(JDBCRetrieveByExtensionClauseTask.class);
 
     @Inject
     private String extensionName;

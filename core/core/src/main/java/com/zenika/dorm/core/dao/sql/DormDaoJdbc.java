@@ -25,7 +25,7 @@ public class DormDaoJdbc implements DormDao {
 
     @Override
     public void saveMetadata(final DormMetadata metadata) {
-        JDBCSinglePushService jdbcSinglePushService = Guice.createInjector(
+        JDBCSinglePushTask jdbcSinglePushTask = Guice.createInjector(
                 new AbstractModule() {
                     @Override
                     protected void configure() {
@@ -33,13 +33,13 @@ public class DormDaoJdbc implements DormDao {
                         bind(DataSource.class).toInstance(dataSource);
                         bind(ExtensionFactoryServiceLoader.class).toInstance(serviceLoader);
                     }
-                }).getInstance(JDBCSinglePushService.class);
-        jdbcSinglePushService.execute();
+                }).getInstance(JDBCSinglePushTask.class);
+        jdbcSinglePushTask.execute();
     }
 
     @Override
     public DormMetadata getMetadataByQualifier(final String qualifier) {
-        JDBCRetrieveByQualifierService jdbcRetrieveByQualifierService = Guice.createInjector(
+        JDBCRetrieveByQualifierTask jdbcRetrieveByQualifierTask = Guice.createInjector(
                 new AbstractModule() {
                     @Override
                     protected void configure() {
@@ -47,13 +47,13 @@ public class DormDaoJdbc implements DormDao {
                         bind(DataSource.class).toInstance(dataSource);
                         bind(ExtensionFactoryServiceLoader.class).toInstance(serviceLoader);
                     }
-                }).getInstance(JDBCRetrieveByQualifierService.class);
-        return jdbcRetrieveByQualifierService.execute();
+                }).getInstance(JDBCRetrieveByQualifierTask.class);
+        return jdbcRetrieveByQualifierTask.execute();
     }
 
     @Override
     public List<DormMetadata> getMetadataByExtension(final String extensionName, final Map<String, String> extensionClauses, Usage usage) {
-        JDBCRetrieveByExtensionClauseService jdbcRetrieveByExtensionClauseService = Guice.createInjector(
+        JDBCRetrieveByExtensionClauseTask jdbcRetrieveByExtensionClauseTask = Guice.createInjector(
                 new AbstractModule() {
                     @Override
                     protected void configure() {
@@ -62,7 +62,7 @@ public class DormDaoJdbc implements DormDao {
                         bind(DataSource.class).toInstance(dataSource);
                         bind(ExtensionFactoryServiceLoader.class).toInstance(serviceLoader);
                     }
-                }).getInstance(JDBCRetrieveByExtensionClauseService.class);
-        return jdbcRetrieveByExtensionClauseService.execute();
+                }).getInstance(JDBCRetrieveByExtensionClauseTask.class);
+        return jdbcRetrieveByExtensionClauseTask.execute();
     }
 }

@@ -12,7 +12,7 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
-public class JDBCRetrieveByQualifierService extends JDBCAbstractService {
+public class JDBCRetrieveByQualifierTask extends JDBCAbstractTask {
 
 
     @Inject

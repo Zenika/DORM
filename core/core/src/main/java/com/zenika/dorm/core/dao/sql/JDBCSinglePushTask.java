@@ -10,9 +10,9 @@ import javax.inject.Inject;
 import java.sql.*;
 import java.util.Map;
 
-public class JDBCSinglePushService extends JDBCAbstractService {
+public class JDBCSinglePushTask extends JDBCAbstractTask {
 
-    private static final Logger LOG = LoggerFactory.getLogger(JDBCSinglePushService.class);
+    private static final Logger LOG = LoggerFactory.getLogger(JDBCSinglePushTask.class);
 
     @Inject
     private DormMetadata metadata;
