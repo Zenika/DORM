@@ -3,8 +3,8 @@ package com.zenika.dorm.core.dao.neo4j;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Inject;
-import com.sun.jersey.api.client.WebResource;
 import com.zenika.dorm.core.dao.DormDao;
+import com.zenika.dorm.core.dao.neo4j.provider.WebResourceWrapper;
 import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.core.model.impl.Usage;
 import com.zenika.dorm.core.service.spi.ExtensionFactoryServiceLoader;
@@ -24,7 +24,7 @@ public class DormDaoNeo4j implements DormDao {
     public static final String DATA_ENTRY_POINT_URI = "http://localhost:7474/db/data";
 
     @Inject
-    private WebResource resource;
+    private WebResourceWrapper wrapper;
     @Inject
     private Neo4jIndex index;
     @Inject
@@ -45,7 +45,7 @@ public class DormDaoNeo4j implements DormDao {
         Guice.createInjector(new AbstractModule() {
             @Override
             protected void configure() {
-                bind(WebResource.class).toInstance(resource);
+                bind(WebResourceWrapper.class).toInstance(wrapper);
                 bind(Neo4jIndex.class).toInstance(index);
                 bind(ExtensionFactoryServiceLoader.class).toInstance(serviceLoader);
                 bind(DormMetadata.class).toInstance(metadata);

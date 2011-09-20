@@ -31,8 +31,12 @@ public class Neo4jSinglePushTask extends Neo4jAbstractTask {
     @Inject
     private DormMetadata metadata;
 
+    private WebResource resource;
+
     @Override
     public Void execute() {
+        resource = wrapper.get();
+
         Neo4jMetadata metadata = new Neo4jMetadata(
                 this.metadata.getQualifier(),
                 this.metadata.getExtensionName(),

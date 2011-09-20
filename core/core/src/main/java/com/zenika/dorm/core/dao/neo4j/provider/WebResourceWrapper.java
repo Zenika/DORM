@@ -1,7 +1,5 @@
-package com.zenika.dorm.core.guice.module.provider;
+package com.zenika.dorm.core.dao.neo4j.provider;
 
-import com.google.inject.Inject;
-import com.google.inject.Provider;
 import com.google.inject.Singleton;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.WebResource;
@@ -12,6 +10,8 @@ import com.zenika.dorm.core.dao.neo4j.DormDaoNeo4j;
 import com.zenika.dorm.core.dao.neo4j.Neo4jIndex;
 import com.zenika.dorm.core.dao.neo4j.Neo4jMetadata;
 import com.zenika.dorm.core.dao.neo4j.Neo4jResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -21,14 +21,16 @@ import java.util.Set;
  * @author Antoine ROUAZE <antoine.rouaze AT zenika.com>
  */
 @Singleton
-public class WebClientProvider implements Provider<WebResource> {
+public class WebResourceWrapper {
+
+    private static final Logger LOG = LoggerFactory.getLogger(WebResourceWrapper.class);
 
     private WebResource resource;
 
 //    @Inject
 //    private Collection<Class<?>> classes;
 
-    public WebClientProvider() {
+    public WebResourceWrapper() {
         DefaultApacheHttpClientConfig config = new DefaultApacheHttpClientConfig();
         config.getClasses().addAll(getClasses());
         config.getFeatures().put(JSONConfiguration.FEATURE_POJO_MAPPING, true);
@@ -36,7 +38,6 @@ public class WebClientProvider implements Provider<WebResource> {
         resource = client.resource(DormDaoNeo4j.DATA_ENTRY_POINT_URI);
     }
 
-    @Override
     public WebResource get() {
         return resource;
     }

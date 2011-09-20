@@ -1,6 +1,7 @@
 package com.zenika.dorm.core.dao.neo4j;
 
 import com.google.inject.Inject;
+import com.zenika.dorm.core.dao.neo4j.util.Neo4jHelper;
 import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.core.service.spi.ExtensionFactoryServiceLoader;
 import org.apache.commons.logging.Log;
@@ -28,7 +29,7 @@ public class Neo4jMetadata  {
     private Map<String, String> properties;
 
     public Neo4jMetadata(String qualifier, String extensionName, Map<String, String> properties) {
-        this.qualifier = qualifier;
+        this.qualifier = Neo4jHelper.dormQualifierToNeo4jQualifier(qualifier);
         this.extensionName = extensionName;
         this.properties = properties;
     }
@@ -57,4 +58,5 @@ public class Neo4jMetadata  {
     public void setProperties(Map<String, String> properties) {
         this.properties = properties;
     }
+
 }

@@ -1,10 +1,9 @@
-package com.zenika.dorm.core.guice.module.provider;
+package com.zenika.dorm.core.dao.neo4j.provider;
 
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.Singleton;
 import com.sun.jersey.api.client.WebResource;
-import com.zenika.dorm.core.dao.neo4j.Neo4jAbstractTask;
 import com.zenika.dorm.core.dao.neo4j.Neo4jIndex;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,8 +23,8 @@ public class IndexProvider implements Provider<Neo4jIndex>{
     private Neo4jIndex index;
 
     @Inject
-    public IndexProvider(WebResource resource){
-        this.resource = resource;
+    public IndexProvider(WebResourceWrapper wrapper){
+        this.resource = wrapper.get();
         index = post(new Neo4jIndex());
     }
 

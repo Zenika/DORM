@@ -1,19 +1,13 @@
 package com.zenika.dorm.core.dao.neo4j;
 
 import com.google.inject.Inject;
-import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.WebResource;
-import com.sun.jersey.api.json.JSONConfiguration;
-import com.sun.jersey.client.apache.ApacheHttpClient;
-import com.sun.jersey.client.apache.config.DefaultApacheHttpClientConfig;
-import com.zenika.dorm.core.exception.CoreException;
+import com.zenika.dorm.core.dao.neo4j.provider.WebResourceWrapper;
 import com.zenika.dorm.core.service.spi.ExtensionFactoryServiceLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.net.URI;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * @author Antoine ROUAZE <antoine.rouaze AT zenika.com>
@@ -26,7 +20,7 @@ public abstract class Neo4jAbstractTask {
     public static final String NODE_PATH = "node";
 
     @Inject
-    protected WebResource resource;
+    protected WebResourceWrapper wrapper;
     @Inject
     protected Neo4jIndex index;
     @Inject
