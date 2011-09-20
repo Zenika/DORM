@@ -10,6 +10,7 @@ import com.zenika.dorm.core.dao.neo4j.DormDaoNeo4j;
 import com.zenika.dorm.core.dao.neo4j.Neo4jIndex;
 import com.zenika.dorm.core.dao.neo4j.Neo4jMetadata;
 import com.zenika.dorm.core.dao.neo4j.Neo4jResponse;
+import com.zenika.dorm.core.dao.neo4j.util.ObjectMapperProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -44,6 +45,7 @@ public class WebResourceWrapper {
 
     public Collection<Class<?>> getClasses() {
         final Set<Class<?>> classes = new HashSet<Class<?>>();
+        classes.add(ObjectMapperProvider.class);
         classes.add(Neo4jMetadata.class);
         classes.add(Neo4jResponse.class);
         classes.add(Neo4jIndex.class);

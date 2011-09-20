@@ -32,7 +32,15 @@ public class DormDaoNeo4j implements DormDao {
 
     @Override
     public DormMetadata getMetadataByQualifier(final String qualifier) {
-        return null;
+        return Guice.createInjector(new AbstractModule() {
+            @Override
+            protected void configure() {
+                bind(WebResourceWrapper.class).toInstance(wrapper);
+                bind(Neo4jIndex.class).toInstance(index);
+                bind(ExtensionFactoryServiceLoader.class).toInstance(serviceLoader);
+                bind(String.class).toInstance(qualifier);
+            }
+        }).getInstance(Neo4jRetrieveByQualifier.class).execute();
     }
 
     @Override

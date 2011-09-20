@@ -19,14 +19,16 @@ public class Neo4jMetadata  {
 
     private static final Logger LOG = LoggerFactory.getLogger(Neo4jMetadata.class);
 
-
-
     public static final String PROPERTIES_RELATIONSHIPS = "properties";
 
     private String qualifier;
     private String extensionName;
 
     private Map<String, String> properties;
+
+    public Neo4jMetadata(){
+        
+    }
 
     public Neo4jMetadata(String qualifier, String extensionName, Map<String, String> properties) {
         this.qualifier = Neo4jHelper.dormQualifierToNeo4jQualifier(qualifier);
@@ -55,6 +57,7 @@ public class Neo4jMetadata  {
         return properties;
     }
 
+    @JsonIgnore
     public void setProperties(Map<String, String> properties) {
         this.properties = properties;
     }

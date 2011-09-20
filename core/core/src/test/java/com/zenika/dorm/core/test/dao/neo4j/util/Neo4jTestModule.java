@@ -18,7 +18,7 @@ public class Neo4jTestModule extends GuiceBerryModule {
 
         bind(WebResourceWrapper.class);
 
-        requireBinding(WebResource.class);
+        requireBinding(WebResourceWrapper.class);
 
         bind(Neo4jIndex.class).toProvider(IndexProvider.class);
         bind(ExtensionFactoryServiceLoader.class);

@@ -37,24 +37,32 @@ public class Neo4jSinglePushTask extends Neo4jAbstractTask {
     public Void execute() {
         resource = wrapper.get();
 
-        Neo4jMetadata metadata = new Neo4jMetadata(
-                this.metadata.getQualifier(),
-                this.metadata.getExtensionName(),
-                serviceLoader.getInstanceOf(this.metadata.getExtensionName()).toMap(this.metadata)
-        );
+        Neo4jResponse response = getMetadata(metadata.getQualifier());
 
-        Neo4jResponse metadataResponse = createNode(metadata);
-        Neo4jResponse propertiesResponse = createNode(metadata.getProperties());
+        if (response == null) {
 
-        createRelationships(
-                new Neo4jRelationship(
-                        metadataResponse.getCreate_relationship(),
-                        propertiesResponse.getSelf(),
-                        Neo4jMetadata.PROPERTIES_RELATIONSHIPS
-                )
-        );
+            Neo4jMetadata metadata = new Neo4jMetadata(
+                    this.metadata.getQualifier(),
+                    this.metadata.getExtensionName(),
+                    serviceLoader.getInstanceOf(this.metadata.getExtensionName()).toMap(this.metadata)
+            );
 
-        createIndex(metadataResponse, metadata.getQualifier());
+            Neo4jResponse metadataResponse = createNode(metadata);
+            Neo4jResponse propertiesResponse = createNode(metadata.getProperties());
+
+            createRelationships(
+                    new Neo4jRelationship(
+                            metadataResponse.getCreate_relationship(),
+                            propertiesResponse.getSelf(),
+                            Neo4jMetadata.PROPERTIES_RELATIONSHIPS
+                    )
+            );
+
+            createIndex(metadataResponse, metadata.getQualifier());
+
+        } else {
+            LOG.info("The metadata already exist");
+        }
         return null;
     }
 
@@ -101,6 +109,9 @@ public class Neo4jSinglePushTask extends Neo4jAbstractTask {
                     .append("\"")
                     .toString();
 
+            LOG.info("NodeUri: " + nodeUri);
+            LOG.info("Index uri: " + indexUri);
+
             resource.uri(indexUri)
                     .accept(MediaType.APPLICATION_JSON_TYPE)
                     .type(MediaType.APPLICATION_JSON_TYPE)
@@ -112,4 +123,6 @@ public class Neo4jSinglePushTask extends Neo4jAbstractTask {
             throw new CoreException("Uri syntax exception", e);
         }
     }
+
+
 }

@@ -10,8 +10,12 @@ import com.zenika.dorm.core.test.model.DormMetadataTest;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Neo4jDaoTest {
+
+    private static final Logger LOG = LoggerFactory.getLogger(Neo4jDaoTest.class);
 
     @Rule
     public final GuiceBerryRule rule = new GuiceBerryRule(Neo4jTestModule.class);
@@ -25,8 +29,14 @@ public class Neo4jDaoTest {
     }
 
     @Test
-    public void basicTest(){
+    public void singlePushTest(){
         DormMetadata metadata = new DormMetadataTest("1.0.0", "its working!");
         dao.saveMetadata(metadata);
+    }
+
+    @Test
+    public void getByQualifierTest(){
+        DormMetadata metadata = dao.getMetadataByQualifier("Dorm_test:Dorm_test-1.0.0:1.0.0");
+        LOG.info("Metadata: " + metadata);
     }
 }
