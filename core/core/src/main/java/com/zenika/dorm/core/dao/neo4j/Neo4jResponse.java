@@ -12,8 +12,6 @@ import java.net.URISyntaxException;
 /**
  * @author Antoine ROUAZE <antoine.rouaze AT zenika.com>
  */
-@XmlAccessorType(XmlAccessType.FIELD)
-@XmlRootElement
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Neo4jResponse<T> {
 

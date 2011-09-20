@@ -42,6 +42,6 @@ public class DormCoreJdbcModule extends AbstractModule {
         bind(Context.class).toInstance(context);
         bind(DataSource.class).toProvider(fromJndi(DataSource.class, "java:/comp/env/jdbc/postgres"));
 
-        bind(DormDao.class).to(DormDaoJdbc.class);
+//        bind(DormDao.class).to(DormDaoJdbc.class);
     }
 }

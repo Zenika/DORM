@@ -13,7 +13,10 @@ import java.util.Map;
 @JsonAutoDetect
 public class Neo4jIndex {
 
-    private static final String NAME = "dependency";
+    public static final String INDEX_PATH = "index/node";
+    public static final String INDEX_DEFAULT_KEY = "qualifier";
+
+    private static final String NAME = "metadata";
     private static final Map<String, String> CONFIG;
 
     static {
@@ -21,8 +24,6 @@ public class Neo4jIndex {
         CONFIG.put("provider", "lucene");
         CONFIG.put("type", "fulltext");
     }
-
-    public static final String INDEX_PATH = "index/node";
 
     private String template;
     private String provider;
@@ -41,32 +42,15 @@ public class Neo4jIndex {
         return template;
     }
 
-    private void setTemplate(String template) {
+    public void setTemplate(String template) {
         this.template = template;
     }
 
-    @JsonIgnore
-    public String getProvider() {
-        return provider;
-    }
-
-    private void setProvider(String provider) {
+    public void setProvider(String provider) {
         this.provider = provider;
     }
 
-    @JsonIgnore
-    public String getType() {
-        return type;
-    }
-
-    private void setType(String type) {
+    public void setType(String type) {
         this.type = type;
     }
-
-    @XmlTransient
-    public String toString() {
-        return "{\n" + "\t\"template\" : \"" + template + "\",\n\t\"provider\" : \"" + provider + "\",\n\t\"type\" : \"" + type + "\"\n}";
-    }
-
-
 }

@@ -60,7 +60,7 @@ public class Neo4jRequestExecutor implements RequestExecutor {
             dependency.setResponse(response);
             dependencies.add(dependency);
         }
-        logRequest("POST", resource, GREMLIN_SCRIPT_PATH);
+//        logRequest("POST", resource, GREMLIN_SCRIPT_PATH);
         return dependencies;
     }
 
@@ -70,7 +70,7 @@ public class Neo4jRequestExecutor implements RequestExecutor {
                 .entity(node).post(new GenericType<Neo4jResponse<T>>() {
                 });
         node.setResponse(response);
-        logRequest("POST", resource, NODE_PATH);
+//        logRequest("POST", resource, NODE_PATH);
     }
 
     @Override
@@ -78,29 +78,28 @@ public class Neo4jRequestExecutor implements RequestExecutor {
         Neo4jResponse<Map<String, String>> response = resource.path(NODE_PATH).accept(MediaType.APPLICATION_JSON)
                 .type(MediaType.APPLICATION_JSON).entity(properties).post(new GenericType<Neo4jResponse<Map<String, String>>>() {
                 });
-        logRequest("POST", resource, NODE_PATH);
+//        logRequest("POST", resource, NODE_PATH);
         return response;
     }
 
     @Override
-    public void post(Neo4jRelationship relationship) throws URISyntaxException {
-        resource.uri(new URI(relationship.getFrom())).accept(MediaType.APPLICATION_JSON)
-                .type(MediaType.APPLICATION_JSON).post(relationship);
-        logRequest("POST", relationship.getFrom());
+    public Neo4jIndex post(Neo4jIndex index) {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override
-    public Neo4jIndex post(Neo4jIndex index) {
-        index = resource.path(Neo4jIndex.INDEX_PATH).accept(MediaType.APPLICATION_JSON)
-                .type(MediaType.APPLICATION_JSON).post(Neo4jIndex.class, index);
-        logRequest("POST", resource, Neo4jIndex.INDEX_PATH);
-        return index;
+    public void post(Neo4jRelationship relationship) throws URISyntaxException {
+//        resource.uri(new URI(relationship.getFrom())).accept(MediaType.APPLICATION_JSON)
+//                .type(MediaType.APPLICATION_JSON).post(relationship);
+//        logRequest("POST", relationship.getFrom());
     }
+
+
 
     @Override
     public void post(Neo4jNode node, URI indexUri) {
         resource.uri(indexUri).type(MediaType.APPLICATION_JSON).post("\"" + node.getResponse().getSelf() + "\"");
-        logRequest("POST", indexUri.toString());
+//        logRequest("POST", indexUri.toString());
     }
 
     @Override
@@ -109,7 +108,7 @@ public class Neo4jRequestExecutor implements RequestExecutor {
         List<Neo4jRelationship> relationships = resource.uri(uri).accept(MediaType.APPLICATION_JSON).type(MediaType.APPLICATION_JSON).entity(traverse)
                 .post(new GenericType<List<Neo4jRelationship>>() {
                 });
-        logRequest("POST", uri);
+//        logRequest("POST", uri);
         return relationships;
     }
 
@@ -123,14 +122,14 @@ public class Neo4jRequestExecutor implements RequestExecutor {
     @Override
     public <T> T get(URI uri, Class<T> type) {
         T object = resource.uri(uri).accept(MediaType.APPLICATION_JSON).get(type);
-        logRequest("GET", uri);
+//        logRequest("GET", uri);
         return object;
     }
 
     @Override
     public <T> T get(URI uri, Type type) {
         T object = resource.uri(uri).accept(MediaType.APPLICATION_JSON).get(new GenericType<T>(type));
-        logRequest("GET", uri);
+//        logRequest("GET", uri);
         return object;
     }
 
@@ -140,7 +139,7 @@ public class Neo4jRequestExecutor implements RequestExecutor {
         T node = response.getData();
         node.setResponse(response);
         node.setProperties();
-        logRequest("GET", uri);
+//        logRequest("GET", uri);
         return node;
     }
 
@@ -175,7 +174,7 @@ public class Neo4jRequestExecutor implements RequestExecutor {
         T node = response.getData();
         node.setResponse(response);
         node.setProperties();
-        logRequest("GET", uri);
+//        logRequest("GET", uri);
         return node;
     }
 
@@ -183,17 +182,7 @@ public class Neo4jRequestExecutor implements RequestExecutor {
         return "1";
     }
 
-    public static void logRequest(String type, WebResource resource, String path) {
-        logger.info(type + " to " + resource.getURI() + "/" + path);
-    }
 
-    public static void logRequest(String type, URI uri) {
-        logger.info(type + " to " + uri);
-    }
-
-    public static void logRequest(String type, String uri) {
-        logger.info(type + " to " + uri);
-    }
 
     private static Set<Class<?>> getClasses() {
         final Set<Class<?>> classes = new HashSet<Class<?>>();

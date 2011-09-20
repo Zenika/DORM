@@ -33,7 +33,7 @@ public class Neo4jTraverse {
         for (Neo4jRelationship relationship : relationshipsArray) {
             Map<String, String> typedRelationship = new HashMap<String, String>();
             typedRelationship.put("direction", "out");
-            typedRelationship.put("type", relationship.getType());
+//            typedRelationship.put("type", relationship.getType());
             relationships.add(typedRelationship);
         }
     }

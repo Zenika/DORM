@@ -118,20 +118,21 @@ public class DormDaoNeo4jOld implements DormDao {
     }
 
     public Neo4jDependency fillNeo4jDependency(Neo4jDependency dependency, DormMetadata extensionPlug) {
-        try {
-            Neo4jRelationship dependencyMetadata = getSingleRelationship(dependency.getResponse()
-                    .getOutgoing_typed_relationships(Neo4jMetadata.RELATIONSHIP_TYPE));
-            Neo4jMetadata metadata = executor.getNode(dependencyMetadata.getEnd(), new TypeReference<Neo4jResponse<Neo4jMetadata>>() {
-            }.getType());
-            Neo4jRelationship metadataExtension = getSingleRelationship(metadata.getResponse()
-                    .getOutgoing_typed_relationships(Neo4jMetadataExtension.RELATIONSHIP_TYPE));
-            Neo4jMetadataExtension extension = executor.getExtension(metadataExtension.getEnd(), extensionPlug);
-            dependency.setMetadata(metadata);
-            metadata.setExtension(extension);
-            return dependency;
-        } catch (URISyntaxException e) {
-            throw new Neo4jDaoException("URI syntax exception", e);
-        }
+//        try {
+////            Neo4jRelationship dependencyMetadata = getSingleRelationship(dependency.getResponse()
+////                    .getOutgoing_typed_relationships(Neo4jMetadata.RELATIONSHIP_TYPE));
+////            Neo4jMetadata metadata = executor.getNode(dependencyMetadata.getEnd(), new TypeReference<Neo4jResponse<Neo4jMetadata>>() {
+////            }.getType());
+////            Neo4jRelationship metadataExtension = getSingleRelationship(metadata.getResponse()
+////                    .getOutgoing_typed_relationships(Neo4jMetadataExtension.RELATIONSHIP_TYPE));
+////            Neo4jMetadataExtension extension = executor.getExtension(metadataExtension.getEnd(), extensionPlug);
+////            dependency.setMetadata(metadata);
+////            metadata.setExtension(extension);
+//            return dependency;
+//        } catch (URISyntaxException e) {
+//            throw new Neo4jDaoException("URI syntax exception", e);
+//        }
+        return null;
     }
 
     public Dependency getDependency(URI uri, Usage usage, DormMetadata extension) throws URISyntaxException {
@@ -152,37 +153,37 @@ public class DormDaoNeo4jOld implements DormDao {
     }
 
     public void putChild(Usage usage, Map<String, DependencyNode> dependencyNodeMap, List<Neo4jRelationship> relationships, DormMetadata extension) throws URISyntaxException {
-        for (Neo4jRelationship relationship : relationships) {
-            DependencyNode dependencyParent = dependencyNodeMap.get(relationship.getStart().toString());
-            DependencyNode dependencyChild = dependencyNodeMap.get(relationship.getEnd().toString());
-            if (dependencyParent == null) {
-                dependencyParent = DefaultDependencyNode.create(getDependency(relationship.getStart(), usage, extension));
-                dependencyNodeMap.put(relationship.getStart().toString(), dependencyParent);
-            }
-            if (dependencyChild == null) {
-                dependencyChild = DefaultDependencyNode.create(getDependency(relationship.getEnd(), usage, extension));
-                dependencyNodeMap.put(relationship.getEnd().toString(), dependencyChild);
-            }
-            dependencyParent.addChild(dependencyChild);
-        }
+//        for (Neo4jRelationship relationship : relationships) {
+//            DependencyNode dependencyParent = dependencyNodeMap.get(relationship.getStart().toString());
+//            DependencyNode dependencyChild = dependencyNodeMap.get(relationship.getEnd().toString());
+//            if (dependencyParent == null) {
+//                dependencyParent = DefaultDependencyNode.create(getDependency(relationship.getStart(), usage, extension));
+//                dependencyNodeMap.put(relationship.getStart().toString(), dependencyParent);
+//            }
+//            if (dependencyChild == null) {
+//                dependencyChild = DefaultDependencyNode.create(getDependency(relationship.getEnd(), usage, extension));
+//                dependencyNodeMap.put(relationship.getEnd().toString(), dependencyChild);
+//            }
+//            dependencyParent.addChild(dependencyChild);
+//        }
     }
 
     private void postNodeWithChild(DependencyNode currentNode) throws URISyntaxException {
-        Neo4jDependency dependency = postDependency(currentNode.getDependency());
-        for (DependencyNode child : currentNode.getChildren()) {
-            boolean isNotExist = true;
-            Neo4jDependency dependencyChild = postDependency(child.getDependency());
-            List<Neo4jRelationship> relationships = executor.getDependencyRelationship(dependencyChild.getResponse().getOutgoing_typed_relationships(dependencyChild.getUsage()));
-            for (Neo4jRelationship relationship : relationships) {
-                if (relationship.getStart().equals(dependency.getUri()) && relationship.getEnd().equals(dependencyChild.getUri())) {
-                    isNotExist = false;
-                    break;
-                }
-            }
-            if (isNotExist) {
-                executor.post(new Neo4jRelationship(dependency, dependencyChild, dependency.getUsage()));
-            }
-        }
+//        Neo4jDependency dependency = postDependency(currentNode.getDependency());
+//        for (DependencyNode child : currentNode.getChildren()) {
+//            boolean isNotExist = true;
+//            Neo4jDependency dependencyChild = postDependency(child.getDependency());
+//            List<Neo4jRelationship> relationships = executor.getDependencyRelationship(dependencyChild.getResponse().getOutgoing_typed_relationships(dependencyChild.getUsage()));
+//            for (Neo4jRelationship relationship : relationships) {
+//                if (relationship.getStart().equals(dependency.getUri()) && relationship.getEnd().equals(dependencyChild.getUri())) {
+//                    isNotExist = false;
+//                    break;
+//                }
+//            }
+//            if (isNotExist) {
+//                executor.post(new Neo4jRelationship(dependency, dependencyChild, dependency.getUsage()));
+//            }
+//        }
     }
 
     public String buildGremlinScript(Map<String, String> param) {
