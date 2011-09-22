@@ -65,10 +65,9 @@ public final class MavenMetadata extends DormMetadata {
 
         StringBuilder qualifier = new StringBuilder()
                 .append(groupId).append(separator)
-                .append(artifactId).append(separator)
-                .append(version);
+                .append(artifactId);
 
-        if (!StringUtils.isNotBlank(timestamp) && !StringUtils.isNotBlank(buildNumber)) {
+        if (StringUtils.isNotBlank(timestamp) && StringUtils.isNotBlank(buildNumber)) {
             qualifier.append(separator).append(timestamp)
                     .append(separator).append(buildNumber);
         }
@@ -126,21 +125,21 @@ public final class MavenMetadata extends DormMetadata {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        MavenMetadata extension1 = (MavenMetadata) o;
+        MavenMetadata metadata = (MavenMetadata) o;
 
-        if (snapshot != extension1.snapshot) return false;
-        if (artifactId != null ? !artifactId.equals(extension1.artifactId) : extension1.artifactId != null)
+        if (snapshot != metadata.snapshot) return false;
+        if (artifactId != null ? !artifactId.equals(metadata.artifactId) : metadata.artifactId != null)
             return false;
-        if (buildNumber != null ? !buildNumber.equals(extension1.buildNumber) : extension1.buildNumber != null)
+        if (buildNumber != null ? !buildNumber.equals(metadata.buildNumber) : metadata.buildNumber != null)
             return false;
-        if (classifier != null ? !classifier.equals(extension1.classifier) : extension1.classifier != null)
+        if (classifier != null ? !classifier.equals(metadata.classifier) : metadata.classifier != null)
             return false;
-        if (extension != null ? !extension.equals(extension1.extension) : extension1.extension != null)
+        if (extension != null ? !extension.equals(metadata.extension) : metadata.extension != null)
             return false;
-        if (groupId != null ? !groupId.equals(extension1.groupId) : extension1.groupId != null) return false;
-        if (timestamp != null ? !timestamp.equals(extension1.timestamp) : extension1.timestamp != null)
+        if (groupId != null ? !groupId.equals(metadata.groupId) : metadata.groupId != null) return false;
+        if (timestamp != null ? !timestamp.equals(metadata.timestamp) : metadata.timestamp != null)
             return false;
-        if (version != null ? !version.equals(extension1.version) : extension1.version != null) return false;
+        if (version != null ? !version.equals(metadata.version) : metadata.version != null) return false;
 
         return true;
     }

@@ -2,6 +2,7 @@ package com.zenika.dorm.maven.ws.resource;
 
 import com.google.inject.Inject;
 import com.zenika.dorm.core.model.ws.DormWebServiceRequest;
+import com.zenika.dorm.core.model.ws.DormWebServiceResult;
 import com.zenika.dorm.core.processor.DormProcessor;
 import com.zenika.dorm.core.ws.resource.AbstractResource;
 import com.zenika.dorm.maven.model.MavenMetadata;
@@ -37,11 +38,33 @@ public class MavenResource extends AbstractResource {
     public Response get(@PathParam("path") String path,
                         @PathParam("filename") String filename) {
 
+        String uri = path + "/" + filename;
+
         if (LOG.isInfoEnabled()) {
-            LOG.info("Maven webservice GET with path : " + path + " and filename : " + filename);
+            LOG.info("Maven webservice GET with uri : " + uri);
         }
 
-        return Response.status(Response.Status.NOT_FOUND).build();
+        DormWebServiceRequest request = new DormWebServiceRequest.Builder
+                (MavenMetadata.EXTENSION_NAME)
+                .property("uri", uri)
+                .build();
+
+        DormWebServiceResult result = processor.get(request);
+
+        Response response;
+
+        switch (result.getResult()) {
+            case FOUND:
+                response = Response.ok(result.getFile()).build();
+                break;
+            case NOTFOUND:
+                response = Response.status(Response.Status.NOT_FOUND).build();
+                break;
+            default:
+                response = Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+        }
+
+        return response;
     }
 
     @PUT

@@ -1,17 +1,18 @@
 package com.zenika.dorm.maven.test.fixtures;
 
 import com.zenika.dorm.core.model.ws.DormWebServiceRequest;
+import com.zenika.dorm.core.util.DormFileUtils;
 import com.zenika.dorm.maven.exception.MavenException;
 
 import java.io.File;
+import java.net.URISyntaxException;
 
 /**
  * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>
  */
 public class MavenWebServiceRequestFixtures {
 
-    private static final String BASE_PATH = "src/test/resources/samples";
-    private static final String FILENAME = "commons-io-2.0.1";
+    private static final String BASE_PATH = "/samples/commons-io/commons-io-2.0.1";
 
     private MavenPathFixtures pathFixtures;
 
@@ -21,7 +22,6 @@ public class MavenWebServiceRequestFixtures {
     private File pom;
     private File pomSha1;
     private File pomMd5;
-    private File mavenMetadataXml;
 
     private DormWebServiceRequest simpleJar;
     private DormWebServiceRequest simpleJarSha1;
@@ -29,7 +29,6 @@ public class MavenWebServiceRequestFixtures {
     private DormWebServiceRequest simplePom;
     private DormWebServiceRequest simplePomSha1;
     private DormWebServiceRequest simplePomMd5;
-    private DormWebServiceRequest simpleMavenMetadata;
 
     public MavenWebServiceRequestFixtures() {
         this(new MavenPathFixtures());
@@ -69,26 +68,23 @@ public class MavenWebServiceRequestFixtures {
                 .property("uri", pathFixtures.getPomMd5Hash())
                 .file(pomMd5)
                 .build();
-
-        simpleMavenMetadata = new DormWebServiceRequest.Builder("maven")
-                .property("uri", pathFixtures.getMavenMetadataXml())
-                .file(mavenMetadataXml)
-                .build();
     }
 
     private void getFiles() {
 
-        jar = new File(BASE_PATH + "/" + FILENAME + ".jar");
-        jarSha1 = new File(BASE_PATH + "/" + FILENAME + ".jar.sha1");
-        jarMd5 = new File(BASE_PATH + "/" + FILENAME + ".jar.md5");
-        pom = new File(BASE_PATH + "/" + FILENAME + ".pom");
-        pomSha1 = new File(BASE_PATH + "/" + FILENAME + ".pom.sha1");
-        pomMd5 = new File(BASE_PATH + "/" + FILENAME + ".pom.md5");
-        mavenMetadataXml = new File(BASE_PATH + "/maven-metadata.xml");
+        try {
+            jar = new File(getClass().getResource(BASE_PATH + ".jar").toURI());
+            jarSha1 = new File(getClass().getResource(BASE_PATH + ".jar.sha1").toURI());
+            jarMd5 = new File(getClass().getResource(BASE_PATH + ".jar.md5").toURI());
+            pom = new File(getClass().getResource(BASE_PATH + ".pom").toURI());
+            pomSha1 = new File(getClass().getResource(BASE_PATH + ".pom.sha1").toURI());
+            pomMd5 = new File(getClass().getResource(BASE_PATH + ".pom.md5").toURI());
+        } catch (URISyntaxException e) {
+            
+        }
 
-        if (null == jar || null == jarSha1 || null == jarMd5 || null == pom || null == pomSha1 ||
-                null == pomMd5 || null == mavenMetadataXml) {
-            throw new MavenException("Sample files are null");
+        if (!DormFileUtils.allExists(jar, jarSha1, jarMd5, pom, pomSha1, pomMd5)) {
+            throw new MavenException("One or more sample files are null");
         }
     }
 
@@ -116,7 +112,27 @@ public class MavenWebServiceRequestFixtures {
         return simplePomMd5;
     }
 
-    public DormWebServiceRequest getSimpleMavenMetadata() {
-        return simpleMavenMetadata;
+    public File getJar() {
+        return jar;
+    }
+
+    public File getJarSha1() {
+        return jarSha1;
+    }
+
+    public File getJarMd5() {
+        return jarMd5;
+    }
+
+    public File getPom() {
+        return pom;
+    }
+
+    public File getPomSha1() {
+        return pomSha1;
+    }
+
+    public File getPomMd5() {
+        return pomMd5;
     }
 }

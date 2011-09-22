@@ -3,7 +3,7 @@ package com.zenika.dorm.maven.test.model;
 import com.zenika.dorm.maven.model.MavenFilename;
 import com.zenika.dorm.maven.model.MavenUri;
 import com.zenika.dorm.maven.test.fixtures.MavenConstantFixtures;
-import com.zenika.dorm.maven.test.unit.AbstractUnitTest;
+import com.zenika.dorm.maven.test.unit.MavenUnitTest;
 import org.fest.assertions.Assertions;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
 /**
  * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>
  */
-public class MavenFilenameUnitTest extends AbstractUnitTest {
+public class MavenFilenameUnitTest extends MavenUnitTest {
 
     private static final Logger LOG = LoggerFactory.getLogger(MavenFilenameUnitTest.class);
 

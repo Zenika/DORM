@@ -1,6 +1,7 @@
 package com.zenika.dorm.maven.processor.extension;
 
 import com.google.inject.Inject;
+import com.zenika.dorm.core.model.DormResource;
 import com.zenika.dorm.core.model.ws.DormWebServiceRequest;
 import com.zenika.dorm.core.model.ws.DormWebServiceResult;
 import com.zenika.dorm.core.processor.ProcessorExtension;
@@ -114,10 +115,35 @@ public class MavenProcessor extends ProcessorExtension {
         }
 
         MavenUri mavenUri = new MavenUri(request.getProperty("uri"));
+
         if (LOG.isDebugEnabled()) {
             LOG.debug("Maven uri : " + mavenUri);
         }
 
-        return null;
+        DormWebServiceResult.Builder responseBuilder = new DormWebServiceResult.Builder(
+                MavenMetadata.EXTENSION_NAME);
+
+        // ignore get's of maven-medata.xml file
+        if (StringUtils.equals(mavenUri.getFilename().getFilename(), MavenConstant.Special.MAVEN_METADATA_XML)) {
+
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Ignore " + MavenConstant.Special.MAVEN_METADATA_XML);
+            }
+
+            return responseBuilder.notfound().build();
+        }
+
+        MavenMetadata metadata = MavenMetadataUriBuilder.buildMavenMetadata(mavenUri);
+
+        DormResource resource = mavenService.getArtifact(metadata);
+
+        if (null == resource) {
+            return responseBuilder.notfound().build();
+        }
+
+        return responseBuilder
+                .file(resource.getFile())
+                .succeeded()
+                .build();
     }
 }

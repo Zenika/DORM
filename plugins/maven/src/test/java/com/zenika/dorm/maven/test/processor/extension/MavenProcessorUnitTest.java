@@ -7,7 +7,7 @@ import com.zenika.dorm.maven.model.builder.MavenMetadataBuilder;
 import com.zenika.dorm.maven.processor.extension.MavenProcessor;
 import com.zenika.dorm.maven.service.MavenService;
 import com.zenika.dorm.maven.test.fixtures.MavenWebServiceRequestFixtures;
-import com.zenika.dorm.maven.test.unit.AbstractUnitTest;
+import com.zenika.dorm.maven.test.unit.MavenUnitTest;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -22,7 +22,7 @@ import static org.mockito.Mockito.when;
  *
  * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>
  */
-public class MavenProcessorUnitTest extends AbstractUnitTest {
+public class MavenProcessorUnitTest extends MavenUnitTest {
 
     private static final Logger LOG = LoggerFactory.getLogger(MavenProcessorUnitTest.class);
 

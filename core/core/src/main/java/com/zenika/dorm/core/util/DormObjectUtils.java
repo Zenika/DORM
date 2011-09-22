@@ -3,9 +3,9 @@ package com.zenika.dorm.core.util;
 /**
  * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>
  */
-public final class DormUtils {
+public final class DormObjectUtils {
 
-    private DormUtils() {
+    private DormObjectUtils() {
     }
 
     public static boolean isNullIn(Object... objects) {

@@ -33,4 +33,18 @@ Web service :
 
 - Maven :
     - Deploy :
-        curl -X PUT -F"file=wicket-1.4.9.jar" http://localhost:8080/maven/org/apache/wicket/wicket/1.4.9/wicket-1.4.9.jar
+        curl -X PUT -F"file=commons-io-2.0.1.jar" http://localhost:8080/maven/commons-io/commons-io/2.0.1/commons-io-2.0.1.jar
+        curl -X PUT -F"file=commons-io-2.0.1.jar.sha1" http://localhost:8080/maven/commons-io/commons-io/2.0.1/commons-io-2.0.1.jar.sha1
+        curl -X PUT -F"file=commons-io-2.0.1.jar.md5" http://localhost:8080/maven/commons-io/commons-io/2.0.1/commons-io-2.0.1.jar.md5
+        curl -X PUT -F"file=commons-io-2.0.1.pom" http://localhost:8080/maven/commons-io/commons-io/2.0.1/commons-io-2.0.1.pom
+        curl -X PUT -F"file=commons-io-2.0.1.pom.sha1" http://localhost:8080/maven/commons-io/commons-io/2.0.1/commons-io-2.0.1.pom.sha1
+        curl -X PUT -F"file=commons-io-2.0.1.pom.md5" http://localhost:8080/maven/commons-io/commons-io/2.0.1/commons-io-2.0.1.pom.md5
+
+    - Get :
+        curl -X GET http://localhost:8080/maven/commons-io/commons-io/2.0.1/commons-io-2.0.1.jar
+        curl -X GET http://localhost:8080/maven/commons-io/commons-io/2.0.1/commons-io-2.0.1.jar.sha1
+        curl -X GET http://localhost:8080/maven/commons-io/commons-io/2.0.1/commons-io-2.0.1.jar.md5
+        curl -X GET http://localhost:8080/maven/commons-io/commons-io/2.0.1/commons-io-2.0.1.pom
+        curl -X GET http://localhost:8080/maven/commons-io/commons-io/2.0.1/commons-io-2.0.1.pom.sha1
+        curl -X GET http://localhost:8080/maven/commons-io/commons-io/2.0.1/commons-io-2.0.1.pom.md5
+

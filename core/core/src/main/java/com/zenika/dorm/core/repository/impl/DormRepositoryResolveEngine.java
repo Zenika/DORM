@@ -6,6 +6,8 @@ import com.zenika.dorm.core.repository.DormRepositoryResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
+
 /**
  * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>
  */
@@ -21,6 +23,13 @@ public class DormRepositoryResolveEngine {
     }
 
     public DormRepositoryResource resolve(String path) {
-        return null;
+
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Resolve file at : " + path);
+        }
+
+        File file = new File(path);
+
+        return new DormRepositoryResource(path, file);
     }
 }

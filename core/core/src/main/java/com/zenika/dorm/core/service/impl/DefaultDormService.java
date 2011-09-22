@@ -91,9 +91,7 @@ public class DefaultDormService implements DormService {
 
     @Override
     public DormResource getResource(DormMetadata metadata) {
-
-//        repository.get(metadata)
-        return null;
+        return repository.get(metadata);
     }
 
     @Override

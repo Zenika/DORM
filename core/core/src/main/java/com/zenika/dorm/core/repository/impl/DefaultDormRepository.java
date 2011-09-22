@@ -93,22 +93,28 @@ public class DefaultDormRepository implements DormRepository {
         DormRepositoryResource resource = resolveEngine.resolve(location);
 
         if (!resource.exists()) {
-            throw new RepositoryException("File not found for metadata : " + metadata);
+
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Resource not found for metadata : " + metadata);
+            }
+
+            return null;
         }
 
         return DefaultDormResource.create(resource.getFile());
     }
 
     private String getPathFromMetadata(DormMetadata metadata) {
-        return getBaseBuilder()
-                .append(metadata.getExtensionName())
+
+        String path = getBaseBuilder()
+                .append(metadata.getExtensionName().replace("/", "-"))
                 .append("/")
-                .append(metadata.getName())
+                .append(metadata.getVersion().replace("/", "-"))
                 .append("/")
-                .append(metadata.getVersion())
-                .append("/")
-                .append(metadata.getQualifier())
+                .append(metadata.getQualifier().replace("/", "-"))
                 .toString();
+
+        return path.replace(":", "-");
     }
 
     private StringBuilder getBaseBuilder() {

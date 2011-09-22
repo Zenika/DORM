@@ -30,7 +30,9 @@ public class MavenService {
             LOG.debug("Store maven metadata with artifact : " + metadata);
         }
 
-        DormResource resource = DefaultDormResource.create(file);
+        DormResource resource = DefaultDormResource.create(
+                metadata.getName() + "." + metadata.getExtension(), file);
+
         DormServiceStoreResourceConfig config = new DormServiceStoreResourceConfig()
                 .override(true);
 
@@ -54,18 +56,23 @@ public class MavenService {
     public void storePom(MavenMetadata metadata, File file) {
 
         if (LOG.isDebugEnabled()) {
-            LOG.debug("Store maven pom form metadata : " + metadata);
+            LOG.debug("Store maven pom from metadata : " + metadata);
         }
 
-//        if (!hashService.compareMavenHashes(metadata, file)) {
-//            if (LOG.isWarnEnabled()) {
-//                LOG.warn("Pom to store is not equal to given hash");
-//            }
-//            return;
-//        }
+        DormResource resource = DefaultDormResource.create(file);
+        DormServiceStoreResourceConfig config = new DormServiceStoreResourceConfig()
+                .override(true);
 
-
+        dormService.storeResource(resource, metadata, config);
     }
 
 
+    public DormResource getArtifact(MavenMetadata metadata) {
+
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Get maven artifact from metadata : " + metadata);
+        }
+
+        return dormService.getResource(metadata);
+    }
 }

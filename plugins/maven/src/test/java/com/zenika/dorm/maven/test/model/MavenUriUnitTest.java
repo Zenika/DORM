@@ -2,14 +2,14 @@ package com.zenika.dorm.maven.test.model;
 
 import com.zenika.dorm.maven.model.MavenUri;
 import com.zenika.dorm.maven.test.fixtures.MavenConstantFixtures;
-import com.zenika.dorm.maven.test.unit.AbstractUnitTest;
+import com.zenika.dorm.maven.test.unit.MavenUnitTest;
 import org.fest.assertions.Assertions;
 import org.junit.Test;
 
 /**
  * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>
  */
-public class MavenUriUnitTest extends AbstractUnitTest {
+public class MavenUriUnitTest extends MavenUnitTest {
 
     @Test
     public void testMavenUriSimple() throws Exception {

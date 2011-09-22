@@ -3,6 +3,8 @@ package com.zenika.dorm.core.model.impl;
 import com.zenika.dorm.core.exception.CoreException;
 import com.zenika.dorm.core.model.DormResource;
 import org.apache.commons.io.FilenameUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 
@@ -13,15 +15,22 @@ import java.io.File;
  */
 public final class DefaultDormResource implements DormResource {
 
+    private static final Logger LOG = LoggerFactory.getLogger(DefaultDormResource.class);
+
     private final String name;
     private final String extension;
     private final File file;
 
     public static DormResource create(File file) {
-        return create("default-name.foo", file);
+        return create(null, file);
     }
 
     public static DefaultDormResource create(String filename, File file) {
+
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Create dorm resource with filename : " + filename);
+        }
+
         return create(FilenameUtils.getBaseName(filename), FilenameUtils.getExtension(filename), file);
     }
 
@@ -31,9 +40,12 @@ public final class DefaultDormResource implements DormResource {
 
     private DefaultDormResource(String name, String extension, File file) {
 
-        if (null == name || null == extension || null == file || name.isEmpty() || extension.isEmpty() ||
-                !file.exists()) {
-            throw new CoreException("Name, extension and file are required.");
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Create dorm resource with name : " + name + " and extension : " + extension);
+        }
+
+        if (null == file || !file.exists()) {
+            throw new CoreException("File is required to create dorm resource");
         }
 
         this.name = name;
@@ -49,11 +61,6 @@ public final class DefaultDormResource implements DormResource {
     @Override
     public File getFile() {
         return file;
-    }
-
-    @Override
-    public boolean exists() {
-        return null != file;
     }
 
     @Override

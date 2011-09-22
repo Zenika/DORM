@@ -8,6 +8,8 @@ import com.zenika.dorm.maven.model.MavenConstant;
 import com.zenika.dorm.maven.model.MavenMetadata;
 import com.zenika.dorm.maven.model.builder.MavenMetadataBuilder;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.*;
 
@@ -15,6 +17,8 @@ import java.io.*;
  * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>
  */
 public class MavenHashService {
+
+    private static final Logger LOG = LoggerFactory.getLogger(MavenHashService.class);
 
     @Inject
     private DormService service;
@@ -24,16 +28,21 @@ public class MavenHashService {
                 compareHash(MavenConstant.Extension.SHA1, metadata, file);
     }
 
-    private boolean compareHash(String hash, MavenMetadata metadata, File file) {
+    public boolean compareHash(String hash, MavenMetadata metadata, File file) {
 
         MavenMetadata hashMetadata = new MavenMetadataBuilder(metadata)
                 .extension(hash)
                 .build();
 
-        DormResource resource = service.getResource(metadata);
+        DormResource resource = service.getResource(hashMetadata);
 
-        if (resource.exists()) {
-            return false;
+        if (null == resource) {
+
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Hash " + hash + " not found for metadata : " + metadata + ", ignoring");
+            }
+
+            return true;
         }
 
         String modelHash = null;

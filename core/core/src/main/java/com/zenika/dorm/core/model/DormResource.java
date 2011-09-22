@@ -34,6 +34,4 @@ public interface DormResource {
      * @return the file
      */
     public File getFile();
-
-    public boolean exists();
 }
