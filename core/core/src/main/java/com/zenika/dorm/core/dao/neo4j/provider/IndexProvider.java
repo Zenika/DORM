@@ -23,7 +23,7 @@ public class IndexProvider implements Provider<Neo4jIndex>{
     private Neo4jIndex index;
 
     @Inject
-    public IndexProvider(WebResourceWrapper wrapper){
+    public IndexProvider(Neo4jWebResourceWrapper wrapper){
         this.resource = wrapper.get();
         index = post(new Neo4jIndex());
     }

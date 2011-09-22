@@ -7,6 +7,7 @@ import com.google.inject.servlet.GuiceServletContextListener;
 import com.zenika.dorm.core.guice.module.DormCoreJdbcModule;
 import com.zenika.dorm.core.guice.module.DormCoreModule;
 import com.zenika.dorm.core.guice.module.DormCoreNeo4jModule;
+import com.zenika.dorm.core.guice.module.DormCoreNuxeoModule;
 import com.zenika.dorm.guice.module.DormJerseyModule;
 import com.zenika.dorm.maven.guice.module.MavenModule;
 
@@ -32,6 +33,7 @@ public class DormGuiceServletContextListener extends GuiceServletContextListener
         modules.add(new DormCoreModule());
         modules.add(new DormCoreJdbcModule());
         modules.add(new DormCoreNeo4jModule());
+        modules.add(new DormCoreNuxeoModule());
 
         // maven extension
         modules.add(new MavenModule());

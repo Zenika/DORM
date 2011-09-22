@@ -1,24 +1,24 @@
 {
     "configuration":{
-        "target.hostname":"192.168.182.129",
-        "target.port":"8081",
-        "target.baseUrl":"artifactory/libs-snapshot-local",
+        "target.hostname":"192.168.0.71",
+        "target.port":"8080",
+        "target.baseUrl":"artifactory/libs-release-local",
         "proxy.hostname":"192.168.182.1",
         "proxy.port":"8008",
-        "proxy.active":true
+        "proxy.active":false
     },
     "resources":[
         {
             "type": "putResource",
-            "pomUrl": "commons-io/commons-io/1.0.0/commons-io-1.0.0.pom",
-            "pomSha1Url": "commons-io/commons-io/1.0.0/commons-io-1.0.0.pom.sha1",
-            "pomMd5Url": "commons-io/commons-io/1.0.0/commons-io-1.0.0.pom.md5",
-            "jarUrl": "commons-io/commons-io/1.0.0/commons-io-1.0.0.jar",
-            "jarSha1Url": "commons-io/commons-io/1.0.0/commons-io-1.0.0.jar.sha1",
-            "jarMd5Url": "commons-io/commons-io/1.0.0/commons-io-1.0.0.jar.md5",
+            "pomUrl": "commons-io/commons-io/1.4/commons-io-1.4.pom",
+            "pomSha1Url": "commons-io/commons-io/1.4/commons-io-1.4.pom.sha1",
+            "pomMd5Url": "commons-io/commons-io/1.4/commons-io-1.4.pom.md5",
+            "jarUrl": "commons-io/commons-io/1.4/commons-io-1.4.jar",
+            "jarSha1Url": "commons-io/commons-io/1.4/commons-io-1.4.jar.sha1",
+            "jarMd5Url": "commons-io/commons-io/1.4/commons-io-1.4.jar.md5",
             "filePath": "files/sample.jar",
             "expectedResult": {
-                "httpCode": "404"
+                "httpCode": 200
             }
         }
     ]

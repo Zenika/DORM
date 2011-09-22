@@ -3,7 +3,7 @@ package com.zenika.dorm.core.dao.neo4j;
 import com.google.inject.Inject;
 import com.sun.jersey.api.client.GenericType;
 import com.sun.jersey.api.client.WebResource;
-import com.zenika.dorm.core.dao.neo4j.provider.WebResourceWrapper;
+import com.zenika.dorm.core.dao.neo4j.provider.Neo4jWebResourceWrapper;
 import com.zenika.dorm.core.exception.CoreException;
 import com.zenika.dorm.core.service.spi.ExtensionFactoryServiceLoader;
 import org.slf4j.Logger;
@@ -36,7 +36,7 @@ public abstract class Neo4jAbstractTask {
             };
 
     @Inject
-    protected WebResourceWrapper wrapper;
+    protected Neo4jWebResourceWrapper wrapper;
     @Inject
     protected Neo4jIndex index;
     @Inject

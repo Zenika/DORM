@@ -57,12 +57,12 @@ public class MavenService {
             LOG.debug("Store maven pom form metadata : " + metadata);
         }
 
-        if (!hashService.compareMavenHashes(metadata, file)) {
-            if (LOG.isWarnEnabled()) {
-                LOG.warn("Pom to store is not equal to given hash");
-            }
-            return;
-        }
+//        if (!hashService.compareMavenHashes(metadata, file)) {
+//            if (LOG.isWarnEnabled()) {
+//                LOG.warn("Pom to store is not equal to given hash");
+//            }
+//            return;
+//        }
 
 
     }

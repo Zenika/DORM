@@ -22,16 +22,16 @@ import java.util.Set;
  * @author Antoine ROUAZE <antoine.rouaze AT zenika.com>
  */
 @Singleton
-public class WebResourceWrapper {
+public class Neo4jWebResourceWrapper {
 
-    private static final Logger LOG = LoggerFactory.getLogger(WebResourceWrapper.class);
+    private static final Logger LOG = LoggerFactory.getLogger(Neo4jWebResourceWrapper.class);
 
     private WebResource resource;
 
 //    @Inject
 //    private Collection<Class<?>> classes;
 
-    public WebResourceWrapper() {
+    public Neo4jWebResourceWrapper() {
         DefaultApacheHttpClientConfig config = new DefaultApacheHttpClientConfig();
         config.getClasses().addAll(getClasses());
         config.getFeatures().put(JSONConfiguration.FEATURE_POJO_MAPPING, true);

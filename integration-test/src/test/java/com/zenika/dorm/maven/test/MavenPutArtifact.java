@@ -87,7 +87,7 @@ public class MavenPutArtifact {
 
             LOG.info("|File path: " + resource.getFilePath());
 
-            URL url = getClass().getResource(resource.getFilePath());
+            URL url = getClass().getResource("/" + resource.getFilePath());
             File file = new File(url.toURI());
             HttpEntity entity = new FileEntity(file, "application/java");
             HttpPut put = new HttpPut(path);
@@ -107,9 +107,9 @@ public class MavenPutArtifact {
             put.abort();
             return result;
         } catch (IOException e) {
-            LOG.info("Unable to send request");
+            LOG.error("Unable to send request", e);
         } catch (URISyntaxException e) {
-            LOG.info("URI syntax exception", e);
+            LOG.error("URI syntax exception", e);
         }
         return null;
     }
