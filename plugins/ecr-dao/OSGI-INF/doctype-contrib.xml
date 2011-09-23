@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<component name="com.zenika.dorm.core.doctype">
+	<extension target="org.eclipse.ecr.core.schema.TypeService"
+		point="doctype">
+
+		<doctype name="DormMetadata" extends="Document">
+			<schema name="dorm-metadata" />
+		</doctype>
+		
+		<doctype name="MavenMetadata" extends="DormMetadata">
+			<schema name="maven-metadata" />
+		</doctype>
+	</extension>
+</component>

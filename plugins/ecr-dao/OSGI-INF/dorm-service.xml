@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+
+<component name="com.zenika.dorm.core.ecr.DormEcrComponent" version="1.0.0">
+
+	<service>
+		<provide interface="com.zenika.dorm.core.service.DormService" />
+	</service>
+
+	<implementation class="com.zenika.dorm.core.ecr.DormEcrComponent" />
+	
+</component>

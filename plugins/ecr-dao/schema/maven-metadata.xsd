@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://zenika.com/ecr/dorm/core" xmlns:dmm="http://zenika.com/ecr/dorm/core">
+	
+	<xs:element name="groupId" type="xs:string" />
+	<xs:element name="artifactId" type="xs:string" />
+	<xs:element name="version" type="xs:string" />
+</xs:schema>

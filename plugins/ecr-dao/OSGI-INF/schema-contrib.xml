@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<component name="com.zenika.dorm.core.schema">
+
+	<extension target="org.eclipse.ecr.core.schema.TypeService" point="schema">
+		<schema name="dorm-metadata" src="schema/dorm-metadata.xsd" prefix="dm" />
+		<schema name="maven-metadata" src="schema/maven-metadata.xsd" prefix="dmm" />
+	</extension>
+	
+<!-- 	<extension target="org.eclipse.ecr.core.schema.TypeService" point="schema">
+		
+	</extension> -->
+	
+</component>

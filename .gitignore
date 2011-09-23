@@ -3,6 +3,10 @@
 *.ipr
 *.iws
 .idea/
+.classpath
+.project
+.settings
+target/
 out/
 classes/
 .gradle/
