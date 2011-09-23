@@ -9,6 +9,7 @@ public class NuxeoMetadata {
 
     private String qualifier;
     private String extensionName;
+    private String version;
 
     private Map<String, String> properties;
 
@@ -16,9 +17,10 @@ public class NuxeoMetadata {
 
     }
 
-    public NuxeoMetadata(String qualifier, String extensionName, Map<String, String> properties) {
+    public NuxeoMetadata(String qualifier, String extensionName, String version, Map<String, String> properties) {
         this.qualifier = qualifier;
         this.extensionName = extensionName;
+        this.version = version;
         this.properties = properties;
     }
 
@@ -36,6 +38,14 @@ public class NuxeoMetadata {
 
     public void setExtensionName(String extensionName) {
         this.extensionName = extensionName;
+    }
+
+    public String getVersion() {
+        return version;
+    }
+
+    public void setVersion(String version) {
+        this.version = version;
     }
 
     public Map<String, String> getProperties() {
