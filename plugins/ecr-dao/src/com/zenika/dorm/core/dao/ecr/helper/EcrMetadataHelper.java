@@ -77,7 +77,7 @@ public final class EcrMetadataHelper {
 			model.setProperties(EcrResourceHelper.getSchemaNameFromExtension("dorm"), dormProperties);
 
 			Map<String, Object> pluginProperties = new HashMap<String, Object>(metadata.getProperties());
-			model.setProperties(extension, pluginProperties);
+			model.setProperties(EcrResourceHelper.getSchemaNameFromExtension(extension), pluginProperties);
 
 		} catch (Exception e) {
 			throw new CoreException("Cannot map the dorm core metadatas");

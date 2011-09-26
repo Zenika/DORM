@@ -1,9 +1,7 @@
-DORM ECR DAO
+DORM POC
 
-Request the dao using the REST api.
+Composed of two packages :
+  - Core : represents the core with Dorm specific metadatas.
+  - Maven : Dorm plugin represents the first use case of Dorm. Add maven specific metadatas and logic.
 
-Store :
-curl -H Content-Type:application/xml -X PUT --user admin:admin --data "<dormMetadata><qualifier>thequalifier</qualifier><extensionName>maven</extensionName><version>1.0</version><properties><entry><key>groupId</key><value>org.foo</value></entry><entry><key>artifactId</key><value>bar</value></entry></properties></dormMetadata>" http://localhost:8090/ecr/dorm/save
-
-Get :
-curl -X GET --user admin:admin http://localhost:8090/ecr/dorm/get/thequalifier
+Core and plugins have to be independants and a plugin may be added or removed dynamically, without restarting the server or reload the core.
