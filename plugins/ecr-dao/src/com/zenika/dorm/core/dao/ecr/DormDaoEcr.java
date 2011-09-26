@@ -30,9 +30,9 @@ public class DormDaoEcr implements DormDao {
 
 		return getOneResult(query);
 	}
-	
+
 	@Override
-	public DormMetadata get(String qualifier, String extension) {
+	public DormMetadata getWithExtension(String qualifier, String extension) {
 
 		CoreSession session = getSession();
 
@@ -45,6 +45,12 @@ public class DormDaoEcr implements DormDao {
 
 	@Override
 	public DormMetadata save(DormMetadata metadata) {
+
+		DormMetadata metadataFromDb = getWithExtension(metadata.getQualifier(), metadata.getExtensionName());
+
+		if (null != metadataFromDb) {
+			return metadataFromDb;
+		}
 
 		CoreSession session = getSession();
 

@@ -7,7 +7,7 @@ public interface DormDao {
 
 	public DormMetadata get(String qualifier);
 	
-	public DormMetadata get(String qualifier, String extension);
+	public DormMetadata getWithExtension(String qualifier, String extension);
 	
 	public DormMetadata save(DormMetadata metadata);
 }

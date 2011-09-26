@@ -39,7 +39,7 @@ public class DormResource {
 			return Response.status(Status.BAD_REQUEST).build();
 		}
 
-		DormMetadata metadata = DormDaoFactory.getDormDao().get(qualifier, elements[0]);
+		DormMetadata metadata = DormDaoFactory.getDormDao().getWithExtension(qualifier, elements[0]);
 
 		if (null == metadata) {
 			return Response.status(Status.NOT_FOUND).build();
