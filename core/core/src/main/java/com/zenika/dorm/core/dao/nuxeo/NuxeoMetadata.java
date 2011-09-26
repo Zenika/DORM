@@ -6,7 +6,7 @@ import java.util.Map;
 /**
  * @author Antoine ROUAZE <antoine.rouaze AT zenika.com>
  */
-@XmlRootElement
+@XmlRootElement(name = "dormMetadata")
 public class NuxeoMetadata {
 
     private String qualifier;
