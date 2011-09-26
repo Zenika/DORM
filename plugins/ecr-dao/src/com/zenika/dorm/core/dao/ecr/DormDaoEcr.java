@@ -15,7 +15,6 @@ import com.zenika.dorm.core.dao.DormDao;
 import com.zenika.dorm.core.dao.ecr.helper.EcrMetadataHelper;
 import com.zenika.dorm.core.dao.ecr.helper.EcrResourceHelper;
 import com.zenika.dorm.core.exception.CoreException;
-import com.zenika.dorm.core.exception.CoreException.Type;
 import com.zenika.dorm.core.model.DormMetadata;
 
 public class DormDaoEcr implements DormDao {
@@ -29,9 +28,19 @@ public class DormDaoEcr implements DormDao {
 		String query = "SELECT * FROM " + EcrResourceHelper.getDocumentNameFromExtension("dorm")
 				+ " WHERE dm:qualifier = '" + qualifier + "'";
 
-		DormMetadata metadata = getOneResult(query);
+		return getOneResult(query);
+	}
+	
+	@Override
+	public DormMetadata get(String qualifier, String extension) {
 
-		return null;
+		CoreSession session = getSession();
+
+		// query the dorm metadata
+		String query = "SELECT * FROM " + EcrResourceHelper.getDocumentNameFromExtension(extension)
+				+ " WHERE dm:qualifier = '" + qualifier + "'";
+
+		return getOneResult(query);
 	}
 
 	@Override
@@ -83,7 +92,7 @@ public class DormDaoEcr implements DormDao {
 			return result.get(0);
 
 		} catch (IndexOutOfBoundsException e) {
-			throw new CoreException("Metadata not found for query : " + query).type(Type.NOTFOUND);
+			return null;
 		}
 	}
 

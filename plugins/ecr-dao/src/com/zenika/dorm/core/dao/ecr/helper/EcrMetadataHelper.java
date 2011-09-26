@@ -43,11 +43,11 @@ public final class EcrMetadataHelper {
 		while (it.hasNext()) {
 
 			String key = it.next();
-
 			Object property = ecrProperties.get(key);
 
 			if (null != property) {
-				extensionProperties.put(key, property.toString());
+				String keyWithoutPrefix = key.substring(key.indexOf(":") + 1);
+				extensionProperties.put(keyWithoutPrefix, property.toString());
 			}
 
 		}
@@ -80,7 +80,7 @@ public final class EcrMetadataHelper {
 			model.setProperties(EcrResourceHelper.getSchemaNameFromExtension(extension), pluginProperties);
 
 		} catch (Exception e) {
-			throw new CoreException("Cannot map the dorm core metadatas");
+			throw new CoreException("Cannot map the dorm core metadatas", e);
 		}
 
 		return model;
