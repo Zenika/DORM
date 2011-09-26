@@ -32,7 +32,7 @@ public class NuxeoRetrieveByQualifier extends NuxeoAbstractTask{
             );
 
             NuxeoMetadata metadata = resource.uri(nuxeoGetUri)
-                    .accept(MediaType.APPLICATION_JSON_TYPE)
+                    .accept(MediaType.APPLICATION_XML)
                     .get(NuxeoMetadata.class);
 
             logRequest("GET", nuxeoGetUri);

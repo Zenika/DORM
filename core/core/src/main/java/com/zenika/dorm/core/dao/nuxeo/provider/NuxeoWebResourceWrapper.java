@@ -10,6 +10,8 @@ import com.zenika.dorm.core.dao.neo4j.Neo4jIndex;
 import com.zenika.dorm.core.dao.neo4j.Neo4jMetadata;
 import com.zenika.dorm.core.dao.neo4j.Neo4jResponse;
 import com.zenika.dorm.core.dao.neo4j.util.ObjectMapperProvider;
+import com.zenika.dorm.core.dao.nuxeo.DormDaoNuxeo;
+import com.zenika.dorm.core.dao.nuxeo.NuxeoMetadata;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,15 +28,21 @@ public class NuxeoWebResourceWrapper {
 
     private WebResource resource;
 
+    private boolean enableProxy = true;
+    private String hostProxy = "192.168.0.24";
+    private String portProxy = "8008";
+
 //    @Inject
 //    private Collection<Class<?>> classes;
 
     public NuxeoWebResourceWrapper() {
         DefaultApacheHttpClientConfig config = new DefaultApacheHttpClientConfig();
+        if (enableProxy) {
+            config.getProperties().put(DefaultApacheHttpClientConfig.PROPERTY_PROXY_URI, "http://" + hostProxy + ":" + portProxy);
+        }
         config.getClasses().addAll(getClasses());
-        config.getFeatures().put(JSONConfiguration.FEATURE_POJO_MAPPING, true);
         Client client = ApacheHttpClient.create(config);
-        resource = client.resource(DormDaoNeo4j.DATA_ENTRY_POINT_URI);
+        resource = client.resource(DormDaoNuxeo.DATA_ENTRY_POINT_URI);
     }
 
     public WebResource get() {
@@ -43,7 +51,7 @@ public class NuxeoWebResourceWrapper {
 
     public Collection<Class<?>> getClasses() {
         final Set<Class<?>> classes = new HashSet<Class<?>>();
-        classes.add(ObjectMapperProvider.class);
+        classes.add(NuxeoMetadata.class);
         return classes;
     }
 }

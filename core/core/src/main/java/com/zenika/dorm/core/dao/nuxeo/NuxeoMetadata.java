@@ -1,10 +1,12 @@
 package com.zenika.dorm.core.dao.nuxeo;
 
+import javax.xml.bind.annotation.XmlRootElement;
 import java.util.Map;
 
 /**
  * @author Antoine ROUAZE <antoine.rouaze AT zenika.com>
  */
+@XmlRootElement
 public class NuxeoMetadata {
 
     private String qualifier;

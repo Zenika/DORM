@@ -16,7 +16,7 @@ import java.net.URISyntaxException;
  */
 public class NuxeoSinglePushTask extends NuxeoAbstractTask {
 
-    private static final String NUXEO_PUT = "http://localhost:???/????????";
+    private static final String NUXEO_PUT = "http://????????:????/????????????????????";
 
     @Inject
     private DormMetadata metadata;
@@ -28,16 +28,16 @@ public class NuxeoSinglePushTask extends NuxeoAbstractTask {
 
             URI nuxeoPutUri = new URI(NUXEO_PUT);
 
-
             NuxeoMetadata metadata = new NuxeoMetadata(
                     this.metadata.getQualifier(),
                     this.metadata.getExtensionName(),
+                    this.metadata.getVersion(),
                     serviceLoader.getInstanceOf(this.metadata.getExtensionName()).toMap(this.metadata)
             );
 
             resource.uri(nuxeoPutUri)
-                    .accept(MediaType.APPLICATION_JSON_TYPE)
-                    .type(MediaType.APPLICATION_JSON_TYPE)
+                    .accept(MediaType.APPLICATION_XML)
+                    .type(MediaType.APPLICATION_XML)
                     .entity(metadata)
                     .put();
 
