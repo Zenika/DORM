@@ -2,6 +2,7 @@ package com.zenika.dorm.core.dao.nuxeo;
 
 import com.google.inject.Inject;
 import com.sun.jersey.api.client.WebResource;
+import com.zenika.dorm.core.factory.ExtensionMetadataFactory;
 import com.zenika.dorm.core.model.DormMetadata;
 
 import javax.ws.rs.core.MediaType;
@@ -11,29 +12,29 @@ import javax.ws.rs.core.MediaType;
  */
 public class NuxeoSinglePushTask extends NuxeoAbstractTask {
 
-    private static final String NUXEO_PUT = "save";
+    private static final String NUXEO_POST = "save";
 
     @Inject
     private DormMetadata metadata;
 
     @Override
-    public Void execute() {
+    public DormMetadata execute() {
         WebResource resource = wrapper.get();
 
         NuxeoMetadata metadata = new NuxeoMetadata(
-                this.metadata.getFunctionalId(),
                 this.metadata.getExtensionName(),
                 this.metadata.getVersion(),
                 serviceLoader.getInstanceOf(this.metadata.getExtensionName()).toMap(this.metadata)
         );
 
-        resource.path(NUXEO_PUT)
+        NuxeoMetadata response = resource.path(NUXEO_POST)
                 .accept(MediaType.APPLICATION_XML)
                 .type(MediaType.APPLICATION_XML)
                 .entity(metadata)
-                .put();
+                .post(NuxeoMetadata.class);
 
-        logRequest("PUT", resource, NUXEO_PUT);
-        return null;
+        logRequest("POST", resource, NUXEO_POST);
+        ExtensionMetadataFactory factory = serviceLoader.getInstanceOf(metadata.getExtensionName());
+        return factory.fromMap(response.getId(), response.getProperties());
     }
 }

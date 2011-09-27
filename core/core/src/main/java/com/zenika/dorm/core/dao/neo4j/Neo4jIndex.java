@@ -14,7 +14,7 @@ import java.util.Map;
 public class Neo4jIndex {
 
     public static final String INDEX_PATH = "index/node";
-    public static final String INDEX_DEFAULT_KEY = "qualifier";
+    public static final String INDEX_DEFAULT_KEY = "functionalId";
 
     private static final String NAME = "metadata";
     private static final Map<String, String> CONFIG;

@@ -3,13 +3,16 @@ package com.zenika.dorm.core.dao.neo4j;
 import com.google.inject.Inject;
 import com.sun.jersey.api.client.WebResource;
 import com.zenika.dorm.core.exception.CoreException;
+import com.zenika.dorm.core.factory.ExtensionMetadataFactory;
 import com.zenika.dorm.core.model.DormMetadata;
+import com.zenika.dorm.core.service.spi.ExtensionFactoryServiceLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.ws.rs.core.MediaType;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Map;
 
 
 /**
@@ -27,20 +30,27 @@ public class Neo4jSinglePushTask extends Neo4jAbstractTask {
     private WebResource resource;
 
     @Override
-    public Void execute() {
+    public DormMetadata execute() {
         resource = wrapper.get();
 
         Neo4jResponse response = getMetadata(metadata.getFunctionalId());
 
         if (response == null) {
 
+            Long id;
+            ExtensionMetadataFactory factory = serviceLoader.getInstanceOf(metadata.getExtensionName());
+            Map<String, String> properties = factory.toMap(this.metadata);
+
             Neo4jMetadata metadata = new Neo4jMetadata(
                     this.metadata.getFunctionalId(),
                     this.metadata.getExtensionName(),
-                    serviceLoader.getInstanceOf(this.metadata.getExtensionName()).toMap(this.metadata)
+                    properties
             );
 
             Neo4jResponse metadataResponse = createNode(metadata);
+
+            id = extractId(metadataResponse.getSelf());
+
             Neo4jResponse propertiesResponse = createNode(metadata.getProperties());
 
             createRelationships(
@@ -53,6 +63,7 @@ public class Neo4jSinglePushTask extends Neo4jAbstractTask {
 
             createIndex(metadataResponse, metadata.getQualifier());
 
+            return factory.fromMap(id, properties);
         } else {
             LOG.info("The metadata already exist");
         }

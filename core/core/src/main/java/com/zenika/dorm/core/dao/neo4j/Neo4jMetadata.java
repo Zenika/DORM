@@ -21,7 +21,6 @@ public class Neo4jMetadata  {
 
     public static final String PROPERTIES_RELATIONSHIPS = "properties";
 
-    private String qualifier;
     private String extensionName;
 
     private Map<String, String> properties;
@@ -30,18 +29,9 @@ public class Neo4jMetadata  {
         
     }
 
-    public Neo4jMetadata(String qualifier, String extensionName, Map<String, String> properties) {
-        this.qualifier = Neo4jHelper.dormQualifierToNeo4jQualifier(qualifier);
+    public Neo4jMetadata(String extensionName, Map<String, String> properties) {
         this.extensionName = extensionName;
         this.properties = properties;
-    }
-
-    public String getQualifier() {
-        return qualifier;
-    }
-
-    public void setQualifier(String qualifier) {
-        this.qualifier = qualifier;
     }
 
     public String getExtensionName() {

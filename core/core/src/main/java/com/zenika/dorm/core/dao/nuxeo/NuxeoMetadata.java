@@ -9,7 +9,7 @@ import java.util.Map;
 @XmlRootElement(name = "dormMetadata")
 public class NuxeoMetadata {
 
-    private String qualifier;
+    private Long id;
     private String extensionName;
     private String version;
 
@@ -19,19 +19,10 @@ public class NuxeoMetadata {
 
     }
 
-    public NuxeoMetadata(String qualifier, String extensionName, String version, Map<String, String> properties) {
-        this.qualifier = qualifier;
+    public NuxeoMetadata(String extensionName, String version, Map<String, String> properties) {
         this.extensionName = extensionName;
         this.version = version;
         this.properties = properties;
-    }
-
-    public String getQualifier() {
-        return qualifier;
-    }
-
-    public void setQualifier(String qualifier) {
-        this.qualifier = qualifier;
     }
 
     public String getExtensionName() {
@@ -56,5 +47,13 @@ public class NuxeoMetadata {
 
     public void setProperties(Map<String, String> properties) {
         this.properties = properties;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }

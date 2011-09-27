@@ -35,19 +35,19 @@ public class JDBCRetrieveByFunctionalIdTask extends JDBCAbstractTask {
             ResultSet resultSet = statement.executeQuery();
 
             Map<String, String> extensionProperties = new HashMap<String, String>();
-            String metadataQualifier = null;
+            String metadataFunctionalId = null;
             String extensionName = null;
             Long id = null;
 
             while (resultSet.next()) {
                 extensionProperties.put(resultSet.getString(PROPERTY_KEY_COLUMN), resultSet.getString(PROPERTY_VALUE_COLUMN));
                 if (resultSet.isFirst()) {
-                    metadataQualifier = resultSet.getString(METADATA_QUALIFIER_COLUMN);
+                    metadataFunctionalId = resultSet.getString(METADATA_QUALIFIER_COLUMN);
                     extensionName = resultSet.getString(EXTENSION_NAME_COLUMN);
                     id = resultSet.getLong(ID_COLUMN);
                 }
             }
-            if (metadataQualifier == null) {
+            if (metadataFunctionalId == null) {
                 throw new CoreException("Cannot find the dependency with this Qualifier : " + qualifier);
             }
             

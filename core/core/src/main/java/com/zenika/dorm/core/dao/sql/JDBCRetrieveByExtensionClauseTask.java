@@ -52,20 +52,21 @@ public class JDBCRetrieveByExtensionClauseTask extends JDBCAbstractTask {
             LOG.debug("Query: " + query);
             ResultSet resultSet = statement.executeQuery();
 
-            String metadataQualifier = null;
+            Long id = null;
+            String metadataFunctionalId = null;
             Map<String, String> extensionProperties = new HashMap<String, String>();
 
             while (resultSet.next()) {
-                if (!resultSet.getString(METADATA_QUALIFIER_COLUMN).equals(metadataQualifier)) {
+                if (!resultSet.getString(METADATA_QUALIFIER_COLUMN).equals(metadataFunctionalId)) {
                     if (!resultSet.isFirst()) {
-                        result.add(createFromProperties(extensionProperties));
+                        result.add(createFromProperties(id, extensionProperties));
                         extensionProperties = new HashMap<String, String>();
                     }
-                    metadataQualifier = resultSet.getString(METADATA_QUALIFIER_COLUMN);
+                    metadataFunctionalId = resultSet.getString(METADATA_QUALIFIER_COLUMN);
                 }
                 extensionProperties.put(resultSet.getString(PROPERTY_KEY_COLUMN), resultSet.getString(PROPERTY_VALUE_COLUMN));
                 if (resultSet.isLast()) {
-                    result.add(createFromProperties(extensionProperties));
+                    result.add(createFromProperties(id, extensionProperties));
                 }
             }
             return result;
@@ -87,7 +88,7 @@ public class JDBCRetrieveByExtensionClauseTask extends JDBCAbstractTask {
      *
      * @param extensionProperties
      */
-    private DormMetadata createFromProperties(Map<String, String> extensionProperties) {
+    private DormMetadata createFromProperties(Long id, Map<String, String> extensionProperties) {
         return serviceLoader.getInstanceOf(extensionName).fromMap(id, extensionProperties);
     }
 

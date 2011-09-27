@@ -19,8 +19,6 @@ import java.util.Map;
  */
 public class DormDaoNeo4j implements DormDao {
 
-    private static final Logger LOG = LoggerFactory.getLogger(DormDaoNeo4j.class);
-
     public static final String DATA_ENTRY_POINT_URI = "http://localhost:7474/db/data";
 
     @Inject
@@ -31,16 +29,16 @@ public class DormDaoNeo4j implements DormDao {
     private ExtensionFactoryServiceLoader serviceLoader;
 
     @Override
-    public DormMetadata getMetadataByFunctionalId(final String qualifier) {
+    public DormMetadata getMetadataByFunctionalId(final String functionalId) {
         return Guice.createInjector(new AbstractModule() {
             @Override
             protected void configure() {
                 bind(Neo4jWebResourceWrapper.class).toInstance(wrapper);
                 bind(Neo4jIndex.class).toInstance(index);
                 bind(ExtensionFactoryServiceLoader.class).toInstance(serviceLoader);
-                bind(String.class).toInstance(qualifier);
+                bind(String.class).toInstance(functionalId);
             }
-        }).getInstance(Neo4jRetrieveByQualifier.class).execute();
+        }).getInstance(Neo4jRetrieveByFunctionalId.class).execute();
     }
 
     @Override
