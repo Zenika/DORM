@@ -42,7 +42,6 @@ public class Neo4jSinglePushTask extends Neo4jAbstractTask {
             Map<String, String> properties = factory.toMap(this.metadata);
 
             Neo4jMetadata metadata = new Neo4jMetadata(
-                    this.metadata.getFunctionalId(),
                     this.metadata.getExtensionName(),
                     properties
             );
@@ -61,7 +60,7 @@ public class Neo4jSinglePushTask extends Neo4jAbstractTask {
                     )
             );
 
-            createIndex(metadataResponse, metadata.getQualifier());
+            createIndex(metadataResponse, this.metadata.getFunctionalId());
 
             return factory.fromMap(id, properties);
         } else {

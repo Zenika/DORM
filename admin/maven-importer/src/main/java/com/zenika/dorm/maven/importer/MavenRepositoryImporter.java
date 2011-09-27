@@ -57,11 +57,6 @@ public class MavenRepositoryImporter {
         init();
     }
 
-    public MavenRepositoryImporter(String baseRepository, URI serverUri) {
-        this.baseUrl = baseRepository;
-        this.serverUri = serverUri;
-    }
-
     private void init() {
         Client client = new Client();
         this.resource = client.resource(serverUri);
