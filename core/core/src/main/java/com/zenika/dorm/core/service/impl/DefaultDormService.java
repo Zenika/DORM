@@ -2,6 +2,7 @@ package com.zenika.dorm.core.service.impl;
 
 import com.google.inject.Inject;
 import com.zenika.dorm.core.dao.DormDao;
+import com.zenika.dorm.core.dao.query.DormBasicQuery;
 import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.core.model.DormResource;
 import com.zenika.dorm.core.model.impl.Usage;
@@ -66,9 +67,10 @@ public class DefaultDormService implements DormService {
 
         List<DormMetadata> metadatas = null;
 
-        if (values.isGetByQualifier()) {
+        if (values.hasCompleteMetadata()) {
 
-            DormMetadata metadata = dao.getMetadataByFunctionalId(values.getMetadata().getName());
+            DormBasicQuery query = new DormBasicQuery.Builder(values.getMetadata()).build();
+            DormMetadata metadata = dao.get(query);
 
             if (null != metadata) {
                 metadatas = new ArrayList<DormMetadata>();

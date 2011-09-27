@@ -5,6 +5,7 @@ import com.google.inject.Guice;
 import com.google.inject.Inject;
 import com.google.inject.TypeLiteral;
 import com.zenika.dorm.core.dao.DormDao;
+import com.zenika.dorm.core.dao.query.DormBasicQuery;
 import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.core.model.impl.Usage;
 import com.zenika.dorm.core.service.spi.ExtensionFactoryServiceLoader;
@@ -49,6 +50,11 @@ public class DormDaoJdbc implements DormDao {
                     }
                 }).getInstance(JDBCRetrieveByFunctionalIdTask.class);
         return jdbcRetrieveByFunctionalIdTask.execute();
+    }
+
+    @Override
+    public DormMetadata get(DormBasicQuery query) {
+        return null;
     }
 
     @Override

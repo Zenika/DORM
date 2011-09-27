@@ -30,8 +30,8 @@ public class DormServiceGetMetadataValues {
         return this;
     }
 
-    public boolean isGetByQualifier() {
-        return metadataExtensionClauses.isEmpty();
+    public boolean hasCompleteMetadata() {
+        return null != metadata;
     }
 
     public boolean isGetByUsage() {
