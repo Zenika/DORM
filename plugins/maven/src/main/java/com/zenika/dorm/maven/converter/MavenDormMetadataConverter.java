@@ -32,8 +32,8 @@ public class MavenDormMetadataConverter {
 
         if (dormMetadata.isSnapshot()) {
             Snapshot snapshot = new Snapshot();
-            snapshot.setBuildNumber(Integer.valueOf(dormMetadata.getBuildNumber()));
-            snapshot.setTimestamp(dormMetadata.getTimestamp());
+            snapshot.setBuildNumber(Integer.valueOf(dormMetadata.getBuildInfo().getBuildNumber()));
+            snapshot.setTimestamp(dormMetadata.getBuildInfo().getTimestamp());
             versioning.setSnapshot(snapshot);
         }
 

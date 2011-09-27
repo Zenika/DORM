@@ -14,21 +14,23 @@ public class MavenMetadataUriBuilder {
 
         MavenFilename filename = uri.getFilename();
 
-        MavenMetadataBuilder builder = new MavenMetadataBuilder(uri.getArtifactId())
-                .groupId(uri.getGroupId())
-                .version(uri.getVersion())
-                .snapshot(uri.isSnapshot())
+        MavenBuildInfoBuilder buildInfoBuilder = new MavenBuildInfoBuilder()
                 .extension(filename.getExtension());
 
         if (StringUtils.isNotBlank(filename.getClassifier())) {
-            builder.classifier(filename.getClassifier());
+            buildInfoBuilder.classifier(filename.getClassifier());
         }
 
         if (StringUtils.isNotBlank(filename.getTimestamp()) && StringUtils.isNotBlank(filename
                 .getBuildNumber())) {
-            builder.timestamp(filename.getTimestamp());
-            builder.buildNumber(filename.getBuildNumber());
+            buildInfoBuilder.timestamp(filename.getTimestamp());
+            buildInfoBuilder.buildNumber(filename.getBuildNumber());
         }
+
+        MavenMetadataBuilder builder = new MavenMetadataBuilder(uri.getArtifactId())
+                .groupId(uri.getGroupId())
+                .version(uri.getVersion())
+                .buildInfo(buildInfoBuilder.build());
 
         return builder.build();
     }

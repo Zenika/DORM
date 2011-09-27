@@ -111,7 +111,7 @@ public class DefaultDormRepository implements DormRepository {
                 .append("/")
                 .append(metadata.getVersion().replace("/", "-"))
                 .append("/")
-                .append(metadata.getQualifier().replace("/", "-"))
+                .append(metadata.getFunctionnalId().replace("/", "-"))
                 .toString();
 
         return path.replace(":", "-");

@@ -8,15 +8,29 @@ package com.zenika.dorm.core.model;
  */
 public abstract class DormMetadata {
 
+    protected final Long id;
+
+    protected DormMetadata() {
+        id =  null;
+    }
+
+    public DormMetadata(Long id) {
+        this.id = id;
+    }
+
     public abstract String getName();
 
     public abstract String getVersion();
 
     public abstract String getExtensionName();
 
-    public final String getQualifier() {
+    public final String getFunctionnalId() {
         return getExtensionName() + ":" +
                 getName() + ":" +
                 getVersion();
+    }
+
+    public Long getId() {
+        return id;
     }
 }

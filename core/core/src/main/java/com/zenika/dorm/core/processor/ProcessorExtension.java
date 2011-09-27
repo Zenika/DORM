@@ -16,10 +16,4 @@ public abstract class ProcessorExtension {
     public abstract DormWebServiceResult push(DormWebServiceRequest request);
 
     public abstract DormWebServiceResult get(DormWebServiceRequest request);
-
-//    public abstract DormServicePutRequest buildPutRequest(DormWebServiceRequest request);
-//
-//    public abstract DormServiceGetRequest buildGetRequest(DormWebServiceRequest request);
-//
-//    public abstract Dependency buildDependency(DormServiceGetResult result);
 }

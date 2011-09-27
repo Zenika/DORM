@@ -1,5 +1,6 @@
 package com.zenika.dorm.maven.model.builder;
 
+import com.zenika.dorm.maven.model.MavenBuildInfo;
 import com.zenika.dorm.maven.model.MavenMetadata;
 
 /**
@@ -9,14 +10,11 @@ import com.zenika.dorm.maven.model.MavenMetadata;
  */
 public class MavenMetadataBuilder {
 
-    protected String groupId;
-    protected String artifactId;
-    protected String version;
-    protected String extension;
-    protected String classifier;
-    protected String timestamp;
-    protected String buildNumber;
-    protected boolean snapshot;
+    private Long id;
+    private String groupId;
+    private String artifactId;
+    private String version;
+    private MavenBuildInfo buildInfo;
 
     public MavenMetadataBuilder(String artifactId) {
         this.artifactId = artifactId;
@@ -26,15 +24,15 @@ public class MavenMetadataBuilder {
         this(metadata.getArtifactId());
         groupId(metadata.getGroupId());
         version(metadata.getVersion());
-        extension(metadata.getExtension());
-        classifier(metadata.getClassifier());
-        timestamp(metadata.getTimestamp());
-        buildNumber(metadata.getBuildNumber());
-        snapshot(metadata.isSnapshot());
+    }
+
+    public MavenMetadataBuilder id(Long id) {
+        this.id = id;
+        return this;
     }
 
     public MavenMetadataBuilder groupId(String groupId) {
-        this.groupId = groupId; //.replaceAll("/", "_");
+        this.groupId = groupId;
         return this;
     }
 
@@ -43,33 +41,12 @@ public class MavenMetadataBuilder {
         return this;
     }
 
-    public MavenMetadataBuilder extension(String extension) {
-        this.extension = extension;
-        return this;
-    }
-
-    public MavenMetadataBuilder classifier(String classifier) {
-        this.classifier = classifier;
-        return this;
-    }
-
-    public MavenMetadataBuilder timestamp(String timestamp) {
-        this.timestamp = timestamp;
-        return this;
-    }
-
-    public MavenMetadataBuilder buildNumber(String buildNumber) {
-        this.buildNumber = buildNumber;
-        return this;
-    }
-
-    public MavenMetadataBuilder snapshot(boolean snapshot) {
-        this.snapshot = snapshot;
+    public MavenMetadataBuilder buildInfo(MavenBuildInfo buildInfo) {
+        this.buildInfo = buildInfo;
         return this;
     }
 
     public MavenMetadata build() {
-        return new MavenMetadata(groupId, artifactId, version, extension, classifier,
-                timestamp, buildNumber, snapshot);
+        return new MavenMetadata(id, groupId, artifactId, version, buildInfo);
     }
 }

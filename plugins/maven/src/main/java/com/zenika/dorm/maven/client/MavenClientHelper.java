@@ -15,17 +15,17 @@ public class MavenClientHelper {
 
     public static Artifact fromDependencyToArtifact(Dependency dependency) {
 
-        MavenMetadata extension;
+        MavenMetadata metadata;
 
         try {
-            extension = (MavenMetadata) dependency.getMetadata();
+            metadata = (MavenMetadata) dependency.getMetadata();
         } catch (ClassCastException e) {
             throw new MavenException("Extension is not maven");
         }
 
-        ArtifactType type = new DefaultArtifactType(extension.getExtension());
-        Artifact artifact = new DefaultArtifact(extension.getGroupId(), extension.getArtifactId(),
-                "toto", extension.getExtension(), extension.getVersion(), type);
+        ArtifactType type = new DefaultArtifactType(metadata.getBuildInfo().getExtension());
+        Artifact artifact = new DefaultArtifact(metadata.getGroupId(), metadata.getArtifactId(),
+                "toto", metadata.getBuildInfo().getExtension(), metadata.getVersion(), type);
 
         if (dependency.hasResource()) {
             return artifact.setFile(dependency.getResource().getFile());

@@ -10,6 +10,7 @@ import com.zenika.dorm.core.model.ws.DormWebServiceRequest;
 import com.zenika.dorm.core.test.helper.ExtensionFixtures;
 import com.zenika.dorm.maven.model.MavenConstant;
 import com.zenika.dorm.maven.model.MavenMetadata;
+import com.zenika.dorm.maven.model.builder.MavenBuildInfoBuilder;
 import com.zenika.dorm.maven.model.builder.MavenMetadataBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,7 +38,7 @@ public class MavenFixtures extends ExtensionFixtures {
         return new MavenMetadataBuilder(artifactId)
                 .groupId(groupId)
                 .version(mavenVersion)
-                .extension(mavenType)
+                .buildInfo(new MavenBuildInfoBuilder().extension(mavenType).build())
                 .build();
     }
 
@@ -45,10 +46,11 @@ public class MavenFixtures extends ExtensionFixtures {
         return new MavenMetadataBuilder(artifactId)
                 .groupId(groupId)
                 .version(mavenVersion)
-                .snapshot(true)
-                .extension("jar")
-                .buildNumber("1")
-                .timestamp("20110825.142212")
+                .buildInfo(new MavenBuildInfoBuilder()
+                        .extension("jar")
+                        .buildNumber("1")
+                        .timestamp("20110825.142212")
+                        .build())
                 .build();
     }
 

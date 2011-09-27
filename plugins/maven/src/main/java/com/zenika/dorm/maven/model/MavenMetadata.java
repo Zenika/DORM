@@ -33,14 +33,13 @@ public final class MavenMetadata extends DormMetadata {
     private final String groupId;
     private final String artifactId;
     private final String version;
-    private final String classifier;
-    private final String timestamp;
-    private final String extension;
-    private final String buildNumber;
     private final boolean snapshot;
 
-    public MavenMetadata(String groupId, String artifactId, String version, String extension,
-                         String classifier, String timestamp, String buildNumber, boolean snapshot) {
+    private final MavenBuildInfo buildInfo;
+
+    public MavenMetadata(Long id, String groupId, String artifactId, String version, MavenBuildInfo buildInfo) {
+
+        super(id);
 
         if (DormStringUtils.oneIsBlank(groupId, artifactId, version)) {
             throw new MavenException("Following metadatas are required : groupId, artifactId, versionId");
@@ -49,13 +48,9 @@ public final class MavenMetadata extends DormMetadata {
         this.groupId = groupId;
         this.artifactId = artifactId;
         this.version = version;
+        this.buildInfo = buildInfo;
 
-        this.extension = StringUtils.defaultIfBlank(extension, "");
-        this.classifier = StringUtils.defaultIfBlank(classifier, "");
-        this.timestamp = StringUtils.defaultIfBlank(timestamp, "");
-        this.buildNumber = StringUtils.defaultIfBlank(buildNumber, "");
-
-        this.snapshot = snapshot;
+        snapshot = (version.endsWith("-" + MavenConstant.Special.SNAPSHOT)) ? true : false;
     }
 
     @Override
@@ -67,17 +62,17 @@ public final class MavenMetadata extends DormMetadata {
                 .append(groupId).append(separator)
                 .append(artifactId);
 
-        if (StringUtils.isNotBlank(timestamp) && StringUtils.isNotBlank(buildNumber)) {
-            qualifier.append(separator).append(timestamp)
-                    .append(separator).append(buildNumber);
+        if (StringUtils.isNotBlank(buildInfo.getTimestamp()) && StringUtils.isNotBlank(buildInfo.getBuildNumber())) {
+            qualifier.append(separator).append(buildInfo.getTimestamp())
+                    .append(separator).append(buildInfo.getBuildNumber());
         }
 
-        if (StringUtils.isNotBlank(classifier)) {
-            qualifier.append(separator).append(classifier);
+        if (StringUtils.isNotBlank(buildInfo.getClassifier())) {
+            qualifier.append(separator).append(buildInfo.getClassifier());
         }
 
         return qualifier
-                .append(separator).append(extension)
+                .append(separator).append(buildInfo.getExtension())
                 .toString();
     }
 
@@ -99,25 +94,24 @@ public final class MavenMetadata extends DormMetadata {
         return artifactId;
     }
 
-    public String getExtension() {
-        return extension;
-    }
-
-    public String getClassifier() {
-        return classifier;
-    }
-
-    public String getTimestamp() {
-        return timestamp;
-    }
-
-    public String getBuildNumber() {
-
-        return buildNumber;
+    public MavenBuildInfo getBuildInfo() {
+        return buildInfo;
     }
 
     public boolean isSnapshot() {
         return snapshot;
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this)
+                .append("groupId", groupId)
+                .append("artifactId", artifactId)
+                .append("version", version)
+                .append("snapshot", snapshot)
+                .append("buildInfo", buildInfo)
+                .appendSuper(super.toString())
+                .toString();
     }
 
     @Override
@@ -128,17 +122,9 @@ public final class MavenMetadata extends DormMetadata {
         MavenMetadata metadata = (MavenMetadata) o;
 
         if (snapshot != metadata.snapshot) return false;
-        if (artifactId != null ? !artifactId.equals(metadata.artifactId) : metadata.artifactId != null)
-            return false;
-        if (buildNumber != null ? !buildNumber.equals(metadata.buildNumber) : metadata.buildNumber != null)
-            return false;
-        if (classifier != null ? !classifier.equals(metadata.classifier) : metadata.classifier != null)
-            return false;
-        if (extension != null ? !extension.equals(metadata.extension) : metadata.extension != null)
-            return false;
+        if (artifactId != null ? !artifactId.equals(metadata.artifactId) : metadata.artifactId != null) return false;
+        if (buildInfo != null ? !buildInfo.equals(metadata.buildInfo) : metadata.buildInfo != null) return false;
         if (groupId != null ? !groupId.equals(metadata.groupId) : metadata.groupId != null) return false;
-        if (timestamp != null ? !timestamp.equals(metadata.timestamp) : metadata.timestamp != null)
-            return false;
         if (version != null ? !version.equals(metadata.version) : metadata.version != null) return false;
 
         return true;
@@ -149,26 +135,8 @@ public final class MavenMetadata extends DormMetadata {
         int result = groupId != null ? groupId.hashCode() : 0;
         result = 31 * result + (artifactId != null ? artifactId.hashCode() : 0);
         result = 31 * result + (version != null ? version.hashCode() : 0);
-        result = 31 * result + (classifier != null ? classifier.hashCode() : 0);
-        result = 31 * result + (timestamp != null ? timestamp.hashCode() : 0);
-        result = 31 * result + (extension != null ? extension.hashCode() : 0);
-        result = 31 * result + (buildNumber != null ? buildNumber.hashCode() : 0);
         result = 31 * result + (snapshot ? 1 : 0);
+        result = 31 * result + (buildInfo != null ? buildInfo.hashCode() : 0);
         return result;
-    }
-
-    @Override
-    public String toString() {
-        return new ToStringBuilder(this)
-                .append("groupId", groupId)
-                .append("artifactId", artifactId)
-                .append("version", version)
-                .append("classifier", classifier)
-                .append("timestamp", timestamp)
-                .append("extension", extension)
-                .append("buildNumber", buildNumber)
-                .append("snapshot", snapshot)
-                .appendSuper(super.toString())
-                .toString();
     }
 }

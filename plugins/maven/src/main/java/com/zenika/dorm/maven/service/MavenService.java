@@ -31,7 +31,7 @@ public class MavenService {
         }
 
         DormResource resource = DefaultDormResource.create(
-                metadata.getName() + "." + metadata.getExtension(), file);
+                metadata.getName() + "." + metadata.getBuildInfo().getExtension(), file);
 
         DormServiceStoreResourceConfig config = new DormServiceStoreResourceConfig()
                 .override(true);

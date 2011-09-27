@@ -1,22 +1,15 @@
 package com.zenika.dorm.core.dao.neo4j;
 
 import com.google.inject.Inject;
-import com.sun.jersey.api.client.ClientResponse;
-import com.sun.jersey.api.client.GenericType;
 import com.sun.jersey.api.client.WebResource;
 import com.zenika.dorm.core.exception.CoreException;
 import com.zenika.dorm.core.model.DormMetadata;
-import com.zenika.dorm.core.service.spi.ExtensionFactoryServiceLoader;
-import org.apache.commons.logging.Log;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.ws.rs.core.MediaType;
-import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.Map;
 
 
 /**
@@ -37,12 +30,12 @@ public class Neo4jSinglePushTask extends Neo4jAbstractTask {
     public Void execute() {
         resource = wrapper.get();
 
-        Neo4jResponse response = getMetadata(metadata.getQualifier());
+        Neo4jResponse response = getMetadata(metadata.getFunctionnalId());
 
         if (response == null) {
 
             Neo4jMetadata metadata = new Neo4jMetadata(
-                    this.metadata.getQualifier(),
+                    this.metadata.getFunctionnalId(),
                     this.metadata.getExtensionName(),
                     serviceLoader.getInstanceOf(this.metadata.getExtensionName()).toMap(this.metadata)
             );

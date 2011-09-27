@@ -87,7 +87,7 @@ public class MavenProcessor extends ProcessorExtension {
         MavenMetadata metadata = MavenMetadataUriBuilder.buildMavenMetadata(mavenUri);
 
         File file = request.getFile();
-        String extension = metadata.getExtension();
+        String extension = metadata.getBuildInfo().getExtension();
 
         // md5 or sha1
         if (MavenExtensionHelper.isHash(extension)) {
@@ -95,7 +95,7 @@ public class MavenProcessor extends ProcessorExtension {
         }
 
         // pom
-        else if (StringUtils.equals(metadata.getExtension(), MavenConstant.Extension.POM)) {
+        else if (StringUtils.equals(metadata.getBuildInfo().getExtension(), MavenConstant.Extension.POM)) {
             mavenService.storePom(metadata, file);
         }
 

@@ -6,6 +6,7 @@ import com.zenika.dorm.core.service.DormService;
 import com.zenika.dorm.maven.exception.MavenException;
 import com.zenika.dorm.maven.model.MavenConstant;
 import com.zenika.dorm.maven.model.MavenMetadata;
+import com.zenika.dorm.maven.model.builder.MavenBuildInfoBuilder;
 import com.zenika.dorm.maven.model.builder.MavenMetadataBuilder;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.slf4j.Logger;
@@ -31,7 +32,7 @@ public class MavenHashService {
     public boolean compareHash(String hash, MavenMetadata metadata, File file) {
 
         MavenMetadata hashMetadata = new MavenMetadataBuilder(metadata)
-                .extension(hash)
+                .buildInfo(new MavenBuildInfoBuilder().extension(hash).build())
                 .build();
 
         DormResource resource = service.getResource(hashMetadata);
