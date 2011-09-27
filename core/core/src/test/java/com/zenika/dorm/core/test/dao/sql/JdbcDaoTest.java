@@ -121,7 +121,7 @@ public class JdbcDaoTest {
 
     @Test
     public void testGetMetadataByQualifier() {
-        DormMetadata metadata = dao.getMetadataByQualifier("maven:com.zenika.test-test-jar-jar-0.0.1:0.0.1");
+        DormMetadata metadata = dao.getMetadataByFunctionalId("maven:com.zenika.test-test-jar-jar-0.0.1:0.0.1");
         LOG.info("Metadata: " + metadata);
     }
 

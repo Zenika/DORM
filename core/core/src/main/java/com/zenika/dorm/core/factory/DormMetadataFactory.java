@@ -35,7 +35,7 @@ public final class DormMetadataFactory {
             throw new CoreException("Metadata factory not found for identifier : " + name);
         }
 
-        return factory.createFromProperties(properties);
+        return factory.fromMap(id, properties);
     }
 
     /**

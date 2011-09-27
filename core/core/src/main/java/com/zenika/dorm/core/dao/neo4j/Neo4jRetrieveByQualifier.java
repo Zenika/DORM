@@ -1,7 +1,6 @@
 package com.zenika.dorm.core.dao.neo4j;
 
 import com.google.inject.Inject;
-import com.sun.jersey.api.client.GenericType;
 import com.sun.jersey.api.client.WebResource;
 import com.zenika.dorm.core.exception.CoreException;
 import com.zenika.dorm.core.model.DormMetadata;
@@ -33,7 +32,7 @@ public class Neo4jRetrieveByQualifier extends Neo4jAbstractTask {
         Neo4jMetadata metadata = metadataResponse.getData();
 
         return serviceLoader.getInstanceOf(metadata.getExtensionName())
-                .createFromProperties(propertiesResponse.getData());
+                .fromMap(id, propertiesResponse.getData());
     }
 
     private Neo4jResponse<Map<String, String>> getProperties(String propertiesStrUri) {

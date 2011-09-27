@@ -23,7 +23,7 @@ public class MavenMetadataFactory implements ExtensionMetadataFactory {
     }
 
     @Override
-    public DormMetadata createFromProperties(Map<String, String> properties) {
+    public DormMetadata fromMap(Long id, Map<String, String> properties) {
         MavenBuildInfo buildInfo = new MavenBuildInfoBuilder()
                 .classifier(properties.get(MavenBuildInfo.METADATA_CLASSIFIER))
                 .extension(properties.get(MavenBuildInfo.METADATA_EXTENSION))

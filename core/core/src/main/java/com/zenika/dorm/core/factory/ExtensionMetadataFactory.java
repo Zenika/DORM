@@ -11,7 +11,7 @@ public interface ExtensionMetadataFactory {
 
     public String getExtensionName();
 
-    public DormMetadata createFromProperties(Map<String, String> properties);
+    public DormMetadata fromMap(Long id, Map<String, String> properties);
 
     public Map<String, String> toMap(DormMetadata metadata);
 }

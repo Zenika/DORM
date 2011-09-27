@@ -21,7 +21,7 @@ public abstract class NuxeoAbstractTask {
     @Inject
     protected ExtensionFactoryServiceLoader serviceLoader;
 
-    protected abstract Object execute();
+    public abstract Object execute();
 
     protected static void logRequest(String type, WebResource resource, String path) {
         logger.info(type + " to " + resource.getURI() + "/" + path);
