@@ -20,7 +20,7 @@ public class ExtensionTestMetadataFactory implements ExtensionMetadataFactory {
     }
 
     @Override
-    public DormMetadata createFromProperties(Map<String, String> properties) {
+    public DormMetadata fromMap(Long id, Map<String, String> properties) {
         return new DormMetadataTest(
                 properties.get(METADATA_VERSION),
                 properties.get(METADATA_FIELD));

@@ -31,7 +31,7 @@ public class DormDaoNeo4j implements DormDao {
     private ExtensionFactoryServiceLoader serviceLoader;
 
     @Override
-    public DormMetadata getMetadataByQualifier(final String qualifier) {
+    public DormMetadata getMetadataByFunctionalId(final String qualifier) {
         return Guice.createInjector(new AbstractModule() {
             @Override
             protected void configure() {

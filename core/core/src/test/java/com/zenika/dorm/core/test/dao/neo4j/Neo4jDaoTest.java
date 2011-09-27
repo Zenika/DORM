@@ -36,7 +36,7 @@ public class Neo4jDaoTest {
 
     @Test
     public void getByQualifierTest(){
-        DormMetadata metadata = dao.getMetadataByQualifier("Dorm_test:Dorm_test-1.0.0:1.0.0");
+        DormMetadata metadata = dao.getMetadataByFunctionalId("Dorm_test:Dorm_test-1.0.0:1.0.0");
         LOG.info("Metadata: " + metadata);
     }
 }

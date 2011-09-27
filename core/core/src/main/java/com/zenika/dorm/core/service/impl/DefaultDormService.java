@@ -68,7 +68,7 @@ public class DefaultDormService implements DormService {
 
         if (values.isGetByQualifier()) {
 
-            DormMetadata metadata = dao.getMetadataByQualifier(values.getMetadata().getName());
+            DormMetadata metadata = dao.getMetadataByFunctionalId(values.getMetadata().getName());
 
             if (null != metadata) {
                 metadatas = new ArrayList<DormMetadata>();

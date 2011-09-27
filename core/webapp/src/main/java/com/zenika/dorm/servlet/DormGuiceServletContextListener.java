@@ -31,9 +31,9 @@ public class DormGuiceServletContextListener extends GuiceServletContextListener
 
         // core
         modules.add(new DormCoreModule());
-        modules.add(new DormCoreJdbcModule());
+//        modules.add(new DormCoreJdbcModule());
 //        modules.add(new DormCoreNeo4jModule());
-//        modules.add(new DormCoreNuxeoModule());
+        modules.add(new DormCoreNuxeoModule());
 
         // maven extension
         modules.add(new MavenModule());

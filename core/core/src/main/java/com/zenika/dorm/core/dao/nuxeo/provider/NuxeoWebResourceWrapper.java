@@ -35,12 +35,9 @@ public class NuxeoWebResourceWrapper {
 
     private WebResource resource;
 
-    private boolean enableProxy = true;
+    private boolean enableProxy = false;
     private String hostProxy = "192.168.0.24";
     private String portProxy = "8008";
-
-//    @Inject
-//    private Collection<Class<?>> classes;
 
     public NuxeoWebResourceWrapper() {
         DefaultApacheHttpClientConfig config = new DefaultApacheHttpClientConfig();

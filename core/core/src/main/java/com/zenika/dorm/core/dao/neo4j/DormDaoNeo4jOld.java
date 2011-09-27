@@ -206,7 +206,7 @@ public class DormDaoNeo4jOld implements DormDao {
         return str.toString();
     }
     @Override
-    public DormMetadata getMetadataByQualifier(String qualifier) {
+    public DormMetadata getMetadataByFunctionalId(String qualifier) {
         return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 

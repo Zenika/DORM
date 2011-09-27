@@ -17,7 +17,7 @@ public class NuxeoSinglePushTask extends NuxeoAbstractTask {
     private DormMetadata metadata;
 
     @Override
-    protected Void execute() {
+    public Void execute() {
         WebResource resource = wrapper.get();
 
         NuxeoMetadata metadata = new NuxeoMetadata(

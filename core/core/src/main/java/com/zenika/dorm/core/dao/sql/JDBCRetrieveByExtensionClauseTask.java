@@ -88,7 +88,7 @@ public class JDBCRetrieveByExtensionClauseTask extends JDBCAbstractTask {
      * @param extensionProperties
      */
     private DormMetadata createFromProperties(Map<String, String> extensionProperties) {
-        return serviceLoader.getInstanceOf(extensionName).createFromProperties(extensionProperties);
+        return serviceLoader.getInstanceOf(extensionName).fromMap(id, extensionProperties);
     }
 
     private String buildSelectQuery(int size) {

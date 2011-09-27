@@ -29,7 +29,7 @@ public class DormDaoNuxeo implements DormDao {
     private ExtensionFactoryServiceLoader serviceLoader;
 
     @Override
-    public DormMetadata getMetadataByQualifier(final String qualifier) {
+    public DormMetadata getMetadataByFunctionalId(final String qualifier) {
         return Guice.createInjector(new AbstractModule() {
             @Override
             protected void configure() {
@@ -37,7 +37,7 @@ public class DormDaoNuxeo implements DormDao {
                 bind(ExtensionFactoryServiceLoader.class).toInstance(serviceLoader);
                 bind(String.class).toInstance(qualifier);
             }
-        }).getInstance(Neo4jRetrieveByQualifier.class).execute();
+        }).getInstance(NuxeoRetrieveByQualifier.class).execute();
     }
 
     @Override
