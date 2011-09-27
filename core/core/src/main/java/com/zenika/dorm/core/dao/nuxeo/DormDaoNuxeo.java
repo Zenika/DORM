@@ -26,20 +26,15 @@ public class DormDaoNuxeo implements DormDao {
     private ExtensionFactoryServiceLoader serviceLoader;
 
     @Override
-    public DormMetadata getMetadataByFunctionalId(final String qualifier) {
+    public DormMetadata get(final DormBasicQuery query) {
         return Guice.createInjector(new AbstractModule() {
             @Override
             protected void configure() {
                 bind(NuxeoWebResourceWrapper.class).toInstance(wrapper);
                 bind(ExtensionFactoryServiceLoader.class).toInstance(serviceLoader);
-                bind(String.class).toInstance(qualifier);
+                bind(DormBasicQuery.class).toInstance(query);
             }
-        }).getInstance(NuxeoRetrieveByQualifier.class).execute();
-    }
-
-    @Override
-    public DormMetadata get(DormBasicQuery query) {
-        return null;
+        }).getInstance(NuxeoGetTask.class).execute();
     }
 
     @Override

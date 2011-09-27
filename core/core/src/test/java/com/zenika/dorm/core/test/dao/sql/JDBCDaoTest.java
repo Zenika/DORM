@@ -1,9 +1,10 @@
-package com.zenika.dorm.core.test.dao.nuxeo;
+package com.zenika.dorm.core.test.dao.sql;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import com.zenika.dorm.core.dao.nuxeo.DormDaoNuxeo;
+import com.zenika.dorm.core.dao.DormDao;
 import com.zenika.dorm.core.dao.query.DormBasicQuery;
+import com.zenika.dorm.core.dao.sql.DormDaoJdbc;
 import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.core.test.model.DormMetadataTest;
 import org.junit.Before;
@@ -11,21 +12,22 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static org.fest.assertions.Assertions.assertThat;
-
+import static org.fest.assertions.Assertions.*;
 /**
  * @author Antoine ROUAZE <antoine.rouaze AT zenika.com>
  */
-public class NuxeoDaoTest {
+//@Ignore
+public class JDBCDaoTest {
 
-    private static final Logger LOG = LoggerFactory.getLogger(NuxeoDaoTest.class);
+    private static final Logger LOG = LoggerFactory.getLogger(JDBCDaoTest.class);
 
-    private DormDaoNuxeo dao;
+    public DormDao dao;
+
 
     @Before
     public void setUp() {
-        Injector injector = Guice.createInjector(new NuxeoTestModule());
-        dao = injector.getInstance(DormDaoNuxeo.class);
+        Injector injector = Guice.createInjector(new JdbcTestModule());
+        dao = injector.getInstance(DormDaoJdbc.class);
     }
 
     @Test
@@ -35,8 +37,8 @@ public class NuxeoDaoTest {
         dao.saveMetadata(expectMetadata);
 
         DormBasicQuery query = new DormBasicQuery.Builder()
-                .extensionName("Dorm_test")
-                .name("Dorm_test-1.0.0")
+                .extensionName("DormTest")
+                .name("DormTest-1.0.0")
                 .version("1.0.0")
                 .build();
         DormMetadata resultMetadata = dao.get(query);

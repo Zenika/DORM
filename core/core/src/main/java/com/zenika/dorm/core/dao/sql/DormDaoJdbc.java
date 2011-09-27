@@ -16,8 +16,8 @@ import java.util.Map;
 
 public class DormDaoJdbc implements DormDao {
 
-    private static final TypeLiteral<Map<String, String>> typeMap = new TypeLiteral<Map<String, String>>(){};
-
+    private static final TypeLiteral<Map<String, String>> typeMap = new TypeLiteral<Map<String, String>>() {
+    };
 
     @Inject
     private DataSource dataSource;
@@ -26,7 +26,7 @@ public class DormDaoJdbc implements DormDao {
 
     @Override
     public void saveMetadata(final DormMetadata metadata) {
-        JDBCSinglePushTask jdbcSinglePushTask = Guice.createInjector(
+        Guice.createInjector(
                 new AbstractModule() {
                     @Override
                     protected void configure() {
@@ -34,32 +34,26 @@ public class DormDaoJdbc implements DormDao {
                         bind(DataSource.class).toInstance(dataSource);
                         bind(ExtensionFactoryServiceLoader.class).toInstance(serviceLoader);
                     }
-                }).getInstance(JDBCSinglePushTask.class);
-        jdbcSinglePushTask.execute();
+                }).getInstance(JDBCSinglePushTask.class).execute();
     }
 
     @Override
-    public DormMetadata getMetadataByFunctionalId(final String functionalId) {
-        JDBCRetrieveByFunctionalIdTask jdbcRetrieveByFunctionalIdTask = Guice.createInjector(
+    public DormMetadata get(final DormBasicQuery query) {
+        JDBCGetTask jdbcGetTask = Guice.createInjector(
                 new AbstractModule() {
                     @Override
                     protected void configure() {
-                        bind(String.class).toInstance(functionalId);
+                        bind(DormBasicQuery.class).toInstance(query);
                         bind(DataSource.class).toInstance(dataSource);
                         bind(ExtensionFactoryServiceLoader.class).toInstance(serviceLoader);
                     }
-                }).getInstance(JDBCRetrieveByFunctionalIdTask.class);
-        return jdbcRetrieveByFunctionalIdTask.execute();
-    }
-
-    @Override
-    public DormMetadata get(DormBasicQuery query) {
-        return null;
+                }).getInstance(JDBCGetTask.class);
+        return jdbcGetTask.execute();
     }
 
     @Override
     public List<DormMetadata> getMetadataByExtension(final String extensionName, final Map<String, String> extensionClauses, Usage usage) {
-        JDBCRetrieveByExtensionClauseTask jdbcRetrieveByExtensionClauseTask = Guice.createInjector(
+        return Guice.createInjector(
                 new AbstractModule() {
                     @Override
                     protected void configure() {
@@ -68,7 +62,6 @@ public class DormDaoJdbc implements DormDao {
                         bind(DataSource.class).toInstance(dataSource);
                         bind(ExtensionFactoryServiceLoader.class).toInstance(serviceLoader);
                     }
-                }).getInstance(JDBCRetrieveByExtensionClauseTask.class);
-        return jdbcRetrieveByExtensionClauseTask.execute();
+                }).getInstance(JDBCRetrieveByExtensionClauseTask.class).execute();
     }
 }

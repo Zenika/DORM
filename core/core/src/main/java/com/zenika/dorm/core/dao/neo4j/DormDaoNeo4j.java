@@ -9,8 +9,6 @@ import com.zenika.dorm.core.dao.query.DormBasicQuery;
 import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.core.model.impl.Usage;
 import com.zenika.dorm.core.service.spi.ExtensionFactoryServiceLoader;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.Map;
@@ -24,27 +22,22 @@ public class DormDaoNeo4j implements DormDao {
 
     @Inject
     private Neo4jWebResourceWrapper wrapper;
-    @Inject
-    private Neo4jIndex index;
+//    @Inject
+//    private Neo4jIndex index;
     @Inject
     private ExtensionFactoryServiceLoader serviceLoader;
 
     @Override
-    public DormMetadata getMetadataByFunctionalId(final String functionalId) {
+    public DormMetadata get(final DormBasicQuery query) {
         return Guice.createInjector(new AbstractModule() {
             @Override
             protected void configure() {
                 bind(Neo4jWebResourceWrapper.class).toInstance(wrapper);
-                bind(Neo4jIndex.class).toInstance(index);
+//                bind(Neo4jIndex.class).toInstance(index);
                 bind(ExtensionFactoryServiceLoader.class).toInstance(serviceLoader);
-                bind(String.class).toInstance(functionalId);
+                bind(DormBasicQuery.class).toInstance(query);
             }
-        }).getInstance(Neo4jRetrieveByFunctionalId.class).execute();
-    }
-
-    @Override
-    public DormMetadata get(DormBasicQuery query) {
-        return null;
+        }).getInstance(Neo4jGetTask.class).execute();
     }
 
     @Override
@@ -58,7 +51,7 @@ public class DormDaoNeo4j implements DormDao {
             @Override
             protected void configure() {
                 bind(Neo4jWebResourceWrapper.class).toInstance(wrapper);
-                bind(Neo4jIndex.class).toInstance(index);
+//                bind(Neo4jIndex.class).toInstance(index);
                 bind(ExtensionFactoryServiceLoader.class).toInstance(serviceLoader);
                 bind(DormMetadata.class).toInstance(metadata);
             }

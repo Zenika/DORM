@@ -36,7 +36,7 @@ public class DormCoreNeo4jModule extends AbstractModule {
 
 //        requireBinding(WebResource.class);
 
-        bind(Neo4jIndex.class).toProvider(IndexProvider.class);
+//        bind(Neo4jIndex.class).toProvider(IndexProvider.class);
         bind(DormDao.class).to(DormDaoNeo4j.class);
     }
 }

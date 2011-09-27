@@ -1,9 +1,11 @@
 package com.zenika.dorm.core.dao.neo4j;
 
 import com.google.inject.Inject;
+import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.GenericType;
 import com.sun.jersey.api.client.WebResource;
 import com.zenika.dorm.core.dao.neo4j.provider.Neo4jWebResourceWrapper;
+import com.zenika.dorm.core.dao.query.DormBasicQuery;
 import com.zenika.dorm.core.exception.CoreException;
 import com.zenika.dorm.core.service.spi.ExtensionFactoryServiceLoader;
 import org.slf4j.Logger;
@@ -20,7 +22,9 @@ import java.util.Map;
  */
 public abstract class Neo4jAbstractTask {
 
-    private static Logger logger = LoggerFactory.getLogger(Neo4jAbstractTask.class.getName());
+    private static final Logger LOG = LoggerFactory.getLogger(Neo4jAbstractTask.class.getName());
+
+    protected static final String GREMLIN_URI = "http://localhost:7474/db/data/ext/GremlinPlugin/graphdb/execute_script";
 
     protected static final GenericType<List<Neo4jResponse<Neo4jMetadata>>> LIST_METADATA_GENERIC_TYPE =
             new GenericType<List<Neo4jResponse<Neo4jMetadata>>>() {
@@ -40,47 +44,74 @@ public abstract class Neo4jAbstractTask {
     protected ExtensionFactoryServiceLoader serviceLoader;
 
     protected static void logRequest(String type, WebResource resource, String path) {
-        logger.info(type + " to " + resource.getURI() + "/" + path);
+        LOG.info(type + " to " + resource.getURI() + "/" + path);
     }
 
     protected static void logRequest(String type, URI uri) {
-        logger.info(type + " to " + uri);
+        LOG.info(type + " to " + uri);
     }
 
     protected static void logRequest(String type, String uri) {
-        logger.info(type + " to " + uri);
+        LOG.info(type + " to " + uri);
     }
 
     public abstract Object execute();
 
-    protected Neo4jResponse<Neo4jMetadata> getMetadata(String functionalId) {
+    protected Neo4jResponse<Neo4jMetadata> getMetadata(DormBasicQuery query) {
         try {
-            URI indexUri = new URI(index.getTemplate().replace("{key}", Neo4jIndex.INDEX_DEFAULT_KEY)
-                    .replace("{value}", functionalId));
 
-            List<Neo4jResponse<Neo4jMetadata>> metadataResponses = wrapper.get().uri(indexUri)
+            URI gremlinUri = new URI(GREMLIN_URI);
+
+            String gremlinScript = buildScript(query);
+
+            LOG.info("Script: " + gremlinScript);
+
+            List<Neo4jResponse<Neo4jMetadata>> metadataResponses = wrapper.get().uri(gremlinUri)
                     .accept(MediaType.APPLICATION_JSON_TYPE)
-                    .get(LIST_METADATA_GENERIC_TYPE);
+                    .type(MediaType.APPLICATION_JSON_TYPE)
+                    .entity(gremlinScript)
+                    .post(LIST_METADATA_GENERIC_TYPE);
+
+//            ClientResponse responses = wrapper.get().uri(gremlinUri)
+//                    .accept(MediaType.APPLICATION_JSON_TYPE)
+//                    .type(MediaType.APPLICATION_JSON_TYPE)
+//                    .entity(gremlinScript)
+//                    .post(ClientResponse.class);
+//
+//            LOG.info("Response: " + responses.getEntity(String.class));
 
             if (metadataResponses.size() > 1) {
                 throw new CoreException("Retrieved multiple result");
             }
 
-            logRequest("GET", indexUri);
+            logRequest("GET", gremlinUri);
 
             if (metadataResponses.size() == 0) {
                 return null;
             }
             return metadataResponses.get(0);
+//            return  null;
         } catch (URISyntaxException e) {
             throw new CoreException("Uri syntax exception", e);
         }
     }
 
+    private String buildScript(DormBasicQuery query) {
+        return new StringBuilder(50)
+                .append("{\"script\": \"g.V.filter{it.extensionName == \\\"")
+                .append(query.getExtensionName())
+                .append("\\\" && it.name == \\\"")
+                .append(query.getName())
+                .append("\\\" && it.version == \\\"")
+                .append(query.getVersion())
+                .append("\\\"}\"}")
+                .toString();
+    }
+
     protected Long extractId(String uri) {
         char[] chars = uri.toCharArray();
         StringBuilder builder = new StringBuilder();
-        for (int i = chars.length; i > 0; i--) {
+        for (int i = chars.length - 1; i > 0; i--) {
             if (chars[i] == '/') {
                 break;
             }

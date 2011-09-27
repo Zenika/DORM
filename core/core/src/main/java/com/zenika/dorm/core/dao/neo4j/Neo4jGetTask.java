@@ -2,6 +2,7 @@ package com.zenika.dorm.core.dao.neo4j;
 
 import com.google.inject.Inject;
 import com.sun.jersey.api.client.WebResource;
+import com.zenika.dorm.core.dao.query.DormBasicQuery;
 import com.zenika.dorm.core.exception.CoreException;
 import com.zenika.dorm.core.model.DormMetadata;
 
@@ -14,10 +15,10 @@ import java.util.Map;
 /**
  * @author Antoine ROUAZE <antoine.rouaze AT zenika.com>
  */
-public class Neo4jRetrieveByFunctionalId extends Neo4jAbstractTask {
+public class Neo4jGetTask extends Neo4jAbstractTask {
 
     @Inject
-    private String qualifier;
+    private DormBasicQuery query;
 
     private WebResource resource;
 
@@ -25,7 +26,12 @@ public class Neo4jRetrieveByFunctionalId extends Neo4jAbstractTask {
     public DormMetadata execute() {
         resource = wrapper.get();
 
-        Neo4jResponse<Neo4jMetadata> metadataResponse = getMetadata(qualifier);
+        Neo4jResponse<Neo4jMetadata> metadataResponse = getMetadata(query);
+
+        if (metadataResponse == null){
+            return null;
+        }
+
         Neo4jRelationship relationship = getOutgoingRelationship(metadataResponse, Neo4jMetadata.PROPERTIES_RELATIONSHIPS);
         Neo4jResponse<Map<String, String>> propertiesResponse = getProperties(relationship.getEnd());
 

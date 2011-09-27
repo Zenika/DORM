@@ -2,10 +2,10 @@ package com.zenika.dorm.core.dao.neo4j;
 
 import com.google.inject.Inject;
 import com.sun.jersey.api.client.WebResource;
+import com.zenika.dorm.core.dao.query.DormBasicQuery;
 import com.zenika.dorm.core.exception.CoreException;
 import com.zenika.dorm.core.factory.ExtensionMetadataFactory;
 import com.zenika.dorm.core.model.DormMetadata;
-import com.zenika.dorm.core.service.spi.ExtensionFactoryServiceLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,7 +33,13 @@ public class Neo4jSinglePushTask extends Neo4jAbstractTask {
     public DormMetadata execute() {
         resource = wrapper.get();
 
-        Neo4jResponse response = getMetadata(metadata.getFunctionalId());
+        DormBasicQuery query = new DormBasicQuery.Builder()
+                .extensionName(this.metadata.getExtensionName())
+                .name(this.metadata.getName())
+                .version(this.metadata.getVersion())
+                .build();
+
+        Neo4jResponse response = getMetadata(query);
 
         if (response == null) {
 
@@ -43,6 +49,8 @@ public class Neo4jSinglePushTask extends Neo4jAbstractTask {
 
             Neo4jMetadata metadata = new Neo4jMetadata(
                     this.metadata.getExtensionName(),
+                    this.metadata.getName(),
+                    this.metadata.getVersion(),
                     properties
             );
 
@@ -60,7 +68,9 @@ public class Neo4jSinglePushTask extends Neo4jAbstractTask {
                     )
             );
 
-            createIndex(metadataResponse, this.metadata.getFunctionalId());
+
+            // Create index is useless for the moment
+//            createIndex(metadataResponse, this.metadata.getFunctionalId());
 
             return factory.fromMap(id, properties);
         } else {
@@ -98,6 +108,11 @@ public class Neo4jSinglePushTask extends Neo4jAbstractTask {
         }
     }
 
+    /**
+     * @deprecated index is useless for the moment
+     * @param response
+     * @param value
+     */
     private void createIndex(Neo4jResponse response, String value) {
         try {
             URI indexUri = new URI(

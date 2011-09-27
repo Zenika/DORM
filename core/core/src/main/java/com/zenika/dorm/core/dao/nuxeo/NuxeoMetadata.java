@@ -12,6 +12,7 @@ public class NuxeoMetadata {
     private Long id;
     private String extensionName;
     private String version;
+    private String name;
 
     private Map<String, String> properties;
 
@@ -19,10 +20,11 @@ public class NuxeoMetadata {
 
     }
 
-    public NuxeoMetadata(String extensionName, String version, Map<String, String> properties) {
+    public NuxeoMetadata(String extensionName, String name, String version, Map<String, String> properties) {
         this.extensionName = extensionName;
         this.version = version;
         this.properties = properties;
+        this.name = name;
     }
 
     public String getExtensionName() {

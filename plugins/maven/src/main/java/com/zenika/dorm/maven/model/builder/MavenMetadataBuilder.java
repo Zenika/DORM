@@ -1,6 +1,5 @@
 package com.zenika.dorm.maven.model.builder;
 
-import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.core.model.builder.DormMetadataBuilder;
 import com.zenika.dorm.maven.model.MavenBuildInfo;
 import com.zenika.dorm.maven.model.MavenMetadata;

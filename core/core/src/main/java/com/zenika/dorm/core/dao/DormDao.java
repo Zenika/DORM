@@ -10,8 +10,6 @@ import java.util.Map;
 
 public interface DormDao {
 
-    public DormMetadata getMetadataByFunctionalId(String qualifier);
-
     public DormMetadata get(DormBasicQuery query);
 
     public List<DormMetadata> getMetadataByExtension(String extensionName, Map<String, String> extensionClauses, Usage usage);

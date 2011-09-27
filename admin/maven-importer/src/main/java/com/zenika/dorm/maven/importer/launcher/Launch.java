@@ -7,7 +7,6 @@ import org.kohsuke.args4j.ExampleMode;
 import org.kohsuke.args4j.Option;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.slf4j.spi.LoggerFactoryBinder;
 
 import java.io.File;
 
@@ -24,8 +23,8 @@ public class Launch {
     private int port = 80;
     @Option(name = "-P", usage = "Root path of the maven resource", aliases = "--Path")
     private String path = "";
-    @Option(name = "-l", usage = "Repository path", aliases = "--location")
-    private String location = "";
+    @Option(name = "-l", usage = "Repository path", aliases = "--localRepository")
+    private String localRepository = "";
     @Option(name = "-s", usage = "Get full stack trace", aliases = "--stackTrace")
     private boolean stackTraceActive;
 
@@ -41,7 +40,7 @@ public class Launch {
             if (!host.contains("http://")){
                 host = "http://" + host;
             }
-            MavenRepositoryImporter importer = new MavenRepositoryImporter(location, host, port, path);
+            MavenRepositoryImporter importer = new MavenRepositoryImporter(localRepository, host, port, path);
             LOG.info("Start import...");
             importer.start();
             LOG.info("Done import in : " + importer.getTime() + " ms");
@@ -72,7 +71,7 @@ public class Launch {
         this.path = path;
     }
 
-    public void setLocation(String location) {
-        this.location = location;
+    public void setLocalRepository(String localRepository) {
+        this.localRepository = localRepository;
     }
 }

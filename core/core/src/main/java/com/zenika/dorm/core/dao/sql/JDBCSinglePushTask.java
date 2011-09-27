@@ -30,11 +30,11 @@ public class JDBCSinglePushTask extends JDBCAbstractTask {
                 id = insertMetadata(connection);
                 insertExtension(connection, id);
             } else {
-                LOG.debug("The dependency " + metadata.getName() + " already insert in database");
+                LOG.debug("The dependency " + this.metadata.getName() + " already insert in database");
             }
             connection.commit();
-            ExtensionMetadataFactory factory = serviceLoader.getInstanceOf(metadata.getExtensionName());
-            Map<String, String> properties = factory.toMap(metadata);
+            ExtensionMetadataFactory factory = serviceLoader.getInstanceOf(this.metadata.getExtensionName());
+            Map<String, String> properties = factory.toMap(this.metadata);
             metadata = factory.fromMap(id, properties);
         } catch (SQLException e) {
             if (connection != null) {
@@ -59,8 +59,10 @@ public class JDBCSinglePushTask extends JDBCAbstractTask {
 
     private Long getDependencyId(Connection connection) throws SQLException {
         Long id = null;
-        PreparedStatement statement = connection.prepareStatement("SELECT id FROM dorm_metadata WHERE metadata_qualifier = ?");
+        PreparedStatement statement = connection.prepareStatement("SELECT id FROM dorm_metadata WHERE metadata_name = ? AND extension_name = ? AND metadata_version = ?");
         statement.setString(1, metadata.getName());
+        statement.setString(2, metadata.getExtensionName());
+        statement.setString(3, metadata.getVersion());
         ResultSet result = statement.executeQuery();
         if (result.next()) {
             id = result.getLong(ID_COLUMN);
@@ -70,9 +72,10 @@ public class JDBCSinglePushTask extends JDBCAbstractTask {
 
     private Long insertMetadata(Connection connection) throws SQLException {
         Long id = null;
-        PreparedStatement statement = connection.prepareStatement("INSERT INTO dorm_metadata (metadata_qualifier, extension_name) VALUES (?, ?);", Statement.RETURN_GENERATED_KEYS);
+        PreparedStatement statement = connection.prepareStatement("INSERT INTO dorm_metadata (metadata_name, extension_name, metadata_version) VALUES (?, ?, ?);", Statement.RETURN_GENERATED_KEYS);
         statement.setString(1, metadata.getName());
         statement.setString(2, metadata.getExtensionName());
+        statement.setString(3, metadata.getVersion());
         if (statement.executeUpdate() > 0) {
             ResultSet resultSet = statement.getGeneratedKeys();
             if (resultSet.next()) {

@@ -17,6 +17,8 @@ public class Neo4jMetadata  {
     public static final String PROPERTIES_RELATIONSHIPS = "properties";
 
     private String extensionName;
+    private String version;
+    private String name;
 
     private Map<String, String> properties;
 
@@ -24,9 +26,11 @@ public class Neo4jMetadata  {
         
     }
 
-    public Neo4jMetadata(String extensionName, Map<String, String> properties) {
+    public Neo4jMetadata(String extensionName, String name, String version, Map<String, String> properties) {
         this.extensionName = extensionName;
         this.properties = properties;
+        this.name = name;
+        this.version = version;
     }
 
     public String getExtensionName() {
@@ -47,4 +51,19 @@ public class Neo4jMetadata  {
         this.properties = properties;
     }
 
+    public String getVersion() {
+        return version;
+    }
+
+    public void setVersion(String version) {
+        this.version = version;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 }

@@ -22,16 +22,20 @@ public class ExtensionTestMetadataFactory implements ExtensionMetadataFactory {
     @Override
     public DormMetadata fromMap(Long id, Map<String, String> properties) {
         return new DormMetadataTest(
-                properties.get(METADATA_VERSION),
-                properties.get(METADATA_FIELD));
+                id,
+                properties.get(VERSION_FIELD),
+                properties.get(FIELD_FIELD),
+                properties.get(DATA_FIELD));
     }
 
     @Override
     public Map<String, String> toMap(DormMetadata metadata) {
         DormMetadataTest metadataTest = (DormMetadataTest) metadata;
+
         Map<String, String> properties = new HashMap<String, String>();
-        properties.put(METADATA_VERSION, metadataTest.getVersion());
-        properties.put(METADATA_FIELD, ((DormMetadataTest) metadata).getTestField());
+        properties.put(VERSION_FIELD, metadataTest.getVersion());
+        properties.put(FIELD_FIELD, metadataTest.getField());
+        properties.put(DATA_FIELD, metadataTest.getData());
         return properties;
     }
 }

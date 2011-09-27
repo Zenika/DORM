@@ -23,6 +23,7 @@ public class NuxeoSinglePushTask extends NuxeoAbstractTask {
 
         NuxeoMetadata metadata = new NuxeoMetadata(
                 this.metadata.getExtensionName(),
+                this.metadata.getName(),
                 this.metadata.getVersion(),
                 serviceLoader.getInstanceOf(this.metadata.getExtensionName()).toMap(this.metadata)
         );
