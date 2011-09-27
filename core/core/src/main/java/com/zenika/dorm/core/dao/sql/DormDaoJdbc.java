@@ -38,17 +38,17 @@ public class DormDaoJdbc implements DormDao {
     }
 
     @Override
-    public DormMetadata getMetadataByFunctionalId(final String qualifier) {
-        JDBCRetrieveByFunctionalIdTask jdbcRetrieveByQualifierTask = Guice.createInjector(
+    public DormMetadata getMetadataByFunctionalId(final String functionalId) {
+        JDBCRetrieveByFunctionalIdTask jdbcRetrieveByFunctionalIdTask = Guice.createInjector(
                 new AbstractModule() {
                     @Override
                     protected void configure() {
-                        bind(String.class).toInstance(qualifier);
+                        bind(String.class).toInstance(functionalId);
                         bind(DataSource.class).toInstance(dataSource);
                         bind(ExtensionFactoryServiceLoader.class).toInstance(serviceLoader);
                     }
                 }).getInstance(JDBCRetrieveByFunctionalIdTask.class);
-        return jdbcRetrieveByQualifierTask.execute();
+        return jdbcRetrieveByFunctionalIdTask.execute();
     }
 
     @Override

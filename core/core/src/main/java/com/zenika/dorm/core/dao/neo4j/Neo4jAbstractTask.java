@@ -22,9 +22,6 @@ public abstract class Neo4jAbstractTask {
 
     private static Logger logger = LoggerFactory.getLogger(Neo4jAbstractTask.class.getName());
 
-    public static final String DATA_ENTRY_POINT_URI = "http://localhost:7474/db/data";
-    public static final String NODE_PATH = "node";
-
     protected static final GenericType<List<Neo4jResponse<Neo4jMetadata>>> LIST_METADATA_GENERIC_TYPE =
             new GenericType<List<Neo4jResponse<Neo4jMetadata>>>() {
             };
@@ -56,10 +53,10 @@ public abstract class Neo4jAbstractTask {
 
     public abstract Object execute();
 
-    protected Neo4jResponse<Neo4jMetadata> getMetadata(String qualifier) {
+    protected Neo4jResponse<Neo4jMetadata> getMetadata(String functionalId) {
         try {
             URI indexUri = new URI(index.getTemplate().replace("{key}", Neo4jIndex.INDEX_DEFAULT_KEY)
-                    .replace("{value}", qualifier));
+                    .replace("{value}", functionalId));
 
             List<Neo4jResponse<Neo4jMetadata>> metadataResponses = wrapper.get().uri(indexUri)
                     .accept(MediaType.APPLICATION_JSON_TYPE)
@@ -71,13 +68,25 @@ public abstract class Neo4jAbstractTask {
 
             logRequest("GET", indexUri);
 
-            if (metadataResponses.size() == 0){
+            if (metadataResponses.size() == 0) {
                 return null;
             }
             return metadataResponses.get(0);
         } catch (URISyntaxException e) {
             throw new CoreException("Uri syntax exception", e);
         }
+    }
+
+    protected Long extractId(String uri) {
+        char[] chars = uri.toCharArray();
+        StringBuilder builder = new StringBuilder();
+        for (int i = chars.length; i > 0; i--) {
+            if (chars[i] == '/') {
+                break;
+            }
+            builder.append(chars[i]);
+        }
+        return Long.valueOf(builder.toString());
     }
 
 }

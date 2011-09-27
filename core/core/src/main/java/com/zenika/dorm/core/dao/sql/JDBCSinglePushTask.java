@@ -1,6 +1,7 @@
 package com.zenika.dorm.core.dao.sql;
 
 import com.zenika.dorm.core.exception.CoreException;
+import com.zenika.dorm.core.factory.ExtensionMetadataFactory;
 import com.zenika.dorm.core.model.DormMetadata;
 import org.apache.commons.dbutils.DbUtils;
 import org.slf4j.Logger;
@@ -18,8 +19,9 @@ public class JDBCSinglePushTask extends JDBCAbstractTask {
     private DormMetadata metadata;
 
     @Override
-    public Void execute() {
+    public DormMetadata execute() {
         Connection connection = null;
+        DormMetadata metadata = null;
         try {
             connection = dataSource.getConnection();
             connection.setAutoCommit(false);
@@ -31,6 +33,9 @@ public class JDBCSinglePushTask extends JDBCAbstractTask {
                 LOG.debug("The dependency " + metadata.getName() + " already insert in database");
             }
             connection.commit();
+            ExtensionMetadataFactory factory = serviceLoader.getInstanceOf(metadata.getExtensionName());
+            Map<String, String> properties = factory.toMap(metadata);
+            metadata = factory.fromMap(id, properties);
         } catch (SQLException e) {
             if (connection != null) {
                 try {
@@ -49,7 +54,7 @@ public class JDBCSinglePushTask extends JDBCAbstractTask {
                 }
             }
         }
-        return null;
+        return metadata;
     }
 
     private Long getDependencyId(Connection connection) throws SQLException {
@@ -79,8 +84,6 @@ public class JDBCSinglePushTask extends JDBCAbstractTask {
     }
 
     /**
-     *
-     *
      * @param connection
      * @param metadataId
      * @throws SQLException

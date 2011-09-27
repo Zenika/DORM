@@ -1,6 +1,5 @@
 package com.zenika.dorm.core.test.dao.neo4j;
 
-import com.zenika.dorm.core.dao.neo4j.DormDaoNeo4jOld;
 import com.zenika.dorm.core.model.DependencyNode;
 import com.zenika.dorm.core.model.impl.Usage;
 import org.junit.Before;

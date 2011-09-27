@@ -9,9 +9,20 @@ import java.util.Map;
 
 public interface DormDao {
 
-    public DormMetadata getMetadataByQualifier(String qualifier);
+    /**
+     * Retrieve a DormMetadata according the qualifier.
+     *
+     * @param qualifier The qualifier. Ex : "maven:commons-io:commons-io:1.0.0:::jar:1.0.0"
+     * @return the DormMetadata
+     */
+    public DormMetadata getMetadataByFunctionalId(String qualifier);
 
     public List<DormMetadata> getMetadataByExtension(String extensionName, Map<String, String> extensionClauses, Usage usage);
 
+    /**
+     * Save the DormMetadata
+     *
+     * @param metadata The metadata
+     */
     public void saveMetadata(DormMetadata metadata);
 }

@@ -14,7 +14,7 @@ import java.util.Map;
 /**
  * @author Antoine ROUAZE <antoine.rouaze AT zenika.com>
  */
-public class Neo4jRetrieveByQualifier extends Neo4jAbstractTask {
+public class Neo4jRetrieveByFunctionalId extends Neo4jAbstractTask {
 
     @Inject
     private String qualifier;
@@ -30,6 +30,7 @@ public class Neo4jRetrieveByQualifier extends Neo4jAbstractTask {
         Neo4jResponse<Map<String, String>> propertiesResponse = getProperties(relationship.getEnd());
 
         Neo4jMetadata metadata = metadataResponse.getData();
+        Long id = extractId(metadataResponse.getSelf());
 
         return serviceLoader.getInstanceOf(metadata.getExtensionName())
                 .fromMap(id, propertiesResponse.getData());
