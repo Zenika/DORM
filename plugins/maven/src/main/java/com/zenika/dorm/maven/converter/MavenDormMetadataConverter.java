@@ -60,7 +60,8 @@ public class MavenDormMetadataConverter {
             throw new UnsupportedOperationException("Maven plugins are not yet supported");
         }
 
-        MavenMetadataBuilder builder = new MavenMetadataBuilder(metadata.getArtifactId())
+        MavenMetadataBuilder builder = new MavenMetadataBuilder()
+                .artifactId(metadata.getArtifactId())
                 .groupId(metadata.getGroupId());
 
 //        metadata.get

@@ -35,7 +35,8 @@ public class MavenFixtures extends ExtensionFixtures {
     @Override
     public DormMetadata getMetadataExtension() {
 
-        return new MavenMetadataBuilder(artifactId)
+        return new MavenMetadataBuilder()
+                .artifactId(artifactId)
                 .groupId(groupId)
                 .version(mavenVersion)
                 .buildInfo(new MavenBuildInfoBuilder().extension(mavenType).build())
@@ -43,7 +44,8 @@ public class MavenFixtures extends ExtensionFixtures {
     }
 
     public DormMetadata getSnapshotMetadataExtension() {
-        return new MavenMetadataBuilder(artifactId)
+        return new MavenMetadataBuilder()
+                .artifactId(artifactId)
                 .groupId(groupId)
                 .version(mavenVersion)
                 .buildInfo(new MavenBuildInfoBuilder()
@@ -99,7 +101,8 @@ public class MavenFixtures extends ExtensionFixtures {
     }
 
     public MavenMetadata getEntityExtension() {
-        return new MavenMetadataBuilder(artifactId)
+        return new MavenMetadataBuilder()
+                .artifactId(artifactId)
                 .groupId(groupId)
                 .version(mavenVersion)
                 .build();

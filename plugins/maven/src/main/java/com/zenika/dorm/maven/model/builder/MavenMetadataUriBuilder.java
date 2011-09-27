@@ -27,7 +27,8 @@ public class MavenMetadataUriBuilder {
             buildInfoBuilder.buildNumber(filename.getBuildNumber());
         }
 
-        MavenMetadataBuilder builder = new MavenMetadataBuilder(uri.getArtifactId())
+        MavenMetadataBuilder builder = new MavenMetadataBuilder()
+                .artifactId(uri.getArtifactId())
                 .groupId(uri.getGroupId())
                 .version(uri.getVersion())
                 .buildInfo(buildInfoBuilder.build());

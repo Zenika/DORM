@@ -2,7 +2,6 @@ package com.zenika.dorm.core.guice.module;
 
 import com.google.inject.AbstractModule;
 import com.zenika.dorm.core.dao.DormDao;
-import com.zenika.dorm.core.factory.DormMetadataFactory;
 import com.zenika.dorm.core.processor.DormProcessor;
 import com.zenika.dorm.core.repository.DormRepository;
 import com.zenika.dorm.core.repository.impl.DefaultDormRepository;
@@ -38,9 +37,6 @@ public class DormCoreModule extends AbstractModule {
 
         bind(DormService.class).to(DefaultDormService.class);
         bind(DormRepository.class).to(DefaultDormRepository.class);
-
-        // factories
-        bind(DormMetadataFactory.class);
 
         requireBinding(DormDao.class);
     }

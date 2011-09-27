@@ -1,5 +1,7 @@
 package com.zenika.dorm.maven.model.builder;
 
+import com.zenika.dorm.core.model.DormMetadata;
+import com.zenika.dorm.core.model.builder.DormMetadataBuilder;
 import com.zenika.dorm.maven.model.MavenBuildInfo;
 import com.zenika.dorm.maven.model.MavenMetadata;
 
@@ -8,27 +10,32 @@ import com.zenika.dorm.maven.model.MavenMetadata;
  *
  * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>
  */
-public class MavenMetadataBuilder {
+public class MavenMetadataBuilder extends DormMetadataBuilder<MavenMetadataBuilder> {
 
-    private Long id;
     private String groupId;
     private String artifactId;
     private String version;
     private MavenBuildInfo buildInfo;
 
-    public MavenMetadataBuilder(String artifactId) {
-        this.artifactId = artifactId;
+    public MavenMetadataBuilder() {
     }
 
     public MavenMetadataBuilder(MavenMetadata metadata) {
-        this(metadata.getArtifactId());
+        super(metadata);
+        artifactId(metadata.getArtifactId());
         groupId(metadata.getGroupId());
         version(metadata.getVersion());
+        buildInfo(metadata.getBuildInfo());
     }
 
-    public MavenMetadataBuilder id(Long id) {
-        this.id = id;
+    @Override
+    protected MavenMetadataBuilder self() {
         return this;
+    }
+
+    public MavenMetadataBuilder artifactId(String artifactId) {
+        this.artifactId = artifactId;
+        return self();
     }
 
     public MavenMetadataBuilder groupId(String groupId) {
