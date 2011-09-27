@@ -21,7 +21,7 @@ public class NuxeoSinglePushTask extends NuxeoAbstractTask {
         WebResource resource = wrapper.get();
 
         NuxeoMetadata metadata = new NuxeoMetadata(
-                this.metadata.getFunctionnalId(),
+                this.metadata.getFunctionalId(),
                 this.metadata.getExtensionName(),
                 this.metadata.getVersion(),
                 serviceLoader.getInstanceOf(this.metadata.getExtensionName()).toMap(this.metadata)

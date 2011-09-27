@@ -25,10 +25,10 @@ public class MavenMetadataFactory implements ExtensionMetadataFactory {
     @Override
     public DormMetadata createFromProperties(Map<String, String> properties) {
         MavenBuildInfo buildInfo = new MavenBuildInfoBuilder()
-                .classifier(properties.get(METADATA_CLASSIFIER))
-                .extension(properties.get(METADATA_EXTENSION))
-                .timestamp(properties.get(METADATA_TIMESTAMP))
-                .buildNumber(properties.get(METADATA_BUILDNUMBER))
+                .classifier(properties.get(MavenBuildInfo.METADATA_CLASSIFIER))
+                .extension(properties.get(MavenBuildInfo.METADATA_EXTENSION))
+                .timestamp(properties.get(MavenBuildInfo.METADATA_TIMESTAMP))
+                .buildNumber(properties.get(MavenBuildInfo.METADATA_BUILDNUMBER))
                 .build();
 
         return new MavenMetadataBuilder(properties.get(METADATA_ARTIFACTID))
@@ -45,11 +45,11 @@ public class MavenMetadataFactory implements ExtensionMetadataFactory {
         properties.put(METADATA_GROUPID, mavenMetadata.getGroupId());
         properties.put(METADATA_ARTIFACTID, mavenMetadata.getArtifactId());
         properties.put(METADATA_VERSION, mavenMetadata.getVersion());
-        properties.put(METADATA_CLASSIFIER, mavenMetadata.getBuildInfo().getClassifier());
-        properties.put(METADATA_EXTENSION, mavenMetadata.getBuildInfo().getExtension());
         properties.put(METADATA_SNAPSHOT, String.valueOf(mavenMetadata.isSnapshot()));
-        properties.put(METADATA_TIMESTAMP, mavenMetadata.getBuildInfo().getTimestamp());
-        properties.put(METADATA_BUILDNUMBER, mavenMetadata.getBuildInfo().getBuildNumber());
+        properties.put(MavenBuildInfo.METADATA_CLASSIFIER, mavenMetadata.getBuildInfo().getClassifier());
+        properties.put(MavenBuildInfo.METADATA_EXTENSION, mavenMetadata.getBuildInfo().getExtension());
+        properties.put(MavenBuildInfo.METADATA_TIMESTAMP, mavenMetadata.getBuildInfo().getTimestamp());
+        properties.put(MavenBuildInfo.METADATA_BUILDNUMBER, mavenMetadata.getBuildInfo().getBuildNumber());
         return properties;
     }
 

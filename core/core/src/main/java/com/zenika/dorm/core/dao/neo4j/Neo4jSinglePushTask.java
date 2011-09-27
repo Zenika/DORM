@@ -30,12 +30,12 @@ public class Neo4jSinglePushTask extends Neo4jAbstractTask {
     public Void execute() {
         resource = wrapper.get();
 
-        Neo4jResponse response = getMetadata(metadata.getFunctionnalId());
+        Neo4jResponse response = getMetadata(metadata.getFunctionalId());
 
         if (response == null) {
 
             Neo4jMetadata metadata = new Neo4jMetadata(
-                    this.metadata.getFunctionnalId(),
+                    this.metadata.getFunctionalId(),
                     this.metadata.getExtensionName(),
                     serviceLoader.getInstanceOf(this.metadata.getExtensionName()).toMap(this.metadata)
             );

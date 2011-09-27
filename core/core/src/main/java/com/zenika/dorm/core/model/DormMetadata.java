@@ -24,7 +24,7 @@ public abstract class DormMetadata {
 
     public abstract String getExtensionName();
 
-    public final String getFunctionnalId() {
+    public final String getFunctionalId() {
         return getExtensionName() + ":" +
                 getName() + ":" +
                 getVersion();

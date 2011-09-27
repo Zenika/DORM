@@ -8,6 +8,11 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
  */
 public class MavenBuildInfo {
 
+    public static final String METADATA_CLASSIFIER = "classifier";
+    public static final String METADATA_TIMESTAMP = "timestamp";
+    public static final String METADATA_EXTENSION = "extension";
+    public static final String METADATA_BUILDNUMBER = "buildNumber";
+
     private final String classifier;
     private final String timestamp;
     private final String buildNumber;
