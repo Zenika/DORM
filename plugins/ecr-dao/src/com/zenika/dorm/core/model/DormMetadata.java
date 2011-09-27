@@ -4,14 +4,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 @XmlRootElement
 public class DormMetadata {
 
-	@XmlTransient
-	private String id;
-	
+	private String id;	
 	private String qualifier;
 	private String version;
 	private String extensionName;
