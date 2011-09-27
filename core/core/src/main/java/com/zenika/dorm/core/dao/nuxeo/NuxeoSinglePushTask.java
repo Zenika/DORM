@@ -2,16 +2,9 @@ package com.zenika.dorm.core.dao.nuxeo;
 
 import com.google.inject.Inject;
 import com.sun.jersey.api.client.WebResource;
-import com.zenika.dorm.core.exception.CoreException;
 import com.zenika.dorm.core.model.DormMetadata;
 
 import javax.ws.rs.core.MediaType;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
 
 /**
  * @author Antoine ROUAZE <antoine.rouaze AT zenika.com>
@@ -28,7 +21,7 @@ public class NuxeoSinglePushTask extends NuxeoAbstractTask {
         WebResource resource = wrapper.get();
 
         NuxeoMetadata metadata = new NuxeoMetadata(
-                this.metadata.getQualifier(),
+                this.metadata.getFunctionnalId(),
                 this.metadata.getExtensionName(),
                 this.metadata.getVersion(),
                 serviceLoader.getInstanceOf(this.metadata.getExtensionName()).toMap(this.metadata)
