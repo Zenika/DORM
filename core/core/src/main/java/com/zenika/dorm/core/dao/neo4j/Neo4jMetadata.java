@@ -1,10 +1,5 @@
 package com.zenika.dorm.core.dao.neo4j;
 
-import com.google.inject.Inject;
-import com.zenika.dorm.core.dao.neo4j.util.Neo4jHelper;
-import com.zenika.dorm.core.model.DormMetadata;
-import com.zenika.dorm.core.service.spi.ExtensionFactoryServiceLoader;
-import org.apache.commons.logging.Log;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
