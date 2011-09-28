@@ -18,7 +18,7 @@ You can changes theses values in the file : db.properties
 API :
 
 Store :
-curl -H Content-Type:application/xml -X PUT --user admin:admin --data "<dormMetadata><qualifier>maven:thequalifier</qualifier><extensionName>maven</extensionName><version>1.0</version><properties><entry><key>groupId</key><value>org.foo</value></entry><entry><key>artifactId</key><value>bar</value></entry></properties></dormMetadata>" http://localhost:8090/ecr/dorm/save
+curl -H Content-Type:application/xml -X PUT --user admin:admin --data "<dormMetadata><name>thename</name><extensionName>maven</extensionName><version>1.0</version><properties><entry><key>groupId</key><value>org.foo</value></entry><entry><key>artifactId</key><value>bar</value></entry></properties></dormMetadata>" http://hostname:port/ecr/dorm/save
 
 Get :
-curl -X GET --user admin:admin http://localhost:8090/ecr/dorm/get/maven:thequalifier
+curl -X GET --user admin:admin http://localhost:8090/ecr/dorm/get/extensionName/name/version

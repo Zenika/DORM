@@ -2,7 +2,7 @@ package com.zenika.dorm.core.ws.rs.resource;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
-import javax.ws.rs.PUT;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
@@ -16,7 +16,7 @@ import com.zenika.dorm.core.model.DormMetadata;
 @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 public class DormResource {
 
-	@PUT
+	@POST
 	@Consumes(MediaType.APPLICATION_XML)
 	@Path("save")
 	public Response save(DormMetadata metadata) {
@@ -26,20 +26,23 @@ public class DormResource {
 	}
 
 	@GET
-	@Path("get/{functionnalId}")
-	public Response get(@PathParam("functionnalId") String functionnalId) {
+	@Path("get/{extensionName}/{name}/{version}")
+	public Response get(@PathParam("extensionName") String extensionName, @PathParam("name") String name,
+			@PathParam("version") String version) {
 
-		if (null == functionnalId || functionnalId.isEmpty()) {
-			return Response.status(Status.BAD_REQUEST).build();
+		if (null == extensionName || extensionName.isEmpty()) {
+			return Response.status(Status.BAD_REQUEST).entity("Extension name is required").build();
 		}
 
-		String[] elements = functionnalId.split(":");
-
-		if (null == elements || elements.length < 2) {
-			return Response.status(Status.BAD_REQUEST).build();
+		if (null == name || name.isEmpty()) {
+			return Response.status(Status.BAD_REQUEST).entity("Name is required").build();
 		}
 
-		DormMetadata metadata = DormDaoFactory.getDormDao().getWithExtension(functionnalId, elements[0]);
+		if (null == version || version.isEmpty()) {
+			return Response.status(Status.BAD_REQUEST).entity("Version is required").build();
+		}
+
+		DormMetadata metadata = DormDaoFactory.getDormDao().get(extensionName, name, version);
 
 		if (null == metadata) {
 			return Response.status(Status.NOT_FOUND).build();
