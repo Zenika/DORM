@@ -1,8 +1,8 @@
 {
     "configuration":{
-        "target.hostname":"192.168.0.71",
+        "target.hostname":"localhost",
         "target.port":"8080",
-        "target.baseUrl":"artifactory/repo1",
+        "target.baseUrl":"maven",
         "proxy.hostname":"192.168.182.1",
         "proxy.port":"8008",
         "proxy.active":false
