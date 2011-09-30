@@ -8,7 +8,7 @@ import com.zenika.dorm.core.model.impl.DefaultDependencyNode;
 import com.zenika.dorm.core.model.impl.Usage;
 import com.zenika.dorm.core.model.ws.DormWebServiceRequest;
 import com.zenika.dorm.core.test.helper.ExtensionFixtures;
-import com.zenika.dorm.maven.model.MavenConstant;
+import com.zenika.dorm.maven.constant.MavenConstant;
 import com.zenika.dorm.maven.model.MavenMetadata;
 import com.zenika.dorm.maven.model.builder.MavenBuildInfoBuilder;
 import com.zenika.dorm.maven.model.builder.MavenMetadataBuilder;

@@ -1,5 +1,6 @@
 package com.zenika.dorm.maven.model;
 
+import com.zenika.dorm.maven.constant.MavenConstant;
 import com.zenika.dorm.maven.exception.MavenException;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;

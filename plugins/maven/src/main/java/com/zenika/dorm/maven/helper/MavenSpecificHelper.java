@@ -1,6 +1,6 @@
 package com.zenika.dorm.maven.helper;
 
-import com.zenika.dorm.maven.model.MavenConstant;
+import com.zenika.dorm.maven.constant.MavenConstant;
 import org.apache.commons.lang3.StringUtils;
 
 /**

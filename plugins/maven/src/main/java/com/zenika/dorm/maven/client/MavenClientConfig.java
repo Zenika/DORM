@@ -1,7 +1,5 @@
 package com.zenika.dorm.maven.client;
 
-import com.zenika.dorm.maven.importer.util.ConsoleRepositoryListener;
-import com.zenika.dorm.maven.importer.util.ConsoleTransferListener;
 import org.apache.maven.repository.internal.DefaultServiceLocator;
 import org.apache.maven.repository.internal.MavenRepositorySystemSession;
 import org.sonatype.aether.RepositorySystem;
@@ -9,8 +7,6 @@ import org.sonatype.aether.RepositorySystemSession;
 import org.sonatype.aether.connector.file.FileRepositoryConnectorFactory;
 import org.sonatype.aether.connector.wagon.WagonProvider;
 import org.sonatype.aether.connector.wagon.WagonRepositoryConnectorFactory;
-import org.sonatype.aether.deployment.DeployRequest;
-import org.sonatype.aether.impl.RemoteRepositoryManager;
 import org.sonatype.aether.repository.LocalRepository;
 import org.sonatype.aether.repository.RemoteRepository;
 import org.sonatype.aether.spi.connector.RepositoryConnectorFactory;
@@ -82,8 +78,8 @@ public class MavenClientConfig {
             MavenRepositorySystemSession session = new MavenRepositorySystemSession();
 
             session.setLocalRepositoryManager(system.newLocalRepositoryManager(new LocalRepository(repository)));
-            session.setTransferListener(new ConsoleTransferListener());
-            session.setRepositoryListener(new ConsoleRepositoryListener());
+//            session.setTransferListener(new ConsoleTransferListener());
+//            session.setRepositoryListener(new ConsoleRepositoryListener());
 
             return session;
         }

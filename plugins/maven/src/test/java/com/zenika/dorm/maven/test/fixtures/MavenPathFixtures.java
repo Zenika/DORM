@@ -1,6 +1,6 @@
 package com.zenika.dorm.maven.test.fixtures;
 
-import com.zenika.dorm.maven.model.MavenConstant;
+import com.zenika.dorm.maven.constant.MavenConstant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

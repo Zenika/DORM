@@ -27,18 +27,23 @@ public class MavenMetadataFactory implements ExtensionMetadataFactory {
 
         MavenMetadataBuilder builder = new MavenMetadataBuilder();
         applyToBuilder(builder, id, properties);
+        
         return builder.build();
     }
 
     public DormMetadata fromMetadata(DormMetadata metadata, Long id, Map<String, String> properties) {
+
         MavenMetadataBuilder builder = new MavenMetadataBuilder((MavenMetadata) metadata);
         applyToBuilder(builder, id, properties);
+
         return builder.build();
     }
 
     @Override
     public Map<String, String> toMap(DormMetadata metadata) {
+
         MavenMetadata mavenMetadata = (MavenMetadata) metadata;
+
         Map<String, String> properties = new HashMap<String, String>();
         properties.put(METADATA_GROUPID, mavenMetadata.getGroupId());
         properties.put(METADATA_ARTIFACTID, mavenMetadata.getArtifactId());
@@ -48,6 +53,7 @@ public class MavenMetadataFactory implements ExtensionMetadataFactory {
         properties.put(MavenBuildInfo.METADATA_EXTENSION, mavenMetadata.getBuildInfo().getExtension());
         properties.put(MavenBuildInfo.METADATA_TIMESTAMP, mavenMetadata.getBuildInfo().getTimestamp());
         properties.put(MavenBuildInfo.METADATA_BUILDNUMBER, mavenMetadata.getBuildInfo().getBuildNumber());
+
         return properties;
     }
 
