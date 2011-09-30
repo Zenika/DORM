@@ -8,7 +8,7 @@ import com.zenika.dorm.core.repository.impl.DefaultDormRepository;
 import com.zenika.dorm.core.service.DormService;
 import com.zenika.dorm.core.service.impl.DefaultDormService;
 import com.zenika.dorm.core.service.spi.ExtensionFactoryServiceLoader;
-import com.zenika.dorm.core.ws.provider.CoreExceptionMapper;
+import com.zenika.dorm.core.ws.handler.CoreExceptionMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

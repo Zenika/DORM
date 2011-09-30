@@ -5,11 +5,14 @@ import com.zenika.dorm.core.model.DormResource;
 import com.zenika.dorm.core.model.impl.DefaultDormResource;
 import com.zenika.dorm.core.service.DormService;
 import com.zenika.dorm.core.service.config.DormServiceStoreResourceConfig;
+import com.zenika.dorm.core.validator.FileValidator;
 import com.zenika.dorm.maven.model.MavenMetadata;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>
@@ -25,6 +28,9 @@ public class MavenService {
     private MavenHashService hashService;
 
     public void storeMetadataWithArtifact(MavenMetadata metadata, File file) {
+
+        checkNotNull(metadata);
+        FileValidator.validateFile(file);
 
         if (LOG.isDebugEnabled()) {
             LOG.debug("Store maven metadata with artifact : " + metadata);
@@ -42,6 +48,9 @@ public class MavenService {
 
     public void storeHash(MavenMetadata metadata, File file) {
 
+        checkNotNull(metadata);
+        FileValidator.validateFile(file);
+
         if (LOG.isDebugEnabled()) {
             LOG.debug("Store maven hash for metadata : " + metadata);
         }
@@ -54,6 +63,9 @@ public class MavenService {
     }
 
     public void storePom(MavenMetadata metadata, File file) {
+
+        checkNotNull(metadata);
+        FileValidator.validateFile(file);
 
         if (LOG.isDebugEnabled()) {
             LOG.debug("Store maven pom from metadata : " + metadata);
@@ -68,6 +80,8 @@ public class MavenService {
 
 
     public DormResource getArtifact(MavenMetadata metadata) {
+
+        checkNotNull(metadata);
 
         if (LOG.isDebugEnabled()) {
             LOG.debug("Get maven artifact from metadata : " + metadata);
