@@ -40,6 +40,7 @@ public class Neo4jSinglePushTask extends Neo4jAbstractTask {
                 .build();
 
         Neo4jResponse response = getMetadata(query);
+//        Neo4jResponse response = null;
 
         if (response == null) {
 
@@ -80,7 +81,6 @@ public class Neo4jSinglePushTask extends Neo4jAbstractTask {
     }
 
     private Neo4jResponse createNode(Object node) {
-
         Neo4jResponse response = resource.path(NODE_PATH)
                 .accept(MediaType.APPLICATION_JSON)
                 .type(MediaType.APPLICATION_JSON)
@@ -109,9 +109,9 @@ public class Neo4jSinglePushTask extends Neo4jAbstractTask {
     }
 
     /**
-     * @deprecated index is useless for the moment
      * @param response
      * @param value
+     * @deprecated index is useless for the moment
      */
     private void createIndex(Neo4jResponse response, String value) {
         try {
