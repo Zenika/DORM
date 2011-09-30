@@ -5,6 +5,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
@@ -18,14 +19,16 @@ public class DormResource {
 
 	@POST
 	@Consumes(MediaType.APPLICATION_XML)
+	@Produces(MediaType.APPLICATION_XML)
 	@Path("save")
 	public Response save(DormMetadata metadata) {
 
-		DormDaoFactory.getDormDao().save(metadata);
-		return Response.ok().build();
+		metadata = DormDaoFactory.getDormDao().save(metadata);
+		return Response.ok(metadata).build();
 	}
 
 	@GET
+	@Produces(MediaType.APPLICATION_XML)
 	@Path("get/{extensionName}/{name}/{version}")
 	public Response get(@PathParam("extensionName") String extensionName, @PathParam("name") String name,
 			@PathParam("version") String version) {
