@@ -74,8 +74,8 @@ public class MavenProcessor extends ProcessorExtension {
             LOG.debug("Maven uri : " + mavenUri);
         }
 
-        // ignore put's of maven-medata.xml file
-        if (StringUtils.equals(mavenUri.getFilename().getFilename(), MavenConstant.Special.MAVEN_METADATA_XML)) {
+        // ignore put's of maven-medata.xml* files
+        if (StringUtils.startsWith(mavenUri.getFilename().getFilename(), MavenConstant.Special.MAVEN_METADATA_XML)) {
 
             if (LOG.isDebugEnabled()) {
                 LOG.debug("Ignore " + MavenConstant.Special.MAVEN_METADATA_XML);
