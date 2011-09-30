@@ -20,9 +20,6 @@ public class Neo4jDaoTest {
 
     private static final Logger LOG = LoggerFactory.getLogger(Neo4jDaoTest.class);
 
-    @Rule
-    public final GuiceBerryRule rule = new GuiceBerryRule(Neo4jTestModule.class);
-
     private DormDaoNeo4j dao;
 
     @Before
