@@ -5,10 +5,13 @@ import com.zenika.dorm.core.model.DormResource;
 import com.zenika.dorm.core.service.DormService;
 import com.zenika.dorm.maven.constant.MavenConstant;
 import com.zenika.dorm.maven.exception.MavenException;
+import com.zenika.dorm.maven.model.MavenBuildInfo;
 import com.zenika.dorm.maven.model.MavenMetadata;
 import com.zenika.dorm.maven.model.builder.MavenBuildInfoBuilder;
 import com.zenika.dorm.maven.model.builder.MavenMetadataBuilder;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,44 +27,49 @@ public class MavenHashService {
     @Inject
     private DormService service;
 
-    public boolean compareMavenHashes(MavenMetadata metadata, File file) {
-        return compareHash(MavenConstant.Extension.MD5, metadata, file) &&
-                compareHash(MavenConstant.Extension.SHA1, metadata, file);
-    }
+    public boolean compareHash(MavenMetadata hashMetadata, File file) {
 
-    public boolean compareHash(String hash, MavenMetadata metadata, File file) {
+        String extension = FilenameUtils.removeExtension(hashMetadata.getBuildInfo().getExtension());
+        String hashType = FilenameUtils.getExtension(hashMetadata.getBuildInfo().getExtension());
 
-        MavenMetadata hashMetadata = new MavenMetadataBuilder(metadata)
-                .buildInfo(new MavenBuildInfoBuilder().extension(hash).build())
+        MavenBuildInfo buildInfo = new MavenBuildInfoBuilder(hashMetadata.getBuildInfo())
+                .extension(extension)
+                .build();
+
+        MavenMetadata metadata = new MavenMetadataBuilder(hashMetadata)
+                .buildInfo(buildInfo)
                 .build();
 
         DormResource resource = service.getResource(hashMetadata);
 
         if (null == resource) {
-
-            if (LOG.isDebugEnabled()) {
-                LOG.debug("Hash " + hash + " not found for metadata : " + metadata + ", ignoring");
-            }
-
-            return true;
+            throw new MavenException("Metadata associated to the hash was not found : " + metadata);
         }
 
-        String modelHash = null;
+        String currentHash = null;
         try {
             BufferedReader reader;
-            reader = new BufferedReader(new FileReader(resource.getFile()));
-            modelHash = reader.readLine();
+            reader = new BufferedReader(new FileReader(file));
+            currentHash = reader.readLine();
         } catch (IOException e) {
             throw new MavenException("Error reading file containing hash", e);
         }
 
-        String currentHash;
+        String modelHash;
+
         try {
-            currentHash = DigestUtils.md5Hex(new FileInputStream(file));
+            if (StringUtils.equals(hashType, MavenConstant.Extension.MD5)) {
+                modelHash = DigestUtils.md5Hex(new FileInputStream(resource.getFile()));
+            } else if (StringUtils.equals(hashType, MavenConstant.Extension.SHA1)) {
+                modelHash = DigestUtils.shaHex(new FileInputStream(resource.getFile()));
+            } else {
+                throw new MavenException("Unknown hash type : " + hashType);
+            }
+
         } catch (IOException e) {
             throw new MavenException("File on which generate hash not found");
         }
 
-        return modelHash != null && modelHash.equals(currentHash);
+        return StringUtils.equals(currentHash, modelHash);
     }
 }

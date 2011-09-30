@@ -17,6 +17,8 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 /**
  * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>
  */
@@ -48,8 +50,14 @@ public class MavenService {
 
     public void storeHash(MavenMetadata metadata, File file) {
 
+        checkNotNull(metadata);
+
         if (LOG.isDebugEnabled()) {
             LOG.debug("Store maven hash for metadata : " + metadata);
+        }
+
+        if (!hashService.compareHash(metadata, file)) {
+            throw new MavenException("Invalid hash metadata : " + metadata);
         }
 
         DormResource resource = DefaultDormResource.create(file);
