@@ -1,7 +1,7 @@
 package com.zenika.dorm.core.model.impl;
 
-import com.zenika.dorm.core.exception.CoreException;
 import com.zenika.dorm.core.model.DormResource;
+import com.zenika.dorm.core.validator.FileValidator;
 import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,7 +22,7 @@ public final class DefaultDormResource implements DormResource {
     private final File file;
 
     public static DormResource create(File file) {
-        return create(null, file);
+        return create(null, null, file);
     }
 
     public static DefaultDormResource create(String filename, File file) {
@@ -40,12 +40,10 @@ public final class DefaultDormResource implements DormResource {
 
     private DefaultDormResource(String name, String extension, File file) {
 
+        FileValidator.validateFile(file);
+
         if (LOG.isDebugEnabled()) {
             LOG.debug("Create dorm resource with name : " + name + " and extension : " + extension);
-        }
-
-        if (null == file || !file.exists()) {
-            throw new CoreException("File is required to create dorm resource");
         }
 
         this.name = name;

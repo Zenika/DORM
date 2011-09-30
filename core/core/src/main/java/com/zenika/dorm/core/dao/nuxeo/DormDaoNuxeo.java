@@ -19,7 +19,11 @@ import java.util.Map;
  */
 public class DormDaoNuxeo implements DormDao {
 
-    public static final String DATA_ENTRY_POINT_URI = "http://192.168.0.37:8090/ecr/dorm";
+    private static final String SERVER_HOSTNAME = "192.168.0.37";
+    private static final String SERVER_PORT = "8090";
+
+    public static final String DATA_ENTRY_POINT_URI = "http://" + SERVER_HOSTNAME + ":" + SERVER_PORT + "/ecr/dorm";
+
 
     @Inject
     private NuxeoWebResourceWrapper wrapper;

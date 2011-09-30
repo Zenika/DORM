@@ -7,6 +7,8 @@ import com.zenika.dorm.core.model.DependencyNode;
 import java.util.HashSet;
 import java.util.Set;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 /**
  * Default implementation of node dependency
  *
@@ -23,7 +25,7 @@ public final class DefaultDependencyNode implements DependencyNode {
     }
 
     private DefaultDependencyNode(Dependency dependency) {
-        this.dependency = dependency;
+        this.dependency = checkNotNull(dependency);
     }
 
     @Override
