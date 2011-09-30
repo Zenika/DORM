@@ -3,7 +3,7 @@ package com.zenika.dorm.core.guice.module;
 import com.google.inject.AbstractModule;
 import com.zenika.dorm.core.dao.DormDao;
 import com.zenika.dorm.core.dao.sql.DormDaoJdbc;
-import com.zenika.dorm.core.exception.JDBCException;
+import com.zenika.dorm.core.exception.CoreException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,11 +32,11 @@ public class DormCoreJdbcModule extends AbstractModule {
         try {
             context = new InitialContext();
         } catch (NamingException e) {
-            throw new JDBCException("Unable to initate the JNDI context", e);
+            throw new CoreException("Unable to initate the JNDI context", e);
         }
 
         if (null == context) {
-            throw new JDBCException("JNDI context is null");
+            throw new CoreException("JNDI context is null");
         }
 
         bind(Context.class).toInstance(context);
