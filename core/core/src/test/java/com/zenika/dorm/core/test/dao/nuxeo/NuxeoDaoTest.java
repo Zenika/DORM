@@ -32,7 +32,7 @@ public class NuxeoDaoTest {
     public void singlePushTest() {
 
         DormMetadata expectMetadata = DormMetadataTest.getDefault();
-        dao.saveMetadata(expectMetadata);
+        dao.saveOrUpdateMetadata(expectMetadata);
 
         DormBasicQuery query = new DormBasicQuery.Builder()
                 .extensionName("Dorm_test")

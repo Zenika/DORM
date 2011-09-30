@@ -3,6 +3,7 @@ package com.zenika.dorm.core.service.impl;
 import com.google.inject.Inject;
 import com.zenika.dorm.core.dao.DormDao;
 import com.zenika.dorm.core.dao.query.DormBasicQuery;
+import com.zenika.dorm.core.model.DependencyNode;
 import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.core.model.DormResource;
 import com.zenika.dorm.core.model.impl.Usage;
@@ -11,13 +12,13 @@ import com.zenika.dorm.core.service.DormService;
 import com.zenika.dorm.core.service.config.DormServiceStoreResourceConfig;
 import com.zenika.dorm.core.service.get.DormServiceGetMetadataResult;
 import com.zenika.dorm.core.service.get.DormServiceGetMetadataValues;
-import com.zenika.dorm.core.service.put.DormServicePutRequest;
-import com.zenika.dorm.core.service.put.DormServiceStoreResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>
@@ -33,22 +34,23 @@ public class DefaultDormService implements DormService {
     private DormRepository repository;
 
     @Override
-    public DormServiceStoreResult store(DormServicePutRequest request) {
-        return null;
-    }
-
-    @Override
     public void storeMetadata(DormMetadata metadata) {
+
+        checkNotNull(metadata);
 
         if (LOG.isDebugEnabled()) {
             LOG.debug("Store metadata : " + metadata);
         }
 
-        dao.saveMetadata(metadata);
+        dao.saveOrUpdateMetadata(metadata);
     }
 
     @Override
     public void storeResource(DormResource resource, DormMetadata metadata, DormServiceStoreResourceConfig config) {
+
+        checkNotNull(resource);
+        checkNotNull(metadata);
+        checkNotNull(config);
 
         if (LOG.isDebugEnabled()) {
             LOG.debug("Store resource : " + resource + " with config : " + config);
@@ -59,6 +61,8 @@ public class DefaultDormService implements DormService {
 
     @Override
     public DormServiceGetMetadataResult getMetadata(DormServiceGetMetadataValues values) {
+
+        checkNotNull(values);
 
         DormServiceGetMetadataResult result = new DormServiceGetMetadataResult();
 
@@ -93,11 +97,14 @@ public class DefaultDormService implements DormService {
 
     @Override
     public DormResource getResource(DormMetadata metadata) {
+
+        checkNotNull(metadata);
+
         return repository.get(metadata);
     }
 
     @Override
-    public DormResource getResource(String extension, String path) {
-        return null;
+    public DependencyNode addDependenciesToNode(DependencyNode node) {
+        return dao.addDependenciesToNode(node);
     }
 }
