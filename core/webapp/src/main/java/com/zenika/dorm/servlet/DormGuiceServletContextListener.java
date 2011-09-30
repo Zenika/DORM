@@ -4,44 +4,71 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.servlet.GuiceServletContextListener;
-import com.zenika.dorm.core.guice.module.DormCoreJdbcModule;
+import com.zenika.dorm.core.exception.CoreException;
 import com.zenika.dorm.core.guice.module.DormCoreModule;
-import com.zenika.dorm.core.guice.module.DormCoreNeo4jModule;
-import com.zenika.dorm.core.guice.module.DormCoreNuxeoModule;
 import com.zenika.dorm.guice.module.DormJerseyModule;
 import com.zenika.dorm.maven.guice.module.MavenModule;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
+import java.io.IOException;
 import java.util.HashSet;
+import java.util.Properties;
 import java.util.Set;
 
-/**
- * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>
- */
 public class DormGuiceServletContextListener extends GuiceServletContextListener {
 
     @Override
     protected Injector getInjector() {
-
         Set<AbstractModule> modules = new HashSet<AbstractModule>();
-
-        // servlet
         modules.add(new DormJerseyModule());
-
-        // core
         modules.add(new DormCoreModule());
-//        modules.add(new DormCoreJdbcModule());
-//        modules.add(new DormCoreNeo4jModule());
-        modules.add(new DormCoreNuxeoModule());
-
-        // maven extension
+        addDAOModule(modules);
         modules.add(new MavenModule());
-
         return Guice.createInjector(modules);
     }
 
-    public void contextInitialized(ServletContextEvent servletContextEvent) {
+
+    private void addDAOModule(Set<AbstractModule> modules) {
+        try {
+            Class<AbstractModule> guiceDAOClass = getDAOModuleClass();
+            if (guiceDAOClass == null) {
+                throw new CoreException("Can't load the Guice DAO module.");
+            }
+            modules.add(guiceDAOClass.newInstance());
+        } catch (IOException ioe) {
+            throw new CoreException(ioe);
+        } catch (ClassNotFoundException cnfe) {
+            throw new CoreException(cnfe);
+        } catch (InstantiationException ie) {
+            throw new CoreException(ie);
+        } catch (IllegalAccessException iae) {
+            throw new CoreException(iae);
+        }
+    }
+
+    private Class<AbstractModule> getDAOModuleClass() throws IOException, ClassNotFoundException {
+
+        String daoClassStr = System.getProperty("dao.class");
+        if (daoClassStr == null) {
+            Properties properties = new Properties();
+            properties.load(this.getClass().getResourceAsStream("dao.properties"));
+            daoClassStr = String.valueOf(properties.get("dao.class"));
+        }
+
+        if (daoClassStr != null) {
+            Class<?> daoClass = Class.forName(daoClassStr);
+            if (AbstractModule.class.isAssignableFrom(daoClass)) {
+                return (Class<AbstractModule>) daoClass;
+            }
+        }
+
+        return null;
+    }
+
+    public void contextInitialized
+            (ServletContextEvent
+                     servletContextEvent) {
         ServletContext servletContext = servletContextEvent.getServletContext();
         JULConfigurer.configureJULtoSLF4J(servletContext);
         super.contextInitialized(servletContextEvent);

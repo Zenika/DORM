@@ -4,7 +4,6 @@ import com.google.inject.Inject;
 import com.zenika.dorm.core.model.ws.DormWebServiceRequest;
 import com.zenika.dorm.core.model.ws.DormWebServiceResult;
 import com.zenika.dorm.core.processor.DormProcessor;
-import com.zenika.dorm.core.ws.resource.AbstractResource;
 import com.zenika.dorm.maven.model.MavenMetadata;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,7 +18,7 @@ import java.io.File;
  */
 @Path("maven")
 @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-public class MavenResource extends AbstractResource {
+public class MavenResource {
 
     private static final Logger LOG = LoggerFactory.getLogger(MavenResource.class);
 
