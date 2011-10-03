@@ -1,4 +1,4 @@
-package com.zenika.dorm.core.ws.provider;
+package com.zenika.dorm.core.ws.handler;
 
 import com.google.inject.Singleton;
 import com.zenika.dorm.core.exception.CoreException;

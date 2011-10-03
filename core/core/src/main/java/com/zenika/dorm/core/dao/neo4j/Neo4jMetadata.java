@@ -1,6 +1,8 @@
 package com.zenika.dorm.core.dao.neo4j;
 
-import org.codehaus.jackson.annotate.JsonIgnore;
+import com.zenika.dorm.core.dao.neo4j.util.CustomSerializer;
+import org.codehaus.jackson.map.annotate.JsonDeserialize;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -10,7 +12,7 @@ import java.util.Map;
 /**
  * @author Antoine ROUAZE <antoine.rouaze AT zenika.com>
  */
-public class Neo4jMetadata  {
+public class Neo4jMetadata {
 
     private static final Logger LOG = LoggerFactory.getLogger(Neo4jMetadata.class);
 
@@ -22,8 +24,8 @@ public class Neo4jMetadata  {
 
     private Map<String, String> properties;
 
-    public Neo4jMetadata(){
-        
+    public Neo4jMetadata() {
+
     }
 
     public Neo4jMetadata(String extensionName, String name, String version, Map<String, String> properties) {
@@ -41,12 +43,10 @@ public class Neo4jMetadata  {
         this.extensionName = extensionName;
     }
 
-    @JsonIgnore
     public Map<String, String> getProperties() {
         return properties;
     }
 
-    @JsonIgnore
     public void setProperties(Map<String, String> properties) {
         this.properties = properties;
     }
@@ -65,5 +65,18 @@ public class Neo4jMetadata  {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder();
+        sb.append("Neo4jMetadata");
+        sb.append("{extensionName='").append(extensionName).append('\'');
+        sb.append(", name='").append(name).append('\'');
+        sb.append(", properties=").append(properties);
+        sb.append(", version='").append(version).append('\'');
+        sb.append('}');
+        return sb.toString();
     }
 }

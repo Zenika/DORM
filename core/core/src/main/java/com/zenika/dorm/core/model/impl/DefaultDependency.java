@@ -1,9 +1,10 @@
 package com.zenika.dorm.core.model.impl;
 
-import com.zenika.dorm.core.exception.CoreException;
 import com.zenika.dorm.core.model.Dependency;
 import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.core.model.DormResource;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Immutable dorm dependency
@@ -33,13 +34,8 @@ public final class DefaultDependency implements Dependency {
     }
 
     private DefaultDependency(DormMetadata metadata, Usage usage, DormResource resource) {
-
-        if (null == metadata || null == usage) {
-            throw new CoreException("Metadata and usage are required.");
-        }
-
-        this.metadata = metadata;
-        this.usage = usage;
+        this.metadata = checkNotNull(metadata);
+        this.usage = checkNotNull(usage);
         this.resource = resource;
     }
 

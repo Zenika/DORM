@@ -8,7 +8,9 @@ import org.eclipse.ecr.core.api.ClientException;
 import org.eclipse.ecr.core.api.CoreSession;
 import org.eclipse.ecr.core.api.DocumentModel;
 
+import com.zenika.dorm.core.dao.DormDaoFactory;
 import com.zenika.dorm.core.exception.CoreException;
+import com.zenika.dorm.core.model.DormId;
 import com.zenika.dorm.core.model.DormMetadata;
 
 public final class EcrMetadataHelper {
@@ -17,26 +19,22 @@ public final class EcrMetadataHelper {
 
 	}
 
-	public static DormMetadata fromDocumentModel(DocumentModel model) {
+	public static DormMetadata fromDocumentModel(DocumentModel model) throws ClientException {
 
 		DormMetadata metadata = new DormMetadata();
-		metadata.setId(model.getId());
+
+		DormId id = DormDaoFactory.getDormIdDao().getFromEcr(model.getId());
+		metadata.setId(id.getDormValue());
 
 		String dormSchema = EcrResourceHelper.getSchemaNameFromExtension("dorm");
 
 		metadata.setExtensionName(fromProperty(model, dormSchema, "extensionName"));
-		metadata.setQualifier(fromProperty(model, dormSchema, "qualifier"));
+		metadata.setName(fromProperty(model, dormSchema, "name"));
 		metadata.setVersion(fromProperty(model, dormSchema, "version"));
 
 		String extensionSchema = EcrResourceHelper.getSchemaNameFromExtension(metadata.getExtensionName());
 
-		Map<String, Object> ecrProperties;
-		try {
-			ecrProperties = model.getProperties(extensionSchema);
-		} catch (Exception e) {
-			throw new CoreException("Cannot get properties extension");
-		}
-
+		Map<String, Object> ecrProperties = model.getProperties(extensionSchema);
 		Map<String, String> extensionProperties = new HashMap<String, String>();
 
 		Iterator<String> it = ecrProperties.keySet().iterator();
@@ -56,32 +54,21 @@ public final class EcrMetadataHelper {
 		return metadata;
 	}
 
-	public static DocumentModel toDocumentModel(DormMetadata metadata, CoreSession session) {
-
-		DocumentModel model;
+	public static DocumentModel toDocumentModel(DormMetadata metadata, CoreSession session) throws ClientException {
 
 		String extension = metadata.getExtensionName();
 
-		try {
-			model = session.createDocumentModel(EcrResourceHelper.getDocumentNameFromExtension(extension));
-		} catch (ClientException e) {
-			throw new CoreException("Cannot create ECR document model");
-		}
+		DocumentModel model = session.createDocumentModel(EcrResourceHelper.getDocumentNameFromExtension(extension));
 
-		try {
-			Map<String, Object> dormProperties = new HashMap<String, Object>();
-			dormProperties.put("extensionName", extension);
-			dormProperties.put("qualifier", metadata.getQualifier());
-			dormProperties.put("version", metadata.getVersion());
+		Map<String, Object> dormProperties = new HashMap<String, Object>();
+		dormProperties.put("extensionName", extension);
+		dormProperties.put("name", metadata.getName());
+		dormProperties.put("version", metadata.getVersion());
 
-			model.setProperties(EcrResourceHelper.getSchemaNameFromExtension("dorm"), dormProperties);
+		model.setProperties(EcrResourceHelper.getSchemaNameFromExtension("dorm"), dormProperties);
 
-			Map<String, Object> pluginProperties = new HashMap<String, Object>(metadata.getProperties());
-			model.setProperties(EcrResourceHelper.getSchemaNameFromExtension(extension), pluginProperties);
-
-		} catch (Exception e) {
-			throw new CoreException("Cannot map the dorm core metadatas", e);
-		}
+		Map<String, Object> pluginProperties = new HashMap<String, Object>(metadata.getProperties());
+		model.setProperties(EcrResourceHelper.getSchemaNameFromExtension(extension), pluginProperties);
 
 		return model;
 	}

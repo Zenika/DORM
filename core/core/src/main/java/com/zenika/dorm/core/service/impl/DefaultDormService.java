@@ -19,6 +19,8 @@ import org.slf4j.LoggerFactory;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 /**
  * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>
  */
@@ -33,12 +35,9 @@ public class DefaultDormService implements DormService {
     private DormRepository repository;
 
     @Override
-    public DormServiceStoreResult store(DormServicePutRequest request) {
-        return null;
-    }
-
-    @Override
     public void storeMetadata(DormMetadata metadata) {
+
+        checkNotNull(metadata);
 
         if (LOG.isDebugEnabled()) {
             LOG.debug("Store metadata : " + metadata);
@@ -50,6 +49,10 @@ public class DefaultDormService implements DormService {
     @Override
     public void storeResource(DormResource resource, DormMetadata metadata, DormServiceStoreResourceConfig config) {
 
+        checkNotNull(resource);
+        checkNotNull(metadata);
+        checkNotNull(config);
+
         if (LOG.isDebugEnabled()) {
             LOG.debug("Store resource : " + resource + " with config : " + config);
         }
@@ -59,6 +62,8 @@ public class DefaultDormService implements DormService {
 
     @Override
     public DormServiceGetMetadataResult getMetadata(DormServiceGetMetadataValues values) {
+
+        checkNotNull(values);
 
         DormServiceGetMetadataResult result = new DormServiceGetMetadataResult();
 
@@ -93,11 +98,9 @@ public class DefaultDormService implements DormService {
 
     @Override
     public DormResource getResource(DormMetadata metadata) {
-        return repository.get(metadata);
-    }
+        
+        checkNotNull(metadata);
 
-    @Override
-    public DormResource getResource(String extension, String path) {
-        return null;
+        return repository.get(metadata);
     }
 }

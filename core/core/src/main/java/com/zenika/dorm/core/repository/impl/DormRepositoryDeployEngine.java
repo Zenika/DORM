@@ -1,11 +1,9 @@
 package com.zenika.dorm.core.repository.impl;
 
-import com.zenika.dorm.core.exception.RepositoryException;
+import com.zenika.dorm.core.exception.CoreException;
 import com.zenika.dorm.core.repository.DormRepositoryResource;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
-import org.apache.ivy.util.CopyProgressEvent;
-import org.apache.ivy.util.CopyProgressListener;
-import org.apache.ivy.util.FileUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,25 +40,9 @@ public class DormRepositoryDeployEngine {
         }
 
         try {
-            FileUtil.copy(resource.getFile().getAbsoluteFile(), destination.getAbsoluteFile(), new CopyProgressListener() {
-
-                @Override
-                public void start(CopyProgressEvent evt) {
-                    LOG.trace("start " + evt);
-                }
-
-                @Override
-                public void progress(CopyProgressEvent evt) {
-                    LOG.trace("progress " + evt);
-                }
-
-                @Override
-                public void end(CopyProgressEvent evt) {
-                    LOG.trace("end " + evt);
-                }
-            });
+            FileUtils.moveFile(resource.getFile(), destination);
         } catch (IOException e) {
-            throw new RepositoryException("Cannot copy to the repository", e);
+            throw new CoreException("Cannot move file to repository : " + destination, e);
         }
 
         return true;

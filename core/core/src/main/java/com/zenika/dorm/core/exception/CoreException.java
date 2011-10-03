@@ -7,6 +7,10 @@ public class CoreException extends RuntimeException {
         super();
     }
 
+    public CoreException(Throwable throwable) {
+        super(throwable);
+    }
+
     public CoreException(String s) {
         super(s);
     }

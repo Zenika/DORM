@@ -8,27 +8,27 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class DormMetadata {
 
-	private String id;	
-	private String qualifier;
+	private Long id;	
+	private String name;
 	private String version;
 	private String extensionName;
 	
 	private Map<String,	String> properties = new HashMap<String, String>();
 
-	public String getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(String id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
-	public String getQualifier() {
-		return qualifier;
+	public String getName() {
+		return name;
 	}
-
-	public void setQualifier(String qualifier) {
-		this.qualifier = qualifier;
+	
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public String getVersion() {

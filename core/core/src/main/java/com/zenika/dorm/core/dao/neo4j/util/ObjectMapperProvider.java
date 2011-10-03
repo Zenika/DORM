@@ -1,10 +1,10 @@
 package com.zenika.dorm.core.dao.neo4j.util;
 
-import org.codehaus.jackson.map.AnnotationIntrospector;
+import com.zenika.dorm.core.dao.neo4j.Neo4jMetadata;
+import org.codehaus.jackson.Version;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.SerializationConfig;
-import org.codehaus.jackson.map.introspect.JacksonAnnotationIntrospector;
-import org.codehaus.jackson.xc.JaxbAnnotationIntrospector;
+import org.codehaus.jackson.map.module.SimpleModule;
 
 import javax.ws.rs.ext.ContextResolver;
 import javax.ws.rs.ext.Provider;
@@ -15,31 +15,24 @@ import javax.ws.rs.ext.Provider;
 @Provider
 public class ObjectMapperProvider implements ContextResolver<ObjectMapper> {
 
-    final ObjectMapper defautltObjectMapper;
+    final ObjectMapper defaultObjectMapper;
 
     public ObjectMapperProvider() {
-        defautltObjectMapper = createDefaultMapper();
+        defaultObjectMapper = createDefaultMapper();
     }
 
     @Override
     public ObjectMapper getContext(Class<?> type) {
-        return defautltObjectMapper;
+        return defaultObjectMapper;
     }
 
     public static ObjectMapper createDefaultMapper() {
-        AnnotationIntrospector.Pair combinedIntrospector = createJaxbJacksonAnnotationIntrospector();
+        SimpleModule module = new SimpleModule("Dorm", new Version(1, 0 , 0, null));
+        module.addDeserializer(Neo4jMetadata.class, new CustomDeserializer());
+        module.addSerializer(Neo4jMetadata.class, new CustomSerializer());
         ObjectMapper result = new ObjectMapper();
         result.getSerializationConfig().set(SerializationConfig.Feature.FAIL_ON_EMPTY_BEANS, false);
-//        result.getDeserializationConfig().setAnnotationIntrospector(combinedIntrospector);
-//        result.getSerializationConfig().setAnnotationIntrospector(combinedIntrospector);
+        result.registerModule(module);
         return result;
-    }
-
-    private static AnnotationIntrospector.Pair createJaxbJacksonAnnotationIntrospector() {
-
-        AnnotationIntrospector jaxbIntrospector = new JaxbAnnotationIntrospector();
-        AnnotationIntrospector jacksonIntrospector = new JacksonAnnotationIntrospector();
-
-        return new AnnotationIntrospector.Pair(jaxbIntrospector, jacksonIntrospector);
     }
 }

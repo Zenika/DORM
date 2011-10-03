@@ -18,6 +18,7 @@ public class DormMetadataTest extends DormMetadata{
     private String data;
 
     public DormMetadataTest(String version, String field, String data) {
+        super(null);
         this.version = version;
         this.field = field;
         this.data = data;

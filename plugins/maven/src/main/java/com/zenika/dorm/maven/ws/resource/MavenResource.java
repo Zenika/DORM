@@ -5,6 +5,7 @@ import com.zenika.dorm.core.model.ws.DormWebServiceRequest;
 import com.zenika.dorm.core.model.ws.DormWebServiceResult;
 import com.zenika.dorm.core.processor.DormProcessor;
 import com.zenika.dorm.maven.model.MavenMetadata;
+import com.zenika.dorm.maven.processor.extension.MavenProcessor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,7 +24,7 @@ public class MavenResource {
     private static final Logger LOG = LoggerFactory.getLogger(MavenResource.class);
 
     @Inject
-    private DormProcessor processor;
+    private MavenProcessor processor;
 
     public MavenResource() {
         if (LOG.isInfoEnabled()) {

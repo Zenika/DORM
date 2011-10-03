@@ -28,51 +28,10 @@ public class Neo4jGetTask extends Neo4jAbstractTask {
 
         Neo4jResponse<Neo4jMetadata> metadataResponse = getMetadata(query);
 
-        if (metadataResponse == null){
-            return null;
-        }
-
-        Neo4jRelationship relationship = getOutgoingRelationship(metadataResponse, Neo4jMetadata.PROPERTIES_RELATIONSHIPS);
-        Neo4jResponse<Map<String, String>> propertiesResponse = getProperties(relationship.getEnd());
-
         Neo4jMetadata metadata = metadataResponse.getData();
-        Long id = extractId(metadataResponse.getSelf());
 
         return serviceLoader.getInstanceOf(metadata.getExtensionName())
-                .fromMap(id, propertiesResponse.getData());
+                .fromMap(extractId(metadataResponse.getSelf()), metadata.getProperties());
     }
 
-    private Neo4jResponse<Map<String, String>> getProperties(String propertiesStrUri) {
-        try {
-            URI propertiesUri = new URI(propertiesStrUri);
-
-            Neo4jResponse<Map<String, String>> propertiesResponse = resource.uri(propertiesUri)
-                    .accept(MediaType.APPLICATION_JSON_TYPE)
-                    .get(PROPERTIES_GENERIC_TYPE);
-
-            return propertiesResponse;
-        } catch (URISyntaxException e) {
-            throw new CoreException("Uri syntax exception", e);
-        }
-    }
-
-    private Neo4jRelationship getOutgoingRelationship(Neo4jResponse metadataResponse, String propertiesRelationships) {
-        try {
-            URI relationshipUri = new URI(metadataResponse.getOutgoing_typed_relationships()
-                    .replace("{-list|&|types}", propertiesRelationships)
-            );
-
-            List<Neo4jRelationship> relationships = resource.uri(relationshipUri)
-                    .accept(MediaType.APPLICATION_JSON_TYPE)
-                    .get(LIST_RELATIONSHIP_GENERIC_TYPE);
-
-            if (relationships.size() > 1) {
-                throw new CoreException("Retrieved multiple result");
-            }
-
-            return relationships.get(0);
-        } catch (URISyntaxException e) {
-            throw new CoreException("Uri syntax exception", e);
-        }
-    }
 }
