@@ -49,4 +49,19 @@ public class MavenHashServiceUnitTest extends MavenUnitTest {
 
         assertThat(hashService.compareHash(hashMetadata, md5File)).isTrue();
     }
+
+    @Test
+    public void compareSha1Hash() throws Exception {
+
+        File sha1File = webServiceRequestFixtures.getJarSha1();
+        File jarFile = webServiceRequestFixtures.getJar();
+        DormResource resource = DefaultDormResource.create(jarFile);
+
+        MavenMetadata hashMetadata = fixtures.getSimpleJarSha1();
+        MavenMetadata metadata = fixtures.getSimpleJar();
+
+        when(service.getResource(metadata)).thenReturn(resource);
+
+        assertThat(hashService.compareHash(hashMetadata, sha1File)).isTrue();
+    }
 }

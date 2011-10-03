@@ -8,6 +8,7 @@ import com.zenika.dorm.maven.model.MavenBuildInfo;
 import com.zenika.dorm.maven.model.MavenMetadata;
 import com.zenika.dorm.maven.model.builder.MavenBuildInfoBuilder;
 import com.zenika.dorm.maven.model.builder.MavenMetadataBuilder;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.maven.model.Model;
 import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
 
@@ -33,10 +34,14 @@ public class MavenPomReader {
 
     public MavenMetadata getArtifact() {
 
+        MavenBuildInfo buildInfo = new MavenBuildInfoBuilder()
+                .extension("pom").build();
+
         return new MavenMetadataBuilder()
                 .artifactId(model.getArtifactId())
                 .groupId(model.getGroupId())
                 .version(model.getVersion())
+                .buildInfo(buildInfo)
                 .build();
     }
 
@@ -46,18 +51,21 @@ public class MavenPomReader {
 
         for (org.apache.maven.model.Dependency dependency : model.getDependencies()) {
 
-            MavenBuildInfo buildInfo = new MavenBuildInfoBuilder()
-                    .classifier(dependency.getClassifier())
-                    .build();
-
-            MavenMetadata metadata = new MavenMetadataBuilder()
+            MavenMetadataBuilder builder = new MavenMetadataBuilder()
                     .groupId(dependency.getGroupId())
                     .artifactId(dependency.getArtifactId())
-                    .version(dependency.getVersion())
-                    .buildInfo(buildInfo)
-                    .build();
+                    .version(dependency.getVersion());
 
-            Usage usage = Usage.create(dependency.getScope());
+            if (StringUtils.isNotBlank(dependency.getClassifier())) {
+                builder.buildInfo(new MavenBuildInfoBuilder()
+                        .classifier(dependency.getClassifier())
+                        .build());
+            }
+
+            MavenMetadata metadata = builder.build();
+
+            String scope = dependency.getScope();
+            Usage usage = (StringUtils.isNotBlank(scope)) ? Usage.create(scope) : Usage.create();
 
             dependencies.add(DefaultDependency.create(metadata, usage));
         }
