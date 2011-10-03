@@ -7,7 +7,6 @@ import com.zenika.dorm.maven.model.MavenMetadata;
 import com.zenika.dorm.maven.service.MavenHashService;
 import com.zenika.dorm.maven.test.fixtures.MavenWebServiceRequestFixtures;
 import com.zenika.dorm.maven.test.unit.MavenUnitTest;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -15,7 +14,6 @@ import org.mockito.Mock;
 import java.io.File;
 
 import static org.fest.assertions.Assertions.assertThat;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 /**
@@ -38,17 +36,17 @@ public class MavenHashServiceUnitTest extends MavenUnitTest {
     }
 
     @Test
-    @Ignore
     public void compareMd5Hash() throws Exception {
 
-        File file = webServiceRequestFixtures.getJar();
-        DormResource resource = DefaultDormResource.create(file);
+        File md5File = webServiceRequestFixtures.getJarMd5();
+        File jarFile = webServiceRequestFixtures.getJar();
+        DormResource resource = DefaultDormResource.create(jarFile);
+
+        MavenMetadata hashMetadata = fixtures.getSimpleJarMd5();
         MavenMetadata metadata = fixtures.getSimpleJar();
 
         when(service.getResource(metadata)).thenReturn(resource);
 
-//        assertThat(hashService.compareHash("md5", metadata, file)).isTrue();
-//
-//        verify(hashService.compareHash("md5", metadata, file));
+        assertThat(hashService.compareHash(hashMetadata, md5File)).isTrue();
     }
 }

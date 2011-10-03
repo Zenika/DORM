@@ -29,18 +29,11 @@ public class MavenHashService {
 
     public boolean compareHash(MavenMetadata hashMetadata, File file) {
 
-        String extension = FilenameUtils.removeExtension(hashMetadata.getBuildInfo().getExtension());
         String hashType = FilenameUtils.getExtension(hashMetadata.getBuildInfo().getExtension());
 
-        MavenBuildInfo buildInfo = new MavenBuildInfoBuilder(hashMetadata.getBuildInfo())
-                .extension(extension)
-                .build();
+        MavenMetadata metadata = getRealMetadataFromHash(hashMetadata);
 
-        MavenMetadata metadata = new MavenMetadataBuilder(hashMetadata)
-                .buildInfo(buildInfo)
-                .build();
-
-        DormResource resource = service.getResource(hashMetadata);
+        DormResource resource = service.getResource(metadata);
 
         if (null == resource) {
             throw new MavenException("Metadata associated to the hash was not found : " + metadata);
@@ -71,5 +64,18 @@ public class MavenHashService {
         }
 
         return StringUtils.equals(currentHash, modelHash);
+    }
+
+    private MavenMetadata getRealMetadataFromHash(MavenMetadata hashMetadata) {
+
+        String extension = FilenameUtils.removeExtension(hashMetadata.getBuildInfo().getExtension());
+
+        MavenBuildInfo buildInfo = new MavenBuildInfoBuilder(hashMetadata.getBuildInfo())
+                .extension(extension)
+                .build();
+
+        return new MavenMetadataBuilder(hashMetadata)
+                .buildInfo(buildInfo)
+                .build();
     }
 }
