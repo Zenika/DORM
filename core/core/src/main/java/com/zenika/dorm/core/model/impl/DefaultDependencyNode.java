@@ -71,10 +71,11 @@ public final class DefaultDependencyNode implements DependencyNode {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof DefaultDependencyNode)) return false;
+        if (o == null || getClass() != o.getClass()) return false;
 
         DefaultDependencyNode that = (DefaultDependencyNode) o;
 
+        if (childrens != null ? !childrens.equals(that.childrens) : that.childrens != null) return false;
         if (dependency != null ? !dependency.equals(that.dependency) : that.dependency != null) return false;
 
         return true;
@@ -82,6 +83,8 @@ public final class DefaultDependencyNode implements DependencyNode {
 
     @Override
     public int hashCode() {
-        return dependency != null ? dependency.hashCode() : 0;
+        int result = dependency != null ? dependency.hashCode() : 0;
+        result = 31 * result + (childrens != null ? childrens.hashCode() : 0);
+        return result;
     }
 }

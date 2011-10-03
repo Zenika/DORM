@@ -60,14 +60,23 @@ public final class DefaultDependency implements Dependency {
     }
 
     @Override
+    public String toString() {
+        String fileAsString = (resource == null) ? "null" : resource.toString();
+        return "Dependency { " +
+                "Usage = " + usage + "; " +
+                "Metadata = " + metadata + "; " +
+                "File = " + fileAsString + " }";
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof DefaultDependency)) return false;
+        if (o == null || getClass() != o.getClass()) return false;
 
         DefaultDependency that = (DefaultDependency) o;
 
-        if (resource != null ? !resource.equals(that.resource) : that.resource != null) return false;
         if (metadata != null ? !metadata.equals(that.metadata) : that.metadata != null) return false;
+        if (resource != null ? !resource.equals(that.resource) : that.resource != null) return false;
         if (usage != null ? !usage.equals(that.usage) : that.usage != null) return false;
 
         return true;
@@ -79,14 +88,5 @@ public final class DefaultDependency implements Dependency {
         result = 31 * result + (metadata != null ? metadata.hashCode() : 0);
         result = 31 * result + (resource != null ? resource.hashCode() : 0);
         return result;
-    }
-
-    @Override
-    public String toString() {
-        String fileAsString = (resource == null) ? "null" : resource.toString();
-        return "Dependency { " +
-                "Usage = " + usage + "; " +
-                "Metadata = " + metadata + "; " +
-                "File = " + fileAsString + " }";
     }
 }

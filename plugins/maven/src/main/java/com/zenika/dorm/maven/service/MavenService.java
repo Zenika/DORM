@@ -11,7 +11,10 @@ import com.zenika.dorm.core.service.DormService;
 import com.zenika.dorm.core.service.config.DormServiceStoreResourceConfig;
 import com.zenika.dorm.core.validator.FileValidator;
 import com.zenika.dorm.maven.exception.MavenException;
+import com.zenika.dorm.maven.model.MavenBuildInfo;
 import com.zenika.dorm.maven.model.MavenMetadata;
+import com.zenika.dorm.maven.model.builder.MavenBuildInfoBuilder;
+import com.zenika.dorm.maven.model.builder.MavenMetadataBuilder;
 import com.zenika.dorm.maven.pom.MavenPomReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,6 +51,7 @@ public class MavenService {
         DormServiceStoreResourceConfig config = new DormServiceStoreResourceConfig()
                 .override(true);
 
+        dormService.storeMetadata(getEntityMavenMetadata(metadata));
         dormService.storeMetadata(metadata);
         dormService.storeResource(resource, metadata, config);
     }
@@ -88,7 +92,7 @@ public class MavenService {
             throw new MavenException("Artifact to store and associated pom are different");
         }
 
-        DependencyNode root = DefaultDependencyNode.create(DefaultDependency.create(metadata));
+        DependencyNode root = DefaultDependencyNode.create(DefaultDependency.create(getEntityMavenMetadata(metadata)));
 
         for (Dependency dependency : reader.getDependencies()) {
             root.addChild(DefaultDependencyNode.create(dependency));
@@ -112,5 +116,21 @@ public class MavenService {
         }
 
         return dormService.getResource(metadata);
+    }
+
+    private MavenMetadata getEntityMavenMetadata(MavenMetadata metadata) {
+
+        MavenBuildInfo buildInfo = null;
+        if (null != metadata.getBuildInfo()) {
+            buildInfo = new MavenBuildInfoBuilder(metadata.getBuildInfo())
+                    .extension(null)
+                    .buildNumber(null)
+                    .timestamp(null)
+                    .build();
+        }
+
+        return new MavenMetadataBuilder(metadata)
+                .buildInfo(buildInfo)
+                .build();
     }
 }
