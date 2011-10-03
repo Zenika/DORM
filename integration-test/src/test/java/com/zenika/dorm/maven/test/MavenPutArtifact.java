@@ -65,12 +65,12 @@ public class MavenPutArtifact {
         for (Iterator<MavenResource> iterator = resources.iterator(); iterator.hasNext(); ) {
             MavenPutResource resource = (MavenPutResource) iterator.next();
             resource.setBaseUri(baseUri);
-            executePutRequest(resource.getPomUri(), resource);
-            executePutRequest(resource.getPomSha1Uri(), resource);
-            executePutRequest(resource.getPomMd5Uri(), resource);
-            executePutRequest(resource.getJarUri(), resource);
-            executePutRequest(resource.getJarSha1Uri(), resource);
-            executePutRequest(resource.getJarMd5Uri(), resource);
+            executePutRequest(resource.getPomUri(), resource.getPomPath(), resource);
+            executePutRequest(resource.getPomSha1Uri(), resource.getPomPathMd5(), resource);
+            executePutRequest(resource.getPomMd5Uri(), resource.getPomPathSha1(), resource);
+            executePutRequest(resource.getJarUri(), resource.getJarPath(), resource);
+            executePutRequest(resource.getJarSha1Uri(), resource.getJarPathMd5(), resource);
+            executePutRequest(resource.getJarMd5Uri(), resource.getJarPathSha1(), resource);
         }
     }
 
@@ -80,14 +80,14 @@ public class MavenPutArtifact {
         LOG.info("Sample: " + MavenUtils.buildBaseUri(sample.getConfiguration()));
     }
 
-    private MavenPutResult executePutRequest(String path, MavenPutResource resource) {
+    private MavenPutResult executePutRequest(String path, String filePath, MavenPutResource resource) {
         try {
             LOG.info("|---------Test Get URL------------|");
             LOG.info("|URL: " + path);
 
-            LOG.info("|File path: " + resource.getFilePath());
+            LOG.info("|File path: " + filePath);
 
-            URL url = getClass().getResource("/" + resource.getFilePath());
+            URL url = getClass().getResource("/" + filePath);
             File file = new File(url.toURI());
             HttpEntity entity = new FileEntity(file, "application/java");
             HttpPut put = new HttpPut(path);

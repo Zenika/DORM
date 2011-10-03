@@ -10,12 +10,12 @@
     "resources":[
         {
             "type": "getResource",
-            "pomUrl": "commons-io/commons-io/1.4/commons-io-1.4.pom",
-            "pomSha1Url": "commons-io/commons-io/1.4/commons-io-1.4.pom.sha1",
-            "pomMd5Url": "commons-io/commons-io/1.4/commons-io-1.4.pom.md5",
-            "jarUrl": "commons-io/commons-io/1.4/commons-io-1.4.jar",
-            "jarSha1Url": "commons-io/commons-io/1.4/commons-io-1.4.jar.sha1",
-            "jarMd5Url": "commons-io/commons-io/1.4/commons-io-1.4.jar.md5",
+            "pomUrl": "commons-cli/commons-cli/1.0/commons-cli-1.0.pom",
+            "pomSha1Url": "commons-cli/commons-cli/1.0/commons-cli-1.0.pom.sha1",
+            "pomMd5Url": "commons-cli/commons-cli/1.0/commons-cli-1.0.pom.md5",
+            "jarUrl": "commons-cli/commons-cli/1.0/commons-cli-1.0.jar",
+            "jarSha1Url": "commons-cli/commons-cli/10/commons-cli-1.0.jar.sha1",
+            "jarMd5Url": "commons-cli/commons-cli/1.0/commons-cli-1.0.jar.md5",
             "expectedResult": {
                 "httpCode": 200
             }
