@@ -1,8 +1,6 @@
 package com.zenika.dorm.core.model;
 
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
 /**
  * Extension point on the model to add specific metadatas
  *
@@ -11,6 +9,10 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public abstract class DormMetadata {
 
     protected final Long id;
+
+    public DormMetadata() {
+        this(null);
+    }
 
     public DormMetadata(Long id) {
         this.id = id;

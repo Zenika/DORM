@@ -6,6 +6,7 @@ import com.google.inject.Inject;
 import com.zenika.dorm.core.dao.DormDao;
 import com.zenika.dorm.core.dao.neo4j.provider.Neo4jWebResourceWrapper;
 import com.zenika.dorm.core.dao.query.DormBasicQuery;
+import com.zenika.dorm.core.model.DependencyNode;
 import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.core.model.impl.Usage;
 import com.zenika.dorm.core.service.spi.ExtensionFactoryServiceLoader;
@@ -46,7 +47,7 @@ public class DormDaoNeo4j implements DormDao {
     }
 
     @Override
-    public void saveMetadata(final DormMetadata metadata) {
+    public void saveOrUpdateMetadata(final DormMetadata metadata) {
         Guice.createInjector(new AbstractModule() {
             @Override
             protected void configure() {
@@ -56,5 +57,10 @@ public class DormDaoNeo4j implements DormDao {
                 bind(DormMetadata.class).toInstance(metadata);
             }
         }).getInstance(Neo4jSinglePushTask.class).execute();
+    }
+
+    @Override
+    public DependencyNode addDependenciesToNode(DependencyNode root) {
+        return null;
     }
 }

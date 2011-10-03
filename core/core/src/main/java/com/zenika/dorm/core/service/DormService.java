@@ -1,5 +1,6 @@
 package com.zenika.dorm.core.service;
 
+import com.zenika.dorm.core.model.DependencyNode;
 import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.core.model.DormResource;
 import com.zenika.dorm.core.service.config.DormServiceStoreResourceConfig;
@@ -18,4 +19,6 @@ public interface DormService {
     public DormServiceGetMetadataResult getMetadata(DormServiceGetMetadataValues values);
 
     public DormResource getResource(DormMetadata metadata);
+
+    public DependencyNode addDependenciesToNode(DependencyNode node);
 }

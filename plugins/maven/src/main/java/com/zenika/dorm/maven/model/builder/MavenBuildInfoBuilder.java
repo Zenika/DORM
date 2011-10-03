@@ -12,6 +12,16 @@ public class MavenBuildInfoBuilder {
     private String timestamp;
     private String buildNumber;
 
+    public MavenBuildInfoBuilder() {
+    }
+
+    public MavenBuildInfoBuilder(MavenBuildInfo buildInfo) {
+        extension(buildInfo.getExtension());
+        classifier(buildInfo.getClassifier());
+        timestamp(buildInfo.getTimestamp());
+        buildNumber(buildInfo.getBuildNumber());
+    }
+
     public MavenBuildInfoBuilder extension(String extension) {
         this.extension = extension;
         return this;

@@ -3,6 +3,7 @@ package com.zenika.dorm.core.service.impl;
 import com.google.inject.Inject;
 import com.zenika.dorm.core.dao.DormDao;
 import com.zenika.dorm.core.dao.query.DormBasicQuery;
+import com.zenika.dorm.core.model.DependencyNode;
 import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.core.model.DormResource;
 import com.zenika.dorm.core.model.impl.Usage;
@@ -11,8 +12,6 @@ import com.zenika.dorm.core.service.DormService;
 import com.zenika.dorm.core.service.config.DormServiceStoreResourceConfig;
 import com.zenika.dorm.core.service.get.DormServiceGetMetadataResult;
 import com.zenika.dorm.core.service.get.DormServiceGetMetadataValues;
-import com.zenika.dorm.core.service.put.DormServicePutRequest;
-import com.zenika.dorm.core.service.put.DormServiceStoreResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -43,7 +42,7 @@ public class DefaultDormService implements DormService {
             LOG.debug("Store metadata : " + metadata);
         }
 
-        dao.saveMetadata(metadata);
+        dao.saveOrUpdateMetadata(metadata);
     }
 
     @Override
@@ -98,9 +97,14 @@ public class DefaultDormService implements DormService {
 
     @Override
     public DormResource getResource(DormMetadata metadata) {
-        
+
         checkNotNull(metadata);
 
         return repository.get(metadata);
+    }
+
+    @Override
+    public DependencyNode addDependenciesToNode(DependencyNode node) {
+        return dao.addDependenciesToNode(node);
     }
 }

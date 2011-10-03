@@ -12,7 +12,8 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static org.fest.assertions.Assertions.*;
+import static org.fest.assertions.Assertions.assertThat;
+
 /**
  * @author Antoine ROUAZE <antoine.rouaze AT zenika.com>
  */
@@ -34,7 +35,7 @@ public class JDBCDaoTest {
     public void singlePushTest() {
 
         DormMetadata expectMetadata = DormMetadataTest.getDefault();
-        dao.saveMetadata(expectMetadata);
+        dao.saveOrUpdateMetadata(expectMetadata);
 
         DormBasicQuery query = new DormBasicQuery.Builder()
                 .extensionName("DormTest")

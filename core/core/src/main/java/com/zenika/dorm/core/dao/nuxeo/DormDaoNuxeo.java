@@ -6,6 +6,7 @@ import com.google.inject.Inject;
 import com.zenika.dorm.core.dao.DormDao;
 import com.zenika.dorm.core.dao.nuxeo.provider.NuxeoWebResourceWrapper;
 import com.zenika.dorm.core.dao.query.DormBasicQuery;
+import com.zenika.dorm.core.model.DependencyNode;
 import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.core.model.impl.Usage;
 import com.zenika.dorm.core.service.spi.ExtensionFactoryServiceLoader;
@@ -18,7 +19,11 @@ import java.util.Map;
  */
 public class DormDaoNuxeo implements DormDao {
 
-    public static final String DATA_ENTRY_POINT_URI = "http://192.168.0.37:8090/ecr/dorm";
+    private static final String SERVER_HOSTNAME = "192.168.0.37";
+    private static final String SERVER_PORT = "8090";
+
+    public static final String DATA_ENTRY_POINT_URI = "http://" + SERVER_HOSTNAME + ":" + SERVER_PORT + "/ecr/dorm";
+
 
     @Inject
     private NuxeoWebResourceWrapper wrapper;
@@ -43,7 +48,7 @@ public class DormDaoNuxeo implements DormDao {
     }
 
     @Override
-    public void saveMetadata(final DormMetadata metadata) {
+    public void saveOrUpdateMetadata(final DormMetadata metadata) {
         Guice.createInjector(new AbstractModule() {
             @Override
             protected void configure() {
@@ -52,5 +57,10 @@ public class DormDaoNuxeo implements DormDao {
                 bind(DormMetadata.class).toInstance(metadata);
             }
         }).getInstance(NuxeoSinglePushTask.class).execute();
+    }
+
+    @Override
+    public DependencyNode addDependenciesToNode(DependencyNode root) {
+        return null;
     }
 }

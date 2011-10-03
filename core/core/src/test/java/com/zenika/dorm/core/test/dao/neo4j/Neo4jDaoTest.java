@@ -32,7 +32,7 @@ public class Neo4jDaoTest {
     public void singlePushTest() {
 
         DormMetadata expectMetadata = DormMetadataTest.getDefault();
-        dao.saveMetadata(expectMetadata);
+        dao.saveOrUpdateMetadata(expectMetadata);
 
         DormBasicQuery query = new DormBasicQuery.Builder()
                 .extensionName("DormTest")

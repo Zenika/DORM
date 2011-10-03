@@ -6,7 +6,8 @@ import com.zenika.dorm.maven.model.builder.MavenMetadataBuilder;
 import org.apache.maven.artifact.repository.metadata.Metadata;
 import org.apache.maven.artifact.repository.metadata.Snapshot;
 import org.apache.maven.artifact.repository.metadata.Versioning;
-import org.apache.maven.artifact.repository.metadata.io.xpp3.MetadataXpp3Reader;
+import org.apache.maven.model.Model;
+import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,7 +17,7 @@ import java.io.FileInputStream;
 /**
  * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>
  */
-public class MavenDormMetadataConverter {
+public final class MavenDormMetadataConverter {
 
     private static final Logger LOG = LoggerFactory.getLogger(MavenDormMetadataConverter.class);
 
@@ -39,33 +40,4 @@ public class MavenDormMetadataConverter {
 
         return metadata;
     }
-
-    public static MavenMetadata mavenToDorm(File mavenMetadataFile) {
-
-        Metadata metadata;
-
-        try {
-            metadata = new MetadataXpp3Reader().read(new FileInputStream(mavenMetadataFile));
-        } catch (Exception e) {
-            LOG.error("Maven metadata file cannot be read", e);
-            throw new MavenException("Maven metadata file cannot be read", e);
-        }
-
-        return mavenToDorm(metadata);
-    }
-
-    public static MavenMetadata mavenToDorm(Metadata metadata) {
-
-        if (null != metadata.getPlugins() && !metadata.getPlugins().isEmpty()) {
-            throw new UnsupportedOperationException("Maven plugins are not yet supported");
-        }
-
-        MavenMetadataBuilder builder = new MavenMetadataBuilder()
-                .artifactId(metadata.getArtifactId())
-                .groupId(metadata.getGroupId());
-
-//        metadata.get
-        return null;
-    }
-
 }

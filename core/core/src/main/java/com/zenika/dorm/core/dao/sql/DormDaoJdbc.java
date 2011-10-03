@@ -6,6 +6,7 @@ import com.google.inject.Inject;
 import com.google.inject.TypeLiteral;
 import com.zenika.dorm.core.dao.DormDao;
 import com.zenika.dorm.core.dao.query.DormBasicQuery;
+import com.zenika.dorm.core.model.DependencyNode;
 import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.core.model.impl.Usage;
 import com.zenika.dorm.core.service.spi.ExtensionFactoryServiceLoader;
@@ -25,7 +26,7 @@ public class DormDaoJdbc implements DormDao {
     private ExtensionFactoryServiceLoader serviceLoader;
 
     @Override
-    public void saveMetadata(final DormMetadata metadata) {
+    public void saveOrUpdateMetadata(final DormMetadata metadata) {
         Guice.createInjector(
                 new AbstractModule() {
                     @Override
@@ -35,6 +36,11 @@ public class DormDaoJdbc implements DormDao {
                         bind(ExtensionFactoryServiceLoader.class).toInstance(serviceLoader);
                     }
                 }).getInstance(JDBCSinglePushTask.class).execute();
+    }
+
+    @Override
+    public DependencyNode addDependenciesToNode(DependencyNode root) {
+        return null;
     }
 
     @Override
