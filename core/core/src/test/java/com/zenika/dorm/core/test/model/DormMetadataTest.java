@@ -9,31 +9,27 @@ public class DormMetadataTest extends DormMetadata{
 
     public static final String EXTENSION_NAME = "DormTest";
     public static final String VERSION_FIELD = "version";
-    public static final String FIELD_FIELD = "field";
-    public static final String DATA_FIELD = "data";
+    public static final String ARTIFACT_ID = "artifactId";
 
     private String version;
 
-    private String field;
-    private String data;
+    private String artifactId;
 
-    public DormMetadataTest(String version, String field, String data) {
+    public DormMetadataTest(String version, String artifactId) {
         super(null);
         this.version = version;
-        this.field = field;
-        this.data = data;
+        this.artifactId = artifactId;
     }
 
-    public DormMetadataTest(Long id, String version, String field, String data) {
+    public DormMetadataTest(Long id, String version, String artifactId) {
             super(id);
             this.version = version;
-            this.field = field;
-            this.data = data;
+            this.artifactId = artifactId;
         }
 
 
     public static DormMetadata getDefault(){
-        return new DormMetadataTest("1.0.0", "property", "DATA");
+        return new DormMetadataTest("1.0.0", "property");
     }
 
     @Override
@@ -51,12 +47,8 @@ public class DormMetadataTest extends DormMetadata{
         return EXTENSION_NAME;
     }
 
-    public String getData() {
-        return data;
-    }
-
-    public String getField() {
-        return field;
+    public String getArtifactId() {
+        return artifactId;
     }
 
     @Override
@@ -66,8 +58,7 @@ public class DormMetadataTest extends DormMetadata{
 
         DormMetadataTest that = (DormMetadataTest) o;
 
-        if (data != null ? !data.equals(that.data) : that.data != null) return false;
-        if (field != null ? !field.equals(that.field) : that.field != null) return false;
+        if (artifactId != null ? !artifactId.equals(that.artifactId) : that.artifactId != null) return false;
         if (version != null ? !version.equals(that.version) : that.version != null) return false;
 
         return true;
@@ -76,8 +67,7 @@ public class DormMetadataTest extends DormMetadata{
     @Override
     public int hashCode() {
         int result = version != null ? version.hashCode() : 0;
-        result = 31 * result + (field != null ? field.hashCode() : 0);
-        result = 31 * result + (data != null ? data.hashCode() : 0);
+        result = 31 * result + (artifactId != null ? artifactId.hashCode() : 0);
         return result;
     }
 
@@ -87,9 +77,8 @@ public class DormMetadataTest extends DormMetadata{
         final StringBuilder sb = new StringBuilder();
         sb.append("DormMetadataTest");
         sb.append("{id='").append(id).append('\'');
-        sb.append(", data='").append(data).append('\'');
         sb.append(", extensionName='").append(getExtensionName()).append('\'');
-        sb.append(", fields='").append(field).append('\'');
+        sb.append(", fields='").append(artifactId).append('\'');
         sb.append(", name='").append(getName()).append('\'');
         sb.append(", version='").append(version).append('\'');
         sb.append('}');

@@ -5,6 +5,7 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.zenika.dorm.core.dao.neo4j.DormDaoNeo4j;
 import com.zenika.dorm.core.dao.query.DormBasicQuery;
+import com.zenika.dorm.core.model.DependencyNode;
 import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.core.test.dao.neo4j.util.Neo4jTestModule;
 import com.zenika.dorm.core.test.model.DormMetadataTest;
@@ -21,15 +22,17 @@ public class Neo4jDaoTest {
     private static final Logger LOG = LoggerFactory.getLogger(Neo4jDaoTest.class);
 
     private DormDaoNeo4j dao;
+    private Neo4jTestProvider provider;
 
     @Before
     public void setUp() {
+        provider = Neo4jTestProvider.getProvider();
         Injector injector = Guice.createInjector(new Neo4jTestModule());
         dao = injector.getInstance(DormDaoNeo4j.class);
     }
 
     @Test
-    public void singlePushTest() {
+    public void testSinglePushTest() {
 
         DormMetadata expectMetadata = DormMetadataTest.getDefault();
         dao.saveOrUpdateMetadata(expectMetadata);
@@ -45,4 +48,16 @@ public class Neo4jDaoTest {
 
         assertThat(resultMetadata).isEqualTo(expectMetadata);
     }
+
+    @Test
+    public void testAddDependenciesToNode() {
+        for (DependencyNode node:provider.getDependencies()){
+            DormMetadata metadata = node.getDependency().getMetadata();
+            dao.saveOrUpdateMetadata(metadata);
+        }
+
+        DependencyNode root = provider.getRoot();
+        dao.addDependenciesToNode(root);
+    }
+
 }

@@ -24,8 +24,7 @@ public class ExtensionTestMetadataFactory implements ExtensionMetadataFactory {
         return new DormMetadataTest(
                 id,
                 properties.get(VERSION_FIELD),
-                properties.get(FIELD_FIELD),
-                properties.get(DATA_FIELD));
+                properties.get(ARTIFACT_ID));
     }
 
     @Override
@@ -34,8 +33,7 @@ public class ExtensionTestMetadataFactory implements ExtensionMetadataFactory {
 
         Map<String, String> properties = new HashMap<String, String>();
         properties.put(VERSION_FIELD, metadataTest.getVersion());
-        properties.put(FIELD_FIELD, metadataTest.getField());
-        properties.put(DATA_FIELD, metadataTest.getData());
+        properties.put(ARTIFACT_ID, metadataTest.getArtifactId());
         return properties;
     }
 }
