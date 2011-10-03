@@ -34,7 +34,6 @@ public class DormDaoNeo4j implements DormDao {
             @Override
             protected void configure() {
                 bind(Neo4jWebResourceWrapper.class).toInstance(wrapper);
-//                bind(Neo4jIndex.class).toInstance(index);
                 bind(ExtensionFactoryServiceLoader.class).toInstance(serviceLoader);
                 bind(DormBasicQuery.class).toInstance(query);
             }
@@ -52,7 +51,6 @@ public class DormDaoNeo4j implements DormDao {
             @Override
             protected void configure() {
                 bind(Neo4jWebResourceWrapper.class).toInstance(wrapper);
-//                bind(Neo4jIndex.class).toInstance(index);
                 bind(ExtensionFactoryServiceLoader.class).toInstance(serviceLoader);
                 bind(DormMetadata.class).toInstance(metadata);
             }
@@ -60,7 +58,14 @@ public class DormDaoNeo4j implements DormDao {
     }
 
     @Override
-    public DependencyNode addDependenciesToNode(DependencyNode root) {
-        return null;
+    public DependencyNode addDependenciesToNode(final DependencyNode root) {
+        return Guice.createInjector(new AbstractModule() {
+            @Override
+            protected void configure() {
+                bind(Neo4jWebResourceWrapper.class).toInstance(wrapper);
+                bind(ExtensionFactoryServiceLoader.class).toInstance(serviceLoader);
+                bind(DependencyNode.class).toInstance(root);
+            }
+        }).getInstance(Neo4jAddDependenciesTask.class).execute();
     }
 }

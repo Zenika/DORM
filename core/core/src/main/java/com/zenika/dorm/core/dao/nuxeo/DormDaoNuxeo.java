@@ -61,6 +61,6 @@ public class DormDaoNuxeo implements DormDao {
 
     @Override
     public DependencyNode addDependenciesToNode(DependencyNode root) {
-        return null;
+        throw new UnsupportedOperationException("Not implement yet");
     }
 }
