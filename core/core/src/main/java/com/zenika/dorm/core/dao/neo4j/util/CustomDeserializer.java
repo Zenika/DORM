@@ -30,12 +30,11 @@ public class CustomDeserializer extends JsonDeserializer<Neo4jMetadata> {
                 if (jp.getText().equals("extensionName")) {
                     jp.nextValue();
                     metadata.setExtensionName(jp.getText());
-                } else if (jp.getText().equals("version")) {
-                    jp.nextValue();
-                    metadata.setVersion(jp.getText());
                 } else if (jp.getText().equals("name")) {
                     jp.nextValue();
                     metadata.setName(jp.getText());
+                } else if (token.equals(JsonToken.END_OBJECT)){
+                    break;
                 } else {
                     String key = jp.getText();
                     jp.nextToken();
@@ -44,7 +43,9 @@ public class CustomDeserializer extends JsonDeserializer<Neo4jMetadata> {
             }
             jp.nextToken();
         }
-
+        
         return metadata;
     }
+
+
 }

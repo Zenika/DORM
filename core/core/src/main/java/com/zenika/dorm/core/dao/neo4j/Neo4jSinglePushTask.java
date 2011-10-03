@@ -59,15 +59,15 @@ public class Neo4jSinglePushTask extends Neo4jAbstractTask {
 
             id = extractId(metadataResponse.getSelf());
 
-            Neo4jResponse propertiesResponse = createNode(metadata.getProperties());
-
-            createRelationships(
-                    new Neo4jRelationship(
-                            metadataResponse.getCreate_relationship(),
-                            propertiesResponse.getSelf(),
-                            Neo4jMetadata.PROPERTIES_RELATIONSHIPS
-                    )
-            );
+//            Neo4jResponse propertiesResponse = createNode(metadata.getProperties());
+//
+//            createRelationships(
+//                    new Neo4jRelationship(
+//                            metadataResponse.getCreate_relationship(),
+//                            propertiesResponse.getSelf(),
+//                            Neo4jMetadata.PROPERTIES_RELATIONSHIPS
+//                    )
+//            );
 
 
             // Create index is useless for the moment

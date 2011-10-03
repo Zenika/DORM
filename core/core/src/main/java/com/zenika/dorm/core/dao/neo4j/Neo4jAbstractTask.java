@@ -32,9 +32,6 @@ public abstract class Neo4jAbstractTask {
     protected static final GenericType<List<Neo4jRelationship>> LIST_RELATIONSHIP_GENERIC_TYPE =
             new GenericType<List<Neo4jRelationship>>() {
             };
-    protected static final GenericType<Neo4jResponse<Map<String, String>>> PROPERTIES_GENERIC_TYPE =
-            new GenericType<Neo4jResponse<Map<String, String>>>() {
-            };
 
     @Inject
     protected Neo4jWebResourceWrapper wrapper;

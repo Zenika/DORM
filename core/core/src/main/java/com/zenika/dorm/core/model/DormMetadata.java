@@ -12,12 +12,8 @@ public abstract class DormMetadata {
 
     protected final Long id;
 
-    protected DormMetadata() {
-        id = null;
-    }
-
     public DormMetadata(Long id) {
-        this.id = checkNotNull(id);
+        this.id = id;
     }
 
     public abstract String getName();
