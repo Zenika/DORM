@@ -88,7 +88,7 @@ public class MavenService {
         MavenPomReader reader = new MavenPomReader(file);
         MavenMetadata pomMetadata = reader.getArtifact();
 
-        if (!metadata.equals(pomMetadata)) {
+        if (!metadata.equalsEntityMetadataOnly(pomMetadata)) {
 
             if (LOG.isInfoEnabled()) {
                 LOG.info("pom metadata = " + pomMetadata);

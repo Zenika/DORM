@@ -86,6 +86,19 @@ public final class MavenMetadata extends DormMetadata {
         return EXTENSION_NAME;
     }
 
+    public boolean equalsEntityMetadataOnly(MavenMetadata metadata) {
+        
+        if (this == metadata) return true;
+        if (metadata == null) return false;
+
+        if (snapshot != metadata.snapshot) return false;
+        if (artifactId != null ? !artifactId.equals(metadata.artifactId) : metadata.artifactId != null) return false;
+        if (groupId != null ? !groupId.equals(metadata.groupId) : metadata.groupId != null) return false;
+        if (version != null ? !version.equals(metadata.version) : metadata.version != null) return false;
+
+        return true;
+    }
+
     public String getGroupId() {
         return groupId;
     }
