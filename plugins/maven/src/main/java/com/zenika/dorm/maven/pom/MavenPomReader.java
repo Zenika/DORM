@@ -37,9 +37,21 @@ public class MavenPomReader {
         MavenBuildInfo buildInfo = new MavenBuildInfoBuilder()
                 .extension("pom").build();
 
+        String groupid = null;
+        
+        if (StringUtils.isNotBlank(model.getGroupId())) {
+            groupid = model.getGroupId();
+        } else if (null != model.getParent()) {
+            groupid = model.getGroupId();
+        }
+
+        if (StringUtils.isBlank(groupid)) {
+            throw new MavenException("Unable to determine the groupid from maven artifact : " + model);
+        }
+
         return new MavenMetadataBuilder()
                 .artifactId(model.getArtifactId())
-                .groupId(model.getGroupId())
+                .groupId(groupid)
                 .version(model.getVersion())
                 .buildInfo(buildInfo)
                 .build();
