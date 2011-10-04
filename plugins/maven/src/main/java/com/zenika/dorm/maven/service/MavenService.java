@@ -89,6 +89,12 @@ public class MavenService {
         MavenMetadata pomMetadata = reader.getArtifact();
 
         if (!metadata.equals(pomMetadata)) {
+
+            if (LOG.isInfoEnabled()) {
+                LOG.info("pom metadata = " + pomMetadata);
+                LOG.info("uri metadata = " + metadata);
+            }
+
             throw new MavenException("Artifact to store and associated pom are different");
         }
 
