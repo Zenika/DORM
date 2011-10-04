@@ -51,7 +51,7 @@ public class MavenHashService {
 
                 char c = (char) i;
 
-                if (c == ' ') {
+                if (StringUtils.isWhitespace(String.valueOf(c))) {
                     break;
                 }
 
