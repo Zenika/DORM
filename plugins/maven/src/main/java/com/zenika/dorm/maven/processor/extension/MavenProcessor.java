@@ -5,8 +5,8 @@ import com.zenika.dorm.core.model.DormResource;
 import com.zenika.dorm.core.model.ws.DormWebServiceRequest;
 import com.zenika.dorm.core.model.ws.DormWebServiceResult;
 import com.zenika.dorm.core.processor.ProcessorExtension;
+import com.zenika.dorm.core.validator.FileValidator;
 import com.zenika.dorm.maven.constant.MavenConstant;
-import com.zenika.dorm.maven.exception.MavenException;
 import com.zenika.dorm.maven.helper.MavenExtensionHelper;
 import com.zenika.dorm.maven.model.MavenMetadata;
 import com.zenika.dorm.maven.model.MavenUri;
@@ -17,6 +17,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * The maven processor needs to create an abstract dependency node which will be the parent of the
@@ -57,31 +59,34 @@ public class MavenProcessor extends ProcessorExtension {
     @Override
     public DormWebServiceResult push(DormWebServiceRequest request) {
 
+        checkNotNull(request);
+        FileValidator.validateFile(request.getFile());
+
         if (LOG.isDebugEnabled()) {
             LOG.debug("Maven webservice push request : " + request);
-        }
-
-        if (!request.hasFile()) {
-            throw new MavenException("File is required");
         }
 
         DormWebServiceResult.Builder responseBuilder = new DormWebServiceResult.Builder(
                 MavenMetadata.EXTENSION_NAME);
 
-        MavenUri mavenUri = new MavenUri(request.getProperty("uri"));
-
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("Maven uri : " + mavenUri);
-        }
+        String uri = checkNotNull(request.getProperty("uri"));
 
         // ignore put's of maven-medata.xml* files
-        if (StringUtils.startsWith(mavenUri.getFilename().getFilename(), MavenConstant.Special.MAVEN_METADATA_XML)) {
+        if (StringUtils.endsWithAny(uri,
+                MavenConstant.Special.MAVEN_METADATA_XML, MavenConstant.Special.MAVEN_METADATA_XML + ".md5",
+                MavenConstant.Special.MAVEN_METADATA_XML + ".sha1")) {
 
             if (LOG.isDebugEnabled()) {
-                LOG.debug("Ignore " + MavenConstant.Special.MAVEN_METADATA_XML);
+                LOG.debug("Ignore " + uri);
             }
 
             return responseBuilder.succeeded().build();
+        }
+
+        MavenUri mavenUri = new MavenUri(uri);
+
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Maven uri : " + mavenUri);
         }
 
         MavenMetadata metadata = MavenMetadataUriBuilder.buildMavenMetadata(mavenUri);
