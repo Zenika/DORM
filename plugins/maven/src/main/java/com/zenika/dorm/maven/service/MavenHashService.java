@@ -39,17 +39,32 @@ public class MavenHashService {
             throw new MavenException("Metadata associated to the hash was not found : " + metadata);
         }
 
-        String currentHash = null;
+        String currentHash;
         try {
             BufferedReader reader;
             reader = new BufferedReader(new FileReader(file));
-            currentHash = reader.readLine();
+
+            StringBuilder builder = new StringBuilder(50);
+
+            int i;
+            while ((i = reader.read()) != -1) {
+
+                char c = (char) i;
+
+                if (c == ' ') {
+                    break;
+                }
+
+                builder.append(c);
+            }
+
+            currentHash = builder.toString();
+
         } catch (IOException e) {
             throw new MavenException("Error reading file containing hash", e);
         }
 
         String modelHash;
-
         try {
             if (StringUtils.equals(hashType, MavenConstant.Extension.MD5)) {
                 modelHash = DigestUtils.md5Hex(new FileInputStream(resource.getFile()));
