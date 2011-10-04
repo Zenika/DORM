@@ -8,6 +8,7 @@ import com.sun.jersey.api.client.UniformInterfaceException;
 import com.sun.jersey.api.client.WebResource;
 import com.zenika.dorm.maven.importer.utils.ExtensionFilter;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.comparator.DefaultFileComparator;
 import org.apache.maven.model.Model;
 import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
@@ -26,8 +27,13 @@ import java.io.InputStream;
 import java.net.ConnectException;
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 /**
  * @author Antoine ROUAZE <antoine.rouaze AT zenika.com>
@@ -107,7 +113,9 @@ public class MavenRepositoryImporter {
         return files;
     }
 
-    public void sendFiles(File[] files, Model model) {
+    public void sendFiles(File[] filesTab, Model model) {
+        List<File> files = Arrays.asList(filesTab);
+        Collections.sort(files, DefaultFileComparator.DEFAULT_COMPARATOR);
         for (File file : files) {
             try {
                 resource.path(getArtifactPath(model, file.getName()))

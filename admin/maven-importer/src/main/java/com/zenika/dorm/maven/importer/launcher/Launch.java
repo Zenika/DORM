@@ -9,6 +9,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * @author Antoine ROUAZE <antoine.rouaze AT zenika.com>
@@ -24,7 +27,7 @@ public class Launch {
     @Option(name = "-P", usage = "Root path of the maven resource", aliases = "--Path")
     private String path = "";
     @Option(name = "-l", usage = "Repository path", aliases = "--localRepository")
-    private String localRepository = "";
+    private String localRepository = "~/.m2/repository";
     @Option(name = "-s", usage = "Get full stack trace", aliases = "--stackTrace")
     private boolean stackTraceActive;
 
