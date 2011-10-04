@@ -11,6 +11,8 @@ import com.zenika.dorm.maven.model.builder.MavenMetadataBuilder;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.maven.model.Model;
 import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -23,6 +25,8 @@ import static com.google.common.base.Preconditions.checkArgument;
  * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>
  */
 public class MavenPomReader {
+
+    private static final Logger LOG = LoggerFactory.getLogger(MavenPomReader.class);
 
     private Model model;
 
@@ -56,6 +60,11 @@ public class MavenPomReader {
         }
 
         checkArgument(StringUtils.isNotBlank(version), "Unable to determine the version from the pom");
+
+        if(LOG.isDebugEnabled()) {
+            LOG.debug("Maven pom groupId : " + groupid);
+            LOG.debug("Maven pom version : " + version);
+        }
 
         return new MavenMetadataBuilder()
                 .artifactId(model.getArtifactId())

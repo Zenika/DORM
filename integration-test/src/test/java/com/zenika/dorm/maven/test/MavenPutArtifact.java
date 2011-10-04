@@ -32,6 +32,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import static org.fest.assertions.Assertions.*;
+
 /**
  * @author Antoine ROUAZE <antoine.rouaze AT zenika.com>
  */
@@ -65,17 +66,17 @@ public class MavenPutArtifact {
         for (Iterator<MavenResource> iterator = resources.iterator(); iterator.hasNext(); ) {
             MavenPutResource resource = (MavenPutResource) iterator.next();
             resource.setBaseUri(baseUri);
-            executePutRequest(resource.getPomUri(), resource.getPomPath(), resource);
-            executePutRequest(resource.getPomSha1Uri(), resource.getPomPathMd5(), resource);
-            executePutRequest(resource.getPomMd5Uri(), resource.getPomPathSha1(), resource);
             executePutRequest(resource.getJarUri(), resource.getJarPath(), resource);
-            executePutRequest(resource.getJarSha1Uri(), resource.getJarPathMd5(), resource);
-            executePutRequest(resource.getJarMd5Uri(), resource.getJarPathSha1(), resource);
+            executePutRequest(resource.getJarSha1Uri(), resource.getJarPathSha1(), resource);
+            executePutRequest(resource.getJarMd5Uri(), resource.getJarPathMd5(), resource);
+            executePutRequest(resource.getPomUri(), resource.getPomPath(), resource);
+            executePutRequest(resource.getPomSha1Uri(), resource.getPomPathSha1(), resource);
+            executePutRequest(resource.getPomMd5Uri(), resource.getPomPathMd5(), resource);
         }
     }
 
     @Test
-    public void test(){
+    public void test() {
         MavenSample sample = MavenUtils.getSample(JSON_FILE_PATH);
         LOG.info("Sample: " + MavenUtils.buildBaseUri(sample.getConfiguration()));
     }
@@ -95,13 +96,13 @@ public class MavenPutArtifact {
             HttpResponse response = client.execute(put);
             MavenPutResult result = new MavenPutResult(response.getStatusLine().getStatusCode());
             MavenPutResult resultExpected = resource.getExpectedResult();
-            
+
             LOG.info("|Result: " + result);
             LOG.info("|Result expected: " + resultExpected);
-            
+
             try {
                 assertThat(result).isEqualTo(resultExpected);
-            } catch (AssertionError e){
+            } catch (AssertionError e) {
                 LOG.error("|Assert fail", e);
             }
             put.abort();

@@ -11,6 +11,8 @@ import com.zenika.dorm.maven.exception.MavenException;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 /**
  * Maven immutable extension point to the dorm model
  * Add maven specific metadatas
@@ -38,13 +40,10 @@ public final class MavenMetadata extends DormMetadata {
 
         super(id);
 
-        if (DormStringUtils.oneIsBlank(groupId, artifactId, version)) {
-            throw new MavenException("Following metadatas are required : groupId, artifactId, versionId");
-        }
-
-        this.groupId = groupId;
-        this.artifactId = artifactId;
-        this.version = version;
+        this.groupId = checkNotNull(groupId);
+        this.artifactId = checkNotNull(artifactId);
+        this.version = checkNotNull(version);
+        
         this.buildInfo = buildInfo;
 
         snapshot = (version.endsWith("-" + MavenConstant.Special.SNAPSHOT)) ? true : false;
