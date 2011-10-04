@@ -2,10 +2,12 @@ package com.zenika.dorm.maven.factory;
 
 import com.zenika.dorm.core.factory.ExtensionMetadataFactory;
 import com.zenika.dorm.core.model.DormMetadata;
+import com.zenika.dorm.core.util.DormStringUtils;
 import com.zenika.dorm.maven.model.MavenBuildInfo;
 import com.zenika.dorm.maven.model.MavenMetadata;
 import com.zenika.dorm.maven.model.builder.MavenBuildInfoBuilder;
 import com.zenika.dorm.maven.model.builder.MavenMetadataBuilder;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -27,7 +29,7 @@ public class MavenMetadataFactory implements ExtensionMetadataFactory {
 
         MavenMetadataBuilder builder = new MavenMetadataBuilder();
         applyToBuilder(builder, id, properties);
-        
+
         return builder.build();
     }
 
@@ -49,28 +51,40 @@ public class MavenMetadataFactory implements ExtensionMetadataFactory {
         properties.put(METADATA_ARTIFACTID, mavenMetadata.getArtifactId());
         properties.put(METADATA_VERSION, mavenMetadata.getVersion());
         properties.put(METADATA_SNAPSHOT, String.valueOf(mavenMetadata.isSnapshot()));
-        properties.put(MavenBuildInfo.METADATA_CLASSIFIER, mavenMetadata.getBuildInfo().getClassifier());
-        properties.put(MavenBuildInfo.METADATA_EXTENSION, mavenMetadata.getBuildInfo().getExtension());
-        properties.put(MavenBuildInfo.METADATA_TIMESTAMP, mavenMetadata.getBuildInfo().getTimestamp());
-        properties.put(MavenBuildInfo.METADATA_BUILDNUMBER, mavenMetadata.getBuildInfo().getBuildNumber());
+
+        if (null != mavenMetadata.getBuildInfo()) {
+            properties.put(MavenBuildInfo.METADATA_CLASSIFIER, mavenMetadata.getBuildInfo().getClassifier());
+            properties.put(MavenBuildInfo.METADATA_EXTENSION, mavenMetadata.getBuildInfo().getExtension());
+            properties.put(MavenBuildInfo.METADATA_TIMESTAMP, mavenMetadata.getBuildInfo().getTimestamp());
+            properties.put(MavenBuildInfo.METADATA_BUILDNUMBER, mavenMetadata.getBuildInfo().getBuildNumber());
+        }
 
         return properties;
     }
 
     private void applyToBuilder(MavenMetadataBuilder builder, Long id, Map<String, String> properties) {
 
-        MavenBuildInfo buildInfo = new MavenBuildInfoBuilder()
-                .classifier(properties.get(MavenBuildInfo.METADATA_CLASSIFIER))
-                .extension(properties.get(MavenBuildInfo.METADATA_EXTENSION))
-                .timestamp(properties.get(MavenBuildInfo.METADATA_TIMESTAMP))
-                .buildNumber(properties.get(MavenBuildInfo.METADATA_BUILDNUMBER))
-                .build();
+        String classifier = properties.get(MavenBuildInfo.METADATA_CLASSIFIER);
+        String extension = properties.get(MavenBuildInfo.METADATA_EXTENSION);
+        String timestamp = properties.get(MavenBuildInfo.METADATA_TIMESTAMP);
+        String buildnumber = properties.get(MavenBuildInfo.METADATA_BUILDNUMBER);
+
+        if (!DormStringUtils.oneIsBlank(classifier, extension, timestamp, buildnumber)) {
+
+            MavenBuildInfo buildInfo = new MavenBuildInfoBuilder()
+                    .classifier(StringUtils.defaultIfBlank(properties.get(MavenBuildInfo.METADATA_CLASSIFIER), null))
+                    .extension(StringUtils.defaultIfBlank(properties.get(MavenBuildInfo.METADATA_EXTENSION), null))
+                    .timestamp(StringUtils.defaultIfBlank(properties.get(MavenBuildInfo.METADATA_TIMESTAMP), null))
+                    .buildNumber(StringUtils.defaultIfBlank(properties.get(MavenBuildInfo.METADATA_BUILDNUMBER), null))
+                    .build();
+
+            builder.buildInfo(buildInfo);
+        }
 
         builder.id(id)
                 .artifactId(properties.get(METADATA_ARTIFACTID))
                 .groupId(properties.get(METADATA_GROUPID))
                 .version(properties.get(METADATA_VERSION))
-                .buildInfo(buildInfo)
                 .build();
     }
 
