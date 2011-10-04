@@ -59,18 +59,21 @@ public final class MavenMetadata extends DormMetadata {
                 .append(groupId).append(separator)
                 .append(artifactId);
 
-        if (StringUtils.isNotBlank(buildInfo.getTimestamp()) && StringUtils.isNotBlank(buildInfo.getBuildNumber())) {
-            qualifier.append(separator).append(buildInfo.getTimestamp())
-                    .append(separator).append(buildInfo.getBuildNumber());
+        if (null != buildInfo) {
+
+            if (StringUtils.isNotBlank(buildInfo.getTimestamp()) && StringUtils.isNotBlank(buildInfo.getBuildNumber())) {
+                qualifier.append(separator).append(buildInfo.getTimestamp())
+                        .append(separator).append(buildInfo.getBuildNumber());
+            }
+
+            if (StringUtils.isNotBlank(buildInfo.getClassifier())) {
+                qualifier.append(separator).append(buildInfo.getClassifier());
+            }
+
+            qualifier.append(separator).append(buildInfo.getExtension());
         }
 
-        if (StringUtils.isNotBlank(buildInfo.getClassifier())) {
-            qualifier.append(separator).append(buildInfo.getClassifier());
-        }
-
-        return qualifier
-                .append(separator).append(buildInfo.getExtension())
-                .toString();
+        return qualifier.toString();
     }
 
     @Override
