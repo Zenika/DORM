@@ -17,6 +17,8 @@ import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.google.common.base.Preconditions.checkArgument;
+
 /**
  * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>
  */
@@ -38,21 +40,27 @@ public class MavenPomReader {
                 .extension("pom").build();
 
         String groupid = null;
-        
         if (StringUtils.isNotBlank(model.getGroupId())) {
             groupid = model.getGroupId();
         } else if (null != model.getParent()) {
-            groupid = model.getGroupId();
+            groupid = model.getParent().getGroupId();
         }
 
-        if (StringUtils.isBlank(groupid)) {
-            throw new MavenException("Unable to determine the groupid from maven artifact : " + model);
+        checkArgument(StringUtils.isNotBlank(groupid), "Unable to determine the groupId from the pom");
+
+        String version = null;
+        if (StringUtils.isNotBlank(model.getVersion())) {
+            version = model.getVersion();
+        } else if (null != model.getParent()) {
+            version = model.getParent().getVersion();
         }
+
+        checkArgument(StringUtils.isNotBlank(version), "Unable to determine the version from the pom");
 
         return new MavenMetadataBuilder()
                 .artifactId(model.getArtifactId())
                 .groupId(groupid)
-                .version(model.getVersion())
+                .version(version)
                 .buildInfo(buildInfo)
                 .build();
     }
