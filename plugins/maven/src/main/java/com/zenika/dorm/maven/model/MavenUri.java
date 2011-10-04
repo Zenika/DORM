@@ -44,7 +44,7 @@ public class MavenUri {
         groupId = pathParams[groupidParam];
 
         for (int i = groupidParam - 1; i >= 0; i--) {
-            groupId = pathParams[i] + "/" + groupId;
+            groupId = pathParams[i] + "." + groupId;
         }
 
         this.filename = new MavenFilename(this, pathParams[paramsNumber - 1]);
