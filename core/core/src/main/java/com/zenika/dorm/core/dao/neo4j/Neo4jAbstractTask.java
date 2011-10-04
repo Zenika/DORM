@@ -25,6 +25,7 @@ public abstract class Neo4jAbstractTask {
     private static final Logger LOG = LoggerFactory.getLogger(Neo4jAbstractTask.class.getName());
 
     protected static final String GREMLIN_URI = "http://localhost:7474/db/data/ext/GremlinPlugin/graphdb/execute_script";
+    protected static final String NODE_URI = "http://localhost:7474/db/data/node/";
 
     protected static final GenericType<List<Neo4jResponse<Neo4jMetadata>>> LIST_METADATA_GENERIC_TYPE =
             new GenericType<List<Neo4jResponse<Neo4jMetadata>>>() {
@@ -106,15 +107,16 @@ public abstract class Neo4jAbstractTask {
     }
 
     protected Long extractId(String uri) {
-        char[] chars = uri.toCharArray();
-        StringBuilder builder = new StringBuilder();
-        for (int i = chars.length - 1; i > 0; i--) {
-            if (chars[i] == '/') {
-                break;
-            }
-            builder.append(chars[i]);
-        }
-        return Long.valueOf(builder.toString());
+        String[] split = uri.split("/");
+        return Long.valueOf(split[split.length - 1]);
+    }
+
+    protected String generateNodeUri(Long id){
+        return NODE_URI + id;
+    }
+
+    protected String generateCreateRelationshipUri(Long id){
+        return generateNodeUri(id) + "/relationships";
     }
 
 }

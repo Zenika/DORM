@@ -11,6 +11,7 @@ import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.core.model.impl.Usage;
 import com.zenika.dorm.core.service.spi.ExtensionFactoryServiceLoader;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -42,7 +43,7 @@ public class DormDaoNeo4j implements DormDao {
 
     @Override
     public List<DormMetadata> getMetadataByExtension(String extensionName, Map<String, String> extensionClauses, Usage usage) {
-        throw new UnsupportedOperationException("Not implement yet");
+        return new ArrayList<DormMetadata>();
     }
 
     @Override

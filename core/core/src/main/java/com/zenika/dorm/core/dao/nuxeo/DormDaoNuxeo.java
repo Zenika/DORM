@@ -8,9 +8,11 @@ import com.zenika.dorm.core.dao.nuxeo.provider.NuxeoWebResourceWrapper;
 import com.zenika.dorm.core.dao.query.DormBasicQuery;
 import com.zenika.dorm.core.model.DependencyNode;
 import com.zenika.dorm.core.model.DormMetadata;
+import com.zenika.dorm.core.model.impl.DefaultDependencyNode;
 import com.zenika.dorm.core.model.impl.Usage;
 import com.zenika.dorm.core.service.spi.ExtensionFactoryServiceLoader;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -44,7 +46,7 @@ public class DormDaoNuxeo implements DormDao {
 
     @Override
     public List<DormMetadata> getMetadataByExtension(String extensionName, Map<String, String> extensionClauses, Usage usage) {
-        return null;
+        return new ArrayList<DormMetadata>();
     }
 
     @Override
@@ -61,6 +63,6 @@ public class DormDaoNuxeo implements DormDao {
 
     @Override
     public DependencyNode addDependenciesToNode(DependencyNode root) {
-        throw new UnsupportedOperationException("Not implement yet");
+        return root;
     }
 }

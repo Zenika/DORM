@@ -62,4 +62,18 @@ public class Neo4jRelationship {
     public void setEnd(String end) {
         this.end = end;
     }
+
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder();
+        sb.append("Neo4jRelationship");
+        sb.append("{end='").append(end).append('\'');
+        sb.append(", from='").append(from).append('\'');
+        sb.append(", start='").append(start).append('\'');
+        sb.append(", to='").append(to).append('\'');
+        sb.append(", type='").append(type).append('\'');
+        sb.append('}');
+        return sb.toString();
+    }
 }

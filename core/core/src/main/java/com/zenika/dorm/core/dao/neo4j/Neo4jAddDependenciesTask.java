@@ -1,7 +1,11 @@
 package com.zenika.dorm.core.dao.neo4j;
 
+import com.google.inject.AbstractModule;
+import com.google.inject.Guice;
 import com.google.inject.Inject;
+import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
+import com.zenika.dorm.core.dao.neo4j.provider.Neo4jWebResourceWrapper;
 import com.zenika.dorm.core.dao.query.DormBasicQuery;
 import com.zenika.dorm.core.exception.CoreException;
 import com.zenika.dorm.core.graph.visitor.DependencyVisitor;
@@ -9,7 +13,10 @@ import com.zenika.dorm.core.graph.visitor.impl.DependenciesNodeCollector;
 import com.zenika.dorm.core.model.DependencyNode;
 import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.core.model.impl.Usage;
+import com.zenika.dorm.core.service.spi.ExtensionFactoryServiceLoader;
 import org.neo4j.graphdb.Relationship;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.ws.rs.core.MediaType;
 import java.net.URI;
@@ -21,6 +28,8 @@ import java.util.Set;
  * @author Antoine ROUAZE <antoine.rouaze AT zenika.com>
  */
 public class Neo4jAddDependenciesTask extends Neo4jAbstractTask {
+
+    private static final Logger LOG = LoggerFactory.getLogger(Neo4jAddDependenciesTask.class);
 
     @Inject
     private DependencyNode root;
@@ -36,18 +45,35 @@ public class Neo4jAddDependenciesTask extends Neo4jAbstractTask {
         Set<DependencyNode> dependencyNodes = visitor.getDependencies();
 
         for (DependencyNode node : dependencyNodes) {
+            LOG.debug("DormMetadata: " + node.getDependency().getMetadata());
+            String parentUri = null;
             DormMetadata metadataParent = node.getDependency().getMetadata();
 
             Neo4jResponse responseParent = getResponse(metadataParent);
 
-            Usage usage = node.getDependency().getUsage(); // ??????????????????????????????????????????????????????????
+            if (responseParent == null) {
+                parentUri = generateCreateRelationshipUri(saveMetadata(metadataParent).getId());
+            } else {
+                parentUri = responseParent.getCreate_relationship();
+            }
+
+            LOG.debug("DormMetadata Neo4j: " + parentUri);
+
             for (DependencyNode nodeChild : node.getChildren()) {
                 DormMetadata metadataChild = nodeChild.getDependency().getMetadata();
                 Neo4jResponse responseChild = getResponse(metadataChild);
+                String childUri = null;
+                Usage usage = nodeChild.getDependency().getUsage();
+                if (responseChild == null) {
+                    childUri = generateNodeUri(saveMetadata(metadataChild).getId());
+                } else {
+                    childUri = responseChild.getSelf();
+                }
                 Neo4jRelationship relationship = new Neo4jRelationship(
-                        responseParent.getCreate_relationship(),
-                        responseChild.getSelf(),
+                        parentUri,
+                        childUri,
                         usage.getName());
+                LOG.debug("Relationship: " + relationship);
                 saveRelationship(relationship);
             }
         }
@@ -74,8 +100,21 @@ public class Neo4jAddDependenciesTask extends Neo4jAbstractTask {
                     .entity(relationship)
                     .post();
 
+//            LOG.debug("Response: " + response.getEntity(String.class));
+
         } catch (URISyntaxException e) {
             throw new CoreException("URI syntax exception", e);
         }
+    }
+
+    private DormMetadata saveMetadata(final DormMetadata metadata) {
+        return Guice.createInjector(new AbstractModule() {
+            @Override
+            protected void configure() {
+                bind(Neo4jWebResourceWrapper.class).toInstance(wrapper);
+                bind(ExtensionFactoryServiceLoader.class).toInstance(serviceLoader);
+                bind(DormMetadata.class).toInstance(metadata);
+            }
+        }).getInstance(Neo4jSinglePushTask.class).execute();
     }
 }

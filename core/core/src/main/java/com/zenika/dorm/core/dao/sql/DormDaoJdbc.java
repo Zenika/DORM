@@ -40,7 +40,7 @@ public class DormDaoJdbc implements DormDao {
 
     @Override
     public DependencyNode addDependenciesToNode(DependencyNode root) {
-        throw new UnsupportedOperationException("Not implement yet");
+        return root;
     }
 
     @Override
