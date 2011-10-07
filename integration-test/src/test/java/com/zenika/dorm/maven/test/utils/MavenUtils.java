@@ -6,6 +6,7 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -26,6 +27,15 @@ public class MavenUtils {
             LOG.error("Unable to read the Json file at this location : ", e);
         }
         return null;
+    }
+
+    public static MavenSample getSample(File jsonFile){
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            return mapper.readValue(jsonFile, MavenSample.class);
+        } catch (IOException e) {
+            throw new RuntimeException("Unable to mapper this Json file: " + jsonFile);
+        }
     }
 
     public static InputStream getInputStream(String filePath){

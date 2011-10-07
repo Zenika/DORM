@@ -5,6 +5,7 @@ dependencies {
 
     testCompile libraries.jackson_mapper
     testCompile libraries.opencsv
+    testCompile group: 'org.apache.maven', name: 'maven-model', version: "3.0.3"
 }
 
 test.enabled =false

@@ -48,26 +48,32 @@ public class MavenResource {
         return jarMd5Url;
     }
 
+    @JsonIgnore
     public String getPomUri() {
         return toUri(getPomUrl());
     }
 
+    @JsonIgnore
     public String getPomSha1Uri() {
         return toUri(getPomSha1Url());
     }
 
+    @JsonIgnore
     public String getPomMd5Uri() {
         return toUri(getPomMd5Url());
     }
 
+    @JsonIgnore
     public String getJarUri() {
         return toUri(getJarUrl());
     }
 
+    @JsonIgnore
     public String getJarSha1Uri() {
         return toUri(getJarSha1Url());
     }
 
+    @JsonIgnore
     public String getJarMd5Uri() {
         return toUri(getJarMd5Url());
     }

@@ -1,5 +1,7 @@
 package com.zenika.dorm.maven.test.model;
 
+import org.codehaus.jackson.annotate.JsonGetter;
+import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.annotate.JsonSetter;
 
 /**
@@ -14,6 +16,7 @@ public class MavenConfiguration {
     private int proxyPort;
     private boolean proxyActive;
 
+    @JsonProperty("target.hostname")
     public String getTargetHostname() {
         return targetHostname;
     }
@@ -23,6 +26,7 @@ public class MavenConfiguration {
         this.targetHostname = targetHostname;
     }
 
+    @JsonProperty("target.port")
     public int getTargetPort() {
         return targetPort;
     }
@@ -32,6 +36,7 @@ public class MavenConfiguration {
         this.targetPort = targetPort;
     }
 
+    @JsonProperty("target.baseUrl")
     public String getTargetBaseUrl() {
         return targetBaseUrl;
     }
@@ -41,6 +46,7 @@ public class MavenConfiguration {
         this.targetBaseUrl = targetBaseUrl;
     }
 
+    @JsonProperty("proxy.hostname")
     public String getProxyHostname() {
         return proxyHostname;
     }
@@ -50,6 +56,7 @@ public class MavenConfiguration {
         this.proxyHostname = proxyHostname;
     }
 
+    @JsonProperty("proxy.port")
     public int getProxyPort() {
         return proxyPort;
     }
@@ -59,6 +66,7 @@ public class MavenConfiguration {
         this.proxyPort = proxyPort;
     }
 
+    @JsonProperty("proxy.active")
     public boolean isProxyActive() {
         return proxyActive;
     }
