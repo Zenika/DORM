@@ -3,6 +3,7 @@ package com.zenika.dorm.maven.test.fixtures;
 import com.zenika.dorm.core.model.ws.DormWebServiceRequest;
 import com.zenika.dorm.core.util.DormFileUtils;
 import com.zenika.dorm.maven.exception.MavenException;
+import com.zenika.dorm.maven.model.MavenMetadata;
 
 import java.io.File;
 import java.net.URISyntaxException;
@@ -39,32 +40,38 @@ public class MavenWebServiceRequestFixtures {
 
         getFiles();
 
-        simpleJar = new DormWebServiceRequest.Builder("maven")
+        simpleJar = new DormWebServiceRequest.Builder()
+                .origin(MavenMetadata.EXTENSION_NAME)
                 .property("uri", pathFixtures.getJar())
                 .file(jar)
                 .build();
 
-        simpleJarSha1 = new DormWebServiceRequest.Builder("maven")
+        simpleJarSha1 = new DormWebServiceRequest.Builder()
+                .origin(MavenMetadata.EXTENSION_NAME)
                 .property("uri", pathFixtures.getJarSha1Hash())
                 .file(jarSha1)
                 .build();
 
-        simpleJarMd5 = new DormWebServiceRequest.Builder("maven")
+        simpleJarMd5 = new DormWebServiceRequest.Builder()
+                .origin(MavenMetadata.EXTENSION_NAME)
                 .property("uri", pathFixtures.getJarMd5Hash())
                 .file(jarMd5)
                 .build();
 
-        simplePom = new DormWebServiceRequest.Builder("maven")
+        simplePom = new DormWebServiceRequest.Builder()
+                .origin(MavenMetadata.EXTENSION_NAME)
                 .property("uri", pathFixtures.getPom())
                 .file(pom)
                 .build();
 
-        simplePomSha1 = new DormWebServiceRequest.Builder("maven")
+        simplePomSha1 = new DormWebServiceRequest.Builder()
+                .origin(MavenMetadata.EXTENSION_NAME)
                 .property("uri", pathFixtures.getPomSha1Hash())
                 .file(pomSha1)
                 .build();
 
-        simplePomMd5 = new DormWebServiceRequest.Builder("maven")
+        simplePomMd5 = new DormWebServiceRequest.Builder()
+                .origin(MavenMetadata.EXTENSION_NAME)
                 .property("uri", pathFixtures.getPomMd5Hash())
                 .file(pomMd5)
                 .build();
