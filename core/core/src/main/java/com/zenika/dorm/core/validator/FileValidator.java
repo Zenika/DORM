@@ -11,14 +11,22 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public final class FileValidator {
 
     public static void validateFile(File file) {
-        checkNotNull(file);
-        checkArgument(file.exists());
-        checkArgument(file.isFile());
+        validateFile(file, null);
+    }
+
+    public static void validateFile(File file, String message) {
+        checkNotNull(file, message);
+        checkArgument(file.exists(), message);
+        checkArgument(file.isFile(), message);
     }
 
     public static void validateFolder(File file) {
-        checkNotNull(file);
-        checkArgument(file.exists());
-        checkArgument(file.isDirectory());
+        validateFolder(file, null);
+    }
+
+    public static void validateFolder(File file, String message) {
+        checkNotNull(file, message);
+        checkArgument(file.exists(), message);
+        checkArgument(file.isDirectory(), message);
     }
 }

@@ -1,7 +1,7 @@
 package com.zenika.dorm.core.test.processor;
 
 import com.zenika.dorm.core.processor.DormProcessor;
-import com.zenika.dorm.core.processor.ProcessorExtension;
+import com.zenika.dorm.core.processor.extension.ProcessorExtension;
 import com.zenika.dorm.core.service.DormService;
 import com.zenika.dorm.core.test.unit.AbstractUnitTest;
 import org.junit.Ignore;

@@ -1,8 +1,6 @@
 package com.zenika.dorm.core.model.ws;
 
-import com.zenika.dorm.core.exception.CoreException;
 import com.zenika.dorm.core.model.ws.builder.DormWebServiceAbstractBuilder;
-import org.apache.commons.lang3.StringUtils;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -17,11 +15,6 @@ public abstract class DormWebServiceProcess {
     private final Map<String, String> properties = new HashMap<String, String>();
 
     protected DormWebServiceProcess(DormWebServiceAbstractBuilder builder) {
-
-        if (StringUtils.isBlank(builder.getOrigin())) {
-            throw new CoreException("Webservice origin is required.");
-        }
-
         this.origin = builder.getOrigin();
         this.properties.putAll(builder.getProperties());
     }

@@ -5,12 +5,15 @@ import com.google.inject.Singleton;
 import com.zenika.dorm.core.exception.CoreException;
 import com.zenika.dorm.core.model.ws.DormWebServiceRequest;
 import com.zenika.dorm.core.model.ws.DormWebServiceResult;
+import com.zenika.dorm.core.processor.extension.ProcessorExtension;
+import com.zenika.dorm.core.processor.extension.RequestAnalyser;
 import com.zenika.dorm.core.service.DormService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Set;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Main processor which delegate to the appropriate extension and then call the service to interact with
@@ -24,37 +27,36 @@ public class DormProcessor {
     private static final Logger LOG = LoggerFactory.getLogger(DormProcessor.class);
 
     /**
-     * Extensions are injected in the guice module
+     * Injected by guice
      */
-    private Map<String, ProcessorExtension> extensions = new HashMap<String, ProcessorExtension>();
+    private Set<RequestAnalyser> requestAnalysers;
 
     @Inject
     private DormService service;
 
     public DormProcessor() {
+
     }
 
     @Inject
-    public DormProcessor(Map<String, ProcessorExtension> extensions) {
-        this.extensions = extensions;
+    public DormProcessor(Set<RequestAnalyser> requestAnalysers) {
+        this.requestAnalysers = requestAnalysers;
     }
 
     public DormWebServiceResult push(DormWebServiceRequest request) {
 
-        if (null == request) {
-            throw new CoreException("Request is required");
-        }
+        checkNotNull(request);
+        LOG.debug("Push generic request : {}", request);
 
-        return getExtension(request).push(request);
+        return getExtension(request).pushFromGenericRequest(request);
     }
 
     public DormWebServiceResult get(DormWebServiceRequest request) {
 
-        if (null == request) {
-            throw new CoreException("Request is required");
-        }
+        checkNotNull(request);
+        LOG.debug("Get generic request : {}", request);
 
-        return getExtension(request).get(request);
+        return getExtension(request).getFromGenericRequest(request);
     }
 
     /**
@@ -66,19 +68,14 @@ public class DormProcessor {
      */
     private ProcessorExtension getExtension(DormWebServiceRequest request) {
 
-        String origin = request.getOrigin();
+        for (RequestAnalyser analyser : requestAnalysers) {
 
-        ProcessorExtension extension = extensions.get(origin);
-
-        if (null == extension) {
-            throw new CoreException("Extension " + origin + " not found");
+            if (analyser.isKnownRequest(request)) {
+                return analyser.getExtension();
+            }
         }
 
-        return extension;
-    }
-
-    public Map<String, ProcessorExtension> getExtensions() {
-        return extensions;
+        throw new CoreException("Processor extension not found for request : " + request);
     }
 }
 

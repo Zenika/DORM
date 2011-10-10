@@ -11,6 +11,7 @@ import java.io.File;
  */
 public final class DormWebServiceRequest extends DormWebServiceProcess {
 
+    private final String userAgent;
     private final String usage;
     private final String filename;
     private final File file;
@@ -19,9 +20,14 @@ public final class DormWebServiceRequest extends DormWebServiceProcess {
 
         super(builder);
 
+        this.userAgent = builder.userAgent;
         this.usage = builder.usage;
         this.filename = builder.filename;
         this.file = builder.file;
+    }
+
+    public String getUserAgent() {
+        return userAgent;
     }
 
     public String getUsage() {
@@ -42,16 +48,32 @@ public final class DormWebServiceRequest extends DormWebServiceProcess {
 
     public static class Builder extends DormWebServiceAbstractBuilder<Builder> {
 
+        private String userAgent;
         private String usage;
         private String filename;
         private File file;
 
-        public Builder(String origin) {
-            super(origin);
+        public Builder() {
+
+        }
+
+        public Builder(DormWebServiceRequest request) {
+
+            super(request);
+
+            this.userAgent = request.getUserAgent();
+            this.usage = request.getUsage();
+            this.filename = request.getFilename();
+            this.file = request.getFile();
         }
 
         @Override
         protected Builder self() {
+            return this;
+        }
+
+        public Builder userAgent(String userAgent) {
+            this.userAgent = userAgent;
             return this;
         }
 

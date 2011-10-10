@@ -60,7 +60,7 @@ public abstract class ExtensionFixtures {
     }
 
     public DormWebServiceRequest.Builder getRequestBuilder() {
-        return new DormWebServiceRequest.Builder(getRequestVersion());
+        return new DormWebServiceRequest.Builder();
     }
 
     public DormWebServiceRequest.Builder getRequestBuilderWithFile() {
