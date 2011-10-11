@@ -4,7 +4,7 @@ import com.google.inject.Inject;
 import com.zenika.dorm.core.model.DormResource;
 import com.zenika.dorm.core.model.ws.DormWebServiceRequest;
 import com.zenika.dorm.core.model.ws.DormWebServiceResult;
-import com.zenika.dorm.core.processor.ProcessorExtension;
+import com.zenika.dorm.core.processor.extension.ProcessorExtension;
 import com.zenika.dorm.core.validator.FileValidator;
 import com.zenika.dorm.maven.constant.MavenConstant;
 import com.zenika.dorm.maven.helper.MavenExtensionHelper;
@@ -66,8 +66,8 @@ public class MavenProcessor extends ProcessorExtension {
             LOG.debug("Maven webservice push request : " + request);
         }
 
-        DormWebServiceResult.Builder responseBuilder = new DormWebServiceResult.Builder(
-                MavenMetadata.EXTENSION_NAME);
+        DormWebServiceResult.Builder responseBuilder = new DormWebServiceResult.Builder()
+                .origin(MavenMetadata.EXTENSION_NAME);
 
         String uri = checkNotNull(request.getProperty("uri"));
 
@@ -125,8 +125,8 @@ public class MavenProcessor extends ProcessorExtension {
             LOG.debug("Maven uri : " + mavenUri);
         }
 
-        DormWebServiceResult.Builder responseBuilder = new DormWebServiceResult.Builder(
-                MavenMetadata.EXTENSION_NAME);
+        DormWebServiceResult.Builder responseBuilder = new DormWebServiceResult.Builder()
+                .origin(MavenMetadata.EXTENSION_NAME);
 
         // ignore get's of maven-medata.xml file
         if (StringUtils.equals(mavenUri.getFilename().getFilename(), MavenConstant.Special.MAVEN_METADATA_XML)) {
@@ -149,6 +149,22 @@ public class MavenProcessor extends ProcessorExtension {
         return responseBuilder
                 .file(resource.getFile())
                 .succeeded()
+                .build();
+    }
+
+    @Override
+    public DormWebServiceResult pushFromGenericRequest(DormWebServiceRequest request) {
+        return push(getRequestFromGeneric(request));
+    }
+
+    @Override
+    public DormWebServiceResult getFromGenericRequest(DormWebServiceRequest request) {
+        return get(getRequestFromGeneric(request));
+    }
+
+    private DormWebServiceRequest getRequestFromGeneric(DormWebServiceRequest request) {
+        return new DormWebServiceRequest.Builder(request)
+                .property("uri", request.getProperty("path"))
                 .build();
     }
 }

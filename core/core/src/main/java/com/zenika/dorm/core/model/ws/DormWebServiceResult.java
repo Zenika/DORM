@@ -35,10 +35,6 @@ public class DormWebServiceResult extends DormWebServiceProcess {
         private File file;
         private DormWebServiceResult.Result result;
 
-        public Builder(String origin) {
-            super(origin);
-        }
-
         @Override
         protected Builder self() {
             return this;

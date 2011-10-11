@@ -30,7 +30,8 @@ public class MavenPomReader {
 
     private Model model;
 
-    public MavenPomReader(File pom) {
+    public MavenPomReader(File pom) throws MavenException {
+
         try {
             model = new MavenXpp3Reader().read(new FileInputStream(pom));
         } catch (Exception e) {
@@ -61,7 +62,7 @@ public class MavenPomReader {
 
         checkArgument(StringUtils.isNotBlank(version), "Unable to determine the version from the pom");
 
-        if(LOG.isDebugEnabled()) {
+        if (LOG.isDebugEnabled()) {
             LOG.debug("Maven pom groupId : " + groupid);
             LOG.debug("Maven pom version : " + version);
         }

@@ -17,8 +17,8 @@ public abstract class DormWebServiceAbstractBuilder<T extends DormWebServiceAbst
 
     public abstract DormWebServiceProcess build();
 
-    public DormWebServiceAbstractBuilder(String origin) {
-        this.origin = origin;
+    public DormWebServiceAbstractBuilder() {
+
     }
 
     public DormWebServiceAbstractBuilder(DormWebServiceProcess request) {

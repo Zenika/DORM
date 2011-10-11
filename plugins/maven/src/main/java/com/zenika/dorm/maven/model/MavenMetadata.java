@@ -5,9 +5,7 @@ package com.zenika.dorm.maven.model;
  */
 
 import com.zenika.dorm.core.model.DormMetadata;
-import com.zenika.dorm.core.util.DormStringUtils;
 import com.zenika.dorm.maven.constant.MavenConstant;
-import com.zenika.dorm.maven.exception.MavenException;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
@@ -19,7 +17,9 @@ import static com.google.common.base.Preconditions.checkNotNull;
  */
 public final class MavenMetadata extends DormMetadata {
 
-    public static final transient String EXTENSION_NAME = "maven";
+    public static final String EXTENSION_NAME = "maven";
+
+    public static final String USER_AGENT = "maven-agent";
 
     /**
      * Metadata names
@@ -43,7 +43,7 @@ public final class MavenMetadata extends DormMetadata {
         this.groupId = checkNotNull(groupId);
         this.artifactId = checkNotNull(artifactId);
         this.version = checkNotNull(version);
-        
+
         this.buildInfo = buildInfo;
 
         snapshot = (version.endsWith("-" + MavenConstant.Special.SNAPSHOT)) ? true : false;
@@ -86,7 +86,7 @@ public final class MavenMetadata extends DormMetadata {
     }
 
     public boolean equalsEntityMetadataOnly(MavenMetadata metadata) {
-        
+
         if (this == metadata) return true;
         if (metadata == null) return false;
 

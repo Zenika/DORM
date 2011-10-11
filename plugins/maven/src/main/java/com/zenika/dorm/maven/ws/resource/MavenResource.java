@@ -3,13 +3,14 @@ package com.zenika.dorm.maven.ws.resource;
 import com.google.inject.Inject;
 import com.zenika.dorm.core.model.ws.DormWebServiceRequest;
 import com.zenika.dorm.core.model.ws.DormWebServiceResult;
-import com.zenika.dorm.core.processor.DormProcessor;
 import com.zenika.dorm.maven.model.MavenMetadata;
 import com.zenika.dorm.maven.processor.extension.MavenProcessor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.File;
@@ -25,6 +26,9 @@ public class MavenResource {
 
     @Inject
     private MavenProcessor processor;
+
+    @Context
+    private HttpHeaders headers;
 
     public MavenResource() {
         if (LOG.isInfoEnabled()) {
@@ -44,8 +48,8 @@ public class MavenResource {
             LOG.info("Maven webservice GET with uri : " + uri);
         }
 
-        DormWebServiceRequest request = new DormWebServiceRequest.Builder
-                (MavenMetadata.EXTENSION_NAME)
+        DormWebServiceRequest request = new DormWebServiceRequest.Builder()
+                .origin(MavenMetadata.EXTENSION_NAME)
                 .property("uri", uri)
                 .build();
 
@@ -79,8 +83,8 @@ public class MavenResource {
             LOG.info("Maven webservice PUT with uri : " + uri);
         }
 
-        DormWebServiceRequest.Builder requestBuilder = new DormWebServiceRequest.Builder
-                (MavenMetadata.EXTENSION_NAME)
+        DormWebServiceRequest.Builder requestBuilder = new DormWebServiceRequest.Builder()
+                .origin(MavenMetadata.EXTENSION_NAME)
                 .property("uri", uri);
 
         if (file.length() > 0) {
