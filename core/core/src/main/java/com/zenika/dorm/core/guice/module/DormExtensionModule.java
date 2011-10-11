@@ -13,13 +13,13 @@ import com.zenika.dorm.core.processor.extension.RequestAnalyser;
  */
 public abstract class DormExtensionModule extends AbstractModule {
 
-    protected Multibinder<RequestAnalyser> userAgentAnalyserBinder;
+    protected Multibinder<RequestAnalyser> requestAnalyserBinder;
 
     protected MapBinder<String, ExtensionMetadataFactory> metadataFactories;
 
     @Override
     protected void configure() {
-        userAgentAnalyserBinder = Multibinder.newSetBinder(binder(), RequestAnalyser.class);
+        requestAnalyserBinder = Multibinder.newSetBinder(binder(), RequestAnalyser.class);
         metadataFactories = MapBinder.newMapBinder(binder(), String.class, ExtensionMetadataFactory.class);
     }
 }
