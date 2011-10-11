@@ -29,6 +29,8 @@ allprojects {
     artifacts {
         sharedTests testJar
     }
+
+    test.enabled = false;
 }
 
 ideaProject {
