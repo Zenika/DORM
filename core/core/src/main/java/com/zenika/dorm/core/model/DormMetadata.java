@@ -1,8 +1,6 @@
 package com.zenika.dorm.core.model;
 
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
 /**
  * Extension point on the model to add specific metadatas
  *
