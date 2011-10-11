@@ -36,7 +36,6 @@ public class MavenModule extends DormExtensionModule {
 
         bind(MavenProxyService.class).to(MavenProxyServiceHttp.class);
 
-
         requestAnalyserBinder.addBinding().to(MavenRequestAnalyser.class);
     }
 }

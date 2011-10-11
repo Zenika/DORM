@@ -1,7 +1,9 @@
 package com.zenika.dorm.maven.model;
 
+import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.maven.constant.MavenConstant;
 import com.zenika.dorm.maven.exception.MavenException;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
@@ -22,6 +24,15 @@ public class MavenUri {
     public MavenUri(String uri) {
         this.uri = uri;
         extractFields();
+    }
+
+    public MavenUri(MavenMetadata metadata) {
+        this.groupId = metadata.getGroupId();
+        this.artifactId = metadata.getArtifactId();
+        this.version = metadata.getVersion();
+        this.snapshot = metadata.isSnapshot();
+        this.filename = new MavenFilename(this, metadata);
+        buildUri();
     }
 
     private void extractFields() {
@@ -49,6 +60,21 @@ public class MavenUri {
 
         this.filename = new MavenFilename(this, pathParams[paramsNumber - 1]);
     }
+
+    private void buildUri() {
+        StringBuilder builder = new StringBuilder(256)
+                .append(groupId.replace('.', '/'))
+                .append("/")
+                .append(artifactId)
+                .append("/")
+                .append(version)
+                .append("/")
+                .append(filename.getFilename());
+
+        uri = builder.toString();
+    }
+
+
 
     /**
      * Remove "-SNAPSHOT" from version if exists

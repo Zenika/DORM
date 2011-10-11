@@ -32,6 +32,29 @@ public class MavenFilename {
         extractFields();
     }
 
+    public MavenFilename(MavenUri uri, MavenMetadata metadata) {
+        MavenBuildInfo info = metadata.getBuildInfo();
+        this.extension = info.getExtension();
+        this.classifier = info.getClassifier();
+        this.timestamp = info.getTimestamp();
+        this.buildNumber = info.getBuildNumber();
+        this.uri = uri;
+        buildFileName();
+    }
+
+    private void buildFileName() {
+        StringBuilder builder = new StringBuilder()
+                .append(uri.getArtifactId())
+                .append("-")
+                .append(uri.getVersion());
+
+        if ((classifier != null) && (!classifier.isEmpty())) {
+            builder.append("-").append(classifier);
+        }
+        builder.append(".").append(extension);
+        filename = builder.toString();
+    }
+
     private void extractFields() {
 
         if (StringUtils.equals(filename, MavenConstant.Special.MAVEN_METADATA_XML)) {
@@ -113,6 +136,10 @@ public class MavenFilename {
                         filenameInWork.length() - (extensionElement.length() + 1));
             }
         }
+    }
+
+    public String getFileNameWithoutExtension() {
+        return FilenameUtils.getBaseName(filename);
     }
 
     public String getFilename() {

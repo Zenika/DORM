@@ -10,6 +10,7 @@ import com.zenika.dorm.core.model.DormResource;
 import com.zenika.dorm.core.model.impl.DefaultDormResource;
 import com.zenika.dorm.maven.model.MavenBuildInfo;
 import com.zenika.dorm.maven.model.MavenMetadata;
+import com.zenika.dorm.maven.model.MavenUri;
 import com.zenika.dorm.maven.provider.ProxyWebResourceWrapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,14 +35,13 @@ public class MavenProxyServiceHttp implements MavenProxyService {
     @Override
     public DormResource getArtifact(DormMetadata metadata) {
         WebResource webResource = wrapper.get();
-
-        String path = buildPath(metadata);
-        LOG.info("Path proxy: {}", path);
+        MavenUri uri = new MavenUri(convertMetadata(metadata));
+        LOG.info("Path proxy: {}", uri.getUri());
 
         File file;
 
         try {
-            file = webResource.path(buildPath(metadata))
+            file = webResource.path(uri.getUri())
                     .accept(MediaType.APPLICATION_OCTET_STREAM_TYPE)
                     .get(File.class);
         } catch (UniformInterfaceException e) {
@@ -52,43 +52,10 @@ public class MavenProxyServiceHttp implements MavenProxyService {
             }
         }
 
-        return DefaultDormResource.create(buildFileName(metadata), file);
+        return DefaultDormResource.create(uri.getFilename().getFilename(), file);
     }
 
-    private String buildPath(DormMetadata metadata) {
-        MavenMetadata mavenMetadata = convertMetadata(metadata);
-        StringBuilder builder = new StringBuilder(256)
-                .append(mavenMetadata.getGroupId().replace('.', '/'))
-                .append("/")
-                .append(mavenMetadata.getArtifactId())
-                .append("/")
-                .append(mavenMetadata.getVersion())
-                .append("/")
-                .append(buildFileName(mavenMetadata));
 
-        return builder.toString();
-    }
-
-    private String buildFileName(DormMetadata metadata) {
-        MavenMetadata mavenMetadata = convertMetadata(metadata);
-
-        StringBuilder builder = new StringBuilder()
-                .append(mavenMetadata.getArtifactId())
-                .append("-")
-                .append(mavenMetadata.getVersion());
-
-        MavenBuildInfo info = mavenMetadata.getBuildInfo();
-
-        if (info != null) {
-            if ((info.getClassifier() != null) && (!info.getClassifier().isEmpty())) {
-                builder.append("-").append(info.getBuildNumber());
-            }
-        }
-
-        builder.append(".").append(info.getExtension());
-
-        return builder.toString();
-    }
 
     private MavenMetadata convertMetadata(DormMetadata dormMetadata) {
         if (!dormMetadata.getClass().equals(MavenMetadata.class)) {
