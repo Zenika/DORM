@@ -3,6 +3,9 @@ package com.zenika.dorm.maven.guice.module;
 import com.zenika.dorm.core.guice.module.DormExtensionModule;
 import com.zenika.dorm.maven.processor.extension.MavenProcessor;
 import com.zenika.dorm.maven.processor.extension.MavenRequestAnalyser;
+import com.zenika.dorm.maven.provider.ProxyWebResourceWrapper;
+import com.zenika.dorm.maven.service.MavenProxyService;
+import com.zenika.dorm.maven.service.MavenProxyServiceHttp;
 import com.zenika.dorm.maven.service.MavenService;
 import com.zenika.dorm.maven.ws.resource.MavenResource;
 import org.slf4j.Logger;
@@ -28,6 +31,11 @@ public class MavenModule extends DormExtensionModule {
         bind(MavenProcessor.class);
 
         bind(MavenService.class);
+
+        bind(ProxyWebResourceWrapper.class);
+
+        bind(MavenProxyService.class).to(MavenProxyServiceHttp.class);
+
 
         requestAnalyserBinder.addBinding().to(MavenRequestAnalyser.class);
     }

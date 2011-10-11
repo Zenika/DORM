@@ -17,8 +17,23 @@ public class CoreExceptionMapper implements ExceptionMapper<CoreException> {
 
     @Override
     public Response toResponse(CoreException e) {
+
         LOG.error(e.getMessage(), e);
-        return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage())
-                .type("text/plain").build();
+
+        Response.ResponseBuilder responseBuilder;
+
+        switch (e.getType()) {
+            case ERROR:
+                responseBuilder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+                break;
+            case NULL:
+                responseBuilder = Response.status(Response.Status.NOT_FOUND);
+                break;
+            default:
+                responseBuilder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
+                break;
+        }
+
+        return responseBuilder.entity(e.getMessage()).type("text/plain").build();
     }
 }

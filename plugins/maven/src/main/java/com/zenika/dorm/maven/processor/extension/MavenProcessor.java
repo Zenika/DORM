@@ -11,6 +11,7 @@ import com.zenika.dorm.maven.helper.MavenExtensionHelper;
 import com.zenika.dorm.maven.model.MavenMetadata;
 import com.zenika.dorm.maven.model.MavenUri;
 import com.zenika.dorm.maven.model.builder.MavenMetadataUriBuilder;
+import com.zenika.dorm.maven.service.MavenProxyService;
 import com.zenika.dorm.maven.service.MavenService;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -37,6 +38,9 @@ public class MavenProcessor extends ProcessorExtension {
 
     @Inject
     private MavenService mavenService;
+
+    @Inject
+    private MavenProxyService proxyService;
 
     /**
      * Process:
@@ -143,7 +147,10 @@ public class MavenProcessor extends ProcessorExtension {
         DormResource resource = mavenService.getArtifact(metadata);
 
         if (null == resource) {
-            return responseBuilder.notfound().build();
+            resource = proxyService.getArtifact(metadata);
+            if (resource == null) {
+                return responseBuilder.notfound().build();
+            }
         }
 
         return responseBuilder

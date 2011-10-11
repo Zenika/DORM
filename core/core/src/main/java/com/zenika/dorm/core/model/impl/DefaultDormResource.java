@@ -32,6 +32,13 @@ public final class DefaultDormResource implements DormResource {
         return create(FilenameUtils.getBaseName(filename), FilenameUtils.getExtension(filename), file);
     }
 
+    /**
+     *
+     * @param name
+     * @param extension extension file
+     * @param file
+     * @return
+     */
     public static DefaultDormResource create(String name, String extension, File file) {
         return new DefaultDormResource(name, extension, file);
     }

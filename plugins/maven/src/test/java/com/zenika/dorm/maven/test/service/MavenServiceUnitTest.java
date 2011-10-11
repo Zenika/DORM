@@ -64,4 +64,6 @@ public class MavenServiceUnitTest extends MavenUnitTest {
         verify(dormService).storeResource(pomResource, pomMetadata, new DormServiceStoreResourceConfig().override(true));
         verify(dormService).addDependenciesToNode(dependencyFixtures.getCommonsioNode());
     }
+
+
 }

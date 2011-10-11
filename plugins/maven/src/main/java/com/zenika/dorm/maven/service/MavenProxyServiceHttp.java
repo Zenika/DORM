@@ -1,0 +1,99 @@
+package com.zenika.dorm.maven.service;
+
+import com.google.inject.Inject;
+import com.sun.jersey.api.client.ClientResponse;
+import com.sun.jersey.api.client.UniformInterfaceException;
+import com.sun.jersey.api.client.WebResource;
+import com.zenika.dorm.core.exception.CoreException;
+import com.zenika.dorm.core.model.DormMetadata;
+import com.zenika.dorm.core.model.DormResource;
+import com.zenika.dorm.core.model.impl.DefaultDormResource;
+import com.zenika.dorm.maven.model.MavenBuildInfo;
+import com.zenika.dorm.maven.model.MavenMetadata;
+import com.zenika.dorm.maven.provider.ProxyWebResourceWrapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import java.io.File;
+import java.net.URL;
+
+/**
+ * @author Antoine ROUAZE <antoine.rouaze AT zenika.com>
+ */
+public class MavenProxyServiceHttp implements MavenProxyService {
+
+    private static final Logger LOG = LoggerFactory.getLogger(MavenProxyServiceHttp.class);
+
+    public static final String DATA_ENTRY_POINT_URI = "http://repo1.maven.org/maven2";
+
+    @Inject
+    private ProxyWebResourceWrapper wrapper;
+
+    @Override
+    public DormResource getArtifact(DormMetadata metadata) {
+        WebResource webResource = wrapper.get();
+
+        String path = buildPath(metadata);
+        LOG.info("Path proxy: {}", path);
+
+        File file;
+
+        try {
+            file = webResource.path(buildPath(metadata))
+                    .accept(MediaType.APPLICATION_OCTET_STREAM_TYPE)
+                    .get(File.class);
+        } catch (UniformInterfaceException e) {
+            if (e.getResponse().getStatus() == ClientResponse.Status.NOT_FOUND.getStatusCode()) {
+                return null;
+            } else {
+                throw new CoreException(e);
+            }
+        }
+
+        return DefaultDormResource.create(buildFileName(metadata), file);
+    }
+
+    private String buildPath(DormMetadata metadata) {
+        MavenMetadata mavenMetadata = convertMetadata(metadata);
+        StringBuilder builder = new StringBuilder(256)
+                .append(mavenMetadata.getGroupId().replace('.', '/'))
+                .append("/")
+                .append(mavenMetadata.getArtifactId())
+                .append("/")
+                .append(mavenMetadata.getVersion())
+                .append("/")
+                .append(buildFileName(mavenMetadata));
+
+        return builder.toString();
+    }
+
+    private String buildFileName(DormMetadata metadata) {
+        MavenMetadata mavenMetadata = convertMetadata(metadata);
+
+        StringBuilder builder = new StringBuilder()
+                .append(mavenMetadata.getArtifactId())
+                .append("-")
+                .append(mavenMetadata.getVersion());
+
+        MavenBuildInfo info = mavenMetadata.getBuildInfo();
+
+        if (info != null) {
+            if ((info.getClassifier() != null) && (!info.getClassifier().isEmpty())) {
+                builder.append("-").append(info.getBuildNumber());
+            }
+        }
+
+        builder.append(".").append(info.getExtension());
+
+        return builder.toString();
+    }
+
+    private MavenMetadata convertMetadata(DormMetadata dormMetadata) {
+        if (!dormMetadata.getClass().equals(MavenMetadata.class)) {
+            throw new CoreException("The metadata isn't a Maven metadata");
+        }
+        return (MavenMetadata) dormMetadata;
+    }
+}

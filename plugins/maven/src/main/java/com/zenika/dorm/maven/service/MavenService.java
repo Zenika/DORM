@@ -121,7 +121,9 @@ public class MavenService {
             LOG.debug("Get maven artifact from metadata : " + metadata);
         }
 
-        return dormService.getResource(metadata);
+        DormResource resource = dormService.getResource(metadata);
+
+        return resource;
     }
 
     private MavenMetadata getEntityMavenMetadata(MavenMetadata metadata) {
