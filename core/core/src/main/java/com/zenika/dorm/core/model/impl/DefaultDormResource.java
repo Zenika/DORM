@@ -10,8 +10,6 @@ import java.io.File;
 
 /**
  * Immutable class that represents a dorm resource
- *
- * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>
  */
 public final class DefaultDormResource implements DormResource {
 
@@ -51,10 +49,6 @@ public final class DefaultDormResource implements DormResource {
         this.file = file;
     }
 
-    @Override
-    public String getFilename() {
-        return name + "." + extension;
-    }
 
     @Override
     public File getFile() {
@@ -96,6 +90,6 @@ public final class DefaultDormResource implements DormResource {
     @Override
     public String toString() {
         return "DormFile { " +
-                getFilename() + " }";
+                getName() + "." + getExtension() + " }";
     }
 }
