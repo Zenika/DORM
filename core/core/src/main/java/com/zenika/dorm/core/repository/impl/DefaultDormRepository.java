@@ -107,7 +107,7 @@ public class DefaultDormRepository implements DormRepository {
     private String getPathFromMetadata(DormMetadata metadata) {
 
         String path = getBaseBuilder()
-                .append(metadata.getExtensionName().replace("/", "-"))
+                .append(metadata.getType().replace("/", "-"))
                 .append("/")
                 .append(metadata.getVersion().replace("/", "-"))
                 .append("/")

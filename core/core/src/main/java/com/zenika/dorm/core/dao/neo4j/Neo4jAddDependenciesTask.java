@@ -3,25 +3,21 @@ package com.zenika.dorm.core.dao.neo4j;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Inject;
-import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
 import com.zenika.dorm.core.dao.neo4j.provider.Neo4jWebResourceWrapper;
 import com.zenika.dorm.core.dao.query.DormBasicQuery;
 import com.zenika.dorm.core.exception.CoreException;
-import com.zenika.dorm.core.graph.visitor.DependencyVisitor;
 import com.zenika.dorm.core.graph.visitor.impl.DependenciesNodeCollector;
 import com.zenika.dorm.core.model.DependencyNode;
 import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.core.model.impl.Usage;
 import com.zenika.dorm.core.service.spi.ExtensionFactoryServiceLoader;
-import org.neo4j.graphdb.Relationship;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.ws.rs.core.MediaType;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -82,7 +78,7 @@ public class Neo4jAddDependenciesTask extends Neo4jAbstractTask {
 
     private Neo4jResponse getResponse(DormMetadata metadata) {
         DormBasicQuery query = new DormBasicQuery.Builder()
-                .extensionName(metadata.getExtensionName())
+                .extensionName(metadata.getType())
                 .name(metadata.getName())
                 .version(metadata.getVersion())
                 .build();

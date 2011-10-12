@@ -1,12 +1,5 @@
 package com.zenika.dorm.core.service.spi;
 
-import com.zenika.dorm.core.exception.CoreException;
-
-import java.io.File;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.ServiceLoader;
-
 /**
  * @author Antoine ROUAZE <antoine.rouaze AT zenika.com>
  */
@@ -41,7 +34,7 @@ public class ModuleServiceExperimentation {
 //
 //    public Dictionary getModuleResource(String extensionName){
 //        for (Dictionary resource : loader){
-//            if (resource.getExtensionName().equals(extensionName)){
+//            if (resource.getType().equals(extensionName)){
 //                return resource;
 //            }
 //        }

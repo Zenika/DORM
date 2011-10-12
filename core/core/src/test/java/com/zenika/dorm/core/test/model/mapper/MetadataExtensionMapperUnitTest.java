@@ -46,7 +46,7 @@
 //        }
 //
 //        @Override
-//        public String getExtensionName() {
+//        public String getType() {
 //            return null;
 //        }
 //

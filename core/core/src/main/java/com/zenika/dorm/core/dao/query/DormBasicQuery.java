@@ -33,7 +33,7 @@ public class DormBasicQuery {
         public Builder(DormMetadata metadata) {
             name(metadata.getName());
             version(metadata.getVersion());
-            extensionName(metadata.getExtensionName());
+            extensionName(metadata.getType());
         }
 
         public Builder name(String name) {

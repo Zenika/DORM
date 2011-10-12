@@ -22,10 +22,10 @@ public class NuxeoSinglePushTask extends NuxeoAbstractTask {
         WebResource resource = wrapper.get();
 
         NuxeoMetadata metadata = new NuxeoMetadata(
-                this.metadata.getExtensionName(),
+                this.metadata.getType(),
                 this.metadata.getName(),
                 this.metadata.getVersion(),
-                serviceLoader.getInstanceOf(this.metadata.getExtensionName()).toMap(this.metadata)
+                serviceLoader.getInstanceOf(this.metadata.getType()).toMap(this.metadata)
         );
 
         NuxeoMetadata response = resource.path(NUXEO_POST)

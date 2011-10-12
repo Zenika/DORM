@@ -34,7 +34,7 @@ public class Neo4jSinglePushTask extends Neo4jAbstractTask {
         resource = wrapper.get();
 
         DormBasicQuery query = new DormBasicQuery.Builder()
-                .extensionName(this.metadata.getExtensionName())
+                .extensionName(this.metadata.getType())
                 .name(this.metadata.getName())
                 .version(this.metadata.getVersion())
                 .build();
@@ -45,11 +45,11 @@ public class Neo4jSinglePushTask extends Neo4jAbstractTask {
         if (response == null) {
 
             Long id;
-            ExtensionMetadataFactory factory = serviceLoader.getInstanceOf(metadata.getExtensionName());
+            ExtensionMetadataFactory factory = serviceLoader.getInstanceOf(metadata.getType());
             Map<String, String> properties = factory.toMap(this.metadata);
 
             Neo4jMetadata metadata = new Neo4jMetadata(
-                    this.metadata.getExtensionName(),
+                    this.metadata.getType(),
                     this.metadata.getName(),
                     this.metadata.getVersion(),
                     properties

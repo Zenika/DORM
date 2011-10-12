@@ -81,7 +81,7 @@ public final class MavenMetadata extends DormMetadata {
     }
 
     @Override
-    public String getExtensionName() {
+    public String getType() {
         return EXTENSION_NAME;
     }
 

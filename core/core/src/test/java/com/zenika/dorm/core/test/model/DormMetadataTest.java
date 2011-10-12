@@ -5,7 +5,7 @@ import com.zenika.dorm.core.model.DormMetadata;
 /**
  * @author Antoine ROUAZE <antoine.rouaze AT zenika.com>
  */
-public class DormMetadataTest extends DormMetadata{
+public class DormMetadataTest extends DormMetadata {
 
     public static final String EXTENSION_NAME = "DormTest";
     public static final String VERSION_FIELD = "version";
@@ -22,13 +22,13 @@ public class DormMetadataTest extends DormMetadata{
     }
 
     public DormMetadataTest(Long id, String version, String artifactId) {
-            super(id);
-            this.version = version;
-            this.artifactId = artifactId;
-        }
+        super(id);
+        this.version = version;
+        this.artifactId = artifactId;
+    }
 
 
-    public static DormMetadata getDefault(){
+    public static DormMetadata getDefault() {
         return new DormMetadataTest("1.0.0", "property");
     }
 
@@ -43,7 +43,7 @@ public class DormMetadataTest extends DormMetadata{
     }
 
     @Override
-    public String getExtensionName() {
+    public String getType() {
         return EXTENSION_NAME;
     }
 
@@ -77,7 +77,7 @@ public class DormMetadataTest extends DormMetadata{
         final StringBuilder sb = new StringBuilder();
         sb.append("DormMetadataTest");
         sb.append("{id='").append(id).append('\'');
-        sb.append(", extensionName='").append(getExtensionName()).append('\'');
+        sb.append(", extensionName='").append(getType()).append('\'');
         sb.append(", fields='").append(artifactId).append('\'');
         sb.append(", name='").append(getName()).append('\'');
         sb.append(", version='").append(version).append('\'');

@@ -33,7 +33,7 @@ public class JDBCSinglePushTask extends JDBCAbstractTask {
                 LOG.debug("The dependency " + this.metadata.getName() + " already insert in database");
             }
             connection.commit();
-            ExtensionMetadataFactory factory = serviceLoader.getInstanceOf(this.metadata.getExtensionName());
+            ExtensionMetadataFactory factory = serviceLoader.getInstanceOf(this.metadata.getType());
             Map<String, String> properties = factory.toMap(this.metadata);
             metadata = factory.fromMap(id, properties);
         } catch (SQLException e) {
@@ -61,7 +61,7 @@ public class JDBCSinglePushTask extends JDBCAbstractTask {
         Long id = null;
         PreparedStatement statement = connection.prepareStatement("SELECT id FROM dorm_metadata WHERE metadata_name = ? AND extension_name = ? AND metadata_version = ?");
         statement.setString(1, metadata.getName());
-        statement.setString(2, metadata.getExtensionName());
+        statement.setString(2, metadata.getType());
         statement.setString(3, metadata.getVersion());
         ResultSet result = statement.executeQuery();
         if (result.next()) {
@@ -74,7 +74,7 @@ public class JDBCSinglePushTask extends JDBCAbstractTask {
         Long id = null;
         PreparedStatement statement = connection.prepareStatement("INSERT INTO dorm_metadata (metadata_name, extension_name, metadata_version) VALUES (?, ?, ?);", Statement.RETURN_GENERATED_KEYS);
         statement.setString(1, metadata.getName());
-        statement.setString(2, metadata.getExtensionName());
+        statement.setString(2, metadata.getType());
         statement.setString(3, metadata.getVersion());
         if (statement.executeUpdate() > 0) {
             ResultSet resultSet = statement.getGeneratedKeys();
@@ -93,7 +93,7 @@ public class JDBCSinglePushTask extends JDBCAbstractTask {
      */
     private void insertExtension(Connection connection, Long metadataId) throws SQLException {
         Map<String, String> properties = serviceLoader
-                .getInstanceOf(metadata.getExtensionName())
+                .getInstanceOf(metadata.getType())
                 .toMap(metadata);
 
         PreparedStatement statement = connection.prepareStatement("INSERT INTO dorm_properties (property_key, property_value, metadata_id) VALUES (?, ?, ?)");

@@ -22,13 +22,14 @@ public abstract class DormMetadata {
 
     public abstract String getVersion();
 
-    public abstract String getExtensionName();
+    public abstract String getType();
 
-    public final String getFunctionalId() {
-        return getExtensionName() + ":" +
-                getName() + ":" +
-                getVersion();
-    }
+
+//    public final String getFunctionalId() {
+//        return getType() + ":" +
+//                getName() + ":" +
+//                getVersion();
+//    }
 
     public Long getId() {
         return id;
