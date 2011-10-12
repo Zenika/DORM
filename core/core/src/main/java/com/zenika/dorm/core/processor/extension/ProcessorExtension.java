@@ -9,9 +9,9 @@ import com.zenika.dorm.core.service.DormService;
  * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>
  */
 public abstract class ProcessorExtension {
-
-    @Inject
-    protected DormService service;
+//
+//    @Inject
+//    protected DormService service;
 
     public abstract DormWebServiceResult pushFromGenericRequest(DormWebServiceRequest request);
 

@@ -30,9 +30,9 @@ public class DormProcessor {
      * Injected by guice
      */
     private Set<RequestAnalyser> requestAnalysers;
-
-    @Inject
-    private DormService service;
+//
+//    @Inject
+//    private DormService service;
 
     public DormProcessor() {
 
