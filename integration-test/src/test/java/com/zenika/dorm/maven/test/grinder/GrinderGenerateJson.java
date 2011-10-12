@@ -7,8 +7,6 @@ import com.zenika.dorm.maven.test.model.MavenResource;
 import com.zenika.dorm.maven.test.model.MavenSample;
 import com.zenika.dorm.maven.test.result.MavenPutResult;
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.logging.Log;
 import org.apache.maven.model.Dependency;
 import org.apache.maven.model.License;
 import org.apache.maven.model.Model;
@@ -18,17 +16,9 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.net.MalformedURLException;
+import java.io.*;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.net.URLStreamHandler;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -49,7 +39,7 @@ public class GrinderGenerateJson {
     private static final String SHA1 = "SHA1";
     private static final String MD5 = "MD5";
 
-    private static final int NUMBER_OF_GENERATED_FILE = 1000;
+    private static final int NUMBER_OF_GENERATED_FILE = 10;
 
     private static final Logger LOG = LoggerFactory.getLogger(GrinderGenerateJson.class);
 

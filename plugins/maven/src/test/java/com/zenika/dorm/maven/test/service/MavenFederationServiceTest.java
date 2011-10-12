@@ -1,22 +1,20 @@
 package com.zenika.dorm.maven.test.service;
 
 import com.google.inject.Guice;
-import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.core.model.DormResource;
 import com.zenika.dorm.maven.model.MavenBuildInfo;
 import com.zenika.dorm.maven.model.MavenMetadata;
 import com.zenika.dorm.maven.model.MavenUri;
 import com.zenika.dorm.maven.model.builder.MavenMetadataBuilder;
-import com.zenika.dorm.maven.provider.ProxyWebResourceWrapper;
 import com.zenika.dorm.maven.service.MavenProxyService;
-import com.zenika.dorm.maven.service.MavenProxyServiceAether;
 import com.zenika.dorm.maven.service.MavenProxyServiceHttp;
 import com.zenika.dorm.maven.test.module.MavenTestModule;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static org.fest.assertions.Assertions.*;
+import static org.fest.assertions.Assertions.assertThat;
+
 /**
  * @author Antoine ROUAZE <antoine.rouaze AT zenika.com>
  */
@@ -25,7 +23,7 @@ public class MavenFederationServiceTest {
     private static final Logger LOG = LoggerFactory.getLogger(MavenFederationServiceTest.class);
 
     @Test
-    public void test(){
+    public void test() {
 
         MavenProxyService service = Guice.createInjector(new MavenTestModule()).getInstance(MavenProxyServiceHttp.class);
 

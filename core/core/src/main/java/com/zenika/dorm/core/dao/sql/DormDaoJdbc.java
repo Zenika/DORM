@@ -8,11 +8,9 @@ import com.zenika.dorm.core.dao.DormDao;
 import com.zenika.dorm.core.dao.query.DormBasicQuery;
 import com.zenika.dorm.core.model.DependencyNode;
 import com.zenika.dorm.core.model.DormMetadata;
-import com.zenika.dorm.core.model.impl.Usage;
 import com.zenika.dorm.core.service.spi.ExtensionFactoryServiceLoader;
 
 import javax.sql.DataSource;
-import java.util.List;
 import java.util.Map;
 
 public class DormDaoJdbc implements DormDao {
@@ -57,17 +55,4 @@ public class DormDaoJdbc implements DormDao {
         return jdbcGetTask.execute();
     }
 
-    @Override
-    public List<DormMetadata> getMetadataByExtension(final String extensionName, final Map<String, String> extensionClauses, Usage usage) {
-        return Guice.createInjector(
-                new AbstractModule() {
-                    @Override
-                    protected void configure() {
-                        bind(typeMap).toInstance(extensionClauses);
-                        bind(String.class).toInstance(extensionName);
-                        bind(DataSource.class).toInstance(dataSource);
-                        bind(ExtensionFactoryServiceLoader.class).toInstance(serviceLoader);
-                    }
-                }).getInstance(JDBCRetrieveByExtensionClauseTask.class).execute();
-    }
 }

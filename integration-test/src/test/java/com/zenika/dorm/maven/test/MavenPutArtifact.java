@@ -9,16 +9,13 @@ import com.zenika.dorm.maven.test.model.MavenSample;
 import com.zenika.dorm.maven.test.result.MavenPutResult;
 import com.zenika.dorm.maven.test.utils.MavenUtils;
 import com.zenika.dorm.maven.test.utils.TestUtils;
-import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
-import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.conn.params.ConnRoutePNames;
 import org.apache.http.entity.FileEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.protocol.HTTP;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -26,16 +23,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.URISyntaxException;
-import java.net.URL;
 import java.util.Iterator;
 import java.util.List;
 
-import static org.fest.assertions.Assertions.*;
+import static org.fest.assertions.Assertions.assertThat;
 
 /**
  * @author Antoine ROUAZE <antoine.rouaze AT zenika.com>
@@ -48,7 +41,7 @@ public class MavenPutArtifact {
 
     private static final String REPOSITORY_PATH = "repository";
 
-    private static final String NEO4J_HOME = "/home/erouan/Software/neo4j-enterprise-1.4.M06/";
+    private static final String NEO4J_HOME = "/Users/gregory/Integ/neo4j-community-1.5.M01/";
 
     private static MavenConfiguration configuration;
     private static List<MavenResource> resources;

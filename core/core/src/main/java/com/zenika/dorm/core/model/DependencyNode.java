@@ -13,8 +13,6 @@ public interface DependencyNode {
 
     public Boolean accept(DependencyVisitor visitor);
 
-    public void setDependency(Dependency dependency);
-
     public Dependency getDependency();
 
     void addChild(DependencyNode node);

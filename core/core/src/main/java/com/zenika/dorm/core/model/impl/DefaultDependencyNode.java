@@ -29,11 +29,6 @@ public final class DefaultDependencyNode implements DependencyNode {
     }
 
     @Override
-    public void setDependency(Dependency dependency) {
-        this.dependency = dependency;
-    }
-
-    @Override
     public Dependency getDependency() {
         return dependency;
     }

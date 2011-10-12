@@ -8,12 +8,7 @@ import com.zenika.dorm.core.dao.neo4j.provider.Neo4jWebResourceWrapper;
 import com.zenika.dorm.core.dao.query.DormBasicQuery;
 import com.zenika.dorm.core.model.DependencyNode;
 import com.zenika.dorm.core.model.DormMetadata;
-import com.zenika.dorm.core.model.impl.Usage;
 import com.zenika.dorm.core.service.spi.ExtensionFactoryServiceLoader;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 /**
  * @author Antoine ROUAZE <antoine.rouaze AT zenika.com>
@@ -24,7 +19,7 @@ public class DormDaoNeo4j implements DormDao {
 
     @Inject
     private Neo4jWebResourceWrapper wrapper;
-//    @Inject
+    //    @Inject
 //    private Neo4jIndex index;
     @Inject
     private ExtensionFactoryServiceLoader serviceLoader;
@@ -41,10 +36,6 @@ public class DormDaoNeo4j implements DormDao {
         }).getInstance(Neo4jGetTask.class).execute();
     }
 
-    @Override
-    public List<DormMetadata> getMetadataByExtension(String extensionName, Map<String, String> extensionClauses, Usage usage) {
-        return new ArrayList<DormMetadata>();
-    }
 
     @Override
     public void saveOrUpdateMetadata(final DormMetadata metadata) {

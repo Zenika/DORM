@@ -1,1 +1,0 @@
-metadataVertex = g.addVertex([identifier: identifierValue, version: versionValue, extensionName: extensionNameValue]);results = metadataVertex

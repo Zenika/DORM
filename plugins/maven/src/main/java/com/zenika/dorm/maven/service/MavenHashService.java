@@ -84,11 +84,9 @@ public class MavenHashService {
     private MavenMetadata getRealMetadataFromHash(MavenMetadata hashMetadata) {
 
         String extension = FilenameUtils.removeExtension(hashMetadata.getBuildInfo().getExtension());
-
         MavenBuildInfo buildInfo = new MavenBuildInfoBuilder(hashMetadata.getBuildInfo())
                 .extension(extension)
                 .build();
-
         return new MavenMetadataBuilder(hashMetadata)
                 .buildInfo(buildInfo)
                 .build();
