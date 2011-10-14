@@ -54,7 +54,7 @@ public class MavenResource {
 
         switch (result.getResult()) {
             case FOUND:
-                response = Response.ok(result.getFile()).build();
+                response = Response.ok(result.getEntity()).build();
                 break;
             case NOTFOUND:
                 response = Response.status(Response.Status.NOT_FOUND).build();

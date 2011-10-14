@@ -1,6 +1,7 @@
 package com.zenika.dorm.maven.processor.extension;
 
 import com.google.inject.Inject;
+import com.zenika.dorm.core.exception.CoreException;
 import com.zenika.dorm.core.model.DormResource;
 import com.zenika.dorm.core.model.ws.DormWebServiceRequest;
 import com.zenika.dorm.core.model.ws.DormWebServiceResult;
@@ -118,7 +119,7 @@ public class MavenProcessor extends ProcessorExtension {
     public DormWebServiceResult get(DormWebServiceRequest request) {
         DormWebServiceResult.Builder responseBuilder = createBuilder();
         MavenUri mavenUri = new MavenUri(request.getProperty("uri"));
-        if (mavenUri.isMavenMetadataUri()) {
+        if (!mavenUri.isMavenMetadataUri()) {
             return responseBuilder.notfound().build();
         }
         MavenMetadata mavenMetadata = createMavenMetadata(mavenUri);
@@ -143,7 +144,13 @@ public class MavenProcessor extends ProcessorExtension {
         if (isNotAvailableResourceFromProxy(dormResource)) {
             return responseBuilder.notfound().build();
         } else {
-            return responseBuilder.inputStream(dormResource.getInputStream()).succeeded().build();
+            if (dormResource.hasFile()) {
+                return responseBuilder.file(dormResource.getFile()).succeeded().build();
+            } else if (dormResource.hasInputStream()){
+                return responseBuilder.inputStream(dormResource.getInputStream()).succeeded().build();
+            } else {
+                return responseBuilder.notfound().build();
+            }
         }
     }
 

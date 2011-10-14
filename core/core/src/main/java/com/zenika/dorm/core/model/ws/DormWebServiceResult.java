@@ -15,28 +15,25 @@ public class DormWebServiceResult extends DormWebServiceProcess {
     }
 
     private final Result result;
-    private final File file;
-    private final InputStream inputStream;
+    private final Object entity;
 
     public DormWebServiceResult(Builder builder) {
         super(builder);
         this.result = builder.result;
-        this.file = builder.file;
-        this.inputStream = builder.inputStream;
+        if (builder.file == null){
+            this.entity = builder.inputStream;
+        } else {
+            this.entity = builder.file;
+        }
     }
 
     public Result getResult() {
         return result;
     }
 
-    public File getFile() {
-        return file;
+    public Object getEntity(){
+        return entity;
     }
-
-    public InputStream getInputStream(){
-        return inputStream;
-    }
-
 
     public static class Builder extends DormWebServiceAbstractBuilder<Builder> {
 

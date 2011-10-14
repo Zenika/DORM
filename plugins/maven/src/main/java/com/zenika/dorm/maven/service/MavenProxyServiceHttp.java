@@ -51,7 +51,7 @@ public class MavenProxyServiceHttp implements MavenProxyService {
                 throw new CoreException(e);
             }
         }
-
+//
         if (Integer.parseInt(response.getHeaders().get("Content-length").get(0)) < 10000) {
             return new DefaultDormResource(uri.getFilename().getFilename(),
                     uri.getFilename().getExtension(),
