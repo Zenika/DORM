@@ -6,6 +6,7 @@ package com.zenika.dorm.maven.model;
 
 import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.maven.constant.MavenConstant;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
@@ -112,6 +113,25 @@ public final class MavenMetadata extends DormMetadata {
 
     public boolean isSnapshot() {
         return snapshot;
+    }
+
+    public boolean isHash(String extension) {
+
+        if (StringUtils.isBlank(extension)) {
+            return false;
+        }
+
+        // extension is composed of many (ex. jar.md5)
+        if (isComposedOfManyExtensions(extension)) {
+            extension = FilenameUtils.getExtension(extension);
+        }
+
+        return extension.equals("md5") || extension.equals("sha1");
+    }
+
+
+    private boolean isComposedOfManyExtensions(String extension) {
+        return extension.contains(".");
     }
 
     public boolean isMavenMetadata() {

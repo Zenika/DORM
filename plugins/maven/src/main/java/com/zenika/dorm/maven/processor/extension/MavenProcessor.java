@@ -7,7 +7,6 @@ import com.zenika.dorm.core.model.ws.DormWebServiceResult;
 import com.zenika.dorm.core.processor.extension.ProcessorExtension;
 import com.zenika.dorm.core.service.FileValidator;
 import com.zenika.dorm.maven.constant.MavenConstant;
-import com.zenika.dorm.maven.helper.MavenExtensionHelper;
 import com.zenika.dorm.maven.model.MavenMetadata;
 import com.zenika.dorm.maven.model.MavenUri;
 import com.zenika.dorm.maven.service.MavenProxyService;
@@ -97,7 +96,7 @@ public class MavenProcessor extends ProcessorExtension {
         String extension = metadata.getBuildInfo().getExtension();
 
         // md5 or sha1
-        if (MavenExtensionHelper.isHash(extension)) {
+        if (metadata.isHash(extension)) {
             mavenService.storeHash(metadata, file);
         }
 
