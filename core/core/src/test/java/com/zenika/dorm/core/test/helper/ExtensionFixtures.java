@@ -81,7 +81,7 @@ public abstract class ExtensionFixtures {
     }
 
     public DormResource getDormResource() {
-        return DefaultDormResource.create(filename, filenameExtension, file);
+        return new DefaultDormResource(filename, filenameExtension, file);
     }
 
     public Dependency getDependencyWithoutResource() {

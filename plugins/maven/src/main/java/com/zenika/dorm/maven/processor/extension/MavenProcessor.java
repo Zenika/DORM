@@ -116,14 +116,12 @@ public class MavenProcessor extends ProcessorExtension {
 
     @Override
     public DormWebServiceResult get(DormWebServiceRequest request) {
-
         DormWebServiceResult.Builder responseBuilder = createBuilder();
-
-        MavenMetadata mavenMetadata = createMavenMetadata(request);
-        if (mavenMetadata.isMavenMetadata()) {
+        MavenUri mavenUri = new MavenUri(request.getProperty("uri"));
+        if (mavenUri.isMavenMetadataUri()) {
             return responseBuilder.notfound().build();
         }
-
+        MavenMetadata mavenMetadata = createMavenMetadata(mavenUri);
         DormResource dormResource = mavenService.getArtifact(mavenMetadata);
         if (mavenService.isUseProxy(dormResource)) {
             return getResponseWithProxy(responseBuilder, dormResource, mavenMetadata);
@@ -131,19 +129,13 @@ public class MavenProcessor extends ProcessorExtension {
         return responseBuilder.file(dormResource.getFile()).succeeded().build();
     }
 
-    private MavenMetadata createMavenMetadata(DormWebServiceRequest request) {
-        MavenUri mavenUri = new MavenUri(request.getProperty("uri"));
+    private MavenMetadata createMavenMetadata(MavenUri mavenUri) {
         return mavenService.buildMavenMetadata(mavenUri);
     }
 
     private DormWebServiceResult.Builder createBuilder() {
         return new DormWebServiceResult.Builder()
                 .origin(MavenMetadata.EXTENSION_NAME);
-    }
-
-    private boolean isMavenMetadata(DormWebServiceRequest request) {
-        MavenUri mavenUri = new MavenUri(request.getProperty("uri"));
-        return StringUtils.equals(mavenUri.getFilename().getFilename(), MavenConstant.Special.MAVEN_METADATA_XML);
     }
 
     private DormWebServiceResult getResponseWithProxy(DormWebServiceResult.Builder responseBuilder, DormResource dormResource, MavenMetadata mavenMetadata) {
@@ -158,7 +150,6 @@ public class MavenProcessor extends ProcessorExtension {
     private boolean isNotAvailableResourceFromProxy(DormResource dormResource) {
         return dormResource == null;
     }
-
 
     @Override
     public DormWebServiceResult pushFromGenericRequest(DormWebServiceRequest request) {

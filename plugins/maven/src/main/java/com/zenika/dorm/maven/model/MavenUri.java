@@ -72,7 +72,6 @@ public class MavenUri {
         uri = builder.toString();
     }
 
-
     /**
      * Remove "-SNAPSHOT" from version if exists
      *
@@ -85,6 +84,10 @@ public class MavenUri {
         }
 
         return version.substring(0, version.length() - (MavenConstant.Special.SNAPSHOT.length() + 1));
+    }
+
+    public boolean isMavenMetadataUri() {
+        return !StringUtils.equals(filename.getFilename(), MavenConstant.Special.MAVEN_METADATA_XML);
     }
 
     public String getUri() {

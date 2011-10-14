@@ -21,7 +21,7 @@ public final class DefaultDormResource implements DormResource {
         return new DefaultDormResource(FilenameUtils.getBaseName(filename), FilenameUtils.getExtension(filename), file);
     }
 
-    private DefaultDormResource(String name, String extension, File file) {
+    public DefaultDormResource(String name, String extension, File file) {
         this.name = name;
         this.extension = extension;
         this.file = file;

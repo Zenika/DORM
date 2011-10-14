@@ -33,14 +33,6 @@ public class MavenMetadataFactory implements ExtensionMetadataFactory {
         return builder.build();
     }
 
-    public DormMetadata fromMetadata(DormMetadata metadata, Long id, Map<String, String> properties) {
-
-        MavenMetadataBuilder builder = new MavenMetadataBuilder((MavenMetadata) metadata);
-        applyToBuilder(builder, id, properties);
-
-        return builder.build();
-    }
-
     @Override
     public Map<String, String> toMap(DormMetadata metadata) {
 

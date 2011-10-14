@@ -134,12 +134,6 @@ public final class MavenMetadata extends DormMetadata {
         return extension.contains(".");
     }
 
-    public boolean isMavenMetadata() {
-
-        return StringUtils.equals(uri.getFilename().getFilename(), MavenConstant.Special.MAVEN_METADATA_XML);
-    }
-
-
     @Override
     public String toString() {
         return new ToStringBuilder(this)
