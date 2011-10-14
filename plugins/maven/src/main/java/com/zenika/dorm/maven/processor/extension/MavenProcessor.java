@@ -151,9 +151,9 @@ public class MavenProcessor extends ProcessorExtension {
         dormResource = proxyService.getArtifact(mavenMetadata);
         if (isNotAvailableResourceFromProxy(dormResource)) {
             return responseBuilder.notfound().build();
+        } else {
+            return responseBuilder.inputStream(dormResource.getInputStream()).succeeded().build();
         }
-        //TODO Antoine
-        return null;
     }
 
     private boolean isNotAvailableResourceFromProxy(DormResource dormResource) {

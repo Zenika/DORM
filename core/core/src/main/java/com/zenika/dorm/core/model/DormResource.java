@@ -1,6 +1,7 @@
 package com.zenika.dorm.core.model;
 
 import java.io.File;
+import java.io.InputStream;
 
 public interface DormResource {
 
@@ -18,4 +19,10 @@ public interface DormResource {
      * Get the file
      */
     public File getFile();
+
+    public InputStream getInputStream();
+
+    public boolean hasInputStream();
+
+    public boolean hasFile();
 }

@@ -85,17 +85,17 @@ public class DefaultDormRepository implements DormRepository {
     @Override
     public DormResource get(DormMetadata metadata) {
 
-        LOG.debug("Get dorm file by metadata : " + metadata);
+        LOG.debug("Get dorm file by metadata: {}", metadata);
 
         String location = getPathFromMetadata(metadata);
-        LOG.debug("Get file at location : " + location);
+        LOG.debug("Get file at location: {}", location);
 
         DormRepositoryResource resource = resolveEngine.resolve(location);
 
         if (!resource.exists()) {
 
             if (LOG.isDebugEnabled()) {
-                LOG.debug("Resource not found for metadata : " + metadata);
+                LOG.debug("Resource not found for metadata : {}", metadata);
             }
 
             return null;

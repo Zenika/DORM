@@ -20,6 +20,5 @@ public abstract class DormExtensionModule extends AbstractModule {
     @Override
     protected void configure() {
         requestAnalyserBinder = Multibinder.newSetBinder(binder(), RequestAnalyser.class);
-        metadataFactories = MapBinder.newMapBinder(binder(), String.class, ExtensionMetadataFactory.class);
     }
 }

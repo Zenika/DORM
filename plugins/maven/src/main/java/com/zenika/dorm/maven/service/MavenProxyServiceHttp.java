@@ -17,6 +17,8 @@ import org.slf4j.LoggerFactory;
 
 import javax.ws.rs.core.MediaType;
 import java.io.File;
+import java.io.InputStream;
+import java.net.URL;
 
 /**
  * @author Antoine ROUAZE <antoine.rouaze AT zenika.com>
@@ -36,12 +38,12 @@ public class MavenProxyServiceHttp implements MavenProxyService {
         MavenUri uri = new MavenUri(convertMetadata(metadata));
         LOG.info("Path proxy: {}", uri.getUri());
 
-        File file;
+        ClientResponse response;
 
         try {
-            file = webResource.path(uri.getUri())
+            response = webResource.path(uri.getUri())
                     .accept(MediaType.APPLICATION_OCTET_STREAM_TYPE)
-                    .get(File.class);
+                    .get(ClientResponse.class);
         } catch (UniformInterfaceException e) {
             if (e.getResponse().getStatus() == ClientResponse.Status.NOT_FOUND.getStatusCode()) {
                 return null;
@@ -50,8 +52,15 @@ public class MavenProxyServiceHttp implements MavenProxyService {
             }
         }
 
-        new FileValidator().validateFile(file);
-        return DefaultDormResource.create(uri.getFilename().getFilename(), file);
+        if (Integer.parseInt(response.getHeaders().get("Content-length").get(0)) < 10000) {
+            return new DefaultDormResource(uri.getFilename().getFilename(),
+                    uri.getFilename().getExtension(),
+                    response.getEntity(InputStream.class));
+        } else {
+            File file = response.getEntity(File.class);
+            new FileValidator().validateFile(file);
+            return DefaultDormResource.create(uri.getFilename().getFilename(), file);
+        }
     }
 
 

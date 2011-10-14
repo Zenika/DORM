@@ -41,7 +41,7 @@ public class MavenPutArtifact {
 
     private static final String REPOSITORY_PATH = "repository";
 
-    private static final String NEO4J_HOME = "/Users/gregory/Integ/neo4j-community-1.5.M01/";
+    private static final String NEO4J_HOME = "/home/erouan/Software/neo4j-enterprise-1.4.M06/";
 
     private static MavenConfiguration configuration;
     private static List<MavenResource> resources;
