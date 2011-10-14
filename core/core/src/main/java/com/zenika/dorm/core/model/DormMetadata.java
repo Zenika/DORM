@@ -24,12 +24,11 @@ public abstract class DormMetadata {
 
     public abstract String getType();
 
-
-//    public final String getFunctionalId() {
-//        return getType() + ":" +
-//                getName() + ":" +
-//                getVersion();
-//    }
+    public final String getFunctionalId() {
+        return getType() + ":" +
+                getName() + ":" +
+                getVersion();
+    }
 
     public Long getId() {
         return id;

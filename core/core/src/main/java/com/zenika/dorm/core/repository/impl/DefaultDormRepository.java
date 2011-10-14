@@ -1,7 +1,7 @@
 package com.zenika.dorm.core.repository.impl;
 
 import com.google.inject.Inject;
-import com.zenika.dorm.core.exception.RepositoryException;
+import com.zenika.dorm.core.exception.CoreException;
 import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.core.model.DormResource;
 import com.zenika.dorm.core.model.impl.DefaultDormResource;
@@ -59,11 +59,11 @@ public class DefaultDormRepository implements DormRepository {
     public void store(String extension, String path, DormResource resource, boolean override) {
 
         if (DormStringUtils.oneIsBlank(extension, path)) {
-            throw new RepositoryException("Extension and path are required to store internal resource");
+            throw new CoreException("Extension and path are required to store internal resource");
         }
 
         if (null == resource || null == resource.getFile()) {
-            throw new RepositoryException("File to store to the repository is required");
+            throw new CoreException("File to store to the repository is required");
         }
 
         String fullPath = getBaseBuilder().append(INTERNAL_PATH_PREFIX)
