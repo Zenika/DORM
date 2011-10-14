@@ -7,7 +7,7 @@ import com.zenika.dorm.core.model.DormResource;
  * @author Antoine ROUAZE <antoine.rouaze AT zenika.com>
  */
 public interface MavenProxyService {
-    DormResource getArtifact(DormMetadata metadata);
 
+    DormResource getArtifact(DormMetadata metadata);
 
 }

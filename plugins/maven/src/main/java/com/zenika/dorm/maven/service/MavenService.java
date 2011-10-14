@@ -173,4 +173,10 @@ public class MavenService {
 
         return builder.build();
     }
+
+
+    public boolean isUseProxy(DormResource dormResource) {
+        return dormResource == null;
+    }
+
 }

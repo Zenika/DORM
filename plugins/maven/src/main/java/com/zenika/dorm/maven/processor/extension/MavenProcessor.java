@@ -114,48 +114,52 @@ public class MavenProcessor extends ProcessorExtension {
         return responseBuilder.succeeded().build();
     }
 
+
     @Override
     public DormWebServiceResult get(DormWebServiceRequest request) {
 
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("Maven webservice get request : " + request);
-        }
+        DormWebServiceResult.Builder responseBuilder = createBuilder();
 
-        MavenUri mavenUri = new MavenUri(request.getProperty("uri"));
-
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("Maven uri : " + mavenUri);
-        }
-
-        DormWebServiceResult.Builder responseBuilder = new DormWebServiceResult.Builder()
-                .origin(MavenMetadata.EXTENSION_NAME);
-
-        // ignore get's of maven-medata.xml file
-        if (StringUtils.equals(mavenUri.getFilename().getFilename(), MavenConstant.Special.MAVEN_METADATA_XML)) {
-
-            if (LOG.isDebugEnabled()) {
-                LOG.debug("Ignore " + MavenConstant.Special.MAVEN_METADATA_XML);
-            }
-
+        MavenMetadata mavenMetadata = createMavenMetadata(request);
+        if (mavenMetadata.isMavenMetadata()) {
             return responseBuilder.notfound().build();
         }
 
-        MavenMetadata metadata = mavenService.buildMavenMetadata(mavenUri);
-
-        DormResource resource = mavenService.getArtifact(metadata);
-
-        if (null == resource) {
-            resource = proxyService.getArtifact(metadata);
-            if (resource == null) {
-                return responseBuilder.notfound().build();
-            }
+        DormResource dormResource = mavenService.getArtifact(mavenMetadata);
+        if (mavenService.isUseProxy(dormResource)) {
+            return getResponseWithProxy(responseBuilder, dormResource, mavenMetadata);
         }
-
-        return responseBuilder
-                .file(resource.getFile())
-                .succeeded()
-                .build();
+        return responseBuilder.file(dormResource.getFile()).succeeded().build();
     }
+
+    private MavenMetadata createMavenMetadata(DormWebServiceRequest request) {
+        MavenUri mavenUri = new MavenUri(request.getProperty("uri"));
+        return mavenService.buildMavenMetadata(mavenUri);
+    }
+
+    private DormWebServiceResult.Builder createBuilder() {
+        return new DormWebServiceResult.Builder()
+                .origin(MavenMetadata.EXTENSION_NAME);
+    }
+
+    private boolean isMavenMetadata(DormWebServiceRequest request) {
+        MavenUri mavenUri = new MavenUri(request.getProperty("uri"));
+        return StringUtils.equals(mavenUri.getFilename().getFilename(), MavenConstant.Special.MAVEN_METADATA_XML);
+    }
+
+    private DormWebServiceResult getResponseWithProxy(DormWebServiceResult.Builder responseBuilder, DormResource dormResource, MavenMetadata mavenMetadata) {
+        dormResource = proxyService.getArtifact(mavenMetadata);
+        if (isNotAvailableResourceFromProxy(dormResource)) {
+            return responseBuilder.notfound().build();
+        }
+        //TODO Antoine
+        return null;
+    }
+
+    private boolean isNotAvailableResourceFromProxy(DormResource dormResource) {
+        return dormResource == null;
+    }
+
 
     @Override
     public DormWebServiceResult pushFromGenericRequest(DormWebServiceRequest request) {
