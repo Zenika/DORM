@@ -1,8 +1,9 @@
 package com.zenika.dorm.maven.test.fixtures;
 
+import com.google.inject.Inject;
 import com.zenika.dorm.maven.model.MavenMetadata;
 import com.zenika.dorm.maven.model.MavenUri;
-import com.zenika.dorm.maven.model.builder.MavenMetadataUriBuilder;
+import com.zenika.dorm.maven.service.MavenService;
 
 /**
  * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>
@@ -18,6 +19,9 @@ public class MavenFixtures {
     private MavenMetadata simplePomSha1;
     private MavenMetadata simplePomMd5;
 
+    @Inject
+    private MavenService mavenService;
+
     public MavenFixtures() {
         this(new MavenPathFixtures());
     }
@@ -25,12 +29,12 @@ public class MavenFixtures {
     public MavenFixtures(MavenPathFixtures pathFixtures) {
         this.pathFixtures = pathFixtures;
 
-        simpleJar = MavenMetadataUriBuilder.buildMavenMetadata(new MavenUri(pathFixtures.getJar()));
-        simpleJarSha1 = MavenMetadataUriBuilder.buildMavenMetadata(new MavenUri(pathFixtures.getJarSha1Hash()));
-        simpleJarMd5 = MavenMetadataUriBuilder.buildMavenMetadata(new MavenUri(pathFixtures.getJarMd5Hash()));
-        simplePom = MavenMetadataUriBuilder.buildMavenMetadata(new MavenUri(pathFixtures.getPom()));
-        simplePomSha1 = MavenMetadataUriBuilder.buildMavenMetadata(new MavenUri(pathFixtures.getPomSha1Hash()));
-        simplePomMd5 = MavenMetadataUriBuilder.buildMavenMetadata(new MavenUri(pathFixtures.getPomMd5Hash()));
+        simpleJar = mavenService.buildMavenMetadata(new MavenUri(pathFixtures.getJar()));
+        simpleJarSha1 = mavenService.buildMavenMetadata(new MavenUri(pathFixtures.getJarSha1Hash()));
+        simpleJarMd5 = mavenService.buildMavenMetadata(new MavenUri(pathFixtures.getJarMd5Hash()));
+        simplePom = mavenService.buildMavenMetadata(new MavenUri(pathFixtures.getPom()));
+        simplePomSha1 = mavenService.buildMavenMetadata(new MavenUri(pathFixtures.getPomSha1Hash()));
+        simplePomMd5 = mavenService.buildMavenMetadata(new MavenUri(pathFixtures.getPomMd5Hash()));
     }
 
     public MavenMetadata getSimpleJar() {

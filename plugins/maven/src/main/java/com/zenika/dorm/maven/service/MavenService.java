@@ -8,14 +8,17 @@ import com.zenika.dorm.core.model.impl.DefaultDependency;
 import com.zenika.dorm.core.model.impl.DefaultDependencyNode;
 import com.zenika.dorm.core.model.impl.DefaultDormResource;
 import com.zenika.dorm.core.service.DormService;
+import com.zenika.dorm.core.service.FileValidator;
 import com.zenika.dorm.core.service.config.DormServiceStoreResourceConfig;
-import com.zenika.dorm.core.validator.FileValidator;
 import com.zenika.dorm.maven.exception.MavenException;
 import com.zenika.dorm.maven.model.MavenBuildInfo;
+import com.zenika.dorm.maven.model.MavenFilename;
 import com.zenika.dorm.maven.model.MavenMetadata;
+import com.zenika.dorm.maven.model.MavenUri;
 import com.zenika.dorm.maven.model.builder.MavenBuildInfoBuilder;
 import com.zenika.dorm.maven.model.builder.MavenMetadataBuilder;
 import com.zenika.dorm.maven.pom.MavenPomReader;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,17 +37,21 @@ public class MavenService {
     private DormService dormService;
 
     @Inject
+    private FileValidator fileValidator;
+
+    @Inject
     private MavenHashService hashService;
 
     public void storeMetadataWithArtifact(MavenMetadata metadata, File file) {
 
         checkNotNull(metadata);
-        FileValidator.validateFile(file);
+        fileValidator.validateFile(file);
 
         if (LOG.isDebugEnabled()) {
             LOG.debug("Store maven metadata with artifact : " + metadata);
         }
 
+        new FileValidator().validateFile(file);
         DormResource resource = DefaultDormResource.create(
                 metadata.getName() + "." + metadata.getBuildInfo().getExtension(), file);
 
@@ -59,7 +66,7 @@ public class MavenService {
     public void storeHash(MavenMetadata metadata, File file) {
 
         checkNotNull(metadata);
-        FileValidator.validateFile(file);
+        fileValidator.validateFile(file);
 
         if (LOG.isDebugEnabled()) {
             LOG.debug("Store maven hash for metadata : " + metadata);
@@ -79,7 +86,7 @@ public class MavenService {
     public void storePom(MavenMetadata metadata, File file) {
 
         checkNotNull(metadata);
-        FileValidator.validateFile(file);
+        fileValidator.validateFile(file);
 
         if (LOG.isDebugEnabled()) {
             LOG.debug("Store maven pom from metadata : " + metadata);
@@ -140,5 +147,30 @@ public class MavenService {
         return new MavenMetadataBuilder(metadata)
                 .buildInfo(buildInfo)
                 .build();
+    }
+
+    public MavenMetadata buildMavenMetadata(MavenUri uri) {
+
+        MavenFilename filename = uri.getFilename();
+        MavenBuildInfoBuilder buildInfoBuilder = new MavenBuildInfoBuilder()
+                .extension(filename.getExtension());
+
+        if (StringUtils.isNotBlank(filename.getClassifier())) {
+            buildInfoBuilder.classifier(filename.getClassifier());
+        }
+
+        if (StringUtils.isNotBlank(filename.getTimestamp()) && StringUtils.isNotBlank(filename
+                .getBuildNumber())) {
+            buildInfoBuilder.timestamp(filename.getTimestamp());
+            buildInfoBuilder.buildNumber(filename.getBuildNumber());
+        }
+
+        MavenMetadataBuilder builder = new MavenMetadataBuilder()
+                .artifactId(uri.getArtifactId())
+                .groupId(uri.getGroupId())
+                .version(uri.getVersion())
+                .buildInfo(buildInfoBuilder.build());
+
+        return builder.build();
     }
 }

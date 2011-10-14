@@ -5,12 +5,11 @@ import com.zenika.dorm.core.model.DormResource;
 import com.zenika.dorm.core.model.ws.DormWebServiceRequest;
 import com.zenika.dorm.core.model.ws.DormWebServiceResult;
 import com.zenika.dorm.core.processor.extension.ProcessorExtension;
-import com.zenika.dorm.core.validator.FileValidator;
+import com.zenika.dorm.core.service.FileValidator;
 import com.zenika.dorm.maven.constant.MavenConstant;
 import com.zenika.dorm.maven.helper.MavenExtensionHelper;
 import com.zenika.dorm.maven.model.MavenMetadata;
 import com.zenika.dorm.maven.model.MavenUri;
-import com.zenika.dorm.maven.model.builder.MavenMetadataUriBuilder;
 import com.zenika.dorm.maven.service.MavenProxyService;
 import com.zenika.dorm.maven.service.MavenService;
 import org.apache.commons.lang3.StringUtils;
@@ -42,6 +41,9 @@ public class MavenProcessor extends ProcessorExtension {
     @Inject
     private MavenProxyService proxyService;
 
+    @Inject
+    private FileValidator fileValidator;
+
     /**
      * Process:
      * 1. Try to get maven artifact corresponding to the url identifier
@@ -64,11 +66,9 @@ public class MavenProcessor extends ProcessorExtension {
     public DormWebServiceResult push(DormWebServiceRequest request) {
 
         checkNotNull(request);
-        FileValidator.validateFile(request.getFile());
+        fileValidator.validateFile(request.getFile());
+        LOG.debug("Maven webservice push request : {}", request);
 
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("Maven webservice push request : " + request);
-        }
 
         DormWebServiceResult.Builder responseBuilder = new DormWebServiceResult.Builder()
                 .origin(MavenMetadata.EXTENSION_NAME);
@@ -88,12 +88,10 @@ public class MavenProcessor extends ProcessorExtension {
         }
 
         MavenUri mavenUri = new MavenUri(uri);
+        LOG.debug("Maven uri : {}", mavenUri);
 
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("Maven uri : " + mavenUri);
-        }
 
-        MavenMetadata metadata = MavenMetadataUriBuilder.buildMavenMetadata(mavenUri);
+        MavenMetadata metadata = mavenService.buildMavenMetadata(mavenUri);
 
         File file = request.getFile();
         String extension = metadata.getBuildInfo().getExtension();
@@ -142,7 +140,7 @@ public class MavenProcessor extends ProcessorExtension {
             return responseBuilder.notfound().build();
         }
 
-        MavenMetadata metadata = MavenMetadataUriBuilder.buildMavenMetadata(mavenUri);
+        MavenMetadata metadata = mavenService.buildMavenMetadata(mavenUri);
 
         DormResource resource = mavenService.getArtifact(metadata);
 

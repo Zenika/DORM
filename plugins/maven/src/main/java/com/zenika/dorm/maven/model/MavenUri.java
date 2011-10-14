@@ -1,9 +1,7 @@
 package com.zenika.dorm.maven.model;
 
-import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.maven.constant.MavenConstant;
 import com.zenika.dorm.maven.exception.MavenException;
-import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
@@ -73,7 +71,6 @@ public class MavenUri {
 
         uri = builder.toString();
     }
-
 
 
     /**

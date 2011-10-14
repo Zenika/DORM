@@ -1,61 +1,29 @@
 package com.zenika.dorm.core.model.impl;
 
 import com.zenika.dorm.core.model.DormResource;
-import com.zenika.dorm.core.validator.FileValidator;
 import org.apache.commons.io.FilenameUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.File;
 
-/**
- * Immutable class that represents a dorm resource
- */
 public final class DefaultDormResource implements DormResource {
-
-    private static final Logger LOG = LoggerFactory.getLogger(DefaultDormResource.class);
 
     private final String name;
     private final String extension;
     private final File file;
 
     public static DormResource create(File file) {
-        return create(null, null, file);
+        return new DefaultDormResource(null, null, file);
     }
 
     public static DefaultDormResource create(String filename, File file) {
-
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("Create dorm resource with filename : " + filename);
-        }
-
-        return create(FilenameUtils.getBaseName(filename), FilenameUtils.getExtension(filename), file);
-    }
-
-    /**
-     *
-     * @param name
-     * @param extension extension file
-     * @param file
-     * @return
-     */
-    public static DefaultDormResource create(String name, String extension, File file) {
-        return new DefaultDormResource(name, extension, file);
+        return new DefaultDormResource(FilenameUtils.getBaseName(filename), FilenameUtils.getExtension(filename), file);
     }
 
     private DefaultDormResource(String name, String extension, File file) {
-
-        FileValidator.validateFile(file);
-
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("Create dorm resource with name : " + name + " and extension : " + extension);
-        }
-
         this.name = name;
         this.extension = extension;
         this.file = file;
     }
-
 
     @Override
     public File getFile() {
