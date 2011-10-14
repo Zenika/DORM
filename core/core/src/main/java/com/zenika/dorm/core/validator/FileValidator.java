@@ -20,13 +20,4 @@ public final class FileValidator {
         checkArgument(file.isFile(), message);
     }
 
-    public static void validateFolder(File file) {
-        validateFolder(file, null);
-    }
-
-    public static void validateFolder(File file, String message) {
-        checkNotNull(file, message);
-        checkArgument(file.exists(), message);
-        checkArgument(file.isDirectory(), message);
-    }
 }
