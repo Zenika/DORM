@@ -172,19 +172,24 @@ public class MavenProcessor extends ProcessorExtension {
         }
         DormMetadata dormMetadata = mavenUri.toDormMetadata();
         if (dormService.isDormMetadataAlreadyExist(dormMetadata)) {
-            dormMetadata = dormService.getDormMetadata(dormMetadata, MavenPlugin.MAVEN_PLUGIN);
-            MavenPlugin mavenPlugin = (MavenPlugin) dormMetadata.getPlugin(MavenPlugin.MAVEN_PLUGIN);
-            if (mavenUri.getFilename().isJarFile() && dormMetadata.hasDerivedObject()) {
-                DerivedObject derivedObject = dormMetadata.getDerivedObject();
-                return getSelectedObject(mavenUri, derivedObject);
-            } else if (mavenUri.getFilename().isPomFile() && mavenPlugin.hasPomObject()) {
-                PomObject pomObject = mavenPlugin.getPomObject();
-                return getSelectedObject(mavenUri, pomObject);
-            }
+            return getEntity(mavenUri, dormMetadata);
         } else {
             return proxyService.getArtifact(mavenUri);
         }
-        return null;
+    }
+
+    private Object getEntity(MavenUri mavenUri, DormMetadata dormMetadata) {
+        Object entity = null;
+        dormMetadata = dormService.getDormMetadata(dormMetadata, MavenPlugin.MAVEN_PLUGIN);
+        MavenPlugin mavenPlugin = (MavenPlugin) dormMetadata.getPlugin(MavenPlugin.MAVEN_PLUGIN);
+        if (mavenUri.getFilename().isJarFile() && dormMetadata.hasDerivedObject()) {
+            DerivedObject derivedObject = dormMetadata.getDerivedObject();
+            entity = getSelectedObject(mavenUri, derivedObject);
+        } else if (mavenUri.getFilename().isPomFile() && mavenPlugin.hasPomObject()) {
+            PomObject pomObject = mavenPlugin.getPomObject();
+            entity = getSelectedObject(mavenUri, pomObject);
+        }
+        return entity;
     }
 
     private Object getSelectedObject(MavenUri mavenUri, DerivedObject derivedObject) {
@@ -203,10 +208,4 @@ public class MavenProcessor extends ProcessorExtension {
         return new DormWebServiceResult.Builder();
     }
 
-    private DormWebServiceResult getSucceedResponse() {
-        return new DormWebServiceResult.Builder()
-                .origin(MavenPlugin.MAVEN_PLUGIN)
-                .succeeded()
-                .build();
-    }
 }
