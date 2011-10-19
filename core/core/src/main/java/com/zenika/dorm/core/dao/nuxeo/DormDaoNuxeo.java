@@ -38,7 +38,7 @@ public class DormDaoNuxeo implements DormDao {
     }
 
     @Override
-    public void saveOrUpdateMetadata(final DormMetadata metadata) {
+    public DormMetadata saveOrUpdateMetadata(final DormMetadata metadata) {
         Guice.createInjector(new AbstractModule() {
             @Override
             protected void configure() {

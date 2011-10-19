@@ -8,7 +8,7 @@ public interface DormDao {
 
     public DormMetadata get(DormBasicQuery query);
 
-    public void saveOrUpdateMetadata(DormMetadata metadata);
+    public DormMetadata saveOrUpdateMetadata(DormMetadata metadata);
 
     public DependencyNode addDependenciesToNode(DependencyNode root);
 }

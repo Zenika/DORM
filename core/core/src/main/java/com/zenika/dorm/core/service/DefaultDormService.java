@@ -3,11 +3,14 @@ package com.zenika.dorm.core.service;
 import com.google.inject.Inject;
 import com.zenika.dorm.core.dao.DormDao;
 import com.zenika.dorm.core.dao.query.DormBasicQuery;
+import com.zenika.dorm.core.model.DerivedObject;
 import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.core.repository.DormRepository;
 import com.zenika.dorm.core.service.config.DormServiceStoreResourceConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.File;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -25,47 +28,23 @@ public class DefaultDormService implements DormService {
     private DormRepository repository;
 
     @Override
-    public void storeMetadata(DormMetadata metadata) {
-
-        checkNotNull(metadata);
-
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("Store metadata : " + metadata);
-        }
-
-        dao.saveOrUpdateMetadata(metadata);
-    }
-
-    @Override
-    public void storeResource(DormResource resource, DormMetadata metadata, DormServiceStoreResourceConfig config) {
-
-        checkNotNull(resource);
-        checkNotNull(metadata);
-        checkNotNull(config);
-
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("Store resource : " + resource + " with config : " + config);
-        }
-
-        repository.store(resource, metadata, config);
-    }
-
-    @Override
-    public DormResource getResource(DormMetadata metadata) {
-
-        checkNotNull(metadata);
-
-        return repository.get(metadata);
-    }
-
-    @Override
-    public DependencyNode addDependenciesToNode(DependencyNode node) {
-        return dao.addDependenciesToNode(node);
-    }
-
-    @Override
     public boolean isDormMetadataAlreadyExist(DormMetadata dormMetadata) {
         DormBasicQuery basicQuery = new DormBasicQuery.Builder(dormMetadata).build();
         return dao.get(basicQuery) != null;
+    }
+
+    @Override
+    public DormMetadata updateDormMetadata(DormMetadata dormMetadata) {
+        return dao.saveOrUpdateMetadata(dormMetadata);
+    }
+
+    @Override
+    public DormMetadata createDormMetadata(DormMetadata dormMetadata) {
+        return dao.saveOrUpdateMetadata(dormMetadata);
+    }
+
+    @Override
+    public void storeDerivedObject(DerivedObject derivedObject, File file) {
+        repository.store(derivedObject, file);
     }
 }

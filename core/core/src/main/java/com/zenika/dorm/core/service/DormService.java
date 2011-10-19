@@ -11,14 +11,6 @@ import java.io.File;
  */
 public interface DormService {
 
-    public void storeMetadata(DormMetadata metadata);
-
-    public void storeResource(DormResource resource, DormMetadata metadata, DormServiceStoreResourceConfig config);
-
-    public DormResource getResource(DormMetadata metadata);
-
-    public DependencyNode addDependenciesToNode(DependencyNode node);
-
     boolean isDormMetadataAlreadyExist(DormMetadata dormMetadata);
 
     DormMetadata updateDormMetadata(DormMetadata dormMetadata);
@@ -26,4 +18,6 @@ public interface DormService {
     DormMetadata createDormMetadata(DormMetadata dormMetadata);
 
     void storeDerivedObject(DerivedObject derivedObject, File file);
+
+    DormMetadata getDormMetadata(DormMetadata dormMetadata, String mavenPlugin);
 }

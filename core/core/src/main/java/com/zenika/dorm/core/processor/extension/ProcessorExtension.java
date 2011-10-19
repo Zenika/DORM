@@ -10,11 +10,7 @@ import java.io.File;
  */
 public abstract class ProcessorExtension {
 
-    public abstract DormWebServiceResult pushFromGenericRequest(DormWebServiceRequest request);
+    public abstract void push(String uri, File file);
 
-    public abstract DormWebServiceResult push(String uri, File file);
-
-    public abstract DormWebServiceResult getFromGenericRequest(DormWebServiceRequest request);
-
-    public abstract DormWebServiceResult get(DormWebServiceRequest request);
+    public abstract Object get(String request);
 }

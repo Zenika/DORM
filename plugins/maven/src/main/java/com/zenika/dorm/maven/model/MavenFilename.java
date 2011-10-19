@@ -5,6 +5,7 @@ import com.zenika.dorm.maven.constant.MavenConstant;
 import com.zenika.dorm.maven.exception.MavenException;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -15,7 +16,7 @@ import java.util.regex.Pattern;
 public class MavenFilename {
 
     private static final String REGEX_TIMESTAMP = "^[0-9]*(\\.)[0-9]*$";
-    private static final Pattern PATTERN_BUILDNUMBER = Pattern.compile("^(\\d+)\\D.*$");
+    private static final Pattern PATTERN_BUILD_NUMBER = Pattern.compile("^(\\d+)\\D.*$");
 
     private String filename;
     private String extension;
@@ -31,7 +32,7 @@ public class MavenFilename {
         extractFields();
     }
 
-    public MavenFilename(MavenUri uri, MavenMetadata metadata) {
+    public MavenFilename(MavenUri uri, MavenPlugin metadata) {
         MavenBuildInfo info = metadata.getBuildInfo();
         this.extension = info.getExtension();
         this.classifier = info.getClassifier();
@@ -85,7 +86,7 @@ public class MavenFilename {
                 throw new MavenException("Maven snapshot timestamp is invalid : " + timestamp);
             }
 
-            Matcher matcher = PATTERN_BUILDNUMBER.matcher(elements[1]);
+            Matcher matcher = PATTERN_BUILD_NUMBER.matcher(elements[1]);
 
             if (!matcher.find()) {
                 throw new MavenException("Maven snapshot buildnumber is required in : " + filename);

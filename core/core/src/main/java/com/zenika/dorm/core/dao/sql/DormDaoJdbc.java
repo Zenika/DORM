@@ -23,7 +23,7 @@ public class DormDaoJdbc implements DormDao {
     private ExtensionFactoryServiceLoader serviceLoader;
 
     @Override
-    public void saveOrUpdateMetadata(final DormMetadata metadata) {
+    public DormMetadata saveOrUpdateMetadata(final DormMetadata metadata) {
         Guice.createInjector(
                 new AbstractModule() {
                     @Override

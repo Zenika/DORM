@@ -1,5 +1,6 @@
 package com.zenika.dorm.maven.model;
 
+import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.maven.constant.MavenConstant;
 import com.zenika.dorm.maven.exception.MavenException;
 import org.apache.commons.lang3.StringUtils;
@@ -132,5 +133,12 @@ public class MavenUri {
                 .append("filename", filename)
                 .appendSuper(super.toString())
                 .toString();
+    }
+
+    public DormMetadata toDormMetadata() {
+        DormMetadata dormMetadata = new DormMetadata();
+        dormMetadata.setName(artifactId);
+        dormMetadata.setVersion(version);
+        return dormMetadata;
     }
 }

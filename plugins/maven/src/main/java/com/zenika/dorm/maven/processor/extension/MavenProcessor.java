@@ -9,13 +9,11 @@ import com.zenika.dorm.core.model.ws.DormWebServiceResult;
 import com.zenika.dorm.core.processor.extension.ProcessorExtension;
 import com.zenika.dorm.core.service.DormService;
 import com.zenika.dorm.core.service.FileValidator;
-import com.zenika.dorm.maven.constant.MavenConstant;
 import com.zenika.dorm.maven.model.MavenPlugin;
 import com.zenika.dorm.maven.model.MavenUri;
 import com.zenika.dorm.maven.model.PomObject;
 import com.zenika.dorm.maven.service.MavenProxyService;
 import com.zenika.dorm.maven.service.MavenService;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -72,13 +70,12 @@ public class MavenProcessor extends ProcessorExtension {
      * @return
      */
     @Override
-    public DormWebServiceResult push(String uri, File file) {
+    public void push(String uri, File file) {
         MavenUri mavenUri = new MavenUri(checkNotNull(uri));
 
         // ignore put of maven-metadata.xml* files
         if (!mavenUri.isMavenMetadataUri()) {
             LOG.info("Ignore {}", mavenUri);
-            return getSucceedResponse();
         }
         DormMetadata dormMetadata = storeDormMetadata(mavenUri);
         MavenPlugin mavenPlugin = (MavenPlugin) dormMetadata.getPlugin(MavenPlugin.MAVEN_PLUGIN);
@@ -88,12 +85,10 @@ public class MavenProcessor extends ProcessorExtension {
         } else if (mavenUri.getFilename().isJarFile()) {
             storeDerivedObject(file, mavenUri, dormMetadata);
         }
-        return getSucceedResponse();
     }
 
-
     private DormMetadata storeDormMetadata(MavenUri mavenUri) {
-        DormMetadata dormMetadata = new DormMetadata();
+        DormMetadata dormMetadata = mavenUri.toDormMetadata();
         if (dormService.isDormMetadataAlreadyExist(dormMetadata)) {
             if (dormMetadata.hasPlugin(MavenPlugin.MAVEN_PLUGIN)) {
                 return dormMetadata;
@@ -169,66 +164,49 @@ public class MavenProcessor extends ProcessorExtension {
     }
 
     @Override
-    public DormWebServiceResult get(DormWebServiceRequest request) {
+    public Object get(String uri) {
         DormWebServiceResult.Builder responseBuilder = createResponseBuilder();
-        MavenUri mavenUri = new MavenUri(request.getProperty("uri"));
+        MavenUri mavenUri = new MavenUri(uri);
         if (!mavenUri.isMavenMetadataUri()) {
             return responseBuilder.notfound().build();
         }
-        MavenPlugin mavenMetadata = createMavenMetadata(mavenUri);
-        DormResource dormResource = mavenService.getArtifact(mavenMetadata);
-        if (mavenService.isUseProxy(dormResource)) {
-            return getResponseWithProxy(responseBuilder, dormResource, mavenMetadata);
+        DormMetadata dormMetadata = mavenUri.toDormMetadata();
+        if (dormService.isDormMetadataAlreadyExist(dormMetadata)) {
+            dormMetadata = dormService.getDormMetadata(dormMetadata, MavenPlugin.MAVEN_PLUGIN);
+            MavenPlugin mavenPlugin = (MavenPlugin) dormMetadata.getPlugin(MavenPlugin.MAVEN_PLUGIN);
+            if (mavenUri.getFilename().isJarFile() && dormMetadata.hasDerivedObject()) {
+                DerivedObject derivedObject = dormMetadata.getDerivedObject();
+                return getSelectedObject(mavenUri, derivedObject);
+            } else if (mavenUri.getFilename().isPomFile() && mavenPlugin.hasPomObject()) {
+                PomObject pomObject = mavenPlugin.getPomObject();
+                return getSelectedObject(mavenUri, pomObject);
+            }
+        } else {
+            return proxyService.getArtifact(mavenUri);
         }
-        return responseBuilder.file(dormResource.getFile()).succeeded().build();
+        return null;
     }
 
-    private DormMetadata createMavenMetadata(MavenUri mavenUri) {
-        DormMetadata dormMetadata = new DormMetadata();
-        dormMetadata.setName(mavenUri.getArtifactId());
-        dormMetadata.setVersion(mavenUri.getVersion());
-        return dormMetadata;
+    private Object getSelectedObject(MavenUri mavenUri, DerivedObject derivedObject) {
+        Object object = null;
+        if (mavenUri.getFilename().isHashMd5() && derivedObject.hasHashMd5()) {
+            object = derivedObject.getHashMd5();
+        } else if (mavenUri.getFilename().isHashSha1() && derivedObject.hasHashSha1()) {
+            object = derivedObject.getHashSha1();
+        } else if (mavenUri.getFilename().isJarFile() && derivedObject.hasLocation()) {
+            object = new File(derivedObject.getLocation());
+        }
+        return object;
+    }
+
+    private DormWebServiceResult.Builder createResponseBuilder() {
+        return new DormWebServiceResult.Builder();
     }
 
     private DormWebServiceResult getSucceedResponse() {
         return new DormWebServiceResult.Builder()
                 .origin(MavenPlugin.MAVEN_PLUGIN)
                 .succeeded()
-                .build();
-    }
-
-    private DormWebServiceResult getResponseWithProxy(DormWebServiceResult.Builder responseBuilder, DormResource dormResource, MavenPlugin mavenMetadata) {
-        dormResource = proxyService.getArtifact(mavenMetadata);
-        if (isNotAvailableResourceFromProxy(dormResource)) {
-            return responseBuilder.notfound().build();
-        } else {
-            if (dormResource.hasFile()) {
-                return responseBuilder.file(dormResource.getFile()).succeeded().build();
-            } else if (dormResource.hasInputStream()) {
-                return responseBuilder.inputStream(dormResource.getInputStream()).succeeded().build();
-            } else {
-                return responseBuilder.notfound().build();
-            }
-        }
-    }
-
-    private boolean isNotAvailableResourceFromProxy(DormResource dormResource) {
-        return dormResource == null;
-    }
-
-    @Override
-    public DormWebServiceResult pushFromGenericRequest(DormWebServiceRequest request) {
-        return push(getRequestFromGeneric(request));
-    }
-
-    @Override
-    public DormWebServiceResult getFromGenericRequest(DormWebServiceRequest request) {
-        return get(getRequestFromGeneric(request));
-    }
-
-    private DormWebServiceRequest getRequestFromGeneric(DormWebServiceRequest request) {
-        return new DormWebServiceRequest.Builder(request)
-                .property("uri", request.getProperty("path"))
                 .build();
     }
 }

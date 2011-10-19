@@ -30,15 +30,12 @@ public class MavenProxyServiceHttp implements MavenProxyService {
     private ProxyWebResourceWrapper wrapper;
 
     @Override
-    public DormResource getArtifact(DormMetadata metadata) {
+    public Object getArtifact(MavenUri mavenUri) {
         WebResource webResource = wrapper.get();
-        MavenUri uri = new MavenUri(convertMetadata(metadata));
-        LOG.info("Path proxy: {}", uri.getUri());
-
+        LOG.info("Path proxy: {}", mavenUri.getUri());
         ClientResponse response;
-
         try {
-            response = webResource.path(uri.getUri())
+            response = webResource.path(mavenUri.getUri())
                     .accept(MediaType.APPLICATION_OCTET_STREAM_TYPE)
                     .get(ClientResponse.class);
         } catch (UniformInterfaceException e) {
@@ -48,23 +45,15 @@ public class MavenProxyServiceHttp implements MavenProxyService {
                 throw new CoreException(e);
             }
         }
-//
         if (Integer.parseInt(response.getHeaders().get("Content-length").get(0)) < 10000) {
-            return new DefaultDormResource(uri.getFilename().getFilename(),
-                    uri.getFilename().getExtension(),
+            return new DefaultDormResource(mavenUri.getFilename().getFilename(),
+                    mavenUri.getFilename().getExtension(),
                     response.getEntity(InputStream.class));
         } else {
             File file = response.getEntity(File.class);
             new FileValidator().validateFile(file);
-            return DefaultDormResource.create(uri.getFilename().getFilename(), file);
+            return DefaultDormResource.create(mavenUri.getFilename().getFilename(), file);
         }
     }
 
-
-    private MavenMetadata convertMetadata(DormMetadata dormMetadata) {
-        if (!dormMetadata.getClass().equals(MavenMetadata.class)) {
-            throw new CoreException("The metadata isn't a Maven metadata");
-        }
-        return (MavenMetadata) dormMetadata;
-    }
 }

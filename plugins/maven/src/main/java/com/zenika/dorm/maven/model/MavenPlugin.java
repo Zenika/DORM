@@ -1,6 +1,7 @@
 package com.zenika.dorm.maven.model;
 
 import com.zenika.dorm.core.model.PluginMetadata;
+import com.zenika.dorm.maven.constant.MavenConstant;
 
 /**
  * @author Antoine ROUAZE <antoine.rouaze AT zenika.com>
@@ -12,6 +13,8 @@ public class MavenPlugin implements PluginMetadata{
     private String artifactId;
     private String groupId;
     private String version;
+
+    private MavenBuildInfo buildInfo;
 
     private PomObject pomObject;
 
@@ -42,5 +45,25 @@ public class MavenPlugin implements PluginMetadata{
 
     public void setPomObject(PomObject pomObject) {
         this.pomObject = pomObject;
+    }
+
+    public String getArtifactId() {
+        return artifactId;
+    }
+
+    public String getGroupId() {
+        return groupId;
+    }
+
+    public String getVersion() {
+        return version;
+    }
+
+    public MavenBuildInfo getBuildInfo() {
+        return buildInfo;
+    }
+
+    public boolean isSnapshot() {
+        return version.endsWith("-" + MavenConstant.Special.SNAPSHOT);
     }
 }
