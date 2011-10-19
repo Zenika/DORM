@@ -1,7 +1,6 @@
 package com.zenika.dorm.maven.test.fixtures;
 
 import com.google.inject.Inject;
-import com.zenika.dorm.maven.model.MavenMetadata;
 import com.zenika.dorm.maven.model.MavenUri;
 import com.zenika.dorm.maven.service.MavenService;
 

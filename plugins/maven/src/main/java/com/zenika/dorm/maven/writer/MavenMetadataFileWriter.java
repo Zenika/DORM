@@ -1,7 +1,6 @@
 package com.zenika.dorm.maven.writer;
 
 import com.zenika.dorm.maven.converter.MavenDormMetadataConverter;
-import com.zenika.dorm.maven.model.MavenMetadata;
 import org.apache.maven.artifact.repository.metadata.Metadata;
 import org.apache.maven.artifact.repository.metadata.io.xpp3.MetadataXpp3Writer;
 

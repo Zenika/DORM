@@ -1,7 +1,5 @@
 package com.zenika.dorm.maven.test.helper;
 
-import com.zenika.dorm.core.model.Dependency;
-import com.zenika.dorm.core.model.DependencyNode;
 import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.core.model.impl.DefaultDependency;
 import com.zenika.dorm.core.model.impl.DefaultDependencyNode;
@@ -9,7 +7,6 @@ import com.zenika.dorm.core.model.impl.Usage;
 import com.zenika.dorm.core.model.ws.DormWebServiceRequest;
 import com.zenika.dorm.core.test.helper.ExtensionFixtures;
 import com.zenika.dorm.maven.constant.MavenConstant;
-import com.zenika.dorm.maven.model.MavenMetadata;
 import com.zenika.dorm.maven.model.builder.MavenBuildInfoBuilder;
 import com.zenika.dorm.maven.model.builder.MavenMetadataBuilder;
 import org.slf4j.Logger;

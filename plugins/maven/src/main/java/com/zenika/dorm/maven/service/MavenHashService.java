@@ -1,12 +1,9 @@
 package com.zenika.dorm.maven.service;
 
 import com.google.inject.Inject;
-import com.zenika.dorm.core.model.DormResource;
 import com.zenika.dorm.core.service.DormService;
 import com.zenika.dorm.maven.constant.MavenConstant;
 import com.zenika.dorm.maven.exception.MavenException;
-import com.zenika.dorm.maven.model.MavenBuildInfo;
-import com.zenika.dorm.maven.model.MavenMetadata;
 import com.zenika.dorm.maven.model.builder.MavenBuildInfoBuilder;
 import com.zenika.dorm.maven.model.builder.MavenMetadataBuilder;
 import org.apache.commons.codec.digest.DigestUtils;

@@ -2,7 +2,6 @@ package com.zenika.dorm.maven.test.processor.extension;
 
 
 import com.zenika.dorm.core.model.ws.DormWebServiceRequest;
-import com.zenika.dorm.maven.model.MavenMetadata;
 import com.zenika.dorm.maven.model.builder.MavenMetadataBuilder;
 import com.zenika.dorm.maven.processor.extension.MavenProcessor;
 import com.zenika.dorm.maven.service.MavenService;

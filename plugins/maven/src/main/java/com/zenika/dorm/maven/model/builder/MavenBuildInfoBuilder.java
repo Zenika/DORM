@@ -1,7 +1,5 @@
 package com.zenika.dorm.maven.model.builder;
 
-import com.zenika.dorm.maven.model.MavenBuildInfo;
-
 /**
  * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>
  */

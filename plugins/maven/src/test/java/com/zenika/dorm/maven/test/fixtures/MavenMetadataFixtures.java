@@ -1,6 +1,5 @@
 package com.zenika.dorm.maven.test.fixtures;
 
-import com.zenika.dorm.maven.model.MavenMetadata;
 import com.zenika.dorm.maven.model.builder.MavenBuildInfoBuilder;
 import com.zenika.dorm.maven.model.builder.MavenMetadataBuilder;
 

@@ -1,7 +1,5 @@
 package com.zenika.dorm.core.graph.visitor;
 
-import com.zenika.dorm.core.model.DependencyNode;
-
 /**
  * Implementation of an hierarchical visitor pattern
  * See http://c2.com/cgi/wiki?HierarchicalVisitorPattern

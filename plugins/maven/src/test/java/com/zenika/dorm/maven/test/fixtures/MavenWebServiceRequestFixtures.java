@@ -3,7 +3,6 @@ package com.zenika.dorm.maven.test.fixtures;
 import com.zenika.dorm.core.model.ws.DormWebServiceRequest;
 import com.zenika.dorm.core.util.DormFileUtils;
 import com.zenika.dorm.maven.exception.MavenException;
-import com.zenika.dorm.maven.model.MavenMetadata;
 
 import java.io.File;
 import java.net.URISyntaxException;

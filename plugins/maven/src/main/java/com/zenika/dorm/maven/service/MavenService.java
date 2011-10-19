@@ -1,9 +1,6 @@
 package com.zenika.dorm.maven.service;
 
 import com.google.inject.Inject;
-import com.zenika.dorm.core.model.Dependency;
-import com.zenika.dorm.core.model.DependencyNode;
-import com.zenika.dorm.core.model.DormResource;
 import com.zenika.dorm.core.model.impl.DefaultDependency;
 import com.zenika.dorm.core.model.impl.DefaultDependencyNode;
 import com.zenika.dorm.core.model.impl.DefaultDormResource;
@@ -11,9 +8,6 @@ import com.zenika.dorm.core.service.DormService;
 import com.zenika.dorm.core.service.FileValidator;
 import com.zenika.dorm.core.service.config.DormServiceStoreResourceConfig;
 import com.zenika.dorm.maven.exception.MavenException;
-import com.zenika.dorm.maven.model.MavenBuildInfo;
-import com.zenika.dorm.maven.model.MavenFilename;
-import com.zenika.dorm.maven.model.MavenMetadata;
 import com.zenika.dorm.maven.model.MavenUri;
 import com.zenika.dorm.maven.model.builder.MavenBuildInfoBuilder;
 import com.zenika.dorm.maven.model.builder.MavenMetadataBuilder;

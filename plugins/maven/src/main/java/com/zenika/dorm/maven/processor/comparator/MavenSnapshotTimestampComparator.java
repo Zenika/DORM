@@ -2,8 +2,6 @@ package com.zenika.dorm.maven.processor.comparator;
 
 import com.zenika.dorm.core.util.DormStringUtils;
 import com.zenika.dorm.maven.exception.MavenException;
-import com.zenika.dorm.maven.model.MavenBuildInfo;
-import com.zenika.dorm.maven.model.MavenMetadata;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -2,7 +2,6 @@ package com.zenika.dorm.core.dao;
 
 
 import com.zenika.dorm.core.dao.query.DormBasicQuery;
-import com.zenika.dorm.core.model.DependencyNode;
 import com.zenika.dorm.core.model.DormMetadata;
 
 public interface DormDao {

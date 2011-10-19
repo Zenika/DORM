@@ -1,6 +1,5 @@
 package com.zenika.dorm.core.model.impl;
 
-import com.zenika.dorm.core.model.DormResource;
 import org.apache.commons.io.FilenameUtils;
 
 import java.io.File;

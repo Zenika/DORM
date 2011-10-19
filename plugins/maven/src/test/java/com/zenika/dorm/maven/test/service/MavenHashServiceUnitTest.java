@@ -1,9 +1,7 @@
 package com.zenika.dorm.maven.test.service;
 
-import com.zenika.dorm.core.model.DormResource;
 import com.zenika.dorm.core.model.impl.DefaultDormResource;
 import com.zenika.dorm.core.service.DormService;
-import com.zenika.dorm.maven.model.MavenMetadata;
 import com.zenika.dorm.maven.service.MavenHashService;
 import com.zenika.dorm.maven.test.fixtures.MavenWebServiceRequestFixtures;
 import com.zenika.dorm.maven.test.unit.MavenUnitTest;

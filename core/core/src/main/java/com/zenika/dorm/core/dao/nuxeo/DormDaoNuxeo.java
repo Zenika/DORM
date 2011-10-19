@@ -6,7 +6,6 @@ import com.google.inject.Inject;
 import com.zenika.dorm.core.dao.DormDao;
 import com.zenika.dorm.core.dao.nuxeo.provider.NuxeoWebResourceWrapper;
 import com.zenika.dorm.core.dao.query.DormBasicQuery;
-import com.zenika.dorm.core.model.DependencyNode;
 import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.core.service.spi.ExtensionFactoryServiceLoader;
 

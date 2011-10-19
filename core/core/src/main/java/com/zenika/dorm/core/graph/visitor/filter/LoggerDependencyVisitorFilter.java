@@ -2,7 +2,6 @@ package com.zenika.dorm.core.graph.visitor.filter;
 
 import com.zenika.dorm.core.graph.visitor.DependencyVisitorFilter;
 import com.zenika.dorm.core.graph.visitor.DependencyVisitorFilterChain;
-import com.zenika.dorm.core.model.DependencyNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

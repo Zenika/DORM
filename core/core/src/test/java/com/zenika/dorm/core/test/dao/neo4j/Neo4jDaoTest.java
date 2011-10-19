@@ -1,16 +1,13 @@
 package com.zenika.dorm.core.test.dao.neo4j;
 
-import com.google.guiceberry.junit4.GuiceBerryRule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.zenika.dorm.core.dao.neo4j.DormDaoNeo4j;
 import com.zenika.dorm.core.dao.query.DormBasicQuery;
-import com.zenika.dorm.core.model.DependencyNode;
 import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.core.test.dao.neo4j.util.Neo4jTestModule;
 import com.zenika.dorm.core.test.model.DormMetadataTest;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

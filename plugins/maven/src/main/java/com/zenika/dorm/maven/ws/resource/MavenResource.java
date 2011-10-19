@@ -3,7 +3,6 @@ package com.zenika.dorm.maven.ws.resource;
 import com.google.inject.Inject;
 import com.zenika.dorm.core.model.ws.DormWebServiceRequest;
 import com.zenika.dorm.core.model.ws.DormWebServiceResult;
-import com.zenika.dorm.maven.model.MavenMetadata;
 import com.zenika.dorm.maven.processor.extension.MavenProcessor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -74,24 +73,7 @@ public class MavenResource {
 
         String uri = path + "/" + filename;
 
-        if (LOG.isInfoEnabled()) {
-            LOG.info("Maven webservice PUT with uri : " + uri);
-        }
-
-        DormWebServiceRequest.Builder requestBuilder = new DormWebServiceRequest.Builder()
-                .origin(MavenMetadata.EXTENSION_NAME)
-                .property("uri", uri);
-
-        if (file.length() > 0) {
-            requestBuilder.file(file);
-        }
-
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("Size of the uploaded file : " + file.length());
-        }
-
-        DormWebServiceRequest request = requestBuilder.build();
-        processor.push(request);
+        processor.push(uri, file);
 
         return Response.status(Response.Status.OK).build();
     }

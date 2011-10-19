@@ -1,9 +1,6 @@
 package com.zenika.dorm.maven.test.service;
 
 import com.google.inject.Guice;
-import com.zenika.dorm.core.model.DormResource;
-import com.zenika.dorm.maven.model.MavenBuildInfo;
-import com.zenika.dorm.maven.model.MavenMetadata;
 import com.zenika.dorm.maven.model.MavenUri;
 import com.zenika.dorm.maven.model.builder.MavenMetadataBuilder;
 import com.zenika.dorm.maven.service.MavenProxyService;

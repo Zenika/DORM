@@ -24,7 +24,7 @@ public class MavenUri {
         extractFields();
     }
 
-    public MavenUri(MavenMetadata metadata) {
+    public MavenUri(MavenPlugin metadata) {
         this.groupId = metadata.getGroupId();
         this.artifactId = metadata.getArtifactId();
         this.version = metadata.getVersion();
@@ -87,7 +87,9 @@ public class MavenUri {
     }
 
     public boolean isMavenMetadataUri() {
-        return !StringUtils.equals(filename.getFilename(), MavenConstant.Special.MAVEN_METADATA_XML);
+        return !StringUtils.endsWithAny(filename.getFilename(),
+                MavenConstant.Special.MAVEN_METADATA_XML, MavenConstant.Special.MAVEN_METADATA_XML + ".md5",
+                MavenConstant.Special.MAVEN_METADATA_XML + ".sha1");
     }
 
     public String getUri() {

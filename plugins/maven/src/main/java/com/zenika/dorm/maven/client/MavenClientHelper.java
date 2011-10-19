@@ -1,8 +1,6 @@
 package com.zenika.dorm.maven.client;
 
-import com.zenika.dorm.core.model.Dependency;
 import com.zenika.dorm.maven.exception.MavenException;
-import com.zenika.dorm.maven.model.MavenMetadata;
 import org.sonatype.aether.artifact.Artifact;
 import org.sonatype.aether.artifact.ArtifactType;
 import org.sonatype.aether.util.artifact.DefaultArtifact;

@@ -5,13 +5,12 @@ import com.zenika.dorm.maven.constant.MavenConstant;
 import com.zenika.dorm.maven.exception.MavenException;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>
+ * @author Antoine ROUAZE <antoine.rouaze AT zenika.com>
  */
 public class MavenFilename {
 
@@ -136,6 +135,22 @@ public class MavenFilename {
                         filenameInWork.length() - (extensionElement.length() + 1));
             }
         }
+    }
+
+    public boolean isHashMd5(){
+        return StringUtils.equals(extension, "md5");
+    }
+
+    public boolean isHashSha1(){
+        return StringUtils.equals(extension, "sha1");
+    }
+
+    public boolean isPomFile(){
+        return StringUtils.equals(extension, "pom") || StringUtils.endsWith(filename, ".pom");
+    }
+
+    public boolean isJarFile(){
+        return StringUtils.equals(extension, "jar") || StringUtils.endsWith(filename, ".jar");
     }
 
     public String getFileNameWithoutExtension() {

@@ -1,7 +1,6 @@
 package com.zenika.dorm.core.repository;
 
 import com.zenika.dorm.core.model.DormMetadata;
-import com.zenika.dorm.core.model.DormResource;
 import com.zenika.dorm.core.service.config.DormServiceStoreResourceConfig;
 
 /**

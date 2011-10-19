@@ -1,9 +1,7 @@
 package com.zenika.dorm.maven.test.pom;
 
-import com.zenika.dorm.core.model.Dependency;
 import com.zenika.dorm.core.model.impl.DefaultDependency;
 import com.zenika.dorm.core.model.impl.Usage;
-import com.zenika.dorm.maven.model.MavenMetadata;
 import com.zenika.dorm.maven.pom.MavenPomReader;
 import com.zenika.dorm.maven.test.fixtures.MavenWebServiceRequestFixtures;
 import com.zenika.dorm.maven.test.unit.MavenUnitTest;

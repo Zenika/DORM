@@ -1,6 +1,5 @@
 package com.zenika.dorm.maven.test.model;
 
-import com.zenika.dorm.maven.model.MavenFilename;
 import com.zenika.dorm.maven.model.MavenUri;
 import com.zenika.dorm.maven.test.fixtures.MavenConstantFixtures;
 import com.zenika.dorm.maven.test.unit.MavenUnitTest;

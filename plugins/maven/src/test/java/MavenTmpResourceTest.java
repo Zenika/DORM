@@ -1,4 +1,3 @@
-import com.zenika.dorm.core.model.Dependency;
 import com.zenika.dorm.core.model.impl.DefaultDependency;
 import com.zenika.dorm.maven.client.MavenClientConfig;
 import com.zenika.dorm.maven.client.MavenClientService;

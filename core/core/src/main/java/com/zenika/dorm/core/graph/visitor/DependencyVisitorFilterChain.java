@@ -1,6 +1,5 @@
 package com.zenika.dorm.core.graph.visitor;
 
-import com.zenika.dorm.core.model.DependencyNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
