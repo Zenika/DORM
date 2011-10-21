@@ -20,7 +20,7 @@ public class MavenClientHelper {
         MavenPluginMetadata mavenPluginMetadata;
 
         try {
-            mavenPluginMetadata = (MavenPluginMetadata) dormMetadata.getPlugin(MavenPluginMetadata.MAVEN_PLUGIN);
+            mavenPluginMetadata = (MavenPluginMetadata) dormMetadata.getPlugin(MavenPluginMetadata.class);
         } catch (ClassCastException e) {
             throw new MavenException("Extension is not maven");
         }

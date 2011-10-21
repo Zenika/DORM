@@ -19,5 +19,5 @@ public interface DormService {
 
     void storeDerivedObject(DerivedObject derivedObject, File file);
 
-    DormMetadata getDormMetadata(DormMetadata dormMetadata, String mavenPlugin);
+    DormMetadata getDormMetadata(DormMetadata dormMetadata, Class mavenPlugin);
 }

@@ -1,7 +1,7 @@
 package com.zenika.dorm.core.service.spi;
 
 import com.google.inject.Singleton;
-import com.zenika.dorm.core.factory.ExtensionMetadataFactory;
+import com.zenika.dorm.core.factory.PluginExtensionMetadataFactory;
 
 import java.util.ServiceLoader;
 
@@ -11,16 +11,16 @@ import java.util.ServiceLoader;
 @Singleton
 public class ExtensionFactoryServiceLoader {
 
-    private ServiceLoader<ExtensionMetadataFactory> loader;
+    private ServiceLoader<PluginExtensionMetadataFactory> loader;
 
     public ExtensionFactoryServiceLoader(){
-        loader = ServiceLoader.load(ExtensionMetadataFactory.class);
+        loader = ServiceLoader.load(PluginExtensionMetadataFactory.class);
     }
 
-    public ExtensionMetadataFactory getInstanceOf(String extensionName){
-        for (ExtensionMetadataFactory metadata:loader){
-            if (metadata.getExtensionName().equals(extensionName)){
-                return metadata;
+    public PluginExtensionMetadataFactory getInstanceOf(String extensionName){
+        for (PluginExtensionMetadataFactory metadataPlugin :loader){
+            if (metadataPlugin.getExtensionName().equals(extensionName)){
+                return metadataPlugin;
             }
         }
         return null;

@@ -7,7 +7,7 @@ import java.util.Map;
 /**
  * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>
  */
-public interface ExtensionMetadataFactory {
+public interface PluginExtensionMetadataFactory {
 
     public String getExtensionName();
 

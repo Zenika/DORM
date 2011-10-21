@@ -44,13 +44,11 @@ public class MavenProxyServiceHttp implements MavenProxyService {
             }
         }
         if (Integer.parseInt(response.getHeaders().get("Content-length").get(0)) < 10000) {
-            return new DefaultDormResource(mavenUri.getFilename().getFilename(),
-                    mavenUri.getFilename().getExtension(),
-                    response.getEntity(InputStream.class));
+            return new response.getEntity(InputStream.class);
         } else {
             File file = response.getEntity(File.class);
             new FileValidator().validateFile(file);
-            return DefaultDormResource.create(mavenUri.getFilename().getFilename(), file);
+            return file;
         }
     }
 

@@ -47,4 +47,9 @@ public class DefaultDormService implements DormService {
     public void storeDerivedObject(DerivedObject derivedObject, File file) {
         repository.store(derivedObject, file);
     }
+
+    @Override
+    public DormMetadata getDormMetadata(DormMetadata dormMetadata, Class mavenPlugin) {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
 }

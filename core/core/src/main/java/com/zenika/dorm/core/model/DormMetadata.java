@@ -25,7 +25,12 @@ public class DormMetadata {
 
     private List<DormMetadata> metadataChildren = new ArrayList<DormMetadata>();
 
-    private Map<String, PluginMetadata> pluginMetadatas = new HashMap<String, PluginMetadata>();
+    /**
+     * TODO: See with Gregory if is better to use class as key for the map :
+     * private Map<String, PluginMetadata> pluginMetadatas = new HashMap<String, PluginMetadata>();
+     * private Map<Class<? extends PluginMetadata>, ? extends PluginMetadata> pluginMetadatas = new HashMap<Class<? extends PluginMetadata>, PluginMetadata>();
+     */
+    private PluginHashMap pluginMetadatas = new PluginHashMap();
 
     public DormMetadata() {
         id = null;
@@ -56,14 +61,14 @@ public class DormMetadata {
     }
 
     public void addPluginMetadata(PluginMetadata metadata) {
-        pluginMetadatas.put(metadata.getType(), metadata);
+        pluginMetadatas.put(metadata.getClass(), metadata);
     }
 
-    public boolean hasPlugin(String type){
+    public boolean hasPlugin(Class type){
         return pluginMetadatas.get(type) != null;
     }
 
-    public PluginMetadata getPlugin(String type){
+    public <T extends PluginMetadata> T getPlugin(Class<T> type){
         return pluginMetadatas.get(type);
     }
 

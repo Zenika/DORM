@@ -7,9 +7,14 @@ import com.zenika.dorm.maven.constant.MavenConstant;
 /**
  * @author Antoine ROUAZE <antoine.rouaze AT zenika.com>
  */
-public class MavenPluginMetadata implements PluginMetadata{
+public class MavenPluginMetadata implements PluginMetadata {
 
     public static final String MAVEN_PLUGIN = "maven_plugin";
+
+    public static final String METADATA_GROUP_ID = "metadataGroupId";
+    public static final String METADATA_ARTIFACT_ID = "metadataArtifactId";
+    public static final String METADATA_VERSION_ID = "metadataVersionId";
+    public static final String METADATA_SNAPSHOT = "metadataSnapshot";
 
     private String artifactId;
     private String groupId;
@@ -38,14 +43,22 @@ public class MavenPluginMetadata implements PluginMetadata{
 
     @Override
     public DormMetadata toDormMetadata() {
-        DormMetadata dormMetadata = new DormMetadata();
+        return toDormMetadata(new DormMetadata());
+
+    }
+
+    public DormMetadata toDormMetadata(Long id) {
+        return toDormMetadata(new DormMetadata(id));
+    }
+
+    private DormMetadata toDormMetadata(DormMetadata dormMetadata) {
         dormMetadata.setName(getArtifactId());
         dormMetadata.setVersion(getVersion());
         dormMetadata.addPluginMetadata(this);
         return dormMetadata;
     }
 
-    public boolean hasPomObject(){
+    public boolean hasPomObject() {
         return pomObject != null;
     }
 

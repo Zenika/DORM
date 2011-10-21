@@ -4,7 +4,7 @@ import com.google.inject.Inject;
 import com.sun.jersey.api.client.WebResource;
 import com.zenika.dorm.core.dao.query.DormBasicQuery;
 import com.zenika.dorm.core.exception.CoreException;
-import com.zenika.dorm.core.factory.ExtensionMetadataFactory;
+import com.zenika.dorm.core.factory.PluginExtensionMetadataFactory;
 import com.zenika.dorm.core.model.DormMetadata;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,8 +45,8 @@ public class Neo4jSinglePushTask extends Neo4jAbstractTask {
         if (response == null) {
 
             Long id;
-            ExtensionMetadataFactory factory = serviceLoader.getInstanceOf(metadata.getType());
-            Map<String, String> properties = factory.toMap(this.metadata);
+            PluginExtensionMetadataFactory factoryPlugin = serviceLoader.getInstanceOf(metadata.getType());
+            Map<String, String> properties = factoryPlugin.toMap(this.metadata);
 
             Neo4jMetadata metadata = new Neo4jMetadata(
                     this.metadata.getType(),
@@ -73,7 +73,7 @@ public class Neo4jSinglePushTask extends Neo4jAbstractTask {
             // Create index is useless for the moment
 //            createIndex(metadataResponse, this.metadata.getFunctionalId());
 
-            return factory.fromMap(id, properties);
+            return factoryPlugin.fromMap(id, properties);
         } else {
             LOG.info("The metadata already exist");
         }

@@ -56,9 +56,6 @@ public class MavenProcessor extends ProcessorExtension {
      * -- pom.sha1
      * -- maven-metadata.xml
      *
-     * @param uri
-     * @param file
-     * @return
      */
     @Override
     public void push(String uri, File file) {
@@ -69,7 +66,7 @@ public class MavenProcessor extends ProcessorExtension {
             LOG.info("Ignore {}", mavenUri);
         }
         DormMetadata dormMetadata = storeDormMetadata(mavenUri);
-        MavenPluginMetadata mavenPluginMetadata = (MavenPluginMetadata) dormMetadata.getPlugin(MavenPluginMetadata.MAVEN_PLUGIN);
+        MavenPluginMetadata mavenPluginMetadata = dormMetadata.getPlugin(MavenPluginMetadata.class);
 
         if (mavenUri.getFilename().isPomFile()) {
             storePomObject(file, mavenUri, dormMetadata, mavenPluginMetadata);
@@ -81,7 +78,7 @@ public class MavenProcessor extends ProcessorExtension {
     private DormMetadata storeDormMetadata(MavenUri mavenUri) {
         DormMetadata dormMetadata = mavenUri.toDormMetadata();
         if (dormService.isDormMetadataAlreadyExist(dormMetadata)) {
-            if (dormMetadata.hasPlugin(MavenPluginMetadata.MAVEN_PLUGIN)) {
+            if (dormMetadata.hasPlugin(MavenPluginMetadata.class)) {
                 return dormMetadata;
             } else {
                 MavenPluginMetadata mavenPluginMetadata = new MavenPluginMetadata();
@@ -171,8 +168,8 @@ public class MavenProcessor extends ProcessorExtension {
 
     private Object getEntity(MavenUri mavenUri, DormMetadata dormMetadata) {
         Object entity = null;
-        dormMetadata = dormService.getDormMetadata(dormMetadata, MavenPluginMetadata.MAVEN_PLUGIN);
-        MavenPluginMetadata mavenPluginMetadata = (MavenPluginMetadata) dormMetadata.getPlugin(MavenPluginMetadata.MAVEN_PLUGIN);
+        dormMetadata = dormService.getDormMetadata(dormMetadata, MavenPluginMetadata.class);
+        MavenPluginMetadata mavenPluginMetadata = dormMetadata.getPlugin(MavenPluginMetadata.class);
         if (mavenUri.getFilename().isJarFile() && dormMetadata.hasDerivedObject()) {
             DerivedObject derivedObject = dormMetadata.getDerivedObject();
             entity = getSelectedObject(mavenUri, derivedObject);

@@ -2,7 +2,7 @@ package com.zenika.dorm.core.dao.nuxeo;
 
 import com.google.inject.Inject;
 import com.sun.jersey.api.client.WebResource;
-import com.zenika.dorm.core.factory.ExtensionMetadataFactory;
+import com.zenika.dorm.core.factory.PluginExtensionMetadataFactory;
 import com.zenika.dorm.core.model.DormMetadata;
 
 import javax.ws.rs.core.MediaType;
@@ -35,7 +35,7 @@ public class NuxeoSinglePushTask extends NuxeoAbstractTask {
                 .post(NuxeoMetadata.class);
 
         logRequest("POST", resource, NUXEO_POST);
-        ExtensionMetadataFactory factory = serviceLoader.getInstanceOf(metadata.getExtensionName());
-        return factory.fromMap(response.getId(), response.getProperties());
+        PluginExtensionMetadataFactory factoryPlugin = serviceLoader.getInstanceOf(metadata.getExtensionName());
+        return factoryPlugin.fromMap(response.getId(), response.getProperties());
     }
 }

@@ -1,7 +1,7 @@
 package com.zenika.dorm.core.dao.sql;
 
 import com.zenika.dorm.core.exception.CoreException;
-import com.zenika.dorm.core.factory.ExtensionMetadataFactory;
+import com.zenika.dorm.core.factory.PluginExtensionMetadataFactory;
 import com.zenika.dorm.core.model.DormMetadata;
 import org.apache.commons.dbutils.DbUtils;
 import org.slf4j.Logger;
@@ -33,9 +33,9 @@ public class JDBCSinglePushTask extends JDBCAbstractTask {
                 LOG.debug("The dependency " + this.metadata.getName() + " already insert in database");
             }
             connection.commit();
-            ExtensionMetadataFactory factory = serviceLoader.getInstanceOf(this.metadata.getType());
-            Map<String, String> properties = factory.toMap(this.metadata);
-            metadata = factory.fromMap(id, properties);
+            PluginExtensionMetadataFactory factoryPlugin = serviceLoader.getInstanceOf(this.metadata.getType());
+            Map<String, String> properties = factoryPlugin.toMap(this.metadata);
+            metadata = factoryPlugin.fromMap(id, properties);
         } catch (SQLException e) {
             if (connection != null) {
                 try {

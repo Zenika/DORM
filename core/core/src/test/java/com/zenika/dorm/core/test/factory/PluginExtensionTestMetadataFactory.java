@@ -1,6 +1,6 @@
 package com.zenika.dorm.core.test.factory;
 
-import com.zenika.dorm.core.factory.ExtensionMetadataFactory;
+import com.zenika.dorm.core.factory.PluginExtensionMetadataFactory;
 import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.core.test.model.DormMetadataTest;
 
@@ -12,7 +12,7 @@ import static com.zenika.dorm.core.test.model.DormMetadataTest.*;
 /**
  * @author Antoine ROUAZE <antoine.rouaze AT zenika.com>
  */
-public class ExtensionTestMetadataFactory implements ExtensionMetadataFactory {
+public class PluginExtensionTestMetadataFactory implements PluginExtensionMetadataFactory {
 
     @Override
     public String getExtensionName() {

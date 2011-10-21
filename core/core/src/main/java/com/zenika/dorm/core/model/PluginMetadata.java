@@ -8,4 +8,6 @@ public interface PluginMetadata {
     String getType();
 
     DormMetadata toDormMetadata();
+
+    DormMetadata toDormMetadata(Long id);
 }

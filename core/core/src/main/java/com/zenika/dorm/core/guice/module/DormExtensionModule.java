@@ -3,7 +3,7 @@ package com.zenika.dorm.core.guice.module;
 import com.google.inject.AbstractModule;
 import com.google.inject.multibindings.MapBinder;
 import com.google.inject.multibindings.Multibinder;
-import com.zenika.dorm.core.factory.ExtensionMetadataFactory;
+import com.zenika.dorm.core.factory.PluginExtensionMetadataFactory;
 import com.zenika.dorm.core.processor.extension.RequestAnalyser;
 
 /**
@@ -15,7 +15,7 @@ public abstract class DormExtensionModule extends AbstractModule {
 
     protected Multibinder<RequestAnalyser> requestAnalyserBinder;
 
-    protected MapBinder<String, ExtensionMetadataFactory> metadataFactories;
+    protected MapBinder<String, PluginExtensionMetadataFactory> metadataFactories;
 
     @Override
     protected void configure() {

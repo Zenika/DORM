@@ -4,6 +4,7 @@ import com.zenika.dorm.core.model.ws.DormWebServiceRequest;
 import com.zenika.dorm.core.processor.extension.ProcessorExtension;
 import com.zenika.dorm.core.processor.extension.RequestAnalyser;
 import com.zenika.dorm.maven.exception.MavenException;
+import com.zenika.dorm.maven.model.MavenPluginMetadata;
 import com.zenika.dorm.maven.pom.MavenPomReader;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -58,7 +59,7 @@ public class MavenRequestAnalyser implements RequestAnalyser {
     }
 
     private boolean isKnownOrigin(String origin) {
-        return StringUtils.equals(origin, MavenMetadata.EXTENSION_NAME);
+        return StringUtils.equals(origin, MavenPluginMetadata.MAVEN_PLUGIN);
     }
 
     private boolean isKnownFile(File file) {
