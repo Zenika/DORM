@@ -3,8 +3,6 @@ package com.zenika.dorm.maven.factory;
 import com.zenika.dorm.core.factory.ExtensionMetadataFactory;
 import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.core.util.DormStringUtils;
-import com.zenika.dorm.maven.model.builder.MavenBuildInfoBuilder;
-import com.zenika.dorm.maven.model.builder.MavenMetadataBuilder;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.HashMap;

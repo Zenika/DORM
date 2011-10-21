@@ -6,7 +6,6 @@ import com.zenika.dorm.maven.processor.extension.MavenRequestAnalyser;
 import com.zenika.dorm.maven.provider.ProxyWebResourceWrapper;
 import com.zenika.dorm.maven.service.MavenProxyService;
 import com.zenika.dorm.maven.service.MavenProxyServiceHttp;
-import com.zenika.dorm.maven.service.MavenService;
 import com.zenika.dorm.maven.ws.resource.MavenResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,7 +27,6 @@ public class MavenModule extends DormExtensionModule {
 
         bind(MavenResource.class);
         bind(MavenProcessor.class);
-        bind(MavenService.class);
         bind(ProxyWebResourceWrapper.class);
         bind(MavenProxyService.class).to(MavenProxyServiceHttp.class);
 

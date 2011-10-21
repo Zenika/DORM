@@ -1,54 +1,52 @@
 package com.zenika.dorm.maven.test.fixtures;
 
-import com.zenika.dorm.maven.model.builder.MavenBuildInfoBuilder;
-import com.zenika.dorm.maven.model.builder.MavenMetadataBuilder;
+import com.zenika.dorm.maven.model.MavenPluginMetadata;
 
 /**
  * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>
  */
 public class MavenMetadataFixtures {
 
-    private MavenMetadata commonsioMetadata;
-    private MavenMetadata commonsioPomMetadata;
+    private MavenPluginMetadata commonsioMetadata;
+    private MavenPluginMetadata commonsioPomMetadata;
 
-    private MavenMetadata junitMetadata;
+    private MavenPluginMetadata junitMetadata;
 
     public MavenMetadataFixtures() {
 
-        commonsioMetadata = getCommonsioBuilder().build();
+        commonsioMetadata = getCommonsio();
 
-        commonsioPomMetadata = getCommonsioBuilder()
-                .buildInfo(new MavenBuildInfoBuilder()
-                        .extension("pom")
-                        .build())
-                .build();
+        commonsioPomMetadata = getCommonsio();
+        
 
-        junitMetadata = getJunitBuilder().build();
+        junitMetadata = getJunitBuilder();
     }
 
-    private MavenMetadataBuilder getCommonsioBuilder() {
-        return new MavenMetadataBuilder()
-                .artifactId("commons-io")
-                .groupId("commons-io")
-                .version("2.0.1");
+    private MavenPluginMetadata getCommonsio() {
+        MavenPluginMetadata mavenPluginMetadata = new MavenPluginMetadata();
+        mavenPluginMetadata.setArtifactId("commons-io");
+        mavenPluginMetadata.setGroupId("commons-io");
+        mavenPluginMetadata.setVersion("2.0.1");
+        return mavenPluginMetadata;
     }
 
-    private MavenMetadataBuilder getJunitBuilder() {
-        return new MavenMetadataBuilder()
-                .artifactId("junit")
-                .groupId("junit")
-                .version("4.8.2");
+    private MavenPluginMetadata getJunitBuilder() {
+        MavenPluginMetadata mavenPluginMetadata = new MavenPluginMetadata();
+        mavenPluginMetadata.setArtifactId("junit");
+        mavenPluginMetadata.setGroupId("junit");
+        mavenPluginMetadata.setVersion("4.8.2");
+        return mavenPluginMetadata;
     }
 
-    public MavenMetadata getCommonsioMetadata() {
+    public MavenPluginMetadata getCommonsioMetadata() {
         return commonsioMetadata;
     }
 
-    public MavenMetadata getCommonsioPomMetadata() {
+    public MavenPluginMetadata getCommonsioPomMetadata() {
         return commonsioPomMetadata;
     }
 
-    public MavenMetadata getJunitMetadata() {
+    public MavenPluginMetadata getJunitMetadata() {
         return junitMetadata;
     }
 }

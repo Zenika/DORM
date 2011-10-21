@@ -1,5 +1,6 @@
 package com.zenika.dorm.maven.test.model;
 
+import com.zenika.dorm.maven.model.MavenFilename;
 import com.zenika.dorm.maven.model.MavenUri;
 import com.zenika.dorm.maven.test.fixtures.MavenConstantFixtures;
 import com.zenika.dorm.maven.test.unit.MavenUnitTest;
@@ -18,33 +19,33 @@ public class MavenFilenameUnitTest extends MavenUnitTest {
     @Test
     public void testMavenFilenameWithClassifier() throws Exception {
 
-        MavenFilename mavenFilename = new MavenUri(pathFixtures.getWithClassifierSimple()).getFilename();
+        MavenFilename mavenFilename = new MavenUri(httpPathFixtures.getWithClassifierSimple()).getFilename();
         compareFilenameWith(mavenFilename, null, null, MavenConstantFixtures.CLASSIFIER_SIMPLE, MavenConstantFixtures.EXTENSION_SIMPLE_JAR);
 
-        mavenFilename = new MavenUri(pathFixtures.getWithClassifierPoint()).getFilename();
+        mavenFilename = new MavenUri(httpPathFixtures.getWithClassifierPoint()).getFilename();
         compareFilenameWith(mavenFilename, null, null, MavenConstantFixtures.CLASSIFIER_POINT, MavenConstantFixtures.EXTENSION_SIMPLE_JAR);
     }
 
     @Test
     public void testMavenFilenameWithExtension() throws Exception {
 
-        MavenFilename mavenFilename = new MavenUri(pathFixtures.getWithExtensionSimple()).getFilename();
+        MavenFilename mavenFilename = new MavenUri(httpPathFixtures.getWithExtensionSimple()).getFilename();
         compareFilenameWith(mavenFilename, null, null, null, MavenConstantFixtures.EXTENSION_SIMPLE_JAR);
 
-        mavenFilename = new MavenUri(pathFixtures.getWithExtensionHash()).getFilename();
+        mavenFilename = new MavenUri(httpPathFixtures.getWithExtensionHash()).getFilename();
         compareFilenameWith(mavenFilename, null, null, null, MavenConstantFixtures.EXTENSION_HASH_JAR_MD5);
 
-        mavenFilename = new MavenUri(pathFixtures.getWithExtensionMultiple()).getFilename();
+        mavenFilename = new MavenUri(httpPathFixtures.getWithExtensionMultiple()).getFilename();
         compareFilenameWith(mavenFilename, null, null, null, MavenConstantFixtures.EXTENSION_MULTIPLE);
 
-        mavenFilename = new MavenUri(pathFixtures.getWithExtensionMultipleHash()).getFilename();
+        mavenFilename = new MavenUri(httpPathFixtures.getWithExtensionMultipleHash()).getFilename();
         compareFilenameWith(mavenFilename, null, null, null, MavenConstantFixtures.EXTENSION_MULTIPLE_HASH);
     }
 
     @Test
     public void testMavenFilenameWithSnapshot() throws Exception {
 
-        MavenFilename mavenFilename = new MavenUri(pathFixtures.getWithSnapshot()).getFilename();
+        MavenFilename mavenFilename = new MavenUri(httpPathFixtures.getWithSnapshot()).getFilename();
         compareFilenameWith(mavenFilename, MavenConstantFixtures.TIMESTAMP, MavenConstantFixtures.BUILDNUMBER,
                 null, MavenConstantFixtures.EXTENSION_SIMPLE_JAR);
     }
@@ -53,18 +54,18 @@ public class MavenFilenameUnitTest extends MavenUnitTest {
     public void testFilenameUriWithClassifierAndSimpleExtension() throws Exception {
 
         // normal
-        MavenFilename mavenFilename = new MavenUri(pathFixtures.getWithClassifierSimpleAndExtensionSimple()).getFilename();
+        MavenFilename mavenFilename = new MavenUri(httpPathFixtures.getWithClassifierSimpleAndExtensionSimple()).getFilename();
         compareFilenameWith(mavenFilename, null, null, MavenConstantFixtures.CLASSIFIER_SIMPLE, MavenConstantFixtures.EXTENSION_SIMPLE_JAR);
 
-        mavenFilename = new MavenUri(pathFixtures.getWithClassifierPointAndExtensionSimple()).getFilename();
+        mavenFilename = new MavenUri(httpPathFixtures.getWithClassifierPointAndExtensionSimple()).getFilename();
         compareFilenameWith(mavenFilename, null, null, MavenConstantFixtures.CLASSIFIER_POINT, MavenConstantFixtures.EXTENSION_SIMPLE_JAR);
 
         // snapshot
-        mavenFilename = new MavenUri(pathFixtures.getWithSnapshotClassifierSimpleAndExtensionSimple()).getFilename();
+        mavenFilename = new MavenUri(httpPathFixtures.getWithSnapshotClassifierSimpleAndExtensionSimple()).getFilename();
         compareFilenameWith(mavenFilename, MavenConstantFixtures.TIMESTAMP, MavenConstantFixtures.BUILDNUMBER,
                 MavenConstantFixtures.CLASSIFIER_SIMPLE, MavenConstantFixtures.EXTENSION_SIMPLE_JAR);
 
-        mavenFilename = new MavenUri(pathFixtures.getWithSnapshotClassifierPointAndExtensionSimple()).getFilename();
+        mavenFilename = new MavenUri(httpPathFixtures.getWithSnapshotClassifierPointAndExtensionSimple()).getFilename();
         compareFilenameWith(mavenFilename, MavenConstantFixtures.TIMESTAMP, MavenConstantFixtures.BUILDNUMBER,
                 MavenConstantFixtures.CLASSIFIER_POINT, MavenConstantFixtures.EXTENSION_SIMPLE_JAR);
     }
@@ -79,39 +80,39 @@ public class MavenFilenameUnitTest extends MavenUnitTest {
 
         // normal
         // classifier simple
-        MavenFilename mavenFilename = new MavenUri(pathFixtures.getWithClassifierSimpleAndExtensionMultiple()).getFilename();
+        MavenFilename mavenFilename = new MavenUri(httpPathFixtures.getWithClassifierSimpleAndExtensionMultiple()).getFilename();
         compareFilenameWith(mavenFilename, null, null, MavenConstantFixtures.CLASSIFIER_SIMPLE_WITH_EXTENSION_MULTIPLE,
                 MavenConstantFixtures.EXTENSION_MULTIPLE_LAST_ELEMENT);
 
-        mavenFilename = new MavenUri(pathFixtures.getWithClassifierSimpleAndExtensionMultipleHash()).getFilename();
+        mavenFilename = new MavenUri(httpPathFixtures.getWithClassifierSimpleAndExtensionMultipleHash()).getFilename();
         compareFilenameWith(mavenFilename, null, null, MavenConstantFixtures.CLASSIFIER_SIMPLE_WITH_EXTENSION_MULTIPLE_HASH,
                 MavenConstantFixtures.EXTENSION_MULTIPLE_HASH_LAST_ELEMENT);
 
         // classifier point
-        mavenFilename = new MavenUri(pathFixtures.getWithClassifierPointAndExtensionMultiple()).getFilename();
+        mavenFilename = new MavenUri(httpPathFixtures.getWithClassifierPointAndExtensionMultiple()).getFilename();
         compareFilenameWith(mavenFilename, null, null, MavenConstantFixtures.CLASSIFIER_POINT_WITH_EXTENSION_MULTIPLE,
                 MavenConstantFixtures.EXTENSION_MULTIPLE_LAST_ELEMENT);
 
-        mavenFilename = new MavenUri(pathFixtures.getWithClassifierPointAndExtensionMultipleHash()).getFilename();
+        mavenFilename = new MavenUri(httpPathFixtures.getWithClassifierPointAndExtensionMultipleHash()).getFilename();
         compareFilenameWith(mavenFilename, null, null, MavenConstantFixtures.CLASSIFIER_POINT_WITH_EXTENSION_MULTIPLE_HASH,
                 MavenConstantFixtures.EXTENSION_MULTIPLE_HASH_LAST_ELEMENT);
 
         // snapshot
         // classifier simple
-        mavenFilename = new MavenUri(pathFixtures.getWithSnapshotClassifierSimpleAndExtensionMultiple()).getFilename();
+        mavenFilename = new MavenUri(httpPathFixtures.getWithSnapshotClassifierSimpleAndExtensionMultiple()).getFilename();
         compareFilenameWith(mavenFilename, MavenConstantFixtures.TIMESTAMP, MavenConstantFixtures.BUILDNUMBER,
                 MavenConstantFixtures.CLASSIFIER_SIMPLE_WITH_EXTENSION_MULTIPLE, MavenConstantFixtures.EXTENSION_MULTIPLE_LAST_ELEMENT);
 
-        mavenFilename = new MavenUri(pathFixtures.getWithSnapshotClassifierSimpleAndExtensionMultipleHash()).getFilename();
+        mavenFilename = new MavenUri(httpPathFixtures.getWithSnapshotClassifierSimpleAndExtensionMultipleHash()).getFilename();
         compareFilenameWith(mavenFilename, MavenConstantFixtures.TIMESTAMP, MavenConstantFixtures.BUILDNUMBER,
                 MavenConstantFixtures.CLASSIFIER_SIMPLE_WITH_EXTENSION_MULTIPLE_HASH, MavenConstantFixtures.EXTENSION_MULTIPLE_HASH_LAST_ELEMENT);
 
         // classifier point
-        mavenFilename = new MavenUri(pathFixtures.getWithSnapshotClassifierPointAndExtensionMultiple()).getFilename();
+        mavenFilename = new MavenUri(httpPathFixtures.getWithSnapshotClassifierPointAndExtensionMultiple()).getFilename();
         compareFilenameWith(mavenFilename, MavenConstantFixtures.TIMESTAMP, MavenConstantFixtures.BUILDNUMBER,
                 MavenConstantFixtures.CLASSIFIER_POINT_WITH_EXTENSION_MULTIPLE, MavenConstantFixtures.EXTENSION_MULTIPLE_LAST_ELEMENT);
 
-        mavenFilename = new MavenUri(pathFixtures.getWithSnapshotClassifierPointAndExtensionMultipleHash()).getFilename();
+        mavenFilename = new MavenUri(httpPathFixtures.getWithSnapshotClassifierPointAndExtensionMultipleHash()).getFilename();
         compareFilenameWith(mavenFilename, MavenConstantFixtures.TIMESTAMP, MavenConstantFixtures.BUILDNUMBER,
                 MavenConstantFixtures.CLASSIFIER_POINT_WITH_EXTENSION_MULTIPLE_HASH, MavenConstantFixtures.EXTENSION_MULTIPLE_HASH_LAST_ELEMENT);
     }

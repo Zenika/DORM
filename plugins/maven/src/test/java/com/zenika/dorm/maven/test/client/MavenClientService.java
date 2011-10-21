@@ -1,5 +1,6 @@
-package com.zenika.dorm.maven.client;
+package com.zenika.dorm.maven.test.client;
 
+import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.maven.exception.MavenException;
 import org.sonatype.aether.RequestTrace;
 import org.sonatype.aether.artifact.Artifact;
@@ -17,9 +18,9 @@ public class MavenClientService {
         this.config = config;
     }
 
-    public void install(Dependency dependency) {
+    public void install(DormMetadata dormMetadata) {
 
-        Artifact artifact = MavenClientHelper.fromDependencyToArtifact(dependency);
+        Artifact artifact = MavenClientHelper.fromDependencyToArtifact(dormMetadata);
 
         InstallRequest request = new InstallRequest();
         request.addArtifact(artifact);
@@ -31,8 +32,8 @@ public class MavenClientService {
         }
     }
 
-    public void deploy(Dependency dependency) {
-        Artifact artifact = MavenClientHelper.fromDependencyToArtifact(dependency);
+    public void deploy(DormMetadata dormMetadata) {
+        Artifact artifact = MavenClientHelper.fromDependencyToArtifact(dormMetadata);
 
         DeployRequest request = new DeployRequest();
         request.addArtifact(artifact);

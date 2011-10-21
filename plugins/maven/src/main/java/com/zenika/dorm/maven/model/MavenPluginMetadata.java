@@ -1,12 +1,13 @@
 package com.zenika.dorm.maven.model;
 
+import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.core.model.PluginMetadata;
 import com.zenika.dorm.maven.constant.MavenConstant;
 
 /**
  * @author Antoine ROUAZE <antoine.rouaze AT zenika.com>
  */
-public class MavenPlugin implements PluginMetadata{
+public class MavenPluginMetadata implements PluginMetadata{
 
     public static final String MAVEN_PLUGIN = "maven_plugin";
 
@@ -35,6 +36,15 @@ public class MavenPlugin implements PluginMetadata{
         return MAVEN_PLUGIN;
     }
 
+    @Override
+    public DormMetadata toDormMetadata() {
+        DormMetadata dormMetadata = new DormMetadata();
+        dormMetadata.setName(getArtifactId());
+        dormMetadata.setVersion(getVersion());
+        dormMetadata.addPluginMetadata(this);
+        return dormMetadata;
+    }
+
     public boolean hasPomObject(){
         return pomObject != null;
     }
@@ -61,6 +71,10 @@ public class MavenPlugin implements PluginMetadata{
 
     public MavenBuildInfo getBuildInfo() {
         return buildInfo;
+    }
+
+    public void setBuildInfo(MavenBuildInfo buildInfo) {
+        this.buildInfo = buildInfo;
     }
 
     public boolean isSnapshot() {

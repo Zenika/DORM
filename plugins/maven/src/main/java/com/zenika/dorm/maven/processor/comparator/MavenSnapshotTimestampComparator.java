@@ -2,6 +2,8 @@ package com.zenika.dorm.maven.processor.comparator;
 
 import com.zenika.dorm.core.util.DormStringUtils;
 import com.zenika.dorm.maven.exception.MavenException;
+import com.zenika.dorm.maven.model.MavenBuildInfo;
+import com.zenika.dorm.maven.model.MavenPluginMetadata;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -10,12 +12,12 @@ import java.util.Comparator;
 /**
  * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>
  */
-public class MavenSnapshotTimestampComparator implements Comparator<MavenMetadata> {
+public class MavenSnapshotTimestampComparator implements Comparator<MavenPluginMetadata> {
 
     private static final Logger LOG = LoggerFactory.getLogger(MavenSnapshotTimestampComparator.class);
 
     @Override
-    public int compare(MavenMetadata extension1, MavenMetadata extension2) {
+    public int compare(MavenPluginMetadata extension1, MavenPluginMetadata extension2) {
 
         MavenBuildInfo buildInfo1 = extension1.getBuildInfo();
         MavenBuildInfo buildInfo2 = extension2.getBuildInfo();
@@ -27,9 +29,8 @@ public class MavenSnapshotTimestampComparator implements Comparator<MavenMetadat
         String timestamp1 = buildInfo1.getTimestamp().replace(".", "");
         String timestamp2 = buildInfo2.getTimestamp().replace(".", "");
 
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("Compare timestamps : " + timestamp1 + " and : " + timestamp2);
-        }
+        LOG.debug("Compare timestamps : " + timestamp1 + " and : " + timestamp2);
+
 
         Long value1, value2;
 

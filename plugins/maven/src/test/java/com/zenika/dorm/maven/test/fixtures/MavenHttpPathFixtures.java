@@ -7,9 +7,9 @@ import org.slf4j.LoggerFactory;
 /**
  * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>
  */
-public class MavenPathFixtures {
+public class MavenHttpPathFixtures {
 
-    private static final Logger LOG = LoggerFactory.getLogger(MavenPathFixtures.class);
+    private static final Logger LOG = LoggerFactory.getLogger(MavenHttpPathFixtures.class);
 
     private String simple1;
     private String simple2;
@@ -55,7 +55,7 @@ public class MavenPathFixtures {
     public String withSnapshotClassifierPointAndExtensionMultiple;
     public String withSnapshotClassifierPointAndExtensionMultipleHash;
 
-    public MavenPathFixtures() {
+    public MavenHttpPathFixtures() {
 
         simple1 = concat(MavenConstantFixtures.GROUPID1, MavenConstantFixtures.ARTIFACTID1,
                 MavenConstantFixtures.VERSION_SIMPLE, null, null, null, MavenConstantFixtures.EXTENSION_SIMPLE_JAR);

@@ -14,11 +14,11 @@ public class MavenUriUnitTest extends MavenUnitTest {
     @Test
     public void testMavenUriSimple() throws Exception {
 
-        MavenUri mavenUri = new MavenUri(pathFixtures.getSimple1());
+        MavenUri mavenUri = new MavenUri(httpPathFixtures.getSimple1());
         compareUriWith(mavenUri, MavenConstantFixtures.GROUPID1, MavenConstantFixtures.ARTIFACTID1,
                 MavenConstantFixtures.VERSION_SIMPLE, false);
 
-        mavenUri = new MavenUri(pathFixtures.getSimple2());
+        mavenUri = new MavenUri(httpPathFixtures.getSimple2());
         compareUriWith(mavenUri, MavenConstantFixtures.GROUPID2, MavenConstantFixtures.ARTIFACTID2,
                 MavenConstantFixtures.VERSION_SIMPLE, false);
     }
@@ -27,12 +27,12 @@ public class MavenUriUnitTest extends MavenUnitTest {
     public void testMavenUriWithSpecialVersion() throws Exception {
 
         // text version "-xxx"
-        MavenUri mavenUri = new MavenUri(pathFixtures.getSimpleWithTextVersion());
+        MavenUri mavenUri = new MavenUri(httpPathFixtures.getSimpleWithTextVersion());
         compareUriWith(mavenUri, MavenConstantFixtures.GROUPID1, MavenConstantFixtures.ARTIFACTID1,
                 MavenConstantFixtures.VERSION_TEXT, false);
 
         // snapshot "-SNAPSHOT"
-        mavenUri = new MavenUri(pathFixtures.getWithSnapshot());
+        mavenUri = new MavenUri(httpPathFixtures.getWithSnapshot());
         compareUriWith(mavenUri, MavenConstantFixtures.GROUPID1, MavenConstantFixtures.ARTIFACTID1,
                 MavenConstantFixtures.VERSION_SNAPSHOT, true);
     }

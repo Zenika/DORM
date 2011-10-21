@@ -3,7 +3,6 @@ package com.zenika.dorm.core.repository.impl;
 import com.google.inject.Inject;
 import com.zenika.dorm.core.exception.CoreException;
 import com.zenika.dorm.core.model.DormMetadata;
-import com.zenika.dorm.core.model.impl.DefaultDormResource;
 import com.zenika.dorm.core.repository.DormRepository;
 import com.zenika.dorm.core.repository.DormRepositoryResource;
 import com.zenika.dorm.core.service.config.DormServiceStoreResourceConfig;

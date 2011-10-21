@@ -1,7 +1,8 @@
 package com.zenika.dorm.test.ws.resource;
 
-import com.zenika.dorm.maven.client.MavenClientConfig;
-import com.zenika.dorm.maven.client.MavenClientService;
+import com.zenika.dorm.core.model.DormMetadata;
+import com.zenika.dorm.maven.test.client.MavenClientConfig;
+import com.zenika.dorm.maven.test.client.MavenClientService;
 import com.zenika.dorm.maven.test.helper.MavenFixtures;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -37,7 +38,7 @@ public class MavenResourceIntegrationTest extends AbstractIntegrationTest {
 
     @Test
     public void pushValidArtifact() {
-        Dependency dependency = fixtures.getDependencyWithResource();
+        DormMetadata dependency = fixtures.getDependencyWithResource();
         mavenClient.deploy(dependency);
     }
 }

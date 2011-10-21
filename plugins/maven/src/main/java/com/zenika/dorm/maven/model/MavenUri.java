@@ -25,7 +25,7 @@ public class MavenUri {
         extractFields();
     }
 
-    public MavenUri(MavenPlugin metadata) {
+    public MavenUri(MavenPluginMetadata metadata) {
         this.groupId = metadata.getGroupId();
         this.artifactId = metadata.getArtifactId();
         this.version = metadata.getVersion();
@@ -139,6 +139,16 @@ public class MavenUri {
         DormMetadata dormMetadata = new DormMetadata();
         dormMetadata.setName(artifactId);
         dormMetadata.setVersion(version);
+        dormMetadata.addPluginMetadata(toMavenPlugin());
         return dormMetadata;
+    }
+
+    public MavenPluginMetadata toMavenPlugin(){
+        MavenPluginMetadata mavenPluginMetadata = new MavenPluginMetadata();
+        mavenPluginMetadata.setArtifactId(artifactId);
+        mavenPluginMetadata.setGroupId(groupId);
+        mavenPluginMetadata.setVersion(version);
+        mavenPluginMetadata.setBuildInfo(filename.toBuildInfo());
+        return mavenPluginMetadata;
     }
 }

@@ -5,8 +5,6 @@ import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.UniformInterfaceException;
 import com.sun.jersey.api.client.WebResource;
 import com.zenika.dorm.core.exception.CoreException;
-import com.zenika.dorm.core.model.DormMetadata;
-import com.zenika.dorm.core.model.impl.DefaultDormResource;
 import com.zenika.dorm.core.service.FileValidator;
 import com.zenika.dorm.maven.model.MavenUri;
 import com.zenika.dorm.maven.provider.ProxyWebResourceWrapper;

@@ -13,16 +13,28 @@ public class MavenBuildInfo {
     public static final String METADATA_EXTENSION = "extension";
     public static final String METADATA_BUILDNUMBER = "buildNumber";
 
-    private final String classifier;
-    private final String timestamp;
-    private final String buildNumber;
-    private final String extension;
+    private String classifier;
+    private String timestamp;
+    private String buildNumber;
+    private String extension;
 
     public MavenBuildInfo(String extension, String classifier, String timestamp, String buildNumber) {
         this.extension = StringUtils.defaultIfBlank(extension, "");
         this.classifier = StringUtils.defaultIfBlank(classifier, "");
         this.timestamp = StringUtils.defaultIfBlank(timestamp, "");
         this.buildNumber = StringUtils.defaultIfBlank(buildNumber, "");
+    }
+
+    public MavenBuildInfo() {
+
+    }
+
+    public void setExtension(String extension) {
+        this.extension = extension;
+    }
+
+    public void setClassifier(String classifier) {
+        this.classifier = classifier;
     }
 
     public String getExtension() {

@@ -1,6 +1,6 @@
-import com.zenika.dorm.core.model.impl.DefaultDependency;
-import com.zenika.dorm.maven.client.MavenClientConfig;
-import com.zenika.dorm.maven.client.MavenClientService;
+import com.zenika.dorm.core.model.DormMetadata;
+import com.zenika.dorm.maven.test.client.MavenClientConfig;
+import com.zenika.dorm.maven.test.client.MavenClientService;
 import com.zenika.dorm.maven.test.fixtures.MavenFixtures;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,7 +26,7 @@ public class MavenTmpResourceTest {
 
     public static void main(String[] args) {
         before();
-        Dependency dependency = DefaultDependency.create(fixtures.getSimpleJar());
+        DormMetadata dependency = fixtures.getSimpleJar().toDormMetadata();
         mavenClient.deploy(dependency);
     }
 }

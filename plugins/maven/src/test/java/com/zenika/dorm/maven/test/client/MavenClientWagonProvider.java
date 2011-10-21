@@ -1,4 +1,4 @@
-package com.zenika.dorm.maven.client;
+package com.zenika.dorm.maven.test.client;
 
 import org.apache.maven.wagon.Wagon;
 import org.apache.maven.wagon.providers.http.LightweightHttpWagon;

@@ -4,16 +4,13 @@ import com.google.inject.Inject;
 import com.zenika.dorm.core.exception.CoreException;
 import com.zenika.dorm.core.model.DerivedObject;
 import com.zenika.dorm.core.model.DormMetadata;
-import com.zenika.dorm.core.model.ws.DormWebServiceRequest;
 import com.zenika.dorm.core.model.ws.DormWebServiceResult;
 import com.zenika.dorm.core.processor.extension.ProcessorExtension;
 import com.zenika.dorm.core.service.DormService;
-import com.zenika.dorm.core.service.FileValidator;
-import com.zenika.dorm.maven.model.MavenPlugin;
+import com.zenika.dorm.maven.model.MavenPluginMetadata;
 import com.zenika.dorm.maven.model.MavenUri;
 import com.zenika.dorm.maven.model.PomObject;
 import com.zenika.dorm.maven.service.MavenProxyService;
-import com.zenika.dorm.maven.service.MavenService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,16 +36,10 @@ public class MavenProcessor extends ProcessorExtension {
     private static final Logger LOG = LoggerFactory.getLogger(MavenProcessor.class);
 
     @Inject
-    private MavenService mavenService;
-
-    @Inject
     private DormService dormService;
 
     @Inject
     private MavenProxyService proxyService;
-
-    @Inject
-    private FileValidator fileValidator;
 
     /**
      * Process:
@@ -78,10 +69,10 @@ public class MavenProcessor extends ProcessorExtension {
             LOG.info("Ignore {}", mavenUri);
         }
         DormMetadata dormMetadata = storeDormMetadata(mavenUri);
-        MavenPlugin mavenPlugin = (MavenPlugin) dormMetadata.getPlugin(MavenPlugin.MAVEN_PLUGIN);
+        MavenPluginMetadata mavenPluginMetadata = (MavenPluginMetadata) dormMetadata.getPlugin(MavenPluginMetadata.MAVEN_PLUGIN);
 
         if (mavenUri.getFilename().isPomFile()) {
-            storePomObject(file, mavenUri, dormMetadata, mavenPlugin);
+            storePomObject(file, mavenUri, dormMetadata, mavenPluginMetadata);
         } else if (mavenUri.getFilename().isJarFile()) {
             storeDerivedObject(file, mavenUri, dormMetadata);
         }
@@ -90,14 +81,14 @@ public class MavenProcessor extends ProcessorExtension {
     private DormMetadata storeDormMetadata(MavenUri mavenUri) {
         DormMetadata dormMetadata = mavenUri.toDormMetadata();
         if (dormService.isDormMetadataAlreadyExist(dormMetadata)) {
-            if (dormMetadata.hasPlugin(MavenPlugin.MAVEN_PLUGIN)) {
+            if (dormMetadata.hasPlugin(MavenPluginMetadata.MAVEN_PLUGIN)) {
                 return dormMetadata;
             } else {
-                MavenPlugin mavenPlugin = new MavenPlugin();
-                mavenPlugin.setArtifactId(mavenUri.getArtifactId());
-                mavenPlugin.setGroupId(mavenUri.getGroupId());
-                mavenPlugin.setVersion(mavenUri.getVersion());
-                dormMetadata.addPluginMetadata(mavenPlugin);
+                MavenPluginMetadata mavenPluginMetadata = new MavenPluginMetadata();
+                mavenPluginMetadata.setArtifactId(mavenUri.getArtifactId());
+                mavenPluginMetadata.setGroupId(mavenUri.getGroupId());
+                mavenPluginMetadata.setVersion(mavenUri.getVersion());
+                dormMetadata.addPluginMetadata(mavenPluginMetadata);
                 return dormService.updateDormMetadata(dormMetadata);
             }
         } else {
@@ -105,9 +96,9 @@ public class MavenProcessor extends ProcessorExtension {
         }
     }
 
-    private PomObject getPomObject(MavenPlugin mavenPlugin) {
-        if (mavenPlugin.hasPomObject()) {
-            return mavenPlugin.getPomObject();
+    private PomObject getPomObject(MavenPluginMetadata mavenPluginMetadata) {
+        if (mavenPluginMetadata.hasPomObject()) {
+            return mavenPluginMetadata.getPomObject();
         } else {
             return new PomObject();
         }
@@ -121,8 +112,8 @@ public class MavenProcessor extends ProcessorExtension {
         }
     }
 
-    private void storePomObject(File file, MavenUri mavenUri, DormMetadata dormMetadata, MavenPlugin mavenPlugin) {
-        PomObject pomObject = getPomObject(mavenPlugin);
+    private void storePomObject(File file, MavenUri mavenUri, DormMetadata dormMetadata, MavenPluginMetadata mavenPluginMetadata) {
+        PomObject pomObject = getPomObject(mavenPluginMetadata);
         if (mavenUri.getFilename().isHashMd5()) {
             pomObject.setHashMd5(getHashStoredInFile(file));
         } else if (mavenUri.getFilename().isHashSha1()) {
@@ -131,7 +122,7 @@ public class MavenProcessor extends ProcessorExtension {
             pomObject.setLocation(generateLocation(mavenUri));
             dormService.storeDerivedObject(pomObject, file);
         }
-        mavenPlugin.setPomObject(pomObject);
+        mavenPluginMetadata.setPomObject(pomObject);
         dormService.updateDormMetadata(dormMetadata);
     }
 
@@ -180,13 +171,13 @@ public class MavenProcessor extends ProcessorExtension {
 
     private Object getEntity(MavenUri mavenUri, DormMetadata dormMetadata) {
         Object entity = null;
-        dormMetadata = dormService.getDormMetadata(dormMetadata, MavenPlugin.MAVEN_PLUGIN);
-        MavenPlugin mavenPlugin = (MavenPlugin) dormMetadata.getPlugin(MavenPlugin.MAVEN_PLUGIN);
+        dormMetadata = dormService.getDormMetadata(dormMetadata, MavenPluginMetadata.MAVEN_PLUGIN);
+        MavenPluginMetadata mavenPluginMetadata = (MavenPluginMetadata) dormMetadata.getPlugin(MavenPluginMetadata.MAVEN_PLUGIN);
         if (mavenUri.getFilename().isJarFile() && dormMetadata.hasDerivedObject()) {
             DerivedObject derivedObject = dormMetadata.getDerivedObject();
             entity = getSelectedObject(mavenUri, derivedObject);
-        } else if (mavenUri.getFilename().isPomFile() && mavenPlugin.hasPomObject()) {
-            PomObject pomObject = mavenPlugin.getPomObject();
+        } else if (mavenUri.getFilename().isPomFile() && mavenPluginMetadata.hasPomObject()) {
+            PomObject pomObject = mavenPluginMetadata.getPomObject();
             entity = getSelectedObject(mavenUri, pomObject);
         }
         return entity;

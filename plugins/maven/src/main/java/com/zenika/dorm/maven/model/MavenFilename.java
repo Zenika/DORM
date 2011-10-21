@@ -32,7 +32,7 @@ public class MavenFilename {
         extractFields();
     }
 
-    public MavenFilename(MavenUri uri, MavenPlugin metadata) {
+    public MavenFilename(MavenUri uri, MavenPluginMetadata metadata) {
         MavenBuildInfo info = metadata.getBuildInfo();
         this.extension = info.getExtension();
         this.classifier = info.getClassifier();
@@ -189,5 +189,9 @@ public class MavenFilename {
                 .append("uri", uri)
                 .appendSuper(super.toString())
                 .toString();
+    }
+
+    public MavenBuildInfo toBuildInfo(){
+        return new MavenBuildInfo(extension, classifier, timestamp, buildNumber);
     }
 }

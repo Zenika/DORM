@@ -1,8 +1,7 @@
 package com.zenika.dorm.maven.test.fixtures;
 
-import com.zenika.dorm.core.model.impl.DefaultDependency;
-import com.zenika.dorm.core.model.impl.DefaultDependencyNode;
-import com.zenika.dorm.core.model.impl.Usage;
+import com.zenika.dorm.core.model.DormMetadata;
+import com.zenika.dorm.maven.model.MavenPluginMetadata;
 
 /**
  * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>
@@ -11,11 +10,8 @@ public class MavenDependencyFixtures {
 
     private MavenMetadataFixtures metadataFixtures;
 
-    private Dependency commonsioDependency;
-    private Dependency junitTestDependency;
-
-    private DependencyNode commonsioNode;
-    private DependencyNode junitTestNode;
+    private DormMetadata commonsioDependency;
+    private DormMetadata junitTestDependency;
 
     public MavenDependencyFixtures() {
         this(new MavenMetadataFixtures());
@@ -24,27 +20,25 @@ public class MavenDependencyFixtures {
     public MavenDependencyFixtures(MavenMetadataFixtures metadataFixtures) {
         this.metadataFixtures = metadataFixtures;
 
-        commonsioDependency = DefaultDependency.create(metadataFixtures.getCommonsioPomMetadata());
-        junitTestDependency = DefaultDependency.create(metadataFixtures.getJunitMetadata(), Usage.create("test"));
+        commonsioDependency = createDormMetadata(metadataFixtures.getCommonsioPomMetadata());
+        junitTestDependency = createDormMetadata(metadataFixtures.getJunitMetadata());
 
-        commonsioNode = DefaultDependencyNode.create(commonsioDependency);
-        junitTestNode = DefaultDependencyNode.create(junitTestDependency);
-        commonsioNode.addChild(junitTestNode);
+        commonsioDependency.addChild(junitTestDependency);
     }
 
-    public Dependency getJunitTestDependency() {
+    public DormMetadata getJunitTestDependency() {
         return junitTestDependency;
     }
 
-    public Dependency getCommonsioDependency() {
+    public DormMetadata getCommonsioDependency() {
         return commonsioDependency;
     }
 
-    public DependencyNode getCommonsioNode() {
-        return commonsioNode;
-    }
-
-    public DependencyNode getJunitTestNode() {
-        return junitTestNode;
+    private DormMetadata createDormMetadata(MavenPluginMetadata mavenPluginMetadata){
+        DormMetadata dormMetadata = new DormMetadata();
+        dormMetadata.setName(mavenPluginMetadata.getArtifactId());
+        dormMetadata.setVersion(mavenPluginMetadata.getVersion());
+        dormMetadata.addPluginMetadata(mavenPluginMetadata);
+        return dormMetadata;
     }
 }

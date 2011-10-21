@@ -1,62 +1,58 @@
 package com.zenika.dorm.maven.test.fixtures;
 
-import com.google.inject.Inject;
+import com.zenika.dorm.maven.model.MavenPluginMetadata;
 import com.zenika.dorm.maven.model.MavenUri;
-import com.zenika.dorm.maven.service.MavenService;
 
 /**
  * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>
  */
 public class MavenFixtures {
 
-    private MavenPathFixtures pathFixtures;
+    private MavenHttpPathFixtures httpPathFixtures;
 
-    private MavenMetadata simpleJar;
-    private MavenMetadata simpleJarSha1;
-    private MavenMetadata simpleJarMd5;
-    private MavenMetadata simplePom;
-    private MavenMetadata simplePomSha1;
-    private MavenMetadata simplePomMd5;
-
-    @Inject
-    private MavenService mavenService;
+    private MavenPluginMetadata simpleJar;
+    private MavenPluginMetadata simpleJarSha1;
+    private MavenPluginMetadata simpleJarMd5;
+    private MavenPluginMetadata simplePom;
+    private MavenPluginMetadata simplePomSha1;
+    private MavenPluginMetadata simplePomMd5;
 
     public MavenFixtures() {
-        this(new MavenPathFixtures());
+        this(new MavenHttpPathFixtures());
     }
 
-    public MavenFixtures(MavenPathFixtures pathFixtures) {
-        this.pathFixtures = pathFixtures;
+    public MavenFixtures(MavenHttpPathFixtures httpPathFixtures) {
+        this.httpPathFixtures = httpPathFixtures;
 
-        simpleJar = mavenService.buildMavenMetadata(new MavenUri(pathFixtures.getJar()));
-        simpleJarSha1 = mavenService.buildMavenMetadata(new MavenUri(pathFixtures.getJarSha1Hash()));
-        simpleJarMd5 = mavenService.buildMavenMetadata(new MavenUri(pathFixtures.getJarMd5Hash()));
-        simplePom = mavenService.buildMavenMetadata(new MavenUri(pathFixtures.getPom()));
-        simplePomSha1 = mavenService.buildMavenMetadata(new MavenUri(pathFixtures.getPomSha1Hash()));
-        simplePomMd5 = mavenService.buildMavenMetadata(new MavenUri(pathFixtures.getPomMd5Hash()));
+        simpleJar = new MavenUri(httpPathFixtures.getJar()).toMavenPlugin();
+        simpleJarSha1 = new MavenUri(httpPathFixtures.getJarSha1Hash()).toMavenPlugin();
+        simpleJarMd5 = new MavenUri(httpPathFixtures.getJarMd5Hash()).toMavenPlugin();
+        simplePom = new MavenUri(httpPathFixtures.getPom()).toMavenPlugin();
+        simplePomSha1 = new MavenUri(httpPathFixtures.getPomSha1Hash()).toMavenPlugin();
+        simplePomMd5 = new MavenUri(httpPathFixtures.getPomMd5Hash()).toMavenPlugin();
     }
 
-    public MavenMetadata getSimpleJar() {
+    public MavenPluginMetadata getSimpleJar() {
         return simpleJar;
     }
 
-    public MavenMetadata getSimpleJarSha1() {
+    public MavenPluginMetadata getSimpleJarSha1() {
         return simpleJarSha1;
     }
 
-    public MavenMetadata getSimpleJarMd5() {
+    public MavenPluginMetadata getSimpleJarMd5() {
         return simpleJarMd5;
     }
 
-    public MavenMetadata getSimplePom() {
+    public MavenPluginMetadata getSimplePom() {
         return simplePom;
     }
 
-    public MavenMetadata getSimplePomSha1() {
+    public MavenPluginMetadata getSimplePomSha1() {
         return simplePomSha1;
     }
 
-    public MavenMetadata getSimplePomMd5() {
+    public MavenPluginMetadata getSimplePomMd5() {
         return simplePomMd5;
     }
 }

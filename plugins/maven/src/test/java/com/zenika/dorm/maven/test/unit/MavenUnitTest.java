@@ -2,8 +2,8 @@ package com.zenika.dorm.maven.test.unit;
 
 import com.zenika.dorm.maven.test.fixtures.MavenDependencyFixtures;
 import com.zenika.dorm.maven.test.fixtures.MavenFixtures;
+import com.zenika.dorm.maven.test.fixtures.MavenHttpPathFixtures;
 import com.zenika.dorm.maven.test.fixtures.MavenMetadataFixtures;
-import com.zenika.dorm.maven.test.fixtures.MavenPathFixtures;
 import org.junit.Before;
 import org.mockito.MockitoAnnotations;
 
@@ -13,7 +13,7 @@ import org.mockito.MockitoAnnotations;
 public abstract class MavenUnitTest {
 
     protected MavenFixtures fixtures;
-    protected MavenPathFixtures pathFixtures;
+    protected MavenHttpPathFixtures httpPathFixtures;
     protected MavenMetadataFixtures metadataFixtures;
     protected MavenDependencyFixtures dependencyFixtures;
 
@@ -22,8 +22,8 @@ public abstract class MavenUnitTest {
 
         MockitoAnnotations.initMocks(this);
 
-        pathFixtures = new MavenPathFixtures();
-        fixtures = new MavenFixtures(pathFixtures);
+        httpPathFixtures = new MavenHttpPathFixtures();
+        fixtures = new MavenFixtures(httpPathFixtures);
 
         metadataFixtures = new MavenMetadataFixtures();
         dependencyFixtures = new MavenDependencyFixtures(metadataFixtures);

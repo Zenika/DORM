@@ -1,6 +1,8 @@
 package com.zenika.dorm.core.model;
 
 
+import com.zenika.dorm.core.model.impl.Usage;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -19,8 +21,9 @@ public class DormMetadata {
     private String name;
     private String version;
     private DerivedObject derivedObject;
+    private Usage usage;
 
-    private List<DormMetadata> metadataChildren;
+    private List<DormMetadata> metadataChildren = new ArrayList<DormMetadata>();
 
     private Map<String, PluginMetadata> pluginMetadatas = new HashMap<String, PluginMetadata>();
 
@@ -74,5 +77,13 @@ public class DormMetadata {
 
     public void setDerivedObject(DerivedObject derivedObject) {
         this.derivedObject = derivedObject;
+    }
+
+    public void addChild(DormMetadata dormMetadata){
+        this.metadataChildren.add(dormMetadata);
+    }
+
+    public void setUsage(Usage usage) {
+        this.usage = usage;
     }
 }

@@ -6,4 +6,6 @@ package com.zenika.dorm.core.model;
 public interface PluginMetadata {
 
     String getType();
+
+    DormMetadata toDormMetadata();
 }

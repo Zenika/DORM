@@ -1,8 +1,6 @@
 package com.zenika.dorm.core.test.dao.neo4j;
 
 import com.zenika.dorm.core.model.DormMetadata;
-import com.zenika.dorm.core.model.impl.DefaultDependency;
-import com.zenika.dorm.core.model.impl.DefaultDependencyNode;
 import com.zenika.dorm.core.model.impl.Usage;
 import com.zenika.dorm.core.test.model.DormMetadataTest;
 

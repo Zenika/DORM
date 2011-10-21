@@ -1,10 +1,8 @@
 package com.zenika.dorm.core.test.helper;
 
 import com.zenika.dorm.core.exception.CoreException;
+import com.zenika.dorm.core.model.DerivedObject;
 import com.zenika.dorm.core.model.DormMetadata;
-import com.zenika.dorm.core.model.impl.DefaultDependency;
-import com.zenika.dorm.core.model.impl.DefaultDependencyNode;
-import com.zenika.dorm.core.model.impl.DefaultDormResource;
 import com.zenika.dorm.core.model.ws.DormWebServiceRequest;
 
 import java.io.File;
@@ -15,20 +13,14 @@ import java.io.IOException;
  */
 public abstract class ExtensionFixtures {
 
-    public static final String TESTPATH = "tmp/test/";
+    public static final String TEST_PATH = "tmp/test/";
 
-    /**
-     * Dorm file
-     */
-    private String filenameWithExtension = "testfile.jar";
-    private String filename = "testfile";
-    private String filenameExtension = "jar";
-    private File file = new File(TESTPATH + "testfile.jar");
+    private File file = new File(TEST_PATH + "testfile.jar");
 
     public ExtensionFixtures() {
 
         try {
-            new File(TESTPATH).mkdirs();
+            new File(TEST_PATH).mkdirs();
             file.createNewFile();
         } catch (IOException e) {
             throw new CoreException("Cannot create file for test", e);
@@ -46,71 +38,29 @@ public abstract class ExtensionFixtures {
      *
      * @return
      */
-    public abstract DormMetadata getMetadataExtension();
-
-    public String getRequestVersion() {
-        return version;
-    }
 
     public String getType() {
         return type;
     }
 
-    public DormWebServiceRequest.Builder getRequestBuilder() {
-        return new DormWebServiceRequest.Builder();
-    }
-
-    public DormWebServiceRequest.Builder getRequestBuilderWithFile() {
-        return getRequestBuilder().filename(filenameWithExtension).file(file);
-    }
-
-    public DormWebServiceRequest getRequestWithoutFile() {
-        return getRequestBuilder().build();
-    }
-
-    public DormWebServiceRequest getRequestWithFile() {
-        return getRequestBuilderWithFile().build();
-    }
-
     public DormMetadata getMetadata() {
-//        return DefaultDormMetadata.create(getRequestVersion(), getMetadataExtension());
-        return null;
+        DormMetadata dormMetadata = new DormMetadata();
+        dormMetadata.setName("testMetadata");
+        dormMetadata.setVersion(version);
+        return dormMetadata;
     }
 
-    public DormResource getDormResource() {
-        return new DefaultDormResource(filename, filenameExtension, file);
+    public DerivedObject getDerivedObject() {
+        DerivedObject derivedObject = new DerivedObject();
+        derivedObject.setLocation(file.getPath());
+        return derivedObject;
     }
 
-    public Dependency getDependencyWithoutResource() {
-        return DefaultDependency.create(getMetadata());
-    }
-
-    public Dependency getDependencyWithResource() {
-        return DefaultDependency.create(getMetadata(), getDormResource());
-    }
-
-    public DependencyNode getNodeWithoutResource() {
-        return DefaultDependencyNode.create(getDependencyWithoutResource());
-    }
-
-    public DependencyNode getNodeWithResource() {
-        return DefaultDependencyNode.create(getDependencyWithResource());
-    }
-
-    public String getFilenameWithExtension() {
-        return filenameWithExtension;
-    }
-
-    public String getFilename() {
-        return filename;
-    }
-
-    public String getFilenameExtension() {
-        return filenameExtension;
-    }
-
-    public File getFile() {
-        return file;
+    public DormMetadata getDependencyWithResource() {
+        DormMetadata dormMetadata = getMetadata();
+        DerivedObject derivedObject = getDerivedObject();
+        dormMetadata.setDerivedObject(derivedObject);
+        return dormMetadata;
     }
 
     public String getVersion() {
