@@ -41,7 +41,7 @@ public class DormDaoJdbc implements DormDao {
     }
 
     @Override
-    public DormMetadata get(final DormBasicQuery query) {
+    public DormMetadata getDormMetadata(final DormBasicQuery query) {
         JDBCGetTask jdbcGetTask = Guice.createInjector(
                 new AbstractModule() {
                     @Override

@@ -39,7 +39,7 @@ public class NuxeoDaoTest {
                 .name("Dorm_test-1.0.0")
                 .version("1.0.0")
                 .build();
-        DormMetadata resultMetadata = dao.get(query);
+        DormMetadata resultMetadata = dao.getDormMetadata(query);
 
         LOG.info("Metadata: " + resultMetadata);
 

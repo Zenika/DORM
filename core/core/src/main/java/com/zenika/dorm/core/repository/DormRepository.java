@@ -11,11 +11,5 @@ import java.io.File;
  */
 public interface DormRepository {
 
-    public void store(String extension, String path, DormResource resource, boolean override);
-
-    public DormResource get(DormMetadata metadata);
-
-    public void store(DormResource resource, DormMetadata metadata, DormServiceStoreResourceConfig config);
-
     void store(DerivedObject derivedObject, File file);
 }

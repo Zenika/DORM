@@ -39,7 +39,7 @@ public class Neo4jDaoTest {
                 .name("DormTest-1.0.0")
                 .version("1.0.0")
                 .build();
-        DormMetadata resultMetadata = dao.get(query);
+        DormMetadata resultMetadata = dao.getDormMetadata(query);
 
         LOG.info("Metadata: " + resultMetadata);
 

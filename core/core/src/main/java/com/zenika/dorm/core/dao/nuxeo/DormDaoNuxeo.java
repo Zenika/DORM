@@ -26,7 +26,7 @@ public class DormDaoNuxeo implements DormDao {
     private ExtensionFactoryServiceLoader serviceLoader;
 
     @Override
-    public DormMetadata get(final DormBasicQuery query) {
+    public DormMetadata getDormMetadata(final DormBasicQuery query) {
         return Guice.createInjector(new AbstractModule() {
             @Override
             protected void configure() {

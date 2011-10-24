@@ -17,34 +17,16 @@ public class DormRepositoryDeployEngine {
 
     private static final Logger LOG = LoggerFactory.getLogger(DormRepositoryDeployEngine.class);
 
-    public boolean deploy(DormRepositoryResource resource) {
+    public boolean deploy(String location, File file) {
 
-        String path = resource.getPath();
-
-        File folders = new File(FilenameUtils.getPath(path));
-        folders.mkdirs();
-
-        File destination = new File(path);
-
-        if (resource.isOverride() && destination.exists()) {
-
-            if (LOG.isTraceEnabled()) {
-                LOG.trace("Override existing file at : " + destination.getAbsolutePath());
-            }
-
-            destination.delete();
-        }
-
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("Deploy file to : " + destination.getAbsolutePath());
-        }
+        File destination = new File(location);
+        destination.mkdirs();
 
         try {
-            FileUtils.moveFile(resource.getFile(), destination);
+            FileUtils.moveFile(file, destination);
         } catch (IOException e) {
             throw new CoreException("Cannot move file to repository : " + destination, e);
         }
-
         return true;
     }
 }

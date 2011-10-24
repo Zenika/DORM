@@ -6,7 +6,7 @@ import com.zenika.dorm.core.model.DormMetadata;
 
 public interface DormDao {
 
-    public DormMetadata get(DormBasicQuery query);
+    public DormMetadata getDormMetadata(DormBasicQuery query);
 
     public DormMetadata saveOrUpdateMetadata(DormMetadata metadata);
 
