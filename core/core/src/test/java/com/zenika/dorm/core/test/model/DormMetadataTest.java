@@ -10,10 +10,12 @@ public class DormMetadataTest extends DormMetadata {
     public static final String EXTENSION_NAME = "DormTest";
     public static final String VERSION_FIELD = "version";
     public static final String ARTIFACT_ID = "artifactId";
+    public static final String GROUP_ID = "groupId";
 
     private String version;
 
     private String artifactId;
+    private String groupId;
 
     public DormMetadataTest(String version, String artifactId) {
         super(null);
@@ -34,7 +36,7 @@ public class DormMetadataTest extends DormMetadata {
 
     @Override
     public String getName() {
-        return EXTENSION_NAME + "-" + version;
+        return artifactId;
     }
 
     @Override
@@ -51,6 +53,14 @@ public class DormMetadataTest extends DormMetadata {
         return artifactId;
     }
 
+    public String getGroupId() {
+        return groupId;
+    }
+
+    public void setGroupId(String groupId) {
+        this.groupId = groupId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -60,6 +70,7 @@ public class DormMetadataTest extends DormMetadata {
 
         if (artifactId != null ? !artifactId.equals(that.artifactId) : that.artifactId != null) return false;
         if (version != null ? !version.equals(that.version) : that.version != null) return false;
+        if (groupId != null ? !groupId.equals(that.groupId) : that.groupId != null) return false;
 
         return true;
     }

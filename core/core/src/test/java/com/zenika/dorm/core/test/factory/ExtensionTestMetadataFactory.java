@@ -21,10 +21,12 @@ public class ExtensionTestMetadataFactory implements ExtensionMetadataFactory {
 
     @Override
     public DormMetadata fromMap(Long id, Map<String, String> properties) {
-        return new DormMetadataTest(
+        DormMetadataTest dormMetadataTest =  new DormMetadataTest(
                 id,
                 properties.get(VERSION_FIELD),
                 properties.get(ARTIFACT_ID));
+        dormMetadataTest.setGroupId(properties.get(GROUP_ID));
+        return dormMetadataTest;
     }
 
     @Override
@@ -34,6 +36,7 @@ public class ExtensionTestMetadataFactory implements ExtensionMetadataFactory {
         Map<String, String> properties = new HashMap<String, String>();
         properties.put(VERSION_FIELD, metadataTest.getVersion());
         properties.put(ARTIFACT_ID, metadataTest.getArtifactId());
+        properties.put(GROUP_ID, metadataTest.getGroupId());
         return properties;
     }
 }

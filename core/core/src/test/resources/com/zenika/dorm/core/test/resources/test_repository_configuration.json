@@ -1,0 +1,6 @@
+{
+    "name": "Default repository",
+    "base_path": "/home/erouan/repository_tmp",
+    "pattern": "{groupId}/{name}/{version}/{name}-{version}.{extension}",
+    "properties": ["groupId"]
+}

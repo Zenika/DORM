@@ -87,9 +87,15 @@ public final class DefaultDormResource implements DormResource {
         return result;
     }
 
+
     @Override
     public String toString() {
-        return "DormFile { " +
-                getName() + "." + getExtension() + " }";
+        final StringBuilder sb = new StringBuilder();
+        sb.append("DefaultDormResource");
+        sb.append("{extension='").append(extension).append('\'');
+        sb.append(", file=").append(file);
+        sb.append(", name='").append(name).append('\'');
+        sb.append('}');
+        return sb.toString();
     }
 }

@@ -1,0 +1,8 @@
+{
+    "name": "Default repository",
+    "base_path": "/home/erouan/dorm_repository",
+    "pattern": "/{orga: *.}/{name}-{version}/{filename: {Id}-{+name}-{extension}}",
+    "properties": [
+            "orga", "Id", "extension", "name", "filename", "version"
+    ]
+}
