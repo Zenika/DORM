@@ -25,7 +25,7 @@ public class DormRepositoryPatternAssociate implements DormRepository {
     @Inject
     private DormRepositoryConfiguration configuration;
 
-    public DormRepositoryPatternAssociate(){
+    public DormRepositoryPatternAssociate() {
 
     }
 
@@ -47,10 +47,10 @@ public class DormRepositoryPatternAssociate implements DormRepository {
 
     @Override
     public void store(DormResource resource, DormMetadata metadata, DormServiceStoreResourceConfig config) {
-        //To change body of implemented methods use File | Settings | File Templates.
+        
     }
 
-    public File resolve(String name, String version, Map<String, String> properties) {
+    private File resolve(String name, String version, Map<String, String> properties) {
         String patternWithNameAndVersion = configuration.getPattern()
                 .replace("{name}", name)
                 .replace("{version}", version)
@@ -66,6 +66,16 @@ public class DormRepositoryPatternAssociate implements DormRepository {
                         properties.get(property)
                 );
             }
+        }
+        for (String property : configuration.getPropertiesComposite()) {
+            patternWithNameAndVersion = patternWithNameAndVersion.replace(
+                    new StringBuilder(256)
+                            .append("{")
+                            .append(property)
+                            .append("}")
+                            .toString(),
+                      properties.get(property).replace(".", "/")
+            );
         }
         File file = new File(configuration.getBasePath(), patternWithNameAndVersion);
         if (file.exists()) {

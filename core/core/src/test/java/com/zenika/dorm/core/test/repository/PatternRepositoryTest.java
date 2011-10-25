@@ -36,7 +36,7 @@ public class PatternRepositoryTest {
     @Before
     public void setUp() {
         try {
-            File basePathTest = new File(BASE_PATH_REPOSITORY_TEST + "/group_test/zenika_test/1.2.0/");
+            File basePathTest = new File(BASE_PATH_REPOSITORY_TEST + "/com/group_test/zenika_test/1.2.0/tmp/");
             basePathTest.mkdirs();
             testJarRepo = new File(basePathTest, "zenika_test-1.2.0.jar");
             File testJar = new File(getClass().getResource(TEST_JAR).toURI());
@@ -51,7 +51,7 @@ public class PatternRepositoryTest {
     @Test
     public void getTest() {
         DormMetadataTest dormMetadata = new DormMetadataTest("1.2.0", "zenika_test");
-        dormMetadata.setGroupId("group_test");
+        dormMetadata.setGroupId("com.group_test");
         DormResource expectedResource = new DefaultDormResource("zenika_test", "jar", testJarRepo);
         Injector injector = Guice.createInjector(new AbstractModule() {
             @Override

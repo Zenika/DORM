@@ -13,6 +13,7 @@ public class DormRepositoryConfiguration {
     private String basePath;
     private String pattern;
     private List<String> properties;
+    private List<String> propertiesComposite;
 
     public String getName() {
         return name;
@@ -50,6 +51,14 @@ public class DormRepositoryConfiguration {
         this.properties = properties;
     }
 
+    public List<String> getPropertiesComposite() {
+        return propertiesComposite;
+    }
+
+    @JsonProperty("properties_composite")
+    public void setPropertiesComposite(List<String> propertiesComposite) {
+        this.propertiesComposite = propertiesComposite;
+    }
 
     @Override
     public String toString() {
