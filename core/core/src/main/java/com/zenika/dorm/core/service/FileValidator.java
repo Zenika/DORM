@@ -19,5 +19,4 @@ public class FileValidator {
         checkArgument(file.exists(), message);
         checkArgument(file.isFile(), message);
     }
-
 }

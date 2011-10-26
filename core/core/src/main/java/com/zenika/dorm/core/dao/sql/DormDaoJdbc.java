@@ -8,6 +8,7 @@ import com.zenika.dorm.core.dao.DormDao;
 import com.zenika.dorm.core.dao.query.DormBasicQuery;
 import com.zenika.dorm.core.model.DependencyNode;
 import com.zenika.dorm.core.model.DormMetadata;
+import com.zenika.dorm.core.model.DormMetadataLabel;
 import com.zenika.dorm.core.service.spi.ExtensionFactoryServiceLoader;
 
 import javax.sql.DataSource;
@@ -53,6 +54,11 @@ public class DormDaoJdbc implements DormDao {
                     }
                 }).getInstance(JDBCGetTask.class);
         return jdbcGetTask.execute();
+    }
+
+    @Override
+    public DormMetadataLabel getByLabel(DormMetadataLabel label) {
+        return null;
     }
 
 }

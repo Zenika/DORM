@@ -30,9 +30,6 @@ public class DormProcessor {
      * Injected by guice
      */
     private Set<RequestAnalyser> requestAnalysers;
-//
-//    @Inject
-//    private DormService service;
 
     public DormProcessor() {
 
@@ -66,7 +63,7 @@ public class DormProcessor {
      * @param request
      * @return the extension corresponding to the origin
      */
-    private ProcessorExtension getExtension(DormWebServiceRequest request) {
+    public ProcessorExtension getExtension(DormWebServiceRequest request) {
 
         for (RequestAnalyser analyser : requestAnalysers) {
 

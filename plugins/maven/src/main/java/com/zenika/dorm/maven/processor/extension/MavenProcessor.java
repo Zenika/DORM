@@ -1,12 +1,13 @@
 package com.zenika.dorm.maven.processor.extension;
 
 import com.google.inject.Inject;
-import com.zenika.dorm.core.exception.CoreException;
+import com.zenika.dorm.core.model.DormMetadataLabel;
 import com.zenika.dorm.core.model.DormResource;
 import com.zenika.dorm.core.model.ws.DormWebServiceRequest;
 import com.zenika.dorm.core.model.ws.DormWebServiceResult;
 import com.zenika.dorm.core.processor.extension.ProcessorExtension;
 import com.zenika.dorm.core.service.FileValidator;
+import com.zenika.dorm.core.service.MetadataLabelService;
 import com.zenika.dorm.maven.constant.MavenConstant;
 import com.zenika.dorm.maven.model.MavenMetadata;
 import com.zenika.dorm.maven.model.MavenUri;
@@ -17,6 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.util.List;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -37,6 +39,9 @@ public class MavenProcessor extends ProcessorExtension {
 
     @Inject
     private MavenService mavenService;
+
+    @Inject
+    private MetadataLabelService metadataLabelService;
 
     @Inject
     private MavenProxyService proxyService;
@@ -146,7 +151,7 @@ public class MavenProcessor extends ProcessorExtension {
         } else {
             if (dormResource.hasFile()) {
                 return responseBuilder.file(dormResource.getFile()).succeeded().build();
-            } else if (dormResource.hasInputStream()){
+            } else if (dormResource.hasInputStream()) {
                 return responseBuilder.inputStream(dormResource.getInputStream()).succeeded().build();
             } else {
                 return responseBuilder.notfound().build();
@@ -166,6 +171,12 @@ public class MavenProcessor extends ProcessorExtension {
     @Override
     public DormWebServiceResult getFromGenericRequest(DormWebServiceRequest request) {
         return get(getRequestFromGeneric(request));
+    }
+
+    @Override
+    public List<DormResource> getByLabel(String labelName) {
+        DormMetadataLabel<MavenMetadata> label = new DormMetadataLabel<MavenMetadata>(labelName);
+        return metadataLabelService.getArtifactsByLabel(label);
     }
 
     private DormWebServiceRequest getRequestFromGeneric(DormWebServiceRequest request) {

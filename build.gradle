@@ -74,7 +74,9 @@ versions = [
         tomcat: '7.0.19',
         postgresql: '9.0-801.jdbc4',
         jackson_mapper: '1.8.5',
-        opencsv: '2.3'
+        opencsv: '2.3',
+
+        jgit: '1.1.0.201109151100-r'
 ]
 
 // 2nd step, introducing libraries
@@ -123,7 +125,9 @@ libraries = [
 
         postgresql: 'postgresql:postgresql:' + versions.postgresql,
 
-        opencsv: 'net.sf.opencsv:opencsv:' + versions.opencsv
+        opencsv: 'net.sf.opencsv:opencsv:' + versions.opencsv,
+
+        jgit: 'org.eclipse.jgit:org.eclipse.jgit:' + versions.jgit
 ]
 
 subprojects {
@@ -134,6 +138,7 @@ subprojects {
         mavenCentral()
         mavenRepo name: 'java.net repository', urls: "http://download.java.net/maven/2"
         mavenRepo name: 'tinkerpop', urls: 'http://tinkerpop.com/maven2'
+        mavenRepo name: 'jgit', urls: 'http://download.eclipse.org/jgit/maven'
     }
 
     dependencies {

@@ -8,6 +8,7 @@ import com.zenika.dorm.core.dao.nuxeo.provider.NuxeoWebResourceWrapper;
 import com.zenika.dorm.core.dao.query.DormBasicQuery;
 import com.zenika.dorm.core.model.DependencyNode;
 import com.zenika.dorm.core.model.DormMetadata;
+import com.zenika.dorm.core.model.DormMetadataLabel;
 import com.zenika.dorm.core.service.spi.ExtensionFactoryServiceLoader;
 
 /**
@@ -36,6 +37,11 @@ public class DormDaoNuxeo implements DormDao {
                 bind(DormBasicQuery.class).toInstance(query);
             }
         }).getInstance(NuxeoGetTask.class).execute();
+    }
+
+    @Override
+    public DormMetadataLabel getByLabel(DormMetadataLabel label) {
+        return null;
     }
 
     @Override

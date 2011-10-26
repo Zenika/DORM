@@ -1,6 +1,9 @@
 package com.zenika.dorm.core.model;
 
 
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * Extension point on the model to add specific metadatas
  *
@@ -9,6 +12,8 @@ package com.zenika.dorm.core.model;
 public abstract class DormMetadata {
 
     protected final Long id;
+
+    protected final Set<String> labels = new HashSet<String>();
 
     protected DormMetadata() {
         id = null;

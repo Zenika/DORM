@@ -16,6 +16,8 @@ dependencies {
 
     compile libraries.commons_dbUtils
 
+    compile libraries.jgit
+
     compile group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.1.2'
 
     // compile group: 'com.tinkerpop', name: 'gremlin', version: '1.1'
