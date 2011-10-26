@@ -36,11 +36,15 @@ public class PatternRepositoryTest {
     @Before
     public void setUp() {
         try {
-            File basePathTest = new File(BASE_PATH_REPOSITORY_TEST + "/com/group_test/zenika_test/1.2.0/tmp/");
+            File basePathTest = new File(BASE_PATH_REPOSITORY_TEST + "/com/group_test/antoine/zenika/1.2.0/tmp/");
+            File basePathTest1 = new File(BASE_PATH_REPOSITORY_TEST + "/com/group_test/greg/zenika_test/1.2.0/tmp/");
             basePathTest.mkdirs();
-            testJarRepo = new File(basePathTest, "zenika_test-1.2.0.jar");
+            basePathTest1.mkdirs();
+            testJarRepo = new File(basePathTest1, "zenika_test-1.2.0.jar");
+            File testJarRepo2 = new File(basePathTest, "zenika-1.2.0.jar");
             File testJar = new File(getClass().getResource(TEST_JAR).toURI());
             FileUtils.copyFile(testJar, testJarRepo);
+            FileUtils.copyFile(testJar, testJarRepo2);
         } catch (URISyntaxException e) {
             throw new RuntimeException("URI syntax exception", e);
         } catch (IOException e) {
@@ -52,6 +56,7 @@ public class PatternRepositoryTest {
     public void getTest() {
         DormMetadataTest dormMetadata = new DormMetadataTest("1.2.0", "zenika_test");
         dormMetadata.setGroupId("com.group_test");
+        dormMetadata.setAuthor("greg");
         DormResource expectedResource = new DefaultDormResource("zenika_test", "jar", testJarRepo);
         Injector injector = Guice.createInjector(new AbstractModule() {
             @Override

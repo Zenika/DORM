@@ -26,6 +26,7 @@ public class ExtensionTestMetadataFactory implements ExtensionMetadataFactory {
                 properties.get(VERSION_FIELD),
                 properties.get(ARTIFACT_ID));
         dormMetadataTest.setGroupId(properties.get(GROUP_ID));
+        dormMetadataTest.setAuthor(properties.get(AUTHOR_ID));
         return dormMetadataTest;
     }
 
@@ -37,6 +38,7 @@ public class ExtensionTestMetadataFactory implements ExtensionMetadataFactory {
         properties.put(VERSION_FIELD, metadataTest.getVersion());
         properties.put(ARTIFACT_ID, metadataTest.getArtifactId());
         properties.put(GROUP_ID, metadataTest.getGroupId());
+        properties.put(AUTHOR_ID, metadataTest.getAuthor());
         return properties;
     }
 }

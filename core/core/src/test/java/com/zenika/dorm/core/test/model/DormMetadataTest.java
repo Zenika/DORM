@@ -11,11 +11,13 @@ public class DormMetadataTest extends DormMetadata {
     public static final String VERSION_FIELD = "version";
     public static final String ARTIFACT_ID = "artifactId";
     public static final String GROUP_ID = "groupId";
+    public static final String AUTHOR_ID = "author";
 
     private String version;
 
     private String artifactId;
     private String groupId;
+    private String author;
 
     public DormMetadataTest(String version, String artifactId) {
         super(null);
@@ -59,6 +61,14 @@ public class DormMetadataTest extends DormMetadata {
 
     public void setGroupId(String groupId) {
         this.groupId = groupId;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
     }
 
     @Override
