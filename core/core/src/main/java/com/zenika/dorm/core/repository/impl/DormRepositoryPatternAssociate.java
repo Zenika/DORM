@@ -5,21 +5,16 @@ import com.zenika.dorm.core.factory.ExtensionMetadataFactory;
 import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.core.model.DormResource;
 import com.zenika.dorm.core.model.impl.DefaultDormResource;
-import com.zenika.dorm.core.repository.CompositeProperties;
 import com.zenika.dorm.core.repository.DormRepository;
 import com.zenika.dorm.core.repository.DormRepositoryConfiguration;
 import com.zenika.dorm.core.repository.FilePathResolver;
 import com.zenika.dorm.core.service.config.DormServiceStoreResourceConfig;
 import com.zenika.dorm.core.service.spi.ExtensionFactoryServiceLoader;
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang3.StringUtils;
 
 import javax.inject.Inject;
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
-import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import java.util.regex.Matcher;
@@ -76,7 +71,7 @@ public class DormRepositoryPatternAssociate implements DormRepository {
                 .replaceAll("\\[version\\]", version)
                 .replaceAll("\\[extension\\]", extension);
         patternWithNameAndVersion = computePropertiesInPattern(patternWithNameAndVersion, properties);
-        File result = null;
+        File result;
         if (isRecursiveSearch(patternWithNameAndVersion)) {
             Queue<File> fileQueue = new FilePathResolver(patternWithNameAndVersion, configuration.getBasePath()).resolveWithPattern();
             if (fileQueue.size() > 1) {
@@ -89,52 +84,13 @@ public class DormRepositoryPatternAssociate implements DormRepository {
         return result;
     }
 
-
-//    private File resolve(String name, String version, String extension, Map<String, String> properties) {
-//        String patternWithNameAndVersion = configuration.getPattern();
-//        patternWithNameAndVersion = patternWithNameAndVersion
-//                .replaceAll("\\[name\\]", name)
-//                .replaceAll("\\[version\\]", version)
-//                .replaceAll("\\[extension\\]", extension);
-//        patternWithNameAndVersion = setSimpleProperties(properties, patternWithNameAndVersion);
-//        patternWithNameAndVersion = setCompositeProperties(properties, patternWithNameAndVersion);
-//        if (isRecursiveSearch(patternWithNameAndVersion)) {
-//            patternWithNameAndVersion = searchPlace(patternWithNameAndVersion, properties);
-//        }
-//        File file = new File(configuration.getBasePath(), patternWithNameAndVersion);
-//        return file;
-//    }
-
-    // \[[A-Z-a-z-0-9.\-+,?;.:§!*%^¨$£{} ]+\]
-    public String searchPlace(String patternWithNameAndVersion, Map<String, String> mappedProperties) {
-        String[] paths = patternWithNameAndVersion.split("\\[\\*\\]");
-        paths[0] = new StringBuilder(256)
-                .append(configuration.getBasePath())
-                .append(paths[0])
-                .toString();
-        for (int i = 0; i < paths.length - 1; i++) {
-            File[] folders = new File(paths[i]).listFiles();
-            String computedPath = computePropertiesInPattern(paths[0], mappedProperties);
-            String[] splitPath = computedPath.split("/");
-            for (File folder : folders) {
-
-            }
-        }
-
-        return null;
-    }
-
     private String computePropertiesInPattern(String path, Map<String, String> mappedProperties) {
         Matcher matcherProperties = Pattern.compile("\\[[A-Z-a-z-0-9.\\-+,?;.:§!%^¨$£{} ]+\\]").matcher(path);
 
         while (matcherProperties.find()) {
             String result = matcherProperties.group();
-            if (hasPropertyOption(result)) {
-                if (isSeparatorOption(result)) {
-                    String separator = getSeparator(result);
-                    String propertyValue = mappedProperties.get(getPropertyName(result));
-                    path = path.replace(result, propertyValue.replace(separator, "/"));
-                }
+            if (hasPropertyOptions(result)) {
+                path = computeOptions(path, mappedProperties, result);
             } else {
                 path = path.replace(result, mappedProperties.get(getPropertyName(result)));
             }
@@ -143,21 +99,64 @@ public class DormRepositoryPatternAssociate implements DormRepository {
         return path;
     }
 
-    private String getSeparator(String property) {
+    private String computeOptions(String path, Map<String, String> mappedProperties, String result) {
+        String[] options = getOptions(result);
+        for (String option : options) {
+            if (isSeparatorOption(option)) {
+                String separator = getSeparator(option);
+                String propertyValue = mappedProperties.get(getPropertyName(result));
+                path = path.replace(result, propertyValue.replace(separator, "/"));
+            } else if (isPrefixOption(option)){
+                String prefix = getPrefix(option);
+                String propertyValue = mappedProperties.get(getPropertyName(result));
+                path = prefix + path.replace(result, propertyValue);
+            } else if (isOptional(option)){
+                if (mappedProperties.get(getPropertyName(result)) == null){
+                    path = "";
+                } else {
+                    path = path.replace(result, mappedProperties.get(getPropertyName(result)));
+                }
+            }
+        }
+        return path;
+    }
+
+    private boolean isOptional(String option) {
+        return option.contains("option");
+    }
+
+    private String getPrefix(String option) {
+        option = option.substring("prefix:".length());
+        if (option.startsWith(" ")){
+            return option.substring(1);
+        } else {
+            return option;
+        }
+    }
+
+    private boolean isPrefixOption(String option) {
+        return option.contains("prefix");
+    }
+
+    private String[] getOptions(String property) {
         Matcher matcher = Pattern.compile("\\{[A-Z-a-z-0-9.\\-+,?;.:§!*%^¨$£{} ]+\\}").matcher(property);
         matcher.find();
         String result = matcher.group();
-        result = result.substring(10, result.length() - 1);
-        int startIndex = 1;
-        if (result.contains(": ")) {
-            startIndex = 2;
+        result = result.substring(1, result.length() - 1);
+        return result.split(", ");
+    }
+
+    private String getSeparator(String option) {
+        option = option.substring("separator:".length());
+        if (option.contains(" ")) {
+            return option.substring(1);
         }
-        return result.substring(startIndex);
+        return option;
     }
 
     private String getPropertyName(String property) {
         Matcher matcher = null;
-        if (hasPropertyOption(property)) {
+        if (hasPropertyOptions(property)) {
             matcher = Pattern.compile("\\[[A-Z-a-z-0-9.\\-+,?;.§!*%^¨$£{} ]+:").matcher(property);
         } else {
             matcher = Pattern.compile("\\[[A-Z-a-z-0-9.\\-+,?;.§!*%^¨$£{} ]+\\]").matcher(property);
@@ -171,18 +170,9 @@ public class DormRepositoryPatternAssociate implements DormRepository {
         return property.contains("separator");
     }
 
-    private boolean hasPropertyOption(String property) {
+    private boolean hasPropertyOptions(String property) {
         Matcher matcher = Pattern.compile("[: ]+\\{[A-Z-a-z-0-9.\\-+,?;.:§!*%^¨$£{} ]+\\}").matcher(property);
         return matcher.find();
-    }
-
-    private String findFolder(String folder) {
-        Matcher matcher = Pattern.compile("^/[A-Z-a-z-0-9.\\-+,?;.:§!*%^¨$£]+/").matcher(folder);
-        if (matcher.find()) {
-            return matcher.group();
-        } else {
-            throw new CoreException("Unable to find a folder to test in this part of pattern: " + folder);
-        }
     }
 
     private boolean isRecursiveSearch(String patternWithNameAndVersion) {
@@ -195,36 +185,4 @@ public class DormRepositoryPatternAssociate implements DormRepository {
         return extensionMetadataFactory.toMap(dormMetadata);
     }
 
-//    private String setSimpleProperties(Map<String, String> properties, String patternWithNameAndVersion) {
-//        for (String property : configuration.getProperties()) {
-//            if (properties.containsKey(property)) {
-//                patternWithNameAndVersion = patternWithNameAndVersion.replace(
-//                        new StringBuilder(256)
-//                                .append("[")
-//                                .append(property)
-//                                .append("]")
-//                                .toString(),
-//                        properties.get(property)
-//                );
-//            }
-//        }
-//        return patternWithNameAndVersion;
-//    }
-
-//    private String setCompositeProperties(Map<String, String> properties, String patternWithNameAndVersion) {
-//        if (configuration.hasCompositeProperties()) {
-//            CompositeProperties compositeProperties = configuration.getCompositeProperties();
-////            for (String property : compositeProperties.getProperty()) {
-////                patternWithNameAndVersion = patternWithNameAndVersion.replace(
-////                        new StringBuilder(256)
-////                                .append("[")
-////                                .append(property)
-////                                .append("]")
-////                                .toString(),
-////                        properties.get(property).replace(compositeProperties.getSeparator(), "/")
-////                );
-////            }
-//        }
-//        return patternWithNameAndVersion;
-//    }
 }
