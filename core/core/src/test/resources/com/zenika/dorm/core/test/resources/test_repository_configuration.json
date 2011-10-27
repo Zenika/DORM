@@ -1,5 +1,5 @@
 {
     "name": "Default repository",
     "base_path": "/home/erouan/repository_tmp",
-    "pattern": "/[groupId: {separator: .}]/[author]/[*]/[name]/[version]/tmp/[name]-[version].[extension]"
+    "pattern": "/[groupId: {separator: .}]/[author: {optionally}]/[*]/[name]/[version]/tmp/[name]-[version].[extension]"
 }
