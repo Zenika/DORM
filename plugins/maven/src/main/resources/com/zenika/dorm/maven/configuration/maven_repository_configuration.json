@@ -1,0 +1,5 @@
+{
+    "name": "Maven repository",
+    "base_path": "/home/erouan/repository_maven",
+    "pattern": "[groupId: {separator: .}]/[artifactId]/[version]/[artifactId]-[version][classifier: {prefix: -, optionally}].[extension]"
+}
