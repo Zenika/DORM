@@ -1,0 +1,5 @@
+dependencies {
+
+    compile project(':core:core')
+    compile project(':plugins:maven')
+}

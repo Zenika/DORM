@@ -33,7 +33,7 @@ public class DormCoreModule extends AbstractModule {
         bind(ExtensionFactoryServiceLoader.class);
         bind(DormProcessor.class);
         bind(DormRepository.class).to(DefaultDormRepository.class);
-        
+
         requireBinding(DormDao.class);
     }
 }
