@@ -43,7 +43,7 @@ public class DormRepositoryConfiguration {
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder();
-        sb.append("DormRepositoryConfiguration");
+        sb.append("DormRepositoryConfigurationModule");
         sb.append("{basePath='").append(basePath).append('\'');
         sb.append(", name='").append(name).append('\'');
         sb.append(", pattern='").append(pattern).append('\'');

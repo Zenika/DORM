@@ -65,20 +65,20 @@ public class MavenHashService {
         }
 
         String modelHash;
-        try {
-            if (StringUtils.equals(hashType, MavenConstant.Extension.MD5)) {
-                modelHash = DigestUtils.md5Hex(new FileInputStream(resource.getFile()));
-            } else if (StringUtils.equals(hashType, MavenConstant.Extension.SHA1)) {
-                modelHash = DigestUtils.shaHex(new FileInputStream(resource.getFile()));
-            } else {
-                throw new MavenException("Unknown hash type : " + hashType);
-            }
-
-        } catch (IOException e) {
-            throw new MavenException("File on which generate hash not found");
-        }
-
-        return StringUtils.equals(currentHash, modelHash);
+//        try {
+//            if (StringUtils.equals(hashType, MavenConstant.Extension.MD5)) {
+//                modelHash = DigestUtils.md5Hex(new FileInputStream(resource.getFile()));
+//            } else if (StringUtils.equals(hashType, MavenConstant.Extension.SHA1)) {
+//                modelHash = DigestUtils.shaHex(new FileInputStream(resource.getFile()));
+//            } else {
+//                throw new MavenException("Unknown hash type : " + hashType);
+//            }
+//
+//        } catch (IOException e) {
+//            throw new MavenException("File on which generate hash not found");
+//        }
+        return true;
+//        return StringUtils.equals(currentHash, modelHash);
     }
 
     private MavenMetadata getRealMetadataFromHash(MavenMetadata hashMetadata) {

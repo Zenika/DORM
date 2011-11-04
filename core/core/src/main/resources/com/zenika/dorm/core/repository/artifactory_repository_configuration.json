@@ -1,0 +1,5 @@
+{
+    "name": "Artifactory External Library",
+    "base_path": "/Storage/Java/Artifactory/repo/repositories/ext-release-local/",
+    "pattern": "/[groupId: {separator: .}]/[artifactId]/[version]/[artifactId]-[version][classifier: {prefix: -, optionally}].[extension]"
+}

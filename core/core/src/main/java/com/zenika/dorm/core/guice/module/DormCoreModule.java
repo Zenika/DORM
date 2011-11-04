@@ -26,14 +26,12 @@ public class DormCoreModule extends AbstractModule {
         if (LOG.isInfoEnabled()) {
             LOG.info("Configure dorm core guice module");
         }
-
+        requireBinding(DormRepository.class);
         bind(DormService.class).to(DefaultDormService.class);
         bind(DormGenericResource.class);
         bind(CoreExceptionMapper.class);
         bind(ExtensionFactoryServiceLoader.class);
         bind(DormProcessor.class);
-        bind(DormRepository.class).to(DefaultDormRepository.class);
-
         requireBinding(DormDao.class);
     }
 }

@@ -76,7 +76,7 @@ public class MavenService {
             throw new MavenException("Invalid hash metadata : " + metadata);
         }
 
-        DormResource resource = DefaultDormResource.create(file);
+        DormResource resource = new DefaultDormResource(null, metadata.getBuildInfo().getExtension(), file);
         DormServiceStoreResourceConfig config = new DormServiceStoreResourceConfig()
                 .override(true);
 
@@ -111,7 +111,7 @@ public class MavenService {
             root.addChild(DefaultDependencyNode.create(dependency));
         }
 
-        DormResource resource = DefaultDormResource.create(file);
+        DormResource resource = new DefaultDormResource(metadata.getName(), metadata.getBuildInfo().getExtension(), file);
         DormServiceStoreResourceConfig config = new DormServiceStoreResourceConfig()
                 .override(true);
 

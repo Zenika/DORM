@@ -6,6 +6,10 @@ import com.google.inject.Injector;
 import com.google.inject.servlet.GuiceServletContextListener;
 import com.zenika.dorm.core.exception.CoreException;
 import com.zenika.dorm.core.guice.module.DormCoreModule;
+import com.zenika.dorm.core.guice.module.DormRepositoryConfigurationModule;
+import com.zenika.dorm.core.repository.DormRepository;
+import com.zenika.dorm.core.repository.DormRepositoryConfiguration;
+import com.zenika.dorm.core.repository.impl.DormRepositoryPatternAssociate;
 import com.zenika.dorm.guice.module.DormJerseyModule;
 import com.zenika.dorm.maven.guice.module.MavenModule;
 
@@ -21,11 +25,28 @@ public class DormGuiceServletContextListener extends GuiceServletContextListener
     @Override
     protected Injector getInjector() {
         Set<AbstractModule> modules = new HashSet<AbstractModule>();
+        addRepositoryModule(modules);
         modules.add(new DormJerseyModule());
         modules.add(new DormCoreModule());
         addDAOModule(modules);
         modules.add(new MavenModule());
         return Guice.createInjector(modules);
+    }
+
+    private void addRepositoryModule(Set<AbstractModule> modules) {
+        Properties properties = new Properties();
+        String repositoryClassStr = null;
+        try {
+            properties.load(this.getClass().getResourceAsStream("repository.properties"));
+            repositoryClassStr = properties.getProperty("repository.class");
+            Class<? extends DormRepository> repositoryClass = (Class<? extends DormRepository>) Class.forName(repositoryClassStr);
+            String configFilePath = properties.getProperty("repository.config.file");
+            modules.add(new DormRepositoryConfigurationModule(repositoryClass, configFilePath));
+        } catch (IOException e) {
+            throw new CoreException("Unable to read this properties file: repository.properties", e);
+        } catch (ClassNotFoundException e) {
+            throw new CoreException("Unable to find this class: " + repositoryClassStr, e);
+        }
     }
 
 

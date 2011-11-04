@@ -1,7 +1,9 @@
 package com.zenika.dorm.core.repository.impl;
 
+import com.google.inject.AbstractModule;
 import com.zenika.dorm.core.exception.CoreException;
 import com.zenika.dorm.core.factory.ExtensionMetadataFactory;
+import com.zenika.dorm.core.guice.module.DormRepositoryConfigurationModule;
 import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.core.model.DormResource;
 import com.zenika.dorm.core.model.impl.DefaultDormResource;
@@ -21,6 +23,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Queue;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
