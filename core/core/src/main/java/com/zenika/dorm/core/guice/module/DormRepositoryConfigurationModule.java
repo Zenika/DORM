@@ -14,12 +14,18 @@ import java.net.URL;
  */
 public class DormRepositoryConfigurationModule extends AbstractModule {
 
+    private static final String DEFAULT_FILE_CONFIGURATION = "/com/zenika/dorm/core/repository/default_repository_configuration.json";
+
     private String configurationFile;
     private Class<? extends DormRepository> repositoryClass;
 
     public DormRepositoryConfigurationModule(Class<? extends DormRepository> repositoryClass, String configurationFile) {
         this.repositoryClass = repositoryClass;
         this.configurationFile = configurationFile;
+    }
+
+    public DormRepositoryConfigurationModule(Class<? extends DormRepository> repositoryClass) {
+        this(repositoryClass, DEFAULT_FILE_CONFIGURATION);
     }
 
     @Override

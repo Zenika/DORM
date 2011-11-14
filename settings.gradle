@@ -1,1 +1,1 @@
-include 'integration-test', 'core:core', 'core:webapp', 'plugins:maven', 'admin:maven-importer', 'plugins:artifactory-importer'
+include 'integration-test', 'core:core', 'core:webapp', 'plugins:maven', 'admin:maven-importer', 'plugins:artifactory-importer', 'admin:importer'

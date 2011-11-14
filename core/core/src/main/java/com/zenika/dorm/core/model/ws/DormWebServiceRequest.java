@@ -14,6 +14,7 @@ public final class DormWebServiceRequest extends DormWebServiceProcess {
     private final String userAgent;
     private final String usage;
     private final String filename;
+    private final String repositoryName;
     private final File file;
 
     public DormWebServiceRequest(Builder builder) {
@@ -24,6 +25,7 @@ public final class DormWebServiceRequest extends DormWebServiceProcess {
         this.usage = builder.usage;
         this.filename = builder.filename;
         this.file = builder.file;
+        this.repositoryName = builder.repositoryName;
     }
 
     public String getUserAgent() {
@@ -42,6 +44,10 @@ public final class DormWebServiceRequest extends DormWebServiceProcess {
         return file;
     }
 
+    public String getRepositoryName() {
+        return repositoryName;
+    }
+
     public boolean hasFile() {
         return file != null;
     }
@@ -51,6 +57,7 @@ public final class DormWebServiceRequest extends DormWebServiceProcess {
         private String userAgent;
         private String usage;
         private String filename;
+        private String repositoryName;
         private File file;
 
         public Builder() {
@@ -65,6 +72,7 @@ public final class DormWebServiceRequest extends DormWebServiceProcess {
             this.usage = request.getUsage();
             this.filename = request.getFilename();
             this.file = request.getFile();
+            this.repositoryName = request.getRepositoryName();
         }
 
         @Override
@@ -89,6 +97,11 @@ public final class DormWebServiceRequest extends DormWebServiceProcess {
 
         public Builder file(File file) {
             this.file = file;
+            return this;
+        }
+
+        public Builder repositoryName(String repositoryName) {
+            this.repositoryName = repositoryName;
             return this;
         }
 

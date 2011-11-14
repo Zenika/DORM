@@ -1,0 +1,9 @@
+dependencies {
+    // Internal dependencies
+    compile project(':plugins:maven')
+
+    // External dependencies
+
+    // Test
+    testCompile project(':plugins:maven')
+}

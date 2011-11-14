@@ -1,8 +1,4 @@
 {
-    "name": "Default repository",
-    "base_path": "/home/erouan/dorm_repository",
-    "pattern": "/{orga: *.}/{name}-{version}/{filename: {Id}-{+name}-{extension}}",
-    "properties": [
-            "orga", "Id", "extension", "name", "filename", "version"
-    ]
+    "name": "Artifactory External Library",
+    "base_path": "/Storage/Java/Artifactory/repo/repositories/ext-release-local/"
 }
