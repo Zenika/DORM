@@ -11,5 +11,22 @@ public abstract class RepositoryImporter {
     @Inject
     private ImportConfiguration configuration;
 
-    public abstract void startImport();
+    private long time;
+    protected int numberOfImport = 0;
+
+    public final void startImport() {
+        time = System.currentTimeMillis();
+        importProcess();
+        time = System.currentTimeMillis() - time;
+    }
+
+    protected abstract void importProcess();
+
+    public long getTime() {
+        return time;
+    }
+
+    public int getNumberOfImport() {
+        return numberOfImport;
+    }
 }

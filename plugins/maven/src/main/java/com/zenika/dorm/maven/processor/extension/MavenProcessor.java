@@ -73,7 +73,7 @@ public class MavenProcessor extends ProcessorExtension {
         checkNotNull(request);
         fileValidator.validateFile(request.getFile());
         LOG.debug("Maven webservice push request : {}", request);
-
+ 
 
         DormWebServiceResult.Builder responseBuilder = new DormWebServiceResult.Builder()
                 .origin(MavenMetadata.EXTENSION_NAME);
@@ -94,7 +94,7 @@ public class MavenProcessor extends ProcessorExtension {
 
         MavenUri mavenUri = new MavenUri(uri);
         LOG.debug("Maven uri : {}", mavenUri);
-
+ 
 
         MavenMetadata metadata = mavenService.buildMavenMetadata(mavenUri);
 

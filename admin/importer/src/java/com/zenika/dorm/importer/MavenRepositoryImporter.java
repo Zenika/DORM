@@ -32,8 +32,6 @@ public class MavenRepositoryImporter extends RepositoryImporter{
 
     private MavenXpp3Reader reader;
 
-    private long time;
-
     @Inject
     private ImportConfiguration configuration;
 
@@ -44,10 +42,8 @@ public class MavenRepositoryImporter extends RepositoryImporter{
         this.reader = new MavenXpp3Reader();
     }
 
-    public void startImport() {
-        time = System.currentTimeMillis();
+    public void importProcess() {
         sendPoms(new File(configuration.getBasePath()));
-        time = System.currentTimeMillis() - time;
     }
 
     private void sendPoms(File root) {
@@ -57,6 +53,7 @@ public class MavenRepositoryImporter extends RepositoryImporter{
                 File[] files = getArtifactFile(file.getParentFile());
                 if (model != null) {
                     sendFiles(files, model);
+                    numberOfImport++;
                 }
             } else if (file.isDirectory()) {
                 sendPoms(file);
@@ -126,4 +123,5 @@ public class MavenRepositoryImporter extends RepositoryImporter{
         sb.append(fileName);
         return sb.toString();
     }
+
 }

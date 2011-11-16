@@ -1,4 +1,4 @@
 {
-    "name": "Artifactory External Library",
-    "base_path": "/Storage/Java/Artifactory/repo/repositories/ext-release-local/"
+    "name": "Default Repository",
+    "base_path": "/Storage/Java/StageZenika/repository"
 }
