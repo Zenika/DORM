@@ -34,4 +34,12 @@ public class MetadataLabelService {
 
         return resources;
     }
+
+    public <T extends DormMetadata> DormMetadataLabel addLabel(String label, T metadata) {
+
+        DormMetadataLabel<T> metadataLabel = new DormMetadataLabel<T>(label);
+        metadataLabel.addMetadata(metadata);
+
+        return dao.createOrUpdateLabel(metadataLabel);
+    }
 }

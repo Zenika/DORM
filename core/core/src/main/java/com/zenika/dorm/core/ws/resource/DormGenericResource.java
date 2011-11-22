@@ -116,6 +116,14 @@ public class DormGenericResource {
         return Response.status(Response.Status.OK).entity(os).build();
     }
 
+    @PUT
+    @Path("/label/{label}/{id}")
+    public Response addLabel(@PathParam("label") String labelName, @PathParam("id") long id) throws IOException {
+
+        processor.addLabel(labelName, id);
+        return Response.status(Response.Status.OK).build();
+    }
+
     private String getUserAgent() {
 
         if (null == headers.getRequestHeader("user-agent")) {

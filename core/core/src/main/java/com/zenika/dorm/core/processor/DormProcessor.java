@@ -2,12 +2,15 @@ package com.zenika.dorm.core.processor;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import com.zenika.dorm.core.dao.DormDao;
 import com.zenika.dorm.core.exception.CoreException;
+import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.core.model.ws.DormWebServiceRequest;
 import com.zenika.dorm.core.model.ws.DormWebServiceResult;
 import com.zenika.dorm.core.processor.extension.ProcessorExtension;
 import com.zenika.dorm.core.processor.extension.RequestAnalyser;
 import com.zenika.dorm.core.service.DormService;
+import com.zenika.dorm.core.service.MetadataLabelService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,6 +33,15 @@ public class DormProcessor {
      * Injected by guice
      */
     private Set<RequestAnalyser> requestAnalysers;
+
+    @Inject
+    private MetadataLabelService metadataLabelService;
+
+    @Inject
+    private DormService dormService;
+
+    @Inject
+    private DormDao dao;
 
     public DormProcessor() {
 
@@ -54,6 +66,22 @@ public class DormProcessor {
         LOG.debug("Get generic request : {}", request);
 
         return getExtension(request).getFromGenericRequest(request);
+    }
+
+    public DormWebServiceResult addLabel(String label, long metadataId) {
+
+        DormMetadata metadata = dao.getById(metadataId);
+
+        DormWebServiceResult.Builder resultBuilder = new DormWebServiceResult.Builder();
+
+        if (null != metadata) {
+            metadataLabelService.addLabel(label, metadata);
+            resultBuilder.succeeded();
+        } else {
+            resultBuilder.notfound();
+        }
+
+        return resultBuilder.build();
     }
 
     /**

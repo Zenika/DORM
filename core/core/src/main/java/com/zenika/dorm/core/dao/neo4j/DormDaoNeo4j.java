@@ -20,8 +20,7 @@ public class DormDaoNeo4j implements DormDao {
 
     @Inject
     private Neo4jWebResourceWrapper wrapper;
-    //    @Inject
-//    private Neo4jIndex index;
+
     @Inject
     private ExtensionFactoryServiceLoader serviceLoader;
 
@@ -60,6 +59,16 @@ public class DormDaoNeo4j implements DormDao {
                 bind(DependencyNode.class).toInstance(root);
             }
         }).getInstance(Neo4jAddDependenciesTask.class).execute();
+    }
+
+    @Override
+    public DormMetadataLabel createOrUpdateLabel(DormMetadataLabel metadataLabel) {
+        return null;
+    }
+
+    @Override
+    public <T extends DormMetadata> T getById(long artifactId) {
+        return null;
     }
 
     @Override

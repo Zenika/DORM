@@ -17,4 +17,8 @@ public interface DormDao {
     public void saveOrUpdateMetadata(DormMetadata metadata);
 
     public DependencyNode addDependenciesToNode(DependencyNode root);
+
+    public DormMetadataLabel createOrUpdateLabel(DormMetadataLabel metadataLabel);
+
+    public <T extends DormMetadata> T getById(long artifactId);
 }

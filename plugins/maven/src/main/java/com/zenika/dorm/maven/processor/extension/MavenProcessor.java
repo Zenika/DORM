@@ -33,7 +33,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  *
  * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>
  */
-public class MavenProcessor extends ProcessorExtension {
+public class MavenProcessor extends ProcessorExtension<MavenMetadata> {
 
     private static final Logger LOG = LoggerFactory.getLogger(MavenProcessor.class);
 

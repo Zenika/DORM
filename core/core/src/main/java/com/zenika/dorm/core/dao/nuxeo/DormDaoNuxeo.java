@@ -60,4 +60,14 @@ public class DormDaoNuxeo implements DormDao {
     public DependencyNode addDependenciesToNode(DependencyNode root) {
         return root;
     }
+
+    @Override
+    public DormMetadataLabel createOrUpdateLabel(DormMetadataLabel metadataLabel) {
+        return null;
+    }
+
+    @Override
+    public <T extends DormMetadata> T getById(long artifactId) {
+        return null;
+    }
 }

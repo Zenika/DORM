@@ -43,6 +43,16 @@ public class DormDaoJdbc implements DormDao {
     }
 
     @Override
+    public DormMetadataLabel createOrUpdateLabel(DormMetadataLabel metadataLabel) {
+        return null;
+    }
+
+    @Override
+    public <T extends DormMetadata> T getById(long artifactId) {
+        return null;
+    }
+
+    @Override
     public DormMetadata get(final DormBasicQuery query) {
         JDBCGetTask jdbcGetTask = Guice.createInjector(
                 new AbstractModule() {
