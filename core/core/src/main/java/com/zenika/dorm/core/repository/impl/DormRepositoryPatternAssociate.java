@@ -72,6 +72,11 @@ public class DormRepositoryPatternAssociate implements DormRepository {
         }
     }
 
+    @Override
+    public void importResource(DormResource resource, DormMetadata metadata, DormServiceStoreResourceConfig config) {
+        throw new UnsupportedOperationException();
+    }
+
     private File resolve(String name, String version, String extension, Map<String, String> properties) {
         String pattern = configuration.getPattern();
         addCommonsPropertiesInMap(name, version, extension, properties);

@@ -1,13 +1,16 @@
 package com.zenika.dorm.maven.converter;
 
 import com.zenika.dorm.maven.exception.MavenException;
+import com.zenika.dorm.maven.model.MavenBuildInfo;
 import com.zenika.dorm.maven.model.MavenMetadata;
+import com.zenika.dorm.maven.model.builder.MavenBuildInfoBuilder;
 import com.zenika.dorm.maven.model.builder.MavenMetadataBuilder;
 import org.apache.maven.artifact.repository.metadata.Metadata;
 import org.apache.maven.artifact.repository.metadata.Snapshot;
 import org.apache.maven.artifact.repository.metadata.Versioning;
 import org.apache.maven.model.Model;
 import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
+import org.jcp.xml.dsig.internal.dom.DOMRetrievalMethod;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,5 +42,13 @@ public final class MavenDormMetadataConverter {
         }
 
         return metadata;
+    }
+
+    public MavenMetadata mavenModelToDorm(Model model) {
+        return new MavenMetadataBuilder()
+                .artifactId(model.getArtifactId())
+                .groupId(model.getGroupId())
+                .version(model.getVersion())
+                .build();
     }
 }

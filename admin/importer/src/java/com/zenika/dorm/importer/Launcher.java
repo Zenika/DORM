@@ -1,12 +1,17 @@
 package com.zenika.dorm.importer;
 
 import com.google.inject.AbstractModule;
+import com.google.inject.Binder;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import com.google.inject.Module;
+import com.google.inject.util.Modules;
 import com.zenika.dorm.core.exception.CoreException;
 import com.zenika.dorm.core.guice.module.DormCoreModule;
 import com.zenika.dorm.core.guice.module.DormRepositoryConfigurationModule;
 import com.zenika.dorm.core.repository.DormRepository;
+import com.zenika.dorm.core.service.DormService;
+import com.zenika.dorm.core.service.ImportDormService;
 import com.zenika.dorm.maven.guice.module.MavenModule;
 import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
@@ -47,7 +52,7 @@ public class Launcher {
         CmdLineParser cmdLineParser = new CmdLineParser(this);
         try {
             cmdLineParser.parseArgument(args);
-            Set<AbstractModule> modules = initModule();
+            Set<Module> modules = initModule();
             if (repositoryType.equals(MAVEN_REPOSITORY_TYPE)) {
                 modules.add(new ImporterMavenModule());
             } else if (repositoryType.equals(NUXEO_REPOSITORY_TYPE)) {
@@ -57,7 +62,7 @@ public class Launcher {
             } else if (repositoryType.equals(ARTIFACTORY_REPOSITORY_TYPE)) {
                 modules.add(new ImporterMavenModule());
             } else if (repositoryType.equals(IVY_REPOSITORY_TYPE)) {
-                throw new UnsupportedOperationException("Not implemented yet");
+                modules.add(new ImporterIvyModule());
             } else {
                 throw new CmdLineException("Unrecognized type of repository. Only this repositories are supported: \n\tMaven, Nuxeo, Archiva, Artifactory, Ivy");
             }
@@ -68,8 +73,15 @@ public class Launcher {
                     configuration.setBasePath(repositoryPath);
                     configuration.setRepositoryName(repositoryTargetName);
                     bind(ImportConfiguration.class).toInstance(configuration);
+                    
                 }
             });
+            modules.add(Modules.override(new DormCoreModule()).with(new Module() {
+                @Override
+                public void configure(Binder binder) {
+                    binder.bind(DormService.class).to(ImportDormService.class);
+                }
+            }));
             RepositoryImporter importer = Guice.createInjector(modules).getInstance(RepositoryImporter.class);
             importer.startImport();
             LOG.info("{} artifacts are import to the DORM server in {}", importer.getNumberOfImport(), importer.getTime());
@@ -81,16 +93,16 @@ public class Launcher {
     }
 
     // TODO: Refactor the Core to implement the modules initialisation
-    private Set<AbstractModule> initModule() {
-        Set<AbstractModule> modules = new HashSet<AbstractModule>();
+    private Set<Module> initModule() {
+        Set<Module> modules = new HashSet<Module>();
         addRepositoryModule(modules);
-        modules.add(new DormCoreModule());
+//        modules.add(new DormCoreModule());
         addDAOModule(modules);
         return modules;
     }
 
 
-    private void addRepositoryModule(Set<AbstractModule> modules) {
+    private void addRepositoryModule(Set<Module> modules) {
         Properties properties = new Properties();
         String repositoryClassStr = null;
         try {
@@ -106,7 +118,7 @@ public class Launcher {
         }
     }
 
-    private void addDAOModule(Set<AbstractModule> modules) {
+    private void addDAOModule(Set<Module> modules) {
         try {
             Class<AbstractModule> guiceDAOClass = getDAOModuleClass();
             if (guiceDAOClass == null) {

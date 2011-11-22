@@ -42,17 +42,22 @@ public class DefaultDormRepository implements DormRepository {
 
     @Override
     public void store(DormResource resource, DormMetadata metadata, DormServiceStoreResourceConfig config) {
+        DormRepositoryResource repositoryResource = generateRepositoryResource(resource, metadata, config);
+        deployEngine.deploy(repositoryResource);
+    }
 
+    @Override
+    public void importResource(DormResource resource, DormMetadata metadata, DormServiceStoreResourceConfig config) {
+        DormRepositoryResource repositoryResource = generateRepositoryResource(resource, metadata, config);
+        deployEngine.copy(repositoryResource);
+    }
+
+    private DormRepositoryResource generateRepositoryResource(DormResource resource, DormMetadata metadata, DormServiceStoreResourceConfig config) {
         String path = getPathFromMetadata(metadata);
-
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("Store resource at location : " + path);
-        }
-
+        LOG.debug("Store resource at location : {}", path);
         DormRepositoryResource repositoryResource = new DormRepositoryResource(path, resource.getFile());
         repositoryResource.setOverride(config.isOverride());
-
-        deployEngine.deploy(repositoryResource);
+        return repositoryResource;
     }
 
     @Override

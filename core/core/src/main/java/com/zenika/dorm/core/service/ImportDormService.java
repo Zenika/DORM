@@ -6,20 +6,12 @@ import com.zenika.dorm.core.model.DependencyNode;
 import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.core.model.DormResource;
 import com.zenika.dorm.core.repository.DormRepository;
-import com.zenika.dorm.core.service.DormService;
-import com.zenika.dorm.core.service.config.DormServiceResourceConfig;
 import com.zenika.dorm.core.service.config.DormServiceStoreResourceConfig;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
- * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>
+ * @author Antoine ROUAZE <antoine.rouaze AT zenika.com>
  */
-public class DefaultDormService implements DormService {
-
-    private static final Logger LOG = LoggerFactory.getLogger(DefaultDormService.class);
+public class ImportDormService implements DormService {
 
     @Inject
     private DormDao dao;
@@ -29,38 +21,22 @@ public class DefaultDormService implements DormService {
 
     @Override
     public void storeMetadata(DormMetadata metadata) {
-
-        checkNotNull(metadata);
-
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("Store metadata : " + metadata);
-        }
-
         dao.saveOrUpdateMetadata(metadata);
     }
 
     @Override
     public void storeResource(DormResource resource, DormMetadata metadata, DormServiceStoreResourceConfig config) {
-
-        checkNotNull(resource);
-        checkNotNull(metadata);
-        checkNotNull(config);
-
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("Store resource : " + resource + " with config : " + config);
-        }
-
-        repository.store(resource, metadata, config);
+        dao.saveOrUpdateMetadata(metadata);
+        repository.importResource(resource, metadata, config);
     }
 
     @Override
     public DormResource getResource(DormMetadata metadata) {
-        checkNotNull(metadata);
         return repository.get(metadata);
     }
 
     @Override
     public DependencyNode addDependenciesToNode(DependencyNode node) {
-        return dao.addDependenciesToNode(node);
+        throw new UnsupportedOperationException();
     }
 }

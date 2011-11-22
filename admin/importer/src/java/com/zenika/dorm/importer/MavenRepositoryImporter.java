@@ -33,9 +33,6 @@ public class MavenRepositoryImporter extends RepositoryImporter{
     private MavenXpp3Reader reader;
 
     @Inject
-    private ImportConfiguration configuration;
-
-    @Inject
     private MavenProcessor processor;
 
     public MavenRepositoryImporter() {
@@ -85,12 +82,13 @@ public class MavenRepositoryImporter extends RepositoryImporter{
     private void sendFiles(File[] filesTab, Model model) {
         List<File> files = Arrays.asList(filesTab);
         Collections.sort(files, DefaultFileComparator.DEFAULT_COMPARATOR);
+        MavenHelper mavenHelper = new MavenHelper();
         for (File file : files) {
             DormWebServiceRequest request = new DormWebServiceRequest.Builder()
                     .file(file)
                     .repositoryName(configuration.getRepositoryName())
                     .origin(MavenMetadata.EXTENSION_NAME)
-                    .property("uri", getArtifactPath(model, file.getName()))
+                    .property("uri", mavenHelper.getArtifactPath(model, file.getName()))
                     .build();
             processor.push(request);
         }

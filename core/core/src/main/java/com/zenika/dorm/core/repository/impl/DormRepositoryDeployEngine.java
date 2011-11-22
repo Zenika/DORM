@@ -18,27 +18,7 @@ public class DormRepositoryDeployEngine {
     private static final Logger LOG = LoggerFactory.getLogger(DormRepositoryDeployEngine.class);
 
     public boolean deploy(DormRepositoryResource resource) {
-
-        String path = resource.getPath();
-
-        File folders = new File(FilenameUtils.getPath(path));
-        folders.mkdirs();
-
-        File destination = new File(path);
-
-        if (resource.isOverride() && destination.exists()) {
-
-            if (LOG.isTraceEnabled()) {
-                LOG.trace("Override existing file at : " + destination.getAbsolutePath());
-            }
-
-            destination.delete();
-        }
-
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("Deploy file to : " + destination.getAbsolutePath());
-        }
-
+        File destination = getDestination(resource);
         try {
             FileUtils.moveFile(resource.getFile(), destination);
         } catch (IOException e) {
@@ -46,5 +26,27 @@ public class DormRepositoryDeployEngine {
         }
 
         return true;
+    }
+
+    public void copy(DormRepositoryResource repositoryResource) {
+        File destination = getDestination(repositoryResource);
+        try {
+            FileUtils.copyFile(repositoryResource.getFile(), destination);
+        } catch (IOException e) {
+            throw new CoreException("Cannot move file to repository : " + destination, e);
+        }
+    }
+
+    private File getDestination(DormRepositoryResource repositoryResource) {
+        String path = repositoryResource.getPath();
+        File folders = new File(FilenameUtils.getPath(path));
+        folders.mkdirs();
+        File destination = new File(path);
+        if (repositoryResource.isOverride() && destination.exists()) {
+            LOG.trace("Override existing file at: {}", destination.getAbsolutePath());
+            destination.delete();
+        }
+        LOG.debug("Deploy file to : {}", destination.getAbsolutePath());
+        return destination;
     }
 }

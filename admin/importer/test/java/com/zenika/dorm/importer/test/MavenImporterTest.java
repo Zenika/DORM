@@ -16,6 +16,8 @@ import com.zenika.dorm.maven.model.MavenMetadata;
 import com.zenika.dorm.maven.processor.extension.MavenProcessor;
 import com.zenika.dorm.maven.service.MavenProxyService;
 import com.zenika.dorm.maven.service.MavenProxyServiceHttp;
+import org.apache.commons.io.FileUtils;
+import org.apache.ivy.util.ChecksumHelper;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -24,6 +26,9 @@ import org.mockito.ArgumentMatcher;
 import org.mockito.internal.stubbing.answers.ClonesArguments;
 
 import java.io.File;
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;

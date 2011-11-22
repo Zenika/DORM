@@ -65,8 +65,8 @@ public class DormGenericResource {
     }
 
     @PUT
-    @Path("{path:.*}")
-    public Response put(@PathParam("path") String path, File file) {
+    @Path("/{repository}/{path:.*}")
+    public Response put(@PathParam("repository") String repositoryName, @PathParam("path") String path, File file) {
 
         String userAgent = getUserAgent();
 
@@ -74,6 +74,7 @@ public class DormGenericResource {
                 .userAgent(userAgent)
                 .property("path", path)
                 .file(file)
+                .repositoryName(repositoryName)
                 .build();
 
         processor.push(request);

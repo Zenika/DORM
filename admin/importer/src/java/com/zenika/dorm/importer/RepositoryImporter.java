@@ -9,7 +9,7 @@ import com.zenika.dorm.maven.processor.extension.MavenProcessor;
 public abstract class RepositoryImporter {
 
     @Inject
-    private ImportConfiguration configuration;
+    protected ImportConfiguration configuration;
 
     private long time;
     protected int numberOfImport = 0;
