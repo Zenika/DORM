@@ -22,8 +22,6 @@ public class Neo4jSinglePushTask extends Neo4jAbstractTask {
 
     private static final Logger LOG = LoggerFactory.getLogger(Neo4jSinglePushTask.class);
 
-    private static final String NODE_PATH = "node";
-
     @Inject
     private DormMetadata metadata;
 
@@ -90,22 +88,6 @@ public class Neo4jSinglePushTask extends Neo4jAbstractTask {
         logRequest("POST", resource, NODE_PATH);
         LOG.debug("Response self: " + response.getSelf());
         return response;
-    }
-
-    private void createRelationships(Neo4jRelationship relationship) {
-        try {
-            URI createRelationship = new URI(relationship.getFrom());
-
-            resource.uri(createRelationship)
-                    .accept(MediaType.APPLICATION_JSON_TYPE)
-                    .type(MediaType.APPLICATION_JSON_TYPE)
-                    .entity(relationship)
-                    .post();
-
-            logRequest("POST", createRelationship);
-        } catch (URISyntaxException e) {
-            throw new CoreException("Uri syntax exception", e);
-        }
     }
 
     /**

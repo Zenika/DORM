@@ -58,11 +58,19 @@ public class DormDaoNeo4j implements DormDao {
                 bind(ExtensionFactoryServiceLoader.class).toInstance(serviceLoader);
                 bind(DependencyNode.class).toInstance(root);
             }
-        }).getInstance(Neo4jAddDependenciesTask.class).execute();
+        }).getInstance(Neo4jAddDependenciesTask.class).execute();D
     }
 
     @Override
-    public DormMetadataLabel createOrUpdateLabel(DormMetadataLabel metadataLabel) {
+    public DormMetadataLabel createOrUpdateLabel(final DormMetadataLabel metadataLabel) {
+        Guice.createInjector(new AbstractModule() {
+            @Override
+            protected void configure() {
+                bind(Neo4jWebResourceWrapper.class).toInstance(wrapper);
+                bind(ExtensionFactoryServiceLoader.class).toInstance(serviceLoader);
+                bind(DormMetadataLabel.class).toInstance(metadataLabel);
+            }
+        }).getInstance(Neo4jStoreLabelTask.class).execute();
         return null;
     }
 

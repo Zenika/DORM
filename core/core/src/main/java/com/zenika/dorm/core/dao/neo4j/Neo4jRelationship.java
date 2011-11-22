@@ -17,6 +17,8 @@ import java.util.Map;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Neo4jRelationship {
 
+    public static final String LABEL_TYPE = "label";
+
     private String from;
     private String to;
     private String type;

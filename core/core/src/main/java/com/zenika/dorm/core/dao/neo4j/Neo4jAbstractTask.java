@@ -26,12 +26,16 @@ public abstract class Neo4jAbstractTask {
 
     protected static final String GREMLIN_URI = "http://localhost:7474/db/data/ext/GremlinPlugin/graphdb/execute_script";
     protected static final String NODE_URI = "http://localhost:7474/db/data/node/";
+    protected static final String NODE_PATH = "node";
 
     protected static final GenericType<List<Neo4jResponse<Neo4jMetadata>>> LIST_METADATA_GENERIC_TYPE =
             new GenericType<List<Neo4jResponse<Neo4jMetadata>>>() {
             };
     protected static final GenericType<List<Neo4jRelationship>> LIST_RELATIONSHIP_GENERIC_TYPE =
             new GenericType<List<Neo4jRelationship>>() {
+            };
+    protected static final GenericType<Neo4jResponse<Neo4jLabel>> RESPONSE_LABEL =
+            new GenericType<Neo4jResponse<Neo4jLabel>>() {
             };
 
     @Inject
@@ -51,6 +55,10 @@ public abstract class Neo4jAbstractTask {
 
     protected static void logRequest(String type, String uri) {
         LOG.info(type + " to " + uri);
+    }
+
+    protected Neo4jAbstractTask() {
+
     }
 
     public abstract Object execute();
@@ -111,12 +119,28 @@ public abstract class Neo4jAbstractTask {
         return Long.valueOf(split[split.length - 1]);
     }
 
-    protected String generateNodeUri(Long id){
+    protected String generateNodeUri(Long id) {
         return NODE_URI + id;
     }
 
-    protected String generateCreateRelationshipUri(Long id){
+    protected String generateCreateRelationshipUri(Long id) {
         return generateNodeUri(id) + "/relationships";
     }
 
+    protected void createRelationships(Neo4jRelationship relationship) {
+        try {
+            URI createRelationship = new URI(relationship.getFrom());
+
+            ClientResponse clientResponse = wrapper.get().uri(createRelationship)
+                    .accept(MediaType.APPLICATION_JSON_TYPE)
+                    .type(MediaType.APPLICATION_JSON_TYPE)
+                    .entity(relationship)
+                    .post(ClientResponse.class);
+
+            logRequest("POST", clientResponse.getEntity(String.class));
+            LOG.debug("Uri: {}", createRelationship);
+        } catch (URISyntaxException e) {
+            throw new CoreException("Uri syntax exception", e);
+        }
+    }
 }

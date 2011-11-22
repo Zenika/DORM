@@ -31,6 +31,12 @@ public class DormMetadataTest extends DormMetadata {
         this.artifactId = artifactId;
     }
 
+    public DormMetadataTest(String version, String artifactId, String groupId, String author) {
+        this.version = version;
+        this.artifactId = artifactId;
+        this.groupId = groupId;
+        this.author = author;
+    }
 
     public static DormMetadata getDefault() {
         return new DormMetadataTest("1.0.0", "property");

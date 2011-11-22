@@ -31,7 +31,7 @@ public class ObjectMapperProvider implements ContextResolver<ObjectMapper> {
         module.addDeserializer(Neo4jMetadata.class, new CustomDeserializer());
         module.addSerializer(Neo4jMetadata.class, new CustomSerializer());
         ObjectMapper result = new ObjectMapper();
-        result.getSerializationConfig().set(SerializationConfig.Feature.FAIL_ON_EMPTY_BEANS, false);
+        result.getSerializationConfig().set(SerializationConfig.Feature.FAIL_ON_EMPTY_BEANS, true);
         result.registerModule(module);
         return result;
     }
