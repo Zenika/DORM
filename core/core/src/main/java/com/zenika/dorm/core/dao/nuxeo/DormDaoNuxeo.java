@@ -21,7 +21,6 @@ public class DormDaoNuxeo implements DormDao {
 
     public static final String DATA_ENTRY_POINT_URI = "http://" + SERVER_HOSTNAME + ":" + SERVER_PORT + "/ecr/dorm";
 
-
     @Inject
     private NuxeoWebResourceWrapper wrapper;
     @Inject

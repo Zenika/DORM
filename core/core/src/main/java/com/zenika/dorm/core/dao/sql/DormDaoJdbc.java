@@ -16,13 +16,10 @@ import java.util.Map;
 
 public class DormDaoJdbc implements DormDao {
 
-    private static final TypeLiteral<Map<String, String>> typeMap = new TypeLiteral<Map<String, String>>() {
-    };
 
     @Inject
     private DataSource dataSource;
-    @Inject
-    private ExtensionFactoryServiceLoader serviceLoader;
+
 
     @Override
     public void saveOrUpdateMetadata(final DormMetadata metadata) {
@@ -32,7 +29,7 @@ public class DormDaoJdbc implements DormDao {
                     protected void configure() {
                         bind(DormMetadata.class).toInstance(metadata);
                         bind(DataSource.class).toInstance(dataSource);
-                        bind(ExtensionFactoryServiceLoader.class).toInstance(serviceLoader);
+//                        bind(ExtensionFactoryServiceLoader.class).toInstance(serviceLoader);
                     }
                 }).getInstance(JDBCSinglePushTask.class).execute();
     }
@@ -48,7 +45,13 @@ public class DormDaoJdbc implements DormDao {
     }
 
     @Override
-    public <T extends DormMetadata> T getById(long artifactId) {
+    public DormMetadata getById(final long artifactId) {
+
+        DormDaoJdbcQuery query = new DormDaoJdbcQuery("SELECT m FROM dorm_metadata m " +
+                "WHERE m.id = ?");
+
+        query.addLongParam(1, artifactId);
+
         return null;
     }
 
@@ -60,7 +63,7 @@ public class DormDaoJdbc implements DormDao {
                     protected void configure() {
                         bind(DormBasicQuery.class).toInstance(query);
                         bind(DataSource.class).toInstance(dataSource);
-                        bind(ExtensionFactoryServiceLoader.class).toInstance(serviceLoader);
+//                        bind(ExtensionFactoryServiceLoader.class).toInstance(serviceLoader);
                     }
                 }).getInstance(JDBCGetTask.class);
         return jdbcGetTask.execute();
