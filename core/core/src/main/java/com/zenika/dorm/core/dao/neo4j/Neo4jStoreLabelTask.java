@@ -26,15 +26,15 @@ public class Neo4jStoreLabelTask extends Neo4jAbstractTask {
         Set<DormMetadata> dormMetadataSet = dormMetadataLabel.getMetadatas();
         Neo4jLabel label = new Neo4jLabel(dormMetadataLabel.getLabel());
         if (isAlreadyExist(label)) {
-            Neo4jResponse<Neo4jLabel> responseLabel = getLabel(label, indexProvider.getLabelIndex(), true);
+            Neo4jResponse<Neo4jLabel> responseLabel = getLabel(label, true);
             List<Neo4jRelationship> toAddRelationships = findRelationshipsToAdd(dormMetadataSet, responseLabel);
             List<Neo4jRelationship> toDeleteRelationships = findRelationshipsToDelete(dormMetadataSet, responseLabel);
             neo4jService.createRelationships(toAddRelationships);
             neo4jService.deleteRelationships(toDeleteRelationships);
+        } else {
+            Neo4jResponse<Neo4jLabel> responseLabel = storeLabel(label);
+            addMetadataRelationships(dormMetadataSet, responseLabel);
         }
-        Neo4jResponse<Neo4jLabel> responseLabel = storeLabel(label);
-        addMetadataRelationships(dormMetadataSet, responseLabel);
-        LOG.debug("Neo4jResponse<Neo4jLabel>: {}", responseLabel);
         return null;
     }
 
@@ -86,7 +86,7 @@ public class Neo4jStoreLabelTask extends Neo4jAbstractTask {
     }
 
     private boolean isAlreadyExist(Neo4jLabel label) {
-        return getLabel(label, indexProvider.getLabelIndex(), false) != null;
+        return getLabel(label, false) != null;
     }
 
     private Neo4jResponse<Neo4jMetadata> getMetadata(DormMetadata dormMetadata) {

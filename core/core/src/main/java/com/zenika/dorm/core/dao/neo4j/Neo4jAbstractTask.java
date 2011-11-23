@@ -61,8 +61,8 @@ public abstract class Neo4jAbstractTask {
             return neo4jService.getNodeByGremlinScript(gremlinScript, Neo4jService.RESPONSE_LIST_METADATA);
     }
 
-    protected Neo4jResponse<Neo4jLabel> getLabel(Neo4jLabel label, Neo4jIndex index, boolean withMetadata) {
-        Neo4jResponse<Neo4jLabel> labelNeo4jResponse = neo4jService.getNodeByIndex("name", label.getLabel(), index, Neo4jService.RESPONSE_LIST_LABEL);
+    protected Neo4jResponse<Neo4jLabel> getLabel(Neo4jLabel label, boolean withMetadata) {
+        Neo4jResponse<Neo4jLabel> labelNeo4jResponse = neo4jService.getNodeByIndex("name", label.getLabel(), indexProvider.getLabelIndex(), Neo4jService.RESPONSE_LIST_LABEL);
         if (withMetadata) {
             return getLabelWithMetadata(labelNeo4jResponse);
         } else {

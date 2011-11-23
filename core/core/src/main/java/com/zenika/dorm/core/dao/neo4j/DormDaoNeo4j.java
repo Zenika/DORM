@@ -41,7 +41,6 @@ public class DormDaoNeo4j implements DormDao {
         }).getInstance(Neo4jGetTask.class).execute();
     }
 
-
     @Override
     public void saveOrUpdateMetadata(final DormMetadata metadata) {
         Guice.createInjector(new AbstractModule() {
@@ -97,7 +96,15 @@ public class DormDaoNeo4j implements DormDao {
     }
 
     @Override
-    public DormMetadataLabel getByLabel(DormMetadataLabel label) {
-        return null;
+    public DormMetadataLabel getByLabel(final DormMetadataLabel label) {
+        return Guice.createInjector(new AbstractModule() {
+            @Override
+            protected void configure() {
+                bind(Neo4jIndexProvider.class).toInstance(indexProvider);
+                bind(Neo4jService.class).toInstance(service);
+                bind(ExtensionFactoryServiceLoader.class).toInstance(serviceLoader);
+                bind(DormMetadataLabel.class).toInstance(label);
+            }
+        }).getInstance(Neo4jGetByLabelTask.class).execute();
     }
 }

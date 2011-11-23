@@ -27,4 +27,15 @@ public class DormMetadataLabel<T extends DormMetadata> {
     public String getLabel() {
         return label;
     }
+
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder();
+        sb.append("DormMetadataLabel");
+        sb.append("{label='").append(label).append('\'');
+        sb.append(", metadatas=").append(metadatas);
+        sb.append('}');
+        return sb.toString();
+    }
 }

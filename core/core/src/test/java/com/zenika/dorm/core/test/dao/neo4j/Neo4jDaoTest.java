@@ -84,4 +84,9 @@ public class Neo4jDaoTest {
         LOG.info("DormMetadata: " + dormMetadataLabel);
     }
 
+    @Test
+    public void testGetByLabelName() {
+        DormMetadataLabel<DormMetadata> label = dao.getByLabel(new DormMetadataLabel("Test"));
+        LOG.info("Label", label);
+    }
 }
