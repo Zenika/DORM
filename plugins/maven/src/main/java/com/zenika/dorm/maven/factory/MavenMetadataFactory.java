@@ -25,7 +25,7 @@ public class MavenMetadataFactory implements ExtensionMetadataFactory {
     }
 
     @Override
-    public DormMetadata fromMap(Long id, Map<String, String> properties) {
+    public MavenMetadata fromMap(Long id, Map<String, String> properties) {
 
         MavenMetadataBuilder builder = new MavenMetadataBuilder();
         applyToBuilder(builder, id, properties);

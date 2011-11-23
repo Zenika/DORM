@@ -39,7 +39,7 @@ public class DormMetadataTest extends DormMetadata {
     }
 
     public static DormMetadata getDefault() {
-        return new DormMetadataTest("1.0.0", "property");
+        return new DormMetadataTest("1.0.0", "DormTest-1.0.0");
     }
 
     @Override

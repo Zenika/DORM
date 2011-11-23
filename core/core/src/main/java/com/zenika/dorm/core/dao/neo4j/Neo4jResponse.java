@@ -1,5 +1,6 @@
 package com.zenika.dorm.core.dao.neo4j;
 
+import com.zenika.dorm.core.exception.CoreException;
 import com.zenika.dorm.core.model.impl.Usage;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
@@ -65,6 +66,15 @@ public class Neo4jResponse<T> {
         return all_type_relationships;
     }
 
+    public URI getAll_type_relationships(String type) {
+        String uri = getAll_type_relationships().replace("{-list|&|types}", type);
+        try {
+            return new URI(uri);
+        } catch (URISyntaxException e) {
+            throw new CoreException("Unable to create this uri: " + uri);
+        }
+    }
+
     public void setAll_type_relationships(String all_type_relationships) {
         this.all_type_relationships = all_type_relationships;
     }
@@ -79,6 +89,15 @@ public class Neo4jResponse<T> {
 
     public String getIncoming_typed_relationships() {
         return incoming_typed_relationships;
+    }
+
+    public URI getIncoming_typed_relationships(String type) {
+        String uri = getIncoming_typed_relationships().replace("{-list|&|types}", type);
+        try {
+            return new URI(uri);
+        } catch (URISyntaxException e) {
+            throw new CoreException("Unable to create this uri: " + uri);
+        }
     }
 
     public void setIncoming_typed_relationships(String incoming_typed_relationships) {
@@ -97,8 +116,13 @@ public class Neo4jResponse<T> {
         return outgoing_typed_relationships;
     }
 
-    public URI getOutgoing_typed_relationships(Usage usage) throws URISyntaxException {
-        return new URI(getOutgoing_typed_relationships().replace("{-list|&|types}", usage.getName()));
+    public URI getOutgoing_typed_relationships(String type) {
+        String uri = getOutgoing_typed_relationships().replace("{-list|&|types}", type);
+        try {
+            return new URI(uri);
+        } catch (URISyntaxException e) {
+            throw new CoreException("Unable to create this uri: " + uri, e);
+        }
     }
 
     public void setOutgoing_typed_relationships(String outgoing_typed_relationships) {
@@ -193,4 +217,5 @@ public class Neo4jResponse<T> {
         result = 31 * result + (traverse != null ? traverse.hashCode() : 0);
         return result;
     }
+
 }

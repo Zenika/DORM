@@ -4,12 +4,15 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Inject;
 import com.zenika.dorm.core.dao.DormDao;
+import com.zenika.dorm.core.dao.neo4j.provider.Neo4jIndexProvider;
 import com.zenika.dorm.core.dao.neo4j.provider.Neo4jWebResourceWrapper;
 import com.zenika.dorm.core.dao.query.DormBasicQuery;
 import com.zenika.dorm.core.model.DependencyNode;
 import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.core.model.DormMetadataLabel;
 import com.zenika.dorm.core.service.spi.ExtensionFactoryServiceLoader;
+
+import javax.annotation.PostConstruct;
 
 /**
  * @author Antoine ROUAZE <antoine.rouaze AT zenika.com>
@@ -19,17 +22,19 @@ public class DormDaoNeo4j implements DormDao {
     public static final String DATA_ENTRY_POINT_URI = "http://localhost:7474/db/data";
 
     @Inject
-    private Neo4jWebResourceWrapper wrapper;
-
-    @Inject
     private ExtensionFactoryServiceLoader serviceLoader;
+    @Inject
+    private Neo4jIndexProvider indexProvider;
+    @Inject
+    private Neo4jService service;
 
     @Override
     public DormMetadata get(final DormBasicQuery query) {
         return Guice.createInjector(new AbstractModule() {
             @Override
             protected void configure() {
-                bind(Neo4jWebResourceWrapper.class).toInstance(wrapper);
+                bind(Neo4jIndexProvider.class).toInstance(indexProvider);
+                bind(Neo4jService.class).toInstance(service);
                 bind(ExtensionFactoryServiceLoader.class).toInstance(serviceLoader);
                 bind(DormBasicQuery.class).toInstance(query);
             }
@@ -42,7 +47,8 @@ public class DormDaoNeo4j implements DormDao {
         Guice.createInjector(new AbstractModule() {
             @Override
             protected void configure() {
-                bind(Neo4jWebResourceWrapper.class).toInstance(wrapper);
+                bind(Neo4jIndexProvider.class).toInstance(indexProvider);
+                bind(Neo4jService.class).toInstance(service);
                 bind(ExtensionFactoryServiceLoader.class).toInstance(serviceLoader);
                 bind(DormMetadata.class).toInstance(metadata);
             }
@@ -54,11 +60,12 @@ public class DormDaoNeo4j implements DormDao {
         return Guice.createInjector(new AbstractModule() {
             @Override
             protected void configure() {
-                bind(Neo4jWebResourceWrapper.class).toInstance(wrapper);
+                bind(Neo4jIndexProvider.class).toInstance(indexProvider);
+                bind(Neo4jService.class).toInstance(service);
                 bind(ExtensionFactoryServiceLoader.class).toInstance(serviceLoader);
                 bind(DependencyNode.class).toInstance(root);
             }
-        }).getInstance(Neo4jAddDependenciesTask.class).execute();D
+        }).getInstance(Neo4jAddDependenciesTask.class).execute();
     }
 
     @Override
@@ -66,7 +73,8 @@ public class DormDaoNeo4j implements DormDao {
         Guice.createInjector(new AbstractModule() {
             @Override
             protected void configure() {
-                bind(Neo4jWebResourceWrapper.class).toInstance(wrapper);
+                bind(Neo4jIndexProvider.class).toInstance(indexProvider);
+                bind(Neo4jService.class).toInstance(service);
                 bind(ExtensionFactoryServiceLoader.class).toInstance(serviceLoader);
                 bind(DormMetadataLabel.class).toInstance(metadataLabel);
             }
@@ -75,8 +83,17 @@ public class DormDaoNeo4j implements DormDao {
     }
 
     @Override
-    public <T extends DormMetadata> T getById(long artifactId) {
-        return null;
+    public <T extends DormMetadata> T getById(final long artifactId) {
+        DormMetadata dormMetadata = Guice.createInjector(new AbstractModule() {
+            @Override
+            protected void configure() {
+                bind(Neo4jIndexProvider.class).toInstance(indexProvider);
+                bind(Neo4jService.class).toInstance(service);
+                bind(ExtensionFactoryServiceLoader.class).toInstance(serviceLoader);
+                bind(Long.class).toInstance(new Long(artifactId));
+            }
+        }).getInstance(Neo4jGetByIdTask.class).execute();
+        return (T) dormMetadata;
     }
 
     @Override

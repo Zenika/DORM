@@ -3,6 +3,8 @@ package com.zenika.dorm.core.guice.module.dao;
 import com.google.inject.AbstractModule;
 import com.zenika.dorm.core.dao.DormDao;
 import com.zenika.dorm.core.dao.neo4j.DormDaoNeo4j;
+import com.zenika.dorm.core.dao.neo4j.Neo4jIndex;
+import com.zenika.dorm.core.dao.neo4j.provider.Neo4jIndexProvider;
 import com.zenika.dorm.core.dao.neo4j.provider.Neo4jWebResourceWrapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,15 +16,6 @@ public class DormCoreNeo4jModule extends AbstractModule {
 
     private static final Logger LOG = LoggerFactory.getLogger(DormCoreNeo4jModule.class);
 
-//    @Provides
-//    public Collection<Class<?>> getClasses() {
-//        final Set<Class<?>> classes = new HashSet<Class<?>>();
-//        classes.add(Neo4jMetadata.class);
-//        classes.add(Neo4jResponse.class);
-//        classes.add(Neo4jIndex.class);
-//        return classes;
-//    }
-
     @Override
     protected void configure() {
 
@@ -30,11 +23,8 @@ public class DormCoreNeo4jModule extends AbstractModule {
             LOG.info("Configure dorm neo4j guice module");
         }
 
-        bind(Neo4jWebResourceWrapper.class);
-
-//        requireBinding(WebResource.class);
-
-//        bind(Neo4jIndex.class).toProvider(IndexProvider.class);
+//        bind(Neo4jWebResourceWrapper.class);
+//        bind(Neo4jIndexProvider.class);
         bind(DormDao.class).to(DormDaoNeo4j.class);
     }
 }

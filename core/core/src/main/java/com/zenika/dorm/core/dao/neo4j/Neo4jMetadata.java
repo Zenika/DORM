@@ -1,6 +1,7 @@
 package com.zenika.dorm.core.dao.neo4j;
 
 import com.zenika.dorm.core.dao.neo4j.util.CustomSerializer;
+import org.codehaus.jackson.annotate.JsonWriteNullProperties;
 import org.codehaus.jackson.map.annotate.JsonDeserialize;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.slf4j.Logger;

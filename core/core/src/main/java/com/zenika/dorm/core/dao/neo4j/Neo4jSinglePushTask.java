@@ -25,104 +25,31 @@ public class Neo4jSinglePushTask extends Neo4jAbstractTask {
     @Inject
     private DormMetadata metadata;
 
-    private WebResource resource;
-
     @Override
     public DormMetadata execute() {
-        resource = wrapper.get();
-
         DormBasicQuery query = new DormBasicQuery.Builder()
                 .extensionName(this.metadata.getType())
                 .name(this.metadata.getName())
                 .version(this.metadata.getVersion())
                 .build();
-
         Neo4jResponse response = getMetadata(query);
-//        Neo4jResponse response = null;
-
         if (response == null) {
-
             Long id;
             ExtensionMetadataFactory factory = serviceLoader.getInstanceOf(metadata.getType());
             Map<String, String> properties = factory.toMap(this.metadata);
-
             Neo4jMetadata metadata = new Neo4jMetadata(
                     this.metadata.getType(),
                     this.metadata.getName(),
                     this.metadata.getVersion(),
                     properties
             );
-
-            Neo4jResponse metadataResponse = createNode(metadata);
-
+            Neo4jResponse metadataResponse = neo4jService.createNode(metadata);
             id = extractId(metadataResponse.getSelf());
-
-//            Neo4jResponse propertiesResponse = createNode(metadata.getProperties());
-//
-//            createRelationships(
-//                    new Neo4jRelationship(
-//                            metadataResponse.getCreate_relationship(),
-//                            propertiesResponse.getSelf(),
-//                            Neo4jMetadata.PROPERTIES_RELATIONSHIPS
-//                    )
-//            );
-
-
-            // Create index is useless for the moment
-//            createIndex(metadataResponse, this.metadata.getFunctionalId());
-
             return factory.fromMap(id, properties);
         } else {
             LOG.info("The metadata already exist");
         }
         return null;
     }
-
-    private Neo4jResponse createNode(Object node) {
-        Neo4jResponse response = resource.path(NODE_PATH)
-                .accept(MediaType.APPLICATION_JSON)
-                .type(MediaType.APPLICATION_JSON)
-                .entity(node)
-                .post(Neo4jResponse.class);
-
-        logRequest("POST", resource, NODE_PATH);
-        LOG.debug("Response self: " + response.getSelf());
-        return response;
-    }
-
-    /**
-     * @param response
-     * @param value
-     * @deprecated index is useless for the moment
-     */
-    private void createIndex(Neo4jResponse response, String value) {
-        try {
-            URI indexUri = new URI(
-                    index.getTemplate()
-                            .replace("{key}", Neo4jIndex.INDEX_DEFAULT_KEY)
-                            .replace("{value}", value)
-            );
-
-            String nodeUri = new StringBuilder(50)
-                    .append("\"")
-                    .append(response.getSelf())
-                    .append("\"")
-                    .toString();
-
-            LOG.info("NodeUri: " + nodeUri);
-            LOG.info("Index uri: " + indexUri);
-
-            resource.uri(indexUri)
-                    .accept(MediaType.APPLICATION_JSON_TYPE)
-                    .type(MediaType.APPLICATION_JSON_TYPE)
-                    .entity(nodeUri)
-                    .post();
-
-            logRequest("POST", indexUri);
-        } catch (URISyntaxException e) {
-            throw new CoreException("Uri syntax exception", e);
-        }
-    }
-
 
 }

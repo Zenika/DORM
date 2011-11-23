@@ -75,8 +75,13 @@ public class Neo4jDaoTest {
         for (DormMetadata dormMetadata : dormMetadataLabel.getMetadatas()) {
             dao.saveOrUpdateMetadata(dormMetadata);
         }
-
         dao.createOrUpdateLabel(dormMetadataLabel);
+    }
+
+    @Test
+    public void testGetById() {
+        DormMetadata dormMetadataLabel = dao.getById(4);
+        LOG.info("DormMetadata: " + dormMetadataLabel);
     }
 
 }

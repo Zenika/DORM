@@ -12,22 +12,22 @@ import java.util.Map;
 /**
  * @author Antoine ROUAZE <antoine.rouaze AT zenika.com>
  */
-public class CustomSerializer extends JsonSerializer<Neo4jMetadata>{
+public class CustomSerializer extends JsonSerializer<Neo4jMetadata> {
 
     @Override
     public void serialize(Neo4jMetadata value, JsonGenerator jgen, SerializerProvider provider) throws IOException, JsonProcessingException {
         jgen.writeStartObject();
-//        jgen.writeString("!!!!!!!!!!!!!!");
         jgen.writeFieldName("extensionName");
         jgen.writeString(value.getExtensionName());
         jgen.writeFieldName("version");
         jgen.writeString(value.getVersion());
         jgen.writeFieldName("name");
         jgen.writeString(value.getName());
-
-        for (Map.Entry<String, String> property : value.getProperties().entrySet()){
-            jgen.writeFieldName(property.getKey());
-            jgen.writeString(property.getValue());
+        for (Map.Entry<String, String> property : value.getProperties().entrySet()) {
+            if (property.getValue() != null) {
+                jgen.writeFieldName(property.getKey());
+                jgen.writeString(property.getValue());
+            }
         }
         jgen.writeEndObject();
     }

@@ -17,6 +17,10 @@ import java.util.Map;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Neo4jRelationship {
 
+    public enum Direction {
+        IN, OUT, ALL
+    }
+
     public static final String LABEL_TYPE = "label";
 
     private String from;
@@ -25,6 +29,7 @@ public class Neo4jRelationship {
 
     private String start;
     private String end;
+    private String self;
 
     public Neo4jRelationship(){
 
@@ -65,6 +70,13 @@ public class Neo4jRelationship {
         this.end = end;
     }
 
+    public String getSelf() {
+        return self;
+    }
+
+    public void setSelf(String self) {
+        this.self = self;
+    }
 
     @Override
     public String toString() {

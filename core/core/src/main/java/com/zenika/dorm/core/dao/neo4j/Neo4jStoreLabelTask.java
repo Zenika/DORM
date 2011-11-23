@@ -1,13 +1,14 @@
 package com.zenika.dorm.core.dao.neo4j;
 
 import com.google.inject.Inject;
-import com.sun.jersey.api.client.GenericType;
-import com.sun.jersey.api.client.WebResource;
 import com.zenika.dorm.core.dao.query.DormBasicQuery;
 import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.core.model.DormMetadataLabel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import javax.ws.rs.core.MediaType;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -15,24 +16,77 @@ import java.util.Set;
  */
 public class Neo4jStoreLabelTask extends Neo4jAbstractTask {
 
+    private static final Logger LOG = LoggerFactory.getLogger(Neo4jStoreLabelTask.class);
+
     @Inject
     private DormMetadataLabel dormMetadataLabel;
 
-    private WebResource resource;
-
     @Override
     public Void execute() {
-        resource = wrapper.get();
         Set<DormMetadata> dormMetadataSet = dormMetadataLabel.getMetadatas();
         Neo4jLabel label = new Neo4jLabel(dormMetadataLabel.getLabel());
+        if (isAlreadyExist(label)) {
+            Neo4jResponse<Neo4jLabel> responseLabel = getLabel(label, indexProvider.getLabelIndex(), true);
+            List<Neo4jRelationship> toAddRelationships = findRelationshipsToAdd(dormMetadataSet, responseLabel);
+            List<Neo4jRelationship> toDeleteRelationships = findRelationshipsToDelete(dormMetadataSet, responseLabel);
+            neo4jService.createRelationships(toAddRelationships);
+            neo4jService.deleteRelationships(toDeleteRelationships);
+        }
         Neo4jResponse<Neo4jLabel> responseLabel = storeLabel(label);
+        addMetadataRelationships(dormMetadataSet, responseLabel);
+        LOG.debug("Neo4jResponse<Neo4jLabel>: {}", responseLabel);
+        return null;
+    }
+
+    private List<Neo4jRelationship> findRelationshipsToDelete(Set<DormMetadata> dormMetadataSet, Neo4jResponse<Neo4jLabel> responseLabel) {
+        List<Neo4jRelationship> toDeleteRelationships = new ArrayList<Neo4jRelationship>();
+        for (Neo4jResponse<Neo4jMetadata> metadataResponse : responseLabel.getData().getMetadataResponseSet()) {
+            boolean isExist = false;
+            for (DormMetadata dormMetadata : dormMetadataSet) {
+                if (convertToDormMetadata(metadataResponse).equals(dormMetadata)) {
+                    isExist = true;
+                    break;
+                }
+            }
+            if (!isExist) {
+                Neo4jRelationship neo4jRelationship = neo4jService.getRelationship(metadataResponse, Neo4jRelationship.LABEL_TYPE, Neo4jRelationship.Direction.IN);
+                toDeleteRelationships.add(neo4jRelationship);
+            }
+        }
+        return toDeleteRelationships;
+    }
+
+    private List<Neo4jRelationship> findRelationshipsToAdd(Set<DormMetadata> dormMetadataSet, Neo4jResponse<Neo4jLabel> responseLabel) {
+        List<Neo4jRelationship> toAddRelationships = new ArrayList<Neo4jRelationship>();
+        for (DormMetadata dormMetadata : dormMetadataSet) {
+            boolean isExist = false;
+            for (Neo4jResponse<Neo4jMetadata> metadataResponse : responseLabel.getData().getMetadataResponseSet()) {
+                if (dormMetadata.equals(convertToDormMetadata(metadataResponse))) {
+                    isExist = true;
+                    break;
+                }
+            }
+            if (!isExist) {
+                Neo4jResponse<Neo4jMetadata> metadataResponse = neo4jService.getNode(dormMetadata.getId(), Neo4jService.RESPONSE_METADATA);
+                Neo4jRelationship relationship = new Neo4jRelationship(responseLabel.getCreate_relationship(),
+                        metadataResponse.getSelf(), Neo4jRelationship.LABEL_TYPE);
+                toAddRelationships.add(relationship);
+            }
+        }
+        return toAddRelationships;
+    }
+
+    private void addMetadataRelationships(Set<DormMetadata> dormMetadataSet, Neo4jResponse<Neo4jLabel> responseLabel) {
         for (DormMetadata dormMetadata : dormMetadataSet) {
             Neo4jResponse<Neo4jMetadata> neo4jMetadata = getMetadata(dormMetadata);
             Neo4jRelationship neo4jRelationship = new Neo4jRelationship(responseLabel.getCreate_relationship(),
                     neo4jMetadata.getSelf(), Neo4jRelationship.LABEL_TYPE);
-            createRelationships(neo4jRelationship);
+            neo4jService.createRelationship(neo4jRelationship);
         }
-        return null;
+    }
+
+    private boolean isAlreadyExist(Neo4jLabel label) {
+        return getLabel(label, indexProvider.getLabelIndex(), false) != null;
     }
 
     private Neo4jResponse<Neo4jMetadata> getMetadata(DormMetadata dormMetadata) {
@@ -45,11 +99,8 @@ public class Neo4jStoreLabelTask extends Neo4jAbstractTask {
     }
 
     private Neo4jResponse<Neo4jLabel> storeLabel(Neo4jLabel label) {
-        return resource.path(NODE_PATH)
-                .accept(MediaType.APPLICATION_JSON_TYPE)
-                .type(MediaType.APPLICATION_JSON_TYPE)
-                .entity(label)
-                .post(RESPONSE_LABEL);
+        Neo4jResponse<Neo4jLabel> labelNeo4jResponse = neo4jService.createNode(label);
+        neo4jService.createIndex("name", label.getLabel(), labelNeo4jResponse.getSelf(), indexProvider.getLabelIndex());
+        return labelNeo4jResponse;
     }
-
 }

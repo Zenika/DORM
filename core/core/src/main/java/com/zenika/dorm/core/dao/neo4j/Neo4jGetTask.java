@@ -20,18 +20,10 @@ public class Neo4jGetTask extends Neo4jAbstractTask {
     @Inject
     private DormBasicQuery query;
 
-    private WebResource resource;
-
     @Override
     public DormMetadata execute() {
-        resource = wrapper.get();
-
         Neo4jResponse<Neo4jMetadata> metadataResponse = getMetadata(query);
-
-        Neo4jMetadata metadata = metadataResponse.getData();
-
-        return serviceLoader.getInstanceOf(metadata.getExtensionName())
-                .fromMap(extractId(metadataResponse.getSelf()), metadata.getProperties());
+            return convertToDormMetadata(metadataResponse);
     }
 
 }
