@@ -8,3 +8,4 @@ ALTER TABLE dorm_metadata RENAME dorm_qualifier  TO metadata_qualifier;
 ALTER TABLE dorm_metadata RENAME dorm_version  TO metadata_version;
 ALTER TABLE dorm_metadata RENAME dorm_type  TO metadata_type;
 
+insert into dorm_versionning (version) values (2);

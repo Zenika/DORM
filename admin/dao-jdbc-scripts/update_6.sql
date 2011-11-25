@@ -11,10 +11,6 @@ CREATE TABLE dorm_properties
    metadata_id integer, 
    CONSTRAINT id_primary PRIMARY KEY (id), 
    CONSTRAINT metadata_fk FOREIGN KEY (metadata_id) REFERENCES dorm_metadata (id) ON UPDATE NO ACTION ON DELETE NO ACTION
-) 
-WITH (
-  OIDS = FALSE
-)
+);
 
-
--- test;
+insert into dorm_versionning (version) values (6);

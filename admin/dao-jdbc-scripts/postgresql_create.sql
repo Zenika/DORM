@@ -1,4 +1,11 @@
+DROP TABLE IF EXISTS dorm_versionning;
 
+CREATE TABLE dorm_versionning
+(
+  id serial NOT NULL,
+  version character varying(255) NOT NULL,
+  CONSTRAINT dorm_versionning_id PRIMARY KEY (id)
+);
 
 DROP TABLE IF EXISTS dorm_metadata;
 

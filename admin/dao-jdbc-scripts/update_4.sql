@@ -8,3 +8,5 @@ ALTER TABLE dorm_extension
 DROP SEQUENCE dorm_dependencies_id_child_seq;
 DROP SEQUENCE dorm_dependencies_id_parent_seq;
 DROP SEQUENCE dorm_extension_dorm_metadata_fk_seq;
+
+insert into dorm_versionning (version) values (4);
