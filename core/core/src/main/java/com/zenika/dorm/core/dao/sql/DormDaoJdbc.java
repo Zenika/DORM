@@ -17,10 +17,8 @@ import java.util.Map;
 
 public class DormDaoJdbc implements DormDao {
 
-
     @Inject
     private DataSource dataSource;
-
 
     @Override
     public void saveOrUpdateMetadata(final DormMetadata metadata) {
@@ -37,7 +35,7 @@ public class DormDaoJdbc implements DormDao {
 
     @Override
     public DependencyNode addDependenciesToNode(DependencyNode root) {
-        return root;
+        throw new UnsupportedOperationException();
     }
 
     @Override
@@ -70,24 +68,23 @@ public class DormDaoJdbc implements DormDao {
         return DormDaoJdbcMapper.mapMetadataWithExtension(resultSet, extensionName);
     }
 
-
     @Override
-    public DormMetadata get(final DormBasicQuery query) {
-        JDBCGetTask jdbcGetTask = Guice.createInjector(
-                new AbstractModule() {
-                    @Override
-                    protected void configure() {
-                        bind(DormBasicQuery.class).toInstance(query);
-                        bind(DataSource.class).toInstance(dataSource);
-//                        bind(ExtensionFactoryServiceLoader.class).toInstance(serviceLoader);
-                    }
-                }).getInstance(JDBCGetTask.class);
-        return jdbcGetTask.execute();
+    public DormMetadata get(DormBasicQuery basicQuery) {
+
+        DormDaoJdbcQuery query = new DormDaoJdbcQuery("SELECT e.property_key, e.property_value, m.id " +
+                "FROM dorm_metadata m JOIN dorm_properties e ON e.metadata_id = m.id " +
+                "WHERE m.metadata_name = ? AND m.extension_name = ? AND m.metadata_version = ?");
+
+        query.addParam(1, basicQuery.getName());
+        query.addParam(2, basicQuery.getExtensionName());
+        query.addParam(3, basicQuery.getVersion());
+
+        ResultSet resultSet = query.getResultSet();
+        return DormDaoJdbcMapper.mapMetadataWithExtension(resultSet, basicQuery.getExtensionName());
     }
 
     @Override
     public DormMetadataLabel getByLabel(DormMetadataLabel label) {
         return null;
     }
-
 }
