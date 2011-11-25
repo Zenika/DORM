@@ -23,7 +23,7 @@ public class MetadataLabelService {
 
     public <T extends DormMetadata> List<DormResource> getArtifactsByLabel(DormMetadataLabel<T> label) {
 
-        label = dao.getByLabel(label);
+        label = dao.getByLabel(label, "dorm");
 
         List<DormResource> resources = new ArrayList<DormResource>();
 

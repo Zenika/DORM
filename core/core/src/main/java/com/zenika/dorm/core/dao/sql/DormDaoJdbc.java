@@ -3,7 +3,6 @@ package com.zenika.dorm.core.dao.sql;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Inject;
-import com.google.inject.TypeLiteral;
 import com.zenika.dorm.core.dao.DormDao;
 import com.zenika.dorm.core.dao.query.DormBasicQuery;
 import com.zenika.dorm.core.model.DependencyNode;
@@ -13,12 +12,15 @@ import com.zenika.dorm.core.service.spi.ExtensionFactoryServiceLoader;
 
 import javax.sql.DataSource;
 import java.sql.ResultSet;
-import java.util.Map;
+import java.util.List;
 
 public class DormDaoJdbc implements DormDao {
 
     @Inject
     private DataSource dataSource;
+
+    @Inject
+    ExtensionFactoryServiceLoader serviceLoader;
 
     @Override
     public void saveOrUpdateMetadata(final DormMetadata metadata) {
@@ -28,7 +30,7 @@ public class DormDaoJdbc implements DormDao {
                     protected void configure() {
                         bind(DormMetadata.class).toInstance(metadata);
                         bind(DataSource.class).toInstance(dataSource);
-//                        bind(ExtensionFactoryServiceLoader.class).toInstance(serviceLoader);
+                        bind(ExtensionFactoryServiceLoader.class).toInstance(serviceLoader);
                     }
                 }).getInstance(JDBCSinglePushTask.class).execute();
     }
@@ -84,7 +86,19 @@ public class DormDaoJdbc implements DormDao {
     }
 
     @Override
-    public DormMetadataLabel getByLabel(DormMetadataLabel label) {
+    public DormMetadataLabel getByLabel(DormMetadataLabel label, String extensionName) {
+
+        DormDaoJdbcQuery query = new DormDaoJdbcQuery("SELECT e.property_key, e.property_value, m.id FROM dorm_metadata m " +
+                "JOIN dorm_properties e ON e.metadata_id = m.id " +
+                "JOIN dorm_metadata_labels dml ON dml.metadata_id = m.id " +
+                "JOIN labels l ON dml.label_id = l.id " +
+                "WHERE l.name = ? AND m.extension_name = ?");
+
+        query.addParam(1, label.getLabel());
+        query.addParam(2, extensionName);
+
+        ResultSet resultSet = query.getResultSet();
         return null;
+//        List<> DormDaoJdbcMapper.mapMetadataWithExtension(resultSet, extensionName);
     }
 }

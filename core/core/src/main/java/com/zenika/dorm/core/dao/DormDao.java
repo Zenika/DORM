@@ -12,7 +12,7 @@ public interface DormDao {
 
     public DormMetadata get(DormBasicQuery query);
 
-    public DormMetadataLabel getByLabel(DormMetadataLabel label);
+    public DormMetadataLabel getByLabel(DormMetadataLabel label, String extensionName);
 
     public void saveOrUpdateMetadata(DormMetadata metadata);
 

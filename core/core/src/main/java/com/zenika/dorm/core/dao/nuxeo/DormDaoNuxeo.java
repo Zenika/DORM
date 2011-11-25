@@ -39,7 +39,7 @@ public class DormDaoNuxeo implements DormDao {
     }
 
     @Override
-    public DormMetadataLabel getByLabel(DormMetadataLabel label) {
+    public DormMetadataLabel getByLabel(DormMetadataLabel label, String extensionName) {
         return null;
     }
 

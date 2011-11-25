@@ -101,7 +101,7 @@ public class DormDaoNeo4j implements DormDao {
     }
 
     @Override
-    public DormMetadataLabel getByLabel(final DormMetadataLabel label) {
+    public DormMetadataLabel getByLabel(final DormMetadataLabel label, String extensionName) {
         return Guice.createInjector(new AbstractModule() {
             @Override
             protected void configure() {
