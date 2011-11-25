@@ -30,7 +30,7 @@ import java.util.Set;
 public class Launcher {
 
     private static final String MAVEN_REPOSITORY_TYPE = "maven";
-    private static final String NUXEO_REPOSITORY_TYPE = "nuxeo";
+    private static final String NUXEO_REPOSITORY_TYPE = "nexus";
     private static final String ARCHIVA_REPOSITORY_TYPE = "archiva";
     private static final String ARTIFACTORY_REPOSITORY_TYPE = "artifactory";
     private static final String IVY_REPOSITORY_TYPE = "ivy";

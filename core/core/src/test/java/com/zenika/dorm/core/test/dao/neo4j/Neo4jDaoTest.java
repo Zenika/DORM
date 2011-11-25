@@ -37,19 +37,15 @@ public class Neo4jDaoTest {
 
     @Test
     public void testSinglePushTest() {
-
         DormMetadata expectMetadata = DormMetadataTest.getDefault();
         dao.saveOrUpdateMetadata(expectMetadata);
-
         DormBasicQuery query = new DormBasicQuery.Builder()
                 .extensionName("DormTest")
                 .name("DormTest-1.0.0")
                 .version("1.0.0")
                 .build();
         DormMetadata resultMetadata = dao.get(query);
-
         LOG.info("Metadata: " + resultMetadata);
-
         assertThat(resultMetadata).isEqualTo(expectMetadata);
     }
 
@@ -59,7 +55,6 @@ public class Neo4jDaoTest {
             DormMetadata metadata = node.getDependency().getMetadata();
             dao.saveOrUpdateMetadata(metadata);
         }
-
         DependencyNode root = provider.getRoot();
         dao.addDependenciesToNode(root);
     }
@@ -71,7 +66,6 @@ public class Neo4jDaoTest {
         dormMetadataLabel.addMetadata(new DormMetadataTest("1.0", "artifact2", "zenika", "antoine"));
         dormMetadataLabel.addMetadata(new DormMetadataTest("1.0", "artifact3", "zenika", "antoine"));
         dormMetadataLabel.addMetadata(new DormMetadataTest("1.0", "artifact4", "zenika", "antoine"));
-
         for (DormMetadata dormMetadata : dormMetadataLabel.getMetadatas()) {
             dao.saveOrUpdateMetadata(dormMetadata);
         }
