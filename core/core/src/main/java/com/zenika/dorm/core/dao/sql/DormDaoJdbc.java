@@ -12,6 +12,7 @@ import com.zenika.dorm.core.model.DormMetadataLabel;
 import com.zenika.dorm.core.service.spi.ExtensionFactoryServiceLoader;
 
 import javax.sql.DataSource;
+import java.sql.ResultSet;
 import java.util.Map;
 
 public class DormDaoJdbc implements DormDao {
@@ -45,15 +46,29 @@ public class DormDaoJdbc implements DormDao {
     }
 
     @Override
-    public DormMetadata getById(final long artifactId) {
+    public DormMetadata getById(long artifactId) {
 
         DormDaoJdbcQuery query = new DormDaoJdbcQuery("SELECT m FROM dorm_metadata m " +
                 "WHERE m.id = ?");
 
-        query.addLongParam(1, artifactId);
+        query.addParam(1, artifactId);
 
-        return null;
+        ResultSet resultSet = query.getResultSet();
+        return DormDaoJdbcMapper.mapMetadata(resultSet);
     }
+
+    @Override
+    public DormMetadata getById(long artifactId, String extensionName) {
+
+        DormDaoJdbcQuery query = new DormDaoJdbcQuery("SELECT m FROM dorm_metadata m " +
+                "WHERE m.id = ?");
+
+        query.addParam(1, artifactId);
+
+        ResultSet resultSet = query.getResultSet();
+        return DormDaoJdbcMapper.mapMetadata(resultSet);
+    }
+
 
     @Override
     public DormMetadata get(final DormBasicQuery query) {

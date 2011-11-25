@@ -20,5 +20,7 @@ public interface DormDao {
 
     public DormMetadataLabel createOrUpdateLabel(DormMetadataLabel metadataLabel);
 
-    public <T extends DormMetadata> T getById(long artifactId);
+    public DormMetadata getById(long artifactId);
+
+    public DormMetadata getById(long artifactId, String extensionName);
 }

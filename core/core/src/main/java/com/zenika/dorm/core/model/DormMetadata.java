@@ -13,8 +13,6 @@ public abstract class DormMetadata {
 
     protected final Long id;
 
-    protected final Set<String> labels = new HashSet<String>();
-
     protected DormMetadata() {
         id = null;
     }

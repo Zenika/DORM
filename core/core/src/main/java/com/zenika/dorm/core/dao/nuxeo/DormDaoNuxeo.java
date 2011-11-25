@@ -66,7 +66,12 @@ public class DormDaoNuxeo implements DormDao {
     }
 
     @Override
-    public <T extends DormMetadata> T getById(long artifactId) {
+    public DormMetadata getById(long artifactId) {
+        return null;
+    }
+
+    @Override
+    public DormMetadata getById(long artifactId, String extensionName) {
         return null;
     }
 }

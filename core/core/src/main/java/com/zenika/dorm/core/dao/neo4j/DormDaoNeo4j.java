@@ -82,7 +82,12 @@ public class DormDaoNeo4j implements DormDao {
     }
 
     @Override
-    public <T extends DormMetadata> T getById(final long artifactId) {
+    public DormMetadata getById(long artifactId, String extensionName) {
+        return null;
+    }
+
+    @Override
+    public DormMetadata getById(final long artifactId) {
         DormMetadata dormMetadata = Guice.createInjector(new AbstractModule() {
             @Override
             protected void configure() {
@@ -92,7 +97,7 @@ public class DormDaoNeo4j implements DormDao {
                 bind(Long.class).toInstance(new Long(artifactId));
             }
         }).getInstance(Neo4jGetByIdTask.class).execute();
-        return (T) dormMetadata;
+        return dormMetadata;
     }
 
     @Override
