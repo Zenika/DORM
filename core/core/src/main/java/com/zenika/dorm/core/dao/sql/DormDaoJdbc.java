@@ -60,13 +60,14 @@ public class DormDaoJdbc implements DormDao {
     @Override
     public DormMetadata getById(long artifactId, String extensionName) {
 
-        DormDaoJdbcQuery query = new DormDaoJdbcQuery("SELECT m FROM dorm_metadata m " +
+        DormDaoJdbcQuery query = new DormDaoJdbcQuery("SELECT e.property_key, e.property_value, m.id " +
+                "FROM dorm_metadata m JOIN dorm_properties e ON e.metadata_id = m.id " +
                 "WHERE m.id = ?");
 
         query.addParam(1, artifactId);
 
         ResultSet resultSet = query.getResultSet();
-        return DormDaoJdbcMapper.mapMetadata(resultSet);
+        return DormDaoJdbcMapper.mapMetadataWithExtension(resultSet, extensionName);
     }
 
 
