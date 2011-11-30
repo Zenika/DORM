@@ -28,7 +28,7 @@ public class MetadataLabelService {
         List<DormResource> resources = new ArrayList<DormResource>();
 
         for (T metadata : label.getMetadatas()) {
-            DormResource resource = repository.get(metadata);
+            DormResource resource = repository.get(metadata, "jar");
             resources.add(resource);
         }
 

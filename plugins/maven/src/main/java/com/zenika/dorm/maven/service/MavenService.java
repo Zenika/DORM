@@ -128,7 +128,7 @@ public class MavenService {
             LOG.debug("Get maven artifact from metadata : " + metadata);
         }
 
-        DormResource resource = dormService.getResource(metadata);
+        DormResource resource = dormService.getResource(metadata, metadata.getBuildInfo().getExtension());
 
         return resource;
     }

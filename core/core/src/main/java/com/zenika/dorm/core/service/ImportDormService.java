@@ -31,8 +31,8 @@ public class ImportDormService implements DormService {
     }
 
     @Override
-    public DormResource getResource(DormMetadata metadata) {
-        return repository.get(metadata);
+    public DormResource getResource(DormMetadata metadata, String extension) {
+        return repository.get(metadata, null);
     }
 
     @Override

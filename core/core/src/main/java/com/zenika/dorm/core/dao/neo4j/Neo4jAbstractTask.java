@@ -109,7 +109,7 @@ public abstract class Neo4jAbstractTask {
     }
 
     protected String generateNodeUri(Long id) {
-        return neo4jService.NODE_PATH + id;
+        return Neo4jService.NODE_URI + "/" + id;
     }
 
     protected String generateCreateRelationshipUri(Long id) {

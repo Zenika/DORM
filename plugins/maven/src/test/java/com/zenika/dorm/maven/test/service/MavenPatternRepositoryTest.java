@@ -65,7 +65,7 @@ public class MavenPatternRepositoryTest {
             }
         });
         DormRepositoryPatternAssociate repositoryPatternAssociate = injector.getInstance(DormRepositoryPatternAssociate.class);
-        DormResource resultResource = repositoryPatternAssociate.get(mavenMetadata);
+        DormResource resultResource = repositoryPatternAssociate.get(mavenMetadata, null);
         assertThat(resultResource).isEqualTo(expectedResource);
     }
 

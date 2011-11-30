@@ -17,6 +17,8 @@ public class MavenUri {
     private String version;
     private boolean snapshot;
 
+    private boolean mavenMetadata;
+
     private MavenFilename filename;
 
     public MavenUri(String uri) {
@@ -39,24 +41,30 @@ public class MavenUri {
             throw new MavenException("Maven uri is required");
         }
 
-        String[] pathParams = uri.split("/");
-        int paramsNumber = pathParams.length;
+        if (uri.endsWith(MavenConstant.Special.MAVEN_METADATA_XML)) {
+            mavenMetadata = false;
+        } else {
+            String[] pathParams = uri.split("/");
+            int paramsNumber = pathParams.length;
 
-        version = pathParams[paramsNumber - 2];
-        if (version.endsWith("-" + MavenConstant.Special.SNAPSHOT)) {
-            snapshot = true;
+            version = pathParams[paramsNumber - 2];
+            if (version.endsWith("-" + MavenConstant.Special.SNAPSHOT)) {
+                snapshot = true;
+            }
+
+            artifactId = pathParams[paramsNumber - 3];
+
+            int groupidParam = paramsNumber - 4;
+            groupId = pathParams[groupidParam];
+
+            for (int i = groupidParam - 1; i >= 0; i--) {
+                groupId = pathParams[i] + "." + groupId;
+            }
+
+            this.filename = new MavenFilename(this, pathParams[paramsNumber - 1]);
+
+            mavenMetadata = true;
         }
-
-        artifactId = pathParams[paramsNumber - 3];
-
-        int groupidParam = paramsNumber - 4;
-        groupId = pathParams[groupidParam];
-
-        for (int i = groupidParam - 1; i >= 0; i--) {
-            groupId = pathParams[i] + "." + groupId;
-        }
-
-        this.filename = new MavenFilename(this, pathParams[paramsNumber - 1]);
     }
 
     private void buildUri() {
@@ -87,7 +95,7 @@ public class MavenUri {
     }
 
     public boolean isMavenMetadataUri() {
-        return !StringUtils.equals(filename.getFilename(), MavenConstant.Special.MAVEN_METADATA_XML);
+        return mavenMetadata;
     }
 
     public String getUri() {

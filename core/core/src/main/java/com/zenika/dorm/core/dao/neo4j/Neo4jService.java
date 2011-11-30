@@ -3,6 +3,7 @@ package com.zenika.dorm.core.dao.neo4j;
 import com.google.inject.Inject;
 import com.sun.jersey.api.client.GenericType;
 import com.sun.jersey.api.client.WebResource;
+import com.zenika.dorm.core.dao.DormDao;
 import com.zenika.dorm.core.dao.neo4j.provider.Neo4jWebResourceWrapper;
 import com.zenika.dorm.core.exception.CoreException;
 import org.codehaus.groovy.ast.GenericsType;
@@ -19,6 +20,7 @@ public class Neo4jService {
 
     protected static final String GREMLIN_URI = "ext/GremlinPlugin/graphdb/execute_script";
     protected static final String NODE_PATH = "node";
+    protected static final String NODE_URI = DormDaoNeo4j.DATA_ENTRY_POINT_URI + "/node";
     protected static final String AUTO_INDEX_URI = "index/auto/node/{property}/{value}";
 
     public static final GenericType<List<Neo4jRelationship>> RESPONSE_LIST_RELATIONSHIP =

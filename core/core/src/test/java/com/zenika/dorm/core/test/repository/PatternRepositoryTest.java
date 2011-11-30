@@ -3,7 +3,6 @@ package com.zenika.dorm.core.test.repository;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.core.model.DormResource;
 import com.zenika.dorm.core.model.impl.DefaultDormResource;
 import com.zenika.dorm.core.repository.DormRepositoryConfiguration;
@@ -66,7 +65,7 @@ public class PatternRepositoryTest {
             }
         });
         DormRepositoryPatternAssociate repositoryPatternAssociate = injector.getInstance(DormRepositoryPatternAssociate.class);
-        DormResource resultResource = repositoryPatternAssociate.get(dormMetadata);
+        DormResource resultResource = repositoryPatternAssociate.get(dormMetadata, null);
         assertThat(resultResource).isEqualTo(expectedResource);
     }
 

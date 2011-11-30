@@ -6,8 +6,6 @@ import com.zenika.dorm.core.model.DependencyNode;
 import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.core.model.DormResource;
 import com.zenika.dorm.core.repository.DormRepository;
-import com.zenika.dorm.core.service.DormService;
-import com.zenika.dorm.core.service.config.DormServiceResourceConfig;
 import com.zenika.dorm.core.service.config.DormServiceStoreResourceConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,9 +52,9 @@ public class DefaultDormService implements DormService {
     }
 
     @Override
-    public DormResource getResource(DormMetadata metadata) {
+    public DormResource getResource(DormMetadata metadata, String extension) {
         checkNotNull(metadata);
-        return repository.get(metadata);
+        return repository.get(metadata, extension);
     }
 
     @Override

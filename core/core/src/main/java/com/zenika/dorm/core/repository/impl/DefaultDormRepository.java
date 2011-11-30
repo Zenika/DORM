@@ -88,7 +88,7 @@ public class DefaultDormRepository implements DormRepository {
     }
 
     @Override
-    public DormResource get(DormMetadata metadata) {
+    public DormResource get(DormMetadata metadata, String extension) {
 
         LOG.debug("Get dorm file by metadata: {}", metadata);
 

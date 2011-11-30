@@ -14,7 +14,7 @@ public interface DormService {
 
     public void storeResource(DormResource resource, DormMetadata metadata, DormServiceStoreResourceConfig config);
 
-    public DormResource getResource(DormMetadata metadata);
+    public DormResource getResource(DormMetadata metadata, String extension);
 
     public DependencyNode addDependenciesToNode(DependencyNode node);
 }

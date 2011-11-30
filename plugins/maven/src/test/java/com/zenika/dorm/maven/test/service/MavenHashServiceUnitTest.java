@@ -45,7 +45,7 @@ public class MavenHashServiceUnitTest extends MavenUnitTest {
         MavenMetadata hashMetadata = fixtures.getSimpleJarMd5();
         MavenMetadata metadata = fixtures.getSimpleJar();
 
-        when(service.getResource(metadata)).thenReturn(resource);
+        when(service.getResource(metadata, null)).thenReturn(resource);
 
         assertThat(hashService.compareHash(hashMetadata, md5File)).isTrue();
     }
@@ -60,7 +60,7 @@ public class MavenHashServiceUnitTest extends MavenUnitTest {
         MavenMetadata hashMetadata = fixtures.getSimpleJarSha1();
         MavenMetadata metadata = fixtures.getSimpleJar();
 
-        when(service.getResource(metadata)).thenReturn(resource);
+        when(service.getResource(metadata, null)).thenReturn(resource);
 
         assertThat(hashService.compareHash(hashMetadata, sha1File)).isTrue();
     }
