@@ -5,13 +5,16 @@ import com.google.inject.Guice;
 import com.google.inject.Inject;
 import com.zenika.dorm.core.dao.DormDao;
 import com.zenika.dorm.core.dao.query.DormBasicQuery;
+import com.zenika.dorm.core.exception.CoreException;
 import com.zenika.dorm.core.model.DependencyNode;
 import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.core.model.DormMetadataLabel;
 import com.zenika.dorm.core.service.spi.ExtensionFactoryServiceLoader;
 
 import javax.sql.DataSource;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 
 public class DormDaoJdbc implements DormDao {
@@ -24,6 +27,25 @@ public class DormDaoJdbc implements DormDao {
 
     @Override
     public void saveOrUpdateMetadata(final DormMetadata metadata) {
+
+        DormDaoJdbcQueryExec queryExec = new DormDaoJdbcQueryExec() {
+
+            @Override
+            public Object execute(PreparedStatement statement) throws SQLException {
+
+                if (statement.executeUpdate() == 0) {
+                    throw new CoreException("Unable to save metadata");
+                }
+
+                ResultSet res = statement.getGeneratedKeys();
+
+                if (res.next()) {
+                    return res.getLong("id");
+                }
+
+                return null;
+            }
+        };
         Guice.createInjector(
                 new AbstractModule() {
                     @Override

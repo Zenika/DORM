@@ -80,7 +80,7 @@ public class Neo4jDaoTest {
 
     @Test
     public void testGetByLabelName() {
-        DormMetadataLabel<DormMetadata> label = dao.getByLabel(new DormMetadataLabel("Test"));
+        DormMetadataLabel<DormMetadata> label = dao.getByLabel(new DormMetadataLabel("Test"), "maven");
         LOG.info("Label", label);
     }
 }

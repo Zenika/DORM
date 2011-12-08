@@ -19,16 +19,37 @@ public class DormDaoJdbcQuery {
     @Inject
     protected DataSource dataSource;
 
-    private Connection connection;
-
-    private PreparedStatement statement;
-
     private String query;
 
     private Map<Integer, Object> params = new HashMap<Integer, Object>();
 
     public DormDaoJdbcQuery(String query) {
         this.query = query;
+    }
+
+    public int execute() {
+
+        Connection connection = null;
+
+        try {
+            connection = dataSource.getConnection();
+            PreparedStatement statement = connection.prepareStatement(query);
+
+            for (Map.Entry<Integer, Object> entry : params.entrySet()) {
+                statement.setObject(entry.getKey(), entry.getValue());
+            }
+
+            return statement.executeUpdate();
+
+        } catch (SQLException e) {
+            throw new CoreException("Unable to get connection from data source", e);
+        } finally {
+            try {
+                DbUtils.close(connection);
+            } catch (SQLException e) {
+                throw new CoreException("Unable to execute request", e);
+            }
+        }
     }
 
     public ResultSet getResultSet() {
@@ -58,28 +79,6 @@ public class DormDaoJdbcQuery {
 
     public DormDaoJdbcQuery addParam(int index, Object param) {
         params.put(index, param);
-        return this;
-    }
-
-    public DormDaoJdbcQuery addStringParam(int index, String param) {
-
-        try {
-            statement.setString(index, param);
-        } catch (SQLException e) {
-            throw new CoreException("Unable to execute request", e);
-        }
-
-        return this;
-    }
-
-    public DormDaoJdbcQuery addLongParam(int index, long param) {
-
-        try {
-            statement.setLong(index, param);
-        } catch (SQLException e) {
-            throw new CoreException("Unable to execute request", e);
-        }
-
         return this;
     }
 }
