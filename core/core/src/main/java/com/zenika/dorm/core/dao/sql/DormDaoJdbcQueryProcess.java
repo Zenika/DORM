@@ -6,7 +6,7 @@ import java.sql.SQLException;
 /**
  * @author Lukasz Piliszczuk <lukasz.piliszczuk AT zenika.com>
  */
-public interface DormDaoJdbcQueryExec {
+public interface DormDaoJdbcQueryProcess {
 
-    Object execute(PreparedStatement statement) throws SQLException;
+    Object process(PreparedStatement statement) throws SQLException;
 }

@@ -10,12 +10,14 @@ import com.zenika.dorm.core.model.DependencyNode;
 import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.core.model.DormMetadataLabel;
 import com.zenika.dorm.core.service.spi.ExtensionFactoryServiceLoader;
+import org.slf4j.Logger;
 
+import javax.management.Query;
 import javax.sql.DataSource;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.List;
+import java.util.Map;
 
 public class DormDaoJdbc implements DormDao {
 
@@ -28,33 +30,43 @@ public class DormDaoJdbc implements DormDao {
     @Override
     public void saveOrUpdateMetadata(final DormMetadata metadata) {
 
-        DormDaoJdbcQueryExec queryExec = new DormDaoJdbcQueryExec() {
+        DormDaoJdbcQuery query = new DormDaoJdbcQuery("SELECT id FROM dorm_metadata WHERE metadata_name = ? AND extension_name = ? AND metadata_version = ?");
+        query.addParam(1, metadata.getName());
+        query.addParam(2, metadata.getType());
+        query.addParam(3, metadata.getVersion());
 
-            @Override
-            public Object execute(PreparedStatement statement) throws SQLException {
-
-                if (statement.executeUpdate() == 0) {
-                    throw new CoreException("Unable to save metadata");
-                }
-
-                ResultSet res = statement.getGeneratedKeys();
-
-                if (res.next()) {
-                    return res.getLong("id");
-                }
-
-                return null;
+        ResultSet res = query.getResultSet();
+        Long metadataId = null;
+        try {
+            if (res.next()) {
+                metadataId = res.getLong("id");
             }
-        };
-        Guice.createInjector(
-                new AbstractModule() {
-                    @Override
-                    protected void configure() {
-                        bind(DormMetadata.class).toInstance(metadata);
-                        bind(DataSource.class).toInstance(dataSource);
-                        bind(ExtensionFactoryServiceLoader.class).toInstance(serviceLoader);
-                    }
-                }).getInstance(JDBCSinglePushTask.class).execute();
+        } catch (SQLException e) {
+            throw new CoreException("SQL exception", e);
+        }
+
+        if (null != metadataId) {
+            return;
+        }
+
+        query = new DormDaoJdbcQuery("INSERT INTO dorm_metadata (metadata_name, extension_name, metadata_version) VALUES (?, ?, ?);");
+        query.addParam(1, metadata.getName());
+        query.addParam(2, metadata.getType());
+        query.addParam(3, metadata.getVersion());
+
+        metadataId = query.insert();
+
+        Map<String, String> properties = serviceLoader.getInstanceOf(metadata.getType()).toMap(metadata);
+
+        query = new DormDaoJdbcQuery("INSERT INTO dorm_properties (property_key, property_value, metadata_id) VALUES (?, ?, ?)");
+
+        for (Map.Entry<String, String> property : properties.entrySet()) {
+            query.addParam(1, property.getKey());
+            query.addParam(2, property.getValue());
+            query.addParam(3, metadataId);
+        }
+
+        query.insert();
     }
 
     @Override

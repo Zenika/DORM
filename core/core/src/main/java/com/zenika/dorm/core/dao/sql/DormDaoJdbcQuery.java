@@ -5,10 +5,7 @@ import com.zenika.dorm.core.exception.CoreException;
 import org.apache.commons.dbutils.DbUtils;
 
 import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.*;
 
 /**
@@ -27,19 +24,32 @@ public class DormDaoJdbcQuery {
         this.query = query;
     }
 
-    public int execute() {
+//    public Object processs(DormDaoJdbcQueryProcess process) {
+//
+//        Connection connection = null;
+//
+//        try {
+//            connection = dataSource.getConnection();
+//            return process.process(getStatement(connection));
+//
+//        } catch (SQLException e) {
+//            throw new CoreException("Unable to get connection from data source", e);
+//        } finally {
+//            try {
+//                DbUtils.close(connection);
+//            } catch (SQLException e) {
+//                throw new CoreException("Unable to execute request", e);
+//            }
+//        }
+//    }
+
+    public ResultSet getResultSet() {
 
         Connection connection = null;
 
         try {
             connection = dataSource.getConnection();
-            PreparedStatement statement = connection.prepareStatement(query);
-
-            for (Map.Entry<Integer, Object> entry : params.entrySet()) {
-                statement.setObject(entry.getKey(), entry.getValue());
-            }
-
-            return statement.executeUpdate();
+            return getStatement(connection).getResultSet();
 
         } catch (SQLException e) {
             throw new CoreException("Unable to get connection from data source", e);
@@ -52,19 +62,42 @@ public class DormDaoJdbcQuery {
         }
     }
 
-    public ResultSet getResultSet() {
+    public int update() {
 
         Connection connection = null;
 
         try {
             connection = dataSource.getConnection();
-            PreparedStatement statement = connection.prepareStatement(query);
+            return getStatement(connection).executeUpdate();
 
-            for (Map.Entry<Integer, Object> entry : params.entrySet()) {
-                statement.setObject(entry.getKey(), entry.getValue());
+        } catch (SQLException e) {
+            throw new CoreException("Unable to get connection from data source", e);
+        } finally {
+            try {
+                DbUtils.close(connection);
+            } catch (SQLException e) {
+                throw new CoreException("Unable to execute request", e);
+            }
+        }
+    }
+
+    public long insert() throws CoreException {
+
+        Connection connection = null;
+
+        try {
+            connection = dataSource.getConnection();
+            PreparedStatement statement = getStatement(connection);
+            connection.commit();
+
+            if (statement.executeUpdate() == 0) {
+                throw new CoreException("Unable to save");
             }
 
-            return statement.getResultSet();
+            ResultSet res = statement.getGeneratedKeys();
+            res.next();
+
+            return res.getLong("id");
 
         } catch (SQLException e) {
             throw new CoreException("Unable to get connection from data source", e);
@@ -80,5 +113,26 @@ public class DormDaoJdbcQuery {
     public DormDaoJdbcQuery addParam(int index, Object param) {
         params.put(index, param);
         return this;
+    }
+
+    private PreparedStatement getStatement(Connection connection, boolean generatedKeys) throws SQLException {
+
+        PreparedStatement statement;
+
+        if (generatedKeys) {
+            statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+        } else {
+            statement = connection.prepareStatement(query);
+        }
+
+        for (Map.Entry<Integer, Object> entry : params.entrySet()) {
+            statement.setObject(entry.getKey(), entry.getValue());
+        }
+
+        return statement;
+    }
+
+    private PreparedStatement getStatement(Connection connection) throws SQLException {
+        return getStatement(connection, false);
     }
 }
