@@ -30,8 +30,8 @@ public class Neo4jWebResourceWrapper {
     private WebResource resource;
     private Neo4jIndex labelIndex;
 
-    private boolean enableProxy = true;
-    private String hostProxy = "localhost";
+    private boolean enableProxy = false;
+    private String hostProxy = "192.168.182.1";
     private String portProxy = "8008";
 
 //    @Inject
