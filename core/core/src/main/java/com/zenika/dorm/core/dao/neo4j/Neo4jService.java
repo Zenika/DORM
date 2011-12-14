@@ -3,10 +3,8 @@ package com.zenika.dorm.core.dao.neo4j;
 import com.google.inject.Inject;
 import com.sun.jersey.api.client.GenericType;
 import com.sun.jersey.api.client.WebResource;
-import com.zenika.dorm.core.dao.DormDao;
 import com.zenika.dorm.core.dao.neo4j.provider.Neo4jWebResourceWrapper;
 import com.zenika.dorm.core.exception.CoreException;
-import org.codehaus.groovy.ast.GenericsType;
 
 import javax.ws.rs.core.MediaType;
 import java.net.URI;

@@ -14,7 +14,13 @@ import java.util.*;
 public class DormDaoJdbcQuery {
 
     @Inject
-    protected DataSource dataSource;
+    private DataSource dataSource;
+
+    private Connection connection;
+
+    private PreparedStatement statement;
+
+    private ResultSet resultSet;
 
     private String query;
 
@@ -110,9 +116,29 @@ public class DormDaoJdbcQuery {
         }
     }
 
-    public DormDaoJdbcQuery addParam(int index, Object param) {
+    public DormDaoJdbcQuery addOrReplaceParam(int index, Object param) {
         params.put(index, param);
         return this;
+    }
+
+    public DormDaoJdbcQuery resetParam() {
+        params.clear();
+        return this;
+    }
+
+    public DormDaoJdbcQuery setQuery(String query) {
+        this.query = query;
+        return this;
+    }
+
+    public void close() {
+        if (null != connection) {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                
+            }
+        }
     }
 
     private PreparedStatement getStatement(Connection connection, boolean generatedKeys) throws SQLException {
