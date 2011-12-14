@@ -2,10 +2,12 @@ package com.zenika.dorm.core.service;
 
 import com.google.inject.Inject;
 import com.zenika.dorm.core.dao.DormDao;
+import com.zenika.dorm.core.dao.query.DormBasicQuery;
 import com.zenika.dorm.core.model.DependencyNode;
 import com.zenika.dorm.core.model.DormMetadata;
 import com.zenika.dorm.core.model.DormResource;
 import com.zenika.dorm.core.repository.DormRepository;
+import com.zenika.dorm.core.security.DormSecurity;
 import com.zenika.dorm.core.service.config.DormServiceStoreResourceConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,6 +27,9 @@ public class DefaultDormService implements DormService {
     @Inject
     private DormRepository repository;
 
+    @Inject
+    private DormSecurity security;
+
     @Override
     public void storeMetadata(DormMetadata metadata) {
 
@@ -32,6 +37,11 @@ public class DefaultDormService implements DormService {
 
         if (LOG.isDebugEnabled()) {
             LOG.debug("Store metadata : " + metadata);
+        }
+
+        if (!security.getRole().canOverride() &&
+                null != dao.get(new DormBasicQuery.Builder(metadata).build())) {
+            throw new SecurityException("Cannot override existing metadata");
         }
 
         dao.saveOrUpdateMetadata(metadata);

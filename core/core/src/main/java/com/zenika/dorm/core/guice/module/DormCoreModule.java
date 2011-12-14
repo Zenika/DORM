@@ -4,6 +4,7 @@ import com.google.inject.AbstractModule;
 import com.zenika.dorm.core.dao.DormDao;
 import com.zenika.dorm.core.processor.DormProcessor;
 import com.zenika.dorm.core.repository.DormRepository;
+import com.zenika.dorm.core.security.DormSecurity;
 import com.zenika.dorm.core.service.DefaultDormService;
 import com.zenika.dorm.core.service.DormService;
 import com.zenika.dorm.core.service.spi.ExtensionFactoryServiceLoader;
@@ -25,13 +26,15 @@ public class DormCoreModule extends AbstractModule {
         if (LOG.isInfoEnabled()) {
             LOG.info("Configure dorm core guice module");
         }
-        requireBinding(DormRepository.class);
+
         bind(DormService.class).to(DefaultDormService.class);
         bind(DormGenericResource.class);
         bind(CoreExceptionMapper.class);
         bind(ExtensionFactoryServiceLoader.class);
         bind(DormProcessor.class);
-        
+        bind(DormSecurity.class);
+
         requireBinding(DormDao.class);
+        requireBinding(DormRepository.class);
     }
 }
