@@ -4,8 +4,10 @@ import com.google.inject.Inject;
 import com.zenika.dorm.core.exception.CoreException;
 import com.zenika.dorm.core.model.ws.DormWebServiceRequest;
 import com.zenika.dorm.core.model.ws.DormWebServiceResult;
+import com.zenika.dorm.core.security.DormSecurity;
 import com.zenika.dorm.maven.model.MavenMetadata;
 import com.zenika.dorm.maven.processor.extension.MavenProcessor;
+import com.zenika.dorm.maven.service.MavenSecurity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sun.misc.BASE64Decoder;
@@ -27,13 +29,15 @@ import java.util.Properties;
 public class MavenResource {
 
     private static final Logger LOG = LoggerFactory.getLogger(MavenResource.class);
-    private static final String USER_PROPERTIES = "/com/zenika/dorm/maven/configuration/user.properties";
 
     @Inject
     private MavenProcessor processor;
 
     @Context
     private HttpHeaders httpHeaders;
+
+    @Inject
+    private DormSecurity dormSecurity;
 
     public MavenResource() {
         if (LOG.isInfoEnabled()) {
@@ -77,8 +81,11 @@ public class MavenResource {
     public Response put(@PathParam("path") String path, @PathParam("filename") String filename, File file) {
         if (httpHeaders.getRequestHeader("Authorization") != null) {
             String auth = httpHeaders.getRequestHeader("Authorization").get(0);
-            if (allowUser(auth)) {
-                String role = getRole(auth);
+            MavenSecurity mavenSecurity = new MavenSecurity(auth);
+            if (mavenSecurity.isAllowedUser()) {
+
+                dormSecurity.setRole(mavenSecurity.getRole());
+
                 String uri = path + "/" + filename;
                 if (LOG.isInfoEnabled()) {
                     LOG.info("Maven webservice PUT with uri : " + uri);
@@ -102,42 +109,5 @@ public class MavenResource {
         return Response.status(Response.Status.UNAUTHORIZED).header("WWW-Authenticate", "Basic realm=\"Dorm Realm\"").build();
     }
 
-    private boolean allowUser(String auth) {
-        Properties properties = getProperties();
-        String[] user = decodeUserAndPassword(auth);
-        String roleName = user[0];
-        String rolePassword = user[1];
-        String propertyRolePassword = properties.getProperty("security.role." + roleName);
-        if (propertyRolePassword == null) {
-            return false;
-        }        
-        return rolePassword.equals(propertyRolePassword);
-    }
 
-    private String[] decodeUserAndPassword(String auth) {
-        String userPassEncoded = auth.substring(6);
-        BASE64Decoder dec = new BASE64Decoder();
-        String userPassDecoded;
-        try {
-            userPassDecoded = new String(dec.decodeBuffer(userPassEncoded));
-            LOG.debug("Password: " + userPassDecoded);
-        } catch (IOException e) {
-            throw new CoreException("Unable to decrypt the password");
-        }
-        return userPassDecoded.split(":");
-    }
-
-    private Properties getProperties() {
-        Properties properties = new Properties();
-        try {
-            properties.load(getClass().getResourceAsStream(USER_PROPERTIES));
-        } catch (IOException e) {
-            throw new CoreException("Unable to find " + USER_PROPERTIES);
-        }
-        return properties;
-    }
-
-    public String getRole(String auth) {
-        return decodeUserAndPassword(auth)[0];
-    }
 }
