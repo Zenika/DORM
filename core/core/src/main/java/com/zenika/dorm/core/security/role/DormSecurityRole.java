@@ -9,5 +9,5 @@ public interface DormSecurityRole {
 
     boolean canWrite();
 
-    boolean canOverride();
+    boolean canUpdate();
 }

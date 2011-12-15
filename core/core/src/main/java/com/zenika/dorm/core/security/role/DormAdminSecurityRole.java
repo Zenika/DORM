@@ -16,7 +16,7 @@ public class DormAdminSecurityRole implements DormSecurityRole {
     }
 
     @Override
-    public boolean canOverride() {
+    public boolean canUpdate() {
         return true;
     }
 }

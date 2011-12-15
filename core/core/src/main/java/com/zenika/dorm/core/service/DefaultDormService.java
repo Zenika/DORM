@@ -39,7 +39,7 @@ public class DefaultDormService implements DormService {
             LOG.debug("Store metadata : " + metadata);
         }
 
-        if (!security.getRole().canOverride() &&
+        if (!security.getRole().canUpdate() &&
                 null != dao.get(new DormBasicQuery.Builder(metadata).build())) {
             throw new SecurityException("Cannot override existing metadata");
         }
