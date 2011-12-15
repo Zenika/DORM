@@ -5,5 +5,9 @@ package com.zenika.dorm.core.security.role;
  */
 public interface DormSecurityRole {
 
+    boolean canRead();
+
+    boolean canWrite();
+
     boolean canOverride();
 }

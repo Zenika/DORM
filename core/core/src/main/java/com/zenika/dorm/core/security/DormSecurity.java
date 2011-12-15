@@ -1,7 +1,7 @@
 package com.zenika.dorm.core.security;
 
 import com.google.inject.Singleton;
-import com.zenika.dorm.core.security.role.DormDefaultSecurityRole;
+import com.zenika.dorm.core.security.role.DormNoRightsSecurityRole;
 import com.zenika.dorm.core.security.role.DormSecurityRole;
 
 /**
@@ -13,7 +13,7 @@ public class DormSecurity {
     private DormSecurityRole role;
 
     public DormSecurity() {
-        role = new DormDefaultSecurityRole();
+        role = new DormNoRightsSecurityRole();
     }
 
     public DormSecurityRole getRole() {
