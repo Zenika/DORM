@@ -1,9 +1,8 @@
 package com.zenika.dorm.maven.service;
 
 import com.zenika.dorm.core.exception.CoreException;
-import com.zenika.dorm.core.security.role.DormNoRightsSecurityRole;
 import com.zenika.dorm.core.security.role.DormSecurityRole;
-import sun.misc.BASE64Decoder;
+import org.apache.commons.codec.binary.Base64;
 
 import java.io.IOException;
 import java.util.Properties;
@@ -13,7 +12,7 @@ import java.util.Properties;
  */
 public class MavenSecurity {
 
-    private static final String USER_PROPERTIES = "/com/zenika/dorm/maven/configuration/user.properties";
+    public static final String USER_PROPERTIES = "/com/zenika/dorm/maven/configuration/user.properties";
     private String role;
     private String password;
     private Properties properties;
@@ -26,7 +25,7 @@ public class MavenSecurity {
         this.password = user[1];
         this.allowUser = allowUser();
     }
-    
+
     private boolean allowUser() {
         String propertyRolePassword = properties.getProperty("security.role." + role);
         if (propertyRolePassword == null) {
@@ -35,19 +34,15 @@ public class MavenSecurity {
         return password.equals(propertyRolePassword);
     }
 
-    public boolean isAllowedUser(){
+    public boolean isAllowedUser() {
         return allowUser;
     }
 
     private String[] decodeUserAndPassword(String auth) {
         String userPassEncoded = auth.substring(6);
-        BASE64Decoder dec = new BASE64Decoder();
+        Base64 dec = new Base64();
         String userPassDecoded;
-        try {
-            userPassDecoded = new String(dec.decodeBuffer(userPassEncoded));
-        } catch (IOException e) {
-            throw new CoreException("Unable to decrypt the password");
-        }
+        userPassDecoded = new String(dec.decode(userPassEncoded));
         return userPassDecoded.split(":");
     }
 
