@@ -1,4 +1,4 @@
-<Context>
+<Context path="/dorm-server">
 
     <Resource name="jdbc/postgres" auth="Container"
               type="javax.sql.DataSource" driverClassName="org.postgresql.Driver"

@@ -10,7 +10,6 @@ import org.apache.maven.artifact.repository.metadata.Snapshot;
 import org.apache.maven.artifact.repository.metadata.Versioning;
 import org.apache.maven.model.Model;
 import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
-import org.jcp.xml.dsig.internal.dom.DOMRetrievalMethod;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
