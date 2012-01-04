@@ -1,6 +1,7 @@
 package com.zenika.dorm.maven.importer.launcher;
 
 import com.zenika.dorm.maven.importer.MavenRepositoryImporter;
+import com.zenika.dorm.maven.importer.utils.DormCredentials;
 import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
 import org.kohsuke.args4j.ExampleMode;
@@ -30,6 +31,10 @@ public class Launch {
     private String localRepository = "~/.m2/repository";
     @Option(name = "-s", usage = "Get full stack trace", aliases = "--stackTrace")
     private boolean stackTraceActive;
+    @Option(name = "-u", usage = "DORM user name", required = true, aliases = "--user")
+    private String user;
+    @Option(name = "-p", usage = "DORM password", required = true, aliases = "--password")
+    private String password;
 
     public static void main(String[] args){
         Launch launch = new Launch();
@@ -43,7 +48,8 @@ public class Launch {
             if (!host.contains("http://")){
                 host = "http://" + host;
             }
-            MavenRepositoryImporter importer = new MavenRepositoryImporter(localRepository, host, port, path);
+            MavenRepositoryImporter importer = new MavenRepositoryImporter(localRepository,
+                    host, port, path, new DormCredentials(user, password));
             LOG.info("Start import...");
             importer.start();
             LOG.info("Done import in : " + importer.getTime() + " ms");

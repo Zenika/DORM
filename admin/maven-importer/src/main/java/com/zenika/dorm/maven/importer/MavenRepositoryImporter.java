@@ -6,7 +6,14 @@ import com.sun.jersey.api.client.ClientHandlerException;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.UniformInterfaceException;
 import com.sun.jersey.api.client.WebResource;
+import com.sun.jersey.client.apache.ApacheHttpClient;
+import com.sun.jersey.client.apache.config.DefaultApacheHttpClientConfig;
 import com.zenika.dorm.maven.importer.utils.ExtensionFilter;
+import org.apache.commons.httpclient.Credentials;
+import org.apache.commons.httpclient.UsernamePasswordCredentials;
+import org.apache.commons.httpclient.auth.AuthScheme;
+import org.apache.commons.httpclient.auth.CredentialsNotAvailableException;
+import org.apache.commons.httpclient.auth.CredentialsProvider;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.comparator.DefaultFileComparator;
 import org.apache.maven.model.Model;
@@ -57,14 +64,17 @@ public class MavenRepositoryImporter {
 
     private long time;
 
-    public MavenRepositoryImporter(String baseUrl, String host, int port, String path) {
+    public MavenRepositoryImporter(String baseUrl, String host, int port, String path, CredentialsProvider credentials) {
         this.baseUrl = baseUrl;
         this.serverUri = UriBuilder.fromUri(host).port(port).path(path).build();
-        init();
+        DefaultApacheHttpClientConfig config = new DefaultApacheHttpClientConfig();
+        config.getProperties().put(DefaultApacheHttpClientConfig.PROPERTY_INTERACTIVE, true);
+        config.getProperties().put(DefaultApacheHttpClientConfig.PROPERTY_CREDENTIALS_PROVIDER, credentials);
+        init(config);
     }
 
-    private void init() {
-        Client client = new Client();
+    private void init(DefaultApacheHttpClientConfig config) {
+        Client client = ApacheHttpClient.create(config);
         this.resource = client.resource(serverUri);
         this.reader = new MavenXpp3Reader();
         this.importSuccess = 0;

@@ -1,6 +1,7 @@
 package com.zenika.dorm.maven.test.importer;
 
 import com.zenika.dorm.maven.importer.MavenRepositoryImporter;
+import com.zenika.dorm.maven.importer.utils.DormCredentials;
 import org.junit.Test;
 
 /**
@@ -8,9 +9,9 @@ import org.junit.Test;
  */
 public class MavenTestRepositoryImporter {
 
-//    @Test
+    @Test
     public void testImporter(){
-        MavenRepositoryImporter importer = new MavenRepositoryImporter("/home/erouan/.m2/repository", "http://localhost", 8080, "maven");
+        MavenRepositoryImporter importer = new MavenRepositoryImporter("/home/erouan/.m2/repository", "http://localhost", 8080, "dorm-server/maven", new DormCredentials("admin", "password"));
         importer.start();
     }
 
