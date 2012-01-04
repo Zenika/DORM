@@ -19,9 +19,7 @@ while getopts "p:h:" optname
 	;;
     esac
   done
-echo $HOST
-echo $PORT
-java -jar maven_importer.jar -h localhost -p 8080 -P maven -l lib_to_deploy/ 
+java -jar maven_importer.jar -h localhost -p 8080 -P dorm-server/maven -l lib_to_deploy/ -u admin -pwd password
 mvn archetype:create -DgroupId=com.zenika.test -DartifactId=test -DarchetypeArtifactId=maven-archetype-quickstart -DarchetypeGroupId=org.apache.maven.archetypes
 sed -f sed_script test/pom.xml > test/pom2.xml
 mv test/pom2.xml test/pom.xml

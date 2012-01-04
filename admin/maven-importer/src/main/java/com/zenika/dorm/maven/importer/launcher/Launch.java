@@ -33,7 +33,7 @@ public class Launch {
     private boolean stackTraceActive;
     @Option(name = "-u", usage = "DORM user name", required = true, aliases = "--user")
     private String user;
-    @Option(name = "-p", usage = "DORM password", required = true, aliases = "--password")
+    @Option(name = "-pwd", usage = "DORM password", required = true, aliases = "--password")
     private String password;
 
     public static void main(String[] args){
