@@ -1,7 +1,6 @@
 package com.zenika.dorm.importer;
 
 
-import com.sun.jersey.api.client.WebResource;
 import com.zenika.dorm.core.model.ws.DormWebServiceRequest;
 import com.zenika.dorm.maven.model.MavenMetadata;
 import com.zenika.dorm.maven.processor.extension.MavenProcessor;

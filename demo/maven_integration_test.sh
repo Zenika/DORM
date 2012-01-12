@@ -1,5 +1,5 @@
 #!/bin/bash
-while getopts "p:h:P:u:" optname
+while getopts "p:h:P:u:pw" optname
   do
     case "$optname" in
       "p")

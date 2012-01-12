@@ -1,6 +1,5 @@
 package com.zenika.dorm.importer;
 
-import com.google.inject.AbstractModule;
 import com.zenika.dorm.maven.guice.module.MavenModule;
 
 /**
