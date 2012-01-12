@@ -20,9 +20,13 @@ while getopts "p:h:" optname
     esac
   done
 java -jar maven_importer.jar -h localhost -p 8080 -P dorm-server/maven -l lib_to_deploy/ -u admin -pwd password
+groovy set_maven_setting.groovy install
 mvn archetype:create -DgroupId=com.zenika.test -DartifactId=test -DarchetypeArtifactId=maven-archetype-quickstart -DarchetypeGroupId=org.apache.maven.archetypes
 sed -f sed_script test/pom.xml > test/pom2.xml
 mv test/pom2.xml test/pom.xml
 cd test
 mvn install
 mvn deploy
+cd ..
+groovy set_maven_setting.groovy delete
+rm -rf test
