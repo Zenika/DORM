@@ -48,7 +48,7 @@ export PORT=$PORT
 export ROOT_PATH=$ROOT_PATH
 export "$USER_DORM"
 export "$PASSWORD_DORM"
-java -jar maven_importer.jar -h "$HOST" -p "$PORT" -P "$ROOT_PATH" -l lib_to_deploy/ -u admin -pwd password
+java -jar maven_importer.jar -h "$HOST" -p "$PORT" -P "$ROOT_PATH" -l lib_to_deploy/ -u "$USER_DORM" -pwd "$PASSWORD_DORM"
 groovy set_maven_setting.groovy -install -u "$USER_DORM" -pw "$PASSWORD_DORM"
 mvn archetype:create -DgroupId=com.zenika.test -DartifactId=test -DarchetypeArtifactId=maven-archetype-quickstart -DarchetypeGroupId=org.apache.maven.archetypes
 sed -e '/<\/dependencies>/a\
