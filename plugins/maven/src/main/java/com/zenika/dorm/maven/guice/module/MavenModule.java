@@ -26,10 +26,10 @@ public class MavenModule extends DormExtensionModule {
             LOG.info("Configure maven guice module");
         }
 
-        bind(MavenResource.class);
-        bind(MavenProcessor.class);
-        bind(MavenService.class);
-        bind(ProxyWebResourceWrapper.class);
+//        bind(MavenResource.class);
+//        bind(MavenProcessor.class);
+//        bind(MavenService.class);
+//        bind(ProxyWebResourceWrapper.class);
         bind(MavenProxyService.class).to(MavenProxyServiceHttp.class);
 
         requestAnalyserBinder.addBinding().to(MavenRequestAnalyser.class);

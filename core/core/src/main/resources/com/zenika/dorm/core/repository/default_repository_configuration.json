@@ -1,4 +1,4 @@
 {
     "name": "Default Repository",
-    "base_path": "/Storage/Java/StageZenika/repository"
+    "base_path": "tmp_repo"
 }

@@ -1,3 +1,5 @@
+mainClassName = 'com.zenika.dorm.maven.importer.Launcher'
+
 dependencies {
     compile libraries.jersey_client
 
@@ -9,4 +11,9 @@ dependencies {
 
     compile group: 'org.apache.maven', name: 'maven-model', version: "3.0.3"
     compile group: 'args4j', name: 'args4j', version: '2.0.12'
+}
+
+jar {
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    manifest { attributes 'Main-Class': mainClassName }
 }

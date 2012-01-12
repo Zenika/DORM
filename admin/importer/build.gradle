@@ -1,11 +1,18 @@
+mainClassName = 'com.zenika.dorm.importer.Launcher'
+
 dependencies {
     // Internal dependencies
     compile project(':plugins:maven')
-
+    compile project(':core:core')
     // External dependencies
     compile group: 'args4j', name: 'args4j', version: '2.0.12'
     compile group: 'org.apache.ivy', name: 'ivy', version: '2.2.0'
     // Test
     testCompile project(':plugins:maven')
     testCompile project(':core:core')
+}
+
+jar {
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    manifest { attributes 'Main-Class': mainClassName }
 }

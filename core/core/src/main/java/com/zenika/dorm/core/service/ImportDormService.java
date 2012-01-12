@@ -37,6 +37,6 @@ public class ImportDormService implements DormService {
 
     @Override
     public DependencyNode addDependenciesToNode(DependencyNode node) {
-        throw new UnsupportedOperationException();
+        return dao.addDependenciesToNode(node);
     }
 }
