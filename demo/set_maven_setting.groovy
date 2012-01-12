@@ -3,10 +3,22 @@ import groovy.xml.MarkupBuilder
 import groovy.xml.StreamingMarkupBuilder
 
 def mavenHome = System.getenv()['M2_HOME'];
+
+def cli = new CliBuilder(usage: 'set_maven_settings.groovy [options]')
+cli.install('Configure the settings.xml file')
+cli.delete('Delete and restore the original settings.xml')
+cli.u(longOpt:'username', args:1, argName:'username', 'DORM username')
+cli.pw(longOpt:'password', args:1, argName:'password', 'DORM password')
+def options = cli.parse(args)
+
 def file = new File(mavenHome + '/conf/settings.xml');
 def backupFile = new File(mavenHome + '/conf/settings.xml.bak');
 
-if (args[0] == "install") {
+if (options.install) {
+    def user = options.u
+    def passwd = options.pw
+    user == "" ? 'admin' : user
+    passwd == "" ? 'password' : passwd
 
     backupFile << file.asWritable();
 
@@ -19,8 +31,8 @@ if (args[0] == "install") {
         servers.appendNode{
             server {
                 id('DORM-Maven-integration-test')
-	        username('admin')
-                password('password')
+	        username(user)
+                password(passwd)
             }
         }
     }
@@ -31,7 +43,7 @@ if (args[0] == "install") {
         namespaces << ["" : defaultNamespace]
         mkp.yield root
     }.writeTo(file.newWriter());
-} else if (args[0] == "delete"){
+} else if (options.delete){
     file.delete();
     file.createNewFile();
     file << backupFile.asWritable();
