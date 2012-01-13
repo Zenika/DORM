@@ -1,4 +1,4 @@
-mainClassName = 'com.zenika.dorm.maven.importer.Launcher'
+mainClassName = 'com.zenika.dorm.maven.importer.launcher.Launch'
 
 dependencies {
     compile libraries.jersey_client
@@ -13,7 +13,20 @@ dependencies {
     compile group: 'args4j', name: 'args4j', version: '2.0.12'
 }
 
-jar {
-    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
-    manifest { attributes 'Main-Class': mainClassName }
+jar.doFirst {
+    manifest {
+        attributes 'Main-Class': mainClassName
+        def manifestClasspath = configurations.runtime.collect
+        { it.getName() }.join(' lib/')
+        manifestClasspath = 'lib/' + manifestClasspath
+        attributes 'Class-Path': manifestClasspath
+    }
+}
+
+task('dist', type: Zip) {
+    dependsOn 'jar'
+    from jar.archivePath
+    into('lib') {
+        from configurations.runtime
+    }
 }

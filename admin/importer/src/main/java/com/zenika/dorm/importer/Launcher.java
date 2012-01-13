@@ -51,16 +51,22 @@ public class Launcher {
         try {
             cmdLineParser.parseArgument(args);
             Set<Module> modules = initModule();
+            Class<? extends RepositoryImporter> importerClass;
             if (repositoryType.equals(MAVEN_REPOSITORY_TYPE)) {
                 modules.add(new ImporterMavenModule());
+                importerClass = MavenRepositoryImporter.class;
             } else if (repositoryType.equals(NUXEO_REPOSITORY_TYPE)) {
                 modules.add(new ImporterMavenModule());
+                importerClass = MavenRepositoryImporter.class;
             } else if (repositoryType.equals(ARCHIVA_REPOSITORY_TYPE)){
                 modules.add(new ImporterMavenModule());
+                importerClass = MavenRepositoryImporter.class;
             } else if (repositoryType.equals(ARTIFACTORY_REPOSITORY_TYPE)) {
                 modules.add(new ImporterMavenModule());
+                importerClass = MavenRepositoryImporter.class;
             } else if (repositoryType.equals(IVY_REPOSITORY_TYPE)) {
                 modules.add(new ImporterIvyModule());
+                importerClass = IvyRepositoryImporter.class;
             } else {
                 throw new CmdLineException("Unrecognized type of repository. Only this repositories are supported: \n\tMaven, Nuxeo, Archiva, Artifactory, Ivy");
             }
@@ -80,7 +86,7 @@ public class Launcher {
                     binder.bind(DormService.class).to(ImportDormService.class);
                 }
             }));
-            RepositoryImporter importer = Guice.createInjector(modules).getInstance(RepositoryImporter.class);
+            RepositoryImporter importer = Guice.createInjector(modules).getInstance(importerClass);
             importer.startImport();
             LOG.info("{} artifacts are import to the DORM server in {}", importer.getNumberOfImport(), importer.getTime());
         } catch (CmdLineException e) {

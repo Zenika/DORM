@@ -80,24 +80,26 @@ public class MavenPomReader {
         List<Dependency> dependencies = new ArrayList<Dependency>();
 
         for (org.apache.maven.model.Dependency dependency : model.getDependencies()) {
+            // TODO: Fix null version !!!
+            if (dependency.getVersion() != null) {
+                MavenMetadataBuilder builder = new MavenMetadataBuilder()
+                        .groupId(dependency.getGroupId())
+                        .artifactId(dependency.getArtifactId())
+                        .version(dependency.getVersion());
 
-            MavenMetadataBuilder builder = new MavenMetadataBuilder()
-                    .groupId(dependency.getGroupId())
-                    .artifactId(dependency.getArtifactId())
-                    .version(dependency.getVersion());
+                if (StringUtils.isNotBlank(dependency.getClassifier())) {
+                    builder.buildInfo(new MavenBuildInfoBuilder()
+                            .classifier(dependency.getClassifier())
+                            .build());
+                }
 
-            if (StringUtils.isNotBlank(dependency.getClassifier())) {
-                builder.buildInfo(new MavenBuildInfoBuilder()
-                        .classifier(dependency.getClassifier())
-                        .build());
+                MavenMetadata metadata = builder.build();
+
+                String scope = dependency.getScope();
+                Usage usage = (StringUtils.isNotBlank(scope)) ? Usage.create(scope) : Usage.create();
+
+                dependencies.add(DefaultDependency.create(metadata, usage));
             }
-
-            MavenMetadata metadata = builder.build();
-
-            String scope = dependency.getScope();
-            Usage usage = (StringUtils.isNotBlank(scope)) ? Usage.create(scope) : Usage.create();
-
-            dependencies.add(DefaultDependency.create(metadata, usage));
         }
 
         return dependencies;

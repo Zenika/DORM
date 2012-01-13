@@ -9,7 +9,7 @@ public class ImporterMavenModule extends MavenModule{
 
     @Override
     protected void configure() {
-        super.configure();
+        standardConfigure();
         bind(RepositoryImporter.class).to(MavenRepositoryImporter.class);
     }
 }

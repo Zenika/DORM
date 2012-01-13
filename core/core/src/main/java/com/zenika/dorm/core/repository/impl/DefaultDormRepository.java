@@ -21,6 +21,7 @@ public class DefaultDormRepository implements DormRepository {
 
     private static final Logger LOG = LoggerFactory.getLogger(DefaultDormRepository.class);
 
+    private static final String DEFAULT_REPOSITORIES_FOLDER = ".dorm/repo-dorm";
     private static final String DEFAULT_REPOSITORY_LOCATION = "tmp/repo-dorm";
     private static final String INTERNAL_PATH_PREFIX = "_internal_";
 
@@ -31,8 +32,7 @@ public class DefaultDormRepository implements DormRepository {
 
     @Inject
     public DefaultDormRepository() {
-        base = new File(DEFAULT_REPOSITORY_LOCATION);
-        base.mkdirs();
+        initRepositoryFile();
     }
 
     public DefaultDormRepository(String baseLocation) {
@@ -126,5 +126,16 @@ public class DefaultDormRepository implements DormRepository {
         return new StringBuilder(100)
                 .append(base.getAbsolutePath())
                 .append("/");
+    }
+    
+    private void initRepositoryFile() {
+        String repositoriesFolder = System.getProperty("repositories.folder");
+        if (repositoriesFolder == null) {
+            String homePath = System.getenv("HOME");
+            base = new File(homePath + "/" + DEFAULT_REPOSITORIES_FOLDER);
+            if (!base.exists()) {
+                base.mkdirs();
+            }
+        }
     }
 }

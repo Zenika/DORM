@@ -9,7 +9,7 @@ public class ImporterIvyModule extends MavenModule {
 
     @Override
     protected void configure() {
-        super.configure();
-        bind(RepositoryImporter.class).to(IvyRepositoryImporter.class);
+        standardConfigure();
+        bind(RepositoryImporter.class).to(MavenRepositoryImporter.class);
     }
 }

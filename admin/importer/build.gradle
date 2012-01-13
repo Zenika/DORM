@@ -12,7 +12,20 @@ dependencies {
     testCompile project(':core:core')
 }
 
-jar {
-    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
-    manifest { attributes 'Main-Class': mainClassName }
+jar.doFirst {
+    manifest {
+        attributes 'Main-Class': mainClassName
+        def manifestClasspath = configurations.runtime.collect
+        { it.getName() }.join(' lib/')
+        manifestClasspath = 'lib/' + manifestClasspath
+        attributes 'Class-Path': manifestClasspath
+    }
+}
+
+task('dist', type: Zip) {
+    dependsOn 'jar'
+    from jar.archivePath
+    into('lib') {
+        from configurations.runtime
+    }
 }

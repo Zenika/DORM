@@ -20,18 +20,20 @@ public class MavenModule extends DormExtensionModule {
 
     @Override
     protected void configure() {
-        super.configure();
-
         if (LOG.isInfoEnabled()) {
             LOG.info("Configure maven guice module");
         }
+        standardConfigure();
+        bind(MavenResource.class);
+        bind(MavenProcessor.class);
+        bind(MavenService.class);
+        bind(ProxyWebResourceWrapper.class);
 
-//        bind(MavenResource.class);
-//        bind(MavenProcessor.class);
-//        bind(MavenService.class);
-//        bind(ProxyWebResourceWrapper.class);
+    }
+
+    protected void standardConfigure() {
+        super.configure();
         bind(MavenProxyService.class).to(MavenProxyServiceHttp.class);
-
         requestAnalyserBinder.addBinding().to(MavenRequestAnalyser.class);
     }
 }
