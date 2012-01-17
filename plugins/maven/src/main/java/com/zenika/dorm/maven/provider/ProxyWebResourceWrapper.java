@@ -10,6 +10,7 @@ import com.zenika.dorm.core.dao.neo4j.Neo4jIndex;
 import com.zenika.dorm.core.dao.neo4j.Neo4jMetadata;
 import com.zenika.dorm.core.dao.neo4j.Neo4jResponse;
 import com.zenika.dorm.core.dao.neo4j.util.ObjectMapperProvider;
+import com.zenika.dorm.maven.model.MavenRemoteRepository;
 import com.zenika.dorm.maven.service.MavenProxyServiceHttp;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,7 +26,7 @@ public class ProxyWebResourceWrapper {
 
     private static final Logger LOG = LoggerFactory.getLogger(ProxyWebResourceWrapper.class);
 
-    private boolean enableProxy = true;
+    private boolean enableProxy = false;
     private String hostProxy = "192.168.182.1";
     private String portProxy = "8008";
 
@@ -38,7 +39,7 @@ public class ProxyWebResourceWrapper {
         }
         config.getClasses().addAll(getClasses());
         Client client = ApacheHttpClient.create(config);
-        resource = client.resource(MavenProxyServiceHttp.DATA_ENTRY_POINT_URI);
+        resource = client.resource(MavenRemoteRepository.DEFAULT_URL);
     }
 
     public WebResource get() {

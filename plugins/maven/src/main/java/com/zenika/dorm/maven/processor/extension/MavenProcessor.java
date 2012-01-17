@@ -10,6 +10,7 @@ import com.zenika.dorm.core.service.FileValidator;
 import com.zenika.dorm.core.service.MetadataLabelService;
 import com.zenika.dorm.maven.constant.MavenConstant;
 import com.zenika.dorm.maven.model.MavenMetadata;
+import com.zenika.dorm.maven.model.MavenRemoteRepository;
 import com.zenika.dorm.maven.model.MavenUri;
 import com.zenika.dorm.maven.service.MavenProxyService;
 import com.zenika.dorm.maven.service.MavenService;
@@ -145,7 +146,8 @@ public class MavenProcessor extends ProcessorExtension<MavenMetadata> {
     }
 
     private DormWebServiceResult getResponseWithProxy(DormWebServiceResult.Builder responseBuilder, DormResource dormResource, MavenMetadata mavenMetadata) {
-        dormResource = proxyService.getArtifact(mavenMetadata);
+        // TODO: Update to add multi remote repository resolution
+        dormResource = proxyService.getArtifact(mavenMetadata, MavenRemoteRepository.getDefaultRemoteRepository());
         if (isNotAvailableResourceFromProxy(dormResource)) {
             return responseBuilder.notfound().build();
         } else {

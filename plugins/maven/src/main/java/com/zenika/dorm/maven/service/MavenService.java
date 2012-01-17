@@ -11,10 +11,7 @@ import com.zenika.dorm.core.service.DormService;
 import com.zenika.dorm.core.service.FileValidator;
 import com.zenika.dorm.core.service.config.DormServiceStoreResourceConfig;
 import com.zenika.dorm.maven.exception.MavenException;
-import com.zenika.dorm.maven.model.MavenBuildInfo;
-import com.zenika.dorm.maven.model.MavenFilename;
-import com.zenika.dorm.maven.model.MavenMetadata;
-import com.zenika.dorm.maven.model.MavenUri;
+import com.zenika.dorm.maven.model.*;
 import com.zenika.dorm.maven.model.builder.MavenBuildInfoBuilder;
 import com.zenika.dorm.maven.model.builder.MavenMetadataBuilder;
 import com.zenika.dorm.maven.pom.MavenPomReader;
@@ -32,6 +29,9 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public class MavenService {
 
     private static final Logger LOG = LoggerFactory.getLogger(MavenService.class);
+
+    @Inject
+    private MavenProxyService proxyService;
 
     @Inject
     private DormService dormService;
@@ -96,18 +96,15 @@ public class MavenService {
         MavenMetadata pomMetadata = reader.getArtifact();
 
         if (!metadata.equalsEntityMetadataOnly(pomMetadata)) {
-
             if (LOG.isInfoEnabled()) {
                 LOG.info("pom metadata = " + pomMetadata);
                 LOG.info("uri metadata = " + metadata);
             }
-
             throw new MavenException("Artifact to store and associated pom are different");
         }
-
         DependencyNode root = DefaultDependencyNode.create(DefaultDependency.create(getEntityMavenMetadata(metadata)));
 
-        for (Dependency dependency : reader.getDependencies()) {
+        for (Dependency dependency : reader.getDependencies(this)) {
             root.addChild(DefaultDependencyNode.create(dependency));
         }
 
@@ -132,6 +129,12 @@ public class MavenService {
 
         return resource;
     }
+
+    public DormResource getArtifactByProxy(MavenMetadata mavenMetadata) {
+        return proxyService.getArtifact(mavenMetadata, MavenRemoteRepository.getDefaultRemoteRepository());
+    }
+
+
 
     private MavenMetadata getEntityMavenMetadata(MavenMetadata metadata) {
 

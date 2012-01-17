@@ -4,6 +4,7 @@ import com.google.inject.Guice;
 import com.zenika.dorm.core.model.DormResource;
 import com.zenika.dorm.maven.model.MavenBuildInfo;
 import com.zenika.dorm.maven.model.MavenMetadata;
+import com.zenika.dorm.maven.model.MavenRemoteRepository;
 import com.zenika.dorm.maven.model.MavenUri;
 import com.zenika.dorm.maven.model.builder.MavenMetadataBuilder;
 import com.zenika.dorm.maven.service.MavenProxyService;
@@ -25,7 +26,7 @@ public class MavenFederationServiceTest {
     @Test
     public void test() {
 
-        MavenProxyService service = Guice.createInjector(new MavenTestModule()).getInstance(MavenProxyServiceHttp.class);
+        MavenProxyService proxyService = Guice.createInjector(new MavenTestModule()).getInstance(MavenProxyServiceHttp.class);
 
         MavenBuildInfo info = new MavenBuildInfo("jar", null, null, null);
         MavenMetadata metadata = new MavenMetadataBuilder()
@@ -35,9 +36,9 @@ public class MavenFederationServiceTest {
                 .buildInfo(info)
                 .build();
 
-        DormResource resource = service.getArtifact(metadata);
+        DormResource resource = proxyService.getArtifact(metadata, MavenRemoteRepository.getDefaultRemoteRepository());
         MavenUri uri = new MavenUri(metadata);
         assertThat(resource.getExtension()).isEqualTo(uri.getFilename().getExtension());
-        assertThat(resource.getName()).isEqualTo(uri.getFilename().getFileNameWithoutExtension());
+        assertThat(resource.getName()).isEqualTo(uri.getFilename().getFilename());
     }
 }
