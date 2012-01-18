@@ -6,6 +6,7 @@ import com.zenika.dorm.core.processor.extension.RequestAnalyser;
 import com.zenika.dorm.maven.exception.MavenException;
 import com.zenika.dorm.maven.model.MavenMetadata;
 import com.zenika.dorm.maven.pom.MavenPomReader;
+import com.zenika.dorm.maven.service.MavenService;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,6 +23,9 @@ public class MavenRequestAnalyser implements RequestAnalyser {
 
     @Inject
     private MavenProcessor processor;
+
+    @Inject
+    private MavenService mavenService;
 
     @Override
     public boolean isKnownRequest(DormWebServiceRequest request) {
@@ -65,7 +69,7 @@ public class MavenRequestAnalyser implements RequestAnalyser {
     private boolean isKnownFile(File file) {
 
         try {
-            new MavenPomReader(file);
+            new MavenPomReader(mavenService, file);
         } catch (MavenException e) {
             LOG.debug("Exception catched when trying to read file as maven pom in analyser", e);
             return false;

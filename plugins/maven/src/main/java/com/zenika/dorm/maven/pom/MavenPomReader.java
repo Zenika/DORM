@@ -35,13 +35,13 @@ public class MavenPomReader {
     private static final Logger LOG = LoggerFactory.getLogger(MavenPomReader.class);
 
     private Model model;
+    private MavenService mavenService;
 
-    public MavenPomReader(File pom) {
-        try {
-            model = new MavenXpp3Reader().read(new FileInputStream(pom));
-        } catch (Exception e) {
-            throw new MavenException("Maven metadata file cannot be read", e);
-        }
+    private Model parentModel;
+
+    public MavenPomReader(MavenService mavenService, File pom) {
+        this.mavenService = mavenService;
+        model = getModelFromFile(pom);
     }
 
     public MavenPomReader(InputStream stream) {
@@ -90,15 +90,13 @@ public class MavenPomReader {
                 .build();
     }
 
-    public List<Dependency> getDependencies(MavenService mavenService) {
+    public List<Dependency> getDependencies() {
 
         List<Dependency> dependencies = new ArrayList<Dependency>();
+        MavenVersionResolver mavenVersionResolver = new MavenVersionResolver(this);
 
         for (org.apache.maven.model.Dependency dependency : model.getDependencies()) {
-            String version = dependency.getVersion();
-            if (isManagedByParent(dependency)) {
-                version = getDependencyParentVersion(mavenService, dependency);
-            }
+            String version = mavenVersionResolver.getVersion(dependency);
             MavenMetadataBuilder builder = new MavenMetadataBuilder()
                     .groupId(dependency.getGroupId())
                     .artifactId(dependency.getArtifactId())
@@ -121,41 +119,38 @@ public class MavenPomReader {
         return dependencies;
     }
 
-    private boolean isManagedByParent(org.apache.maven.model.Dependency dependency) {
-        return dependency.getVersion() == null;
-    }
-
-    private String getDependencyParentVersion(MavenService mavenService, org.apache.maven.model.Dependency dependency) {
-        Parent parent = model.getParent();
-        MavenMetadata parentMetadata = new MavenMetadataBuilder()
-                .artifactId(parent.getArtifactId())
-                .groupId(parent.getGroupId())
-                .version(parent.getVersion())
-                .buildInfo(new MavenBuildInfoBuilder()
-                        .extension("pom")
-                        .build())
-                .build();
-        DormResource parentResource = mavenService.getArtifact(parentMetadata);
-        return resolveVersion(mavenService, dependency.getArtifactId(), parentMetadata, parentResource);
-    }
-
-    private String resolveVersion(MavenService mavenService, String artifactId, MavenMetadata parentMetadata, DormResource dormResource) {
-        File parentPom;
-        if (dormResource != null) {
-            parentPom = dormResource.getFile();
-        } else {
-            parentPom = mavenService.getArtifactByProxy(parentMetadata).getFile();
-        }
-        MavenPomReader parentReader = new MavenPomReader(parentPom);
-        return parentReader.getDependencyManagedVersionByArtifactId(artifactId);
-    }
-
-    private String getDependencyManagedVersionByArtifactId(String artifactId) {
-        for (org.apache.maven.model.Dependency dependency : model.getDependencyManagement().getDependencies()) {
-            if (dependency.getArtifactId().equals(artifactId)) {
-                return dependency.getVersion();
+    public Model getParentModel() {
+        if (parentModel == null) {
+            Parent parent = model.getParent();
+            MavenMetadata parentMetadata = new MavenMetadataBuilder()
+                    .artifactId(parent.getArtifactId())
+                    .groupId(parent.getGroupId())
+                    .version(parent.getVersion())
+                    .buildInfo(new MavenBuildInfoBuilder()
+                            .extension("pom")
+                            .build())
+                    .build();
+            DormResource parentResource = mavenService.getArtifact(parentMetadata);
+            File parentFilePom;
+            if (parentResource != null) {
+                parentFilePom = parentResource.getFile();
+            } else {
+                parentFilePom = mavenService.getArtifactByProxy(parentMetadata).getFile();
             }
+            parentModel = getModelFromFile(parentFilePom);
         }
-        return null;
+        return parentModel;
+    }
+
+    public Model getModel() {
+        return model;
+    }
+
+    private Model getModelFromFile(File pom) {
+        try {
+            return new MavenXpp3Reader().read(new FileInputStream(pom));
+        } catch (Exception e) {
+            throw new MavenException("Maven metadata file cannot be read", e);
+        }
     }
 }

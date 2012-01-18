@@ -5,10 +5,12 @@ import com.zenika.dorm.core.model.impl.DefaultDependency;
 import com.zenika.dorm.core.model.impl.Usage;
 import com.zenika.dorm.maven.model.MavenMetadata;
 import com.zenika.dorm.maven.pom.MavenPomReader;
+import com.zenika.dorm.maven.service.MavenService;
 import com.zenika.dorm.maven.test.fixtures.MavenWebServiceRequestFixtures;
 import com.zenika.dorm.maven.test.unit.MavenUnitTest;
 import org.junit.Test;
 
+import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,12 +25,15 @@ public class MavenPomReaderUnitTest extends MavenUnitTest {
 
     private MavenPomReader pomReader;
 
+    @Inject
+    private MavenService mavenService;
+
     @Override
     public void before() {
         super.before();
 
         webServiceRequestFixtures = new MavenWebServiceRequestFixtures();
-        pomReader = new MavenPomReader(webServiceRequestFixtures.getPom());
+        pomReader = new MavenPomReader(mavenService, webServiceRequestFixtures.getPom());
     }
 
     @Test

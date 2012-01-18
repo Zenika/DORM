@@ -92,7 +92,7 @@ public class MavenService {
             LOG.debug("Store maven pom from metadata : " + metadata);
         }
 
-        MavenPomReader reader = new MavenPomReader(file);
+        MavenPomReader reader = new MavenPomReader(this, file);
         MavenMetadata pomMetadata = reader.getArtifact();
 
         if (!metadata.equalsEntityMetadataOnly(pomMetadata)) {
@@ -104,7 +104,7 @@ public class MavenService {
         }
         DependencyNode root = DefaultDependencyNode.create(DefaultDependency.create(getEntityMavenMetadata(metadata)));
 
-        for (Dependency dependency : reader.getDependencies(this)) {
+        for (Dependency dependency : reader.getDependencies()) {
             root.addChild(DefaultDependencyNode.create(dependency));
         }
 
