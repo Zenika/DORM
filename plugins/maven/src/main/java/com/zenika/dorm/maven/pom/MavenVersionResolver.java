@@ -74,7 +74,7 @@ public class MavenVersionResolver {
 
     public String resolveProperty(Model model, String property) {
         String value = null;
-        if (property.matches("\\$\\{project.version\\}")) {
+        if (property.matches("\\$\\{project.version\\}") && model.getVersion() != null) {
             return property.replace("${project.version}", model.getVersion());
         } else if (model.getProperties() != null) {
             return getValueProperty(model, property);
