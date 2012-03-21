@@ -1,9 +1,5 @@
 <Context path="/dorm-server">
 
-    <Resource name="jdbc/postgres" auth="Container"
-              type="javax.sql.DataSource" driverClassName="org.postgresql.Driver"
-              url="jdbc:postgresql://${postgres_host}:${postgres_port}/${postgres_database}"
-              username="${postgres_user}" password="${postgres_password}" maxActive="20" maxIdle="10"
-              maxWait="-1"/>
+
 
 </Context>

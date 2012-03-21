@@ -39,7 +39,7 @@ public class GrinderGenerateJson {
     private static final String SHA1 = "SHA1";
     private static final String MD5 = "MD5";
 
-    private static final int NUMBER_OF_GENERATED_FILE = 10;
+    private static final int NUMBER_OF_GENERATED_FILE = 1000;
 
     private static final Logger LOG = LoggerFactory.getLogger(GrinderGenerateJson.class);
 
@@ -76,22 +76,22 @@ public class GrinderGenerateJson {
                 generateChecksum(jarFile, jarFileMd5, MD5);
                 resource.setJarPathMd5(jarFileMd5.getAbsolutePath());
 
-                File jarFileSha1 = new File(repository, "file-" + i + "jar.sha1");
+                File jarFileSha1 = new File(repository, "file-" + i + ".jar.sha1");
                 generateChecksum(jarFile, jarFileSha1, SHA1);
                 resource.setJarPathSha1(jarFileSha1.getAbsolutePath());
 
                 Model model = generateModel(i);
-                File pomFile = new File(repository, "file-" + i + "pom");
+                File pomFile = new File(repository, "file-" + i + ".pom");
                 outputStream = new FileOutputStream(pomFile);
                 writer.write(outputStream, model);
                 outputStream.close();
                 resource.setPomPath(pomFile.getAbsolutePath());
 
-                File pomFileMd5 = new File(repository, "file-" + i + "pom.md5");
+                File pomFileMd5 = new File(repository, "file-" + i + ".pom.md5");
                 generateChecksum(pomFile, pomFileMd5, MD5);
                 resource.setPomPathMd5(pomFileMd5.getAbsolutePath());
 
-                File pomFileSha1 = new File(repository, "file-i" + i + "pom.sha1");
+                File pomFileSha1 = new File(repository, "file-i" + i + ".pom.sha1");
                 generateChecksum(pomFile, pomFileSha1, SHA1);
                 resource.setPomPathSha1(pomFileSha1.getAbsolutePath());
 

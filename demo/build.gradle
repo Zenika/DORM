@@ -1,0 +1,141 @@
+import groovy.xml.StreamingMarkupBuilder
+
+NEO4J_HOME = System.getenv()['NEO4J_HOME']
+demoPathRoot = rootDir.path + "/demo"
+demoLibToDeploy = demoPathRoot + "/lib_to_deploy"
+
+
+
+task demo(dependsOn: ':admin:maven-importer:dist') {
+    doFirst {
+        startNeo4j()
+        tasks.getByPath(':core:webapp:tomcatRun').daemon = true
+        tasks.getByPath(':core:webapp:tomcatRun').execute()
+        unzipMavenImporter()
+        importDemoArtifacts()
+        createProjectToDeploy()
+        addDependenciesIntoProjectToDeploy()
+        mavenInstall()
+        mavenDeploy()
+    }
+    doLast {
+        tasks.getByPath(':core:webapp:tomcatStop').execute()
+        stopNeo4j()
+        deleteProjectToDeploy()
+    }
+}
+
+void startNeo4j() {
+    if (NEO4J_HOME == null || NEO4J_HOME.isEmpty()) {
+        throw new StopExecutionException('Please set NEO4J_HOME environnement variable')
+    }
+    runCmd("neo4j start", new File(NEO4J_HOME + "/bin"))
+}
+
+void stopNeo4j() {
+    if (NEO4J_HOME == null || NEO4J_HOME.isEmpty()) {
+        throw new StopExecutionException('Please set NEO4J_HOME environnement variable')
+    }
+    runCmd("neo4j stop", new File(NEO4J_HOME + "/bin"))
+}
+
+void unzipMavenImporter() {
+    ant.unzip(src: rootDir.path + '/admin/maven-importer/build/distributions/maven-importer-1.0.0-SNAPSHOT.zip',
+            dest: rootDir.path + '/admin/maven-importer/build/distributions/')
+}
+
+void createProjectToDeploy() {
+    runCmd("mvn archetype:create -DgroupId=com.zenika.test -DartifactId=test -DarchetypeArtifactId=maven-archetype-quickstart -DarchetypeGroupId=org.apache.maven.archetypes", new File(demoPathRoot))
+}
+
+void importDemoArtifacts() {
+    runCmd("java -jar maven-importer-1.0.0-SNAPSHOT.jar -h localhost -p 8080 -P dorm-server/maven -l " + demoLibToDeploy + " -u admin -pwd password", new File(rootDir.path + "/admin/maven-importer/build/distributions/"))
+}
+
+void mavenInstall() {
+    runCmd("mvn -s " + demoPathRoot + "/settings.xml install", new File(demoPathRoot + "/test"))
+}
+
+void mavenDeploy() {
+    runCmd("mvn -s " + demoPathRoot + "/settings.xml deploy", new File(demoPathRoot + "/test"))
+}
+
+void deleteProjectToDeploy() {
+    ant.delete(dir: demoPathRoot + "/test")
+}
+
+void addDependenciesIntoProjectToDeploy() {
+    def pom = new File(demoPathRoot + "/test/pom.xml")
+    def project = new XmlSlurper().parse(pom)
+    def dependencies = project.dependencies
+    dependencies.appendNode {
+        dependency {
+            groupId('commons-cli')
+            artifactId('commons-cli')
+            tmpVersion('1.2')
+        }
+        dependency {
+            groupId('commons-collections')
+            artifactId('commons-collections')
+            tmpVersion('3.2.1')
+        }
+    }
+    project.appendNode {
+        distributionManagement {
+            repository {
+                id('Dorm')
+                url('http://localhost:8080/dorm-server/maven')
+            }
+        }
+        tmpRepositories {
+            repository {
+                id('Dorm')
+                url('http://localhost:8080/dorm-server/maven')
+            }
+        }
+    }
+    def outputBuilder = new StreamingMarkupBuilder();
+    def defaultNamespace = project.namespaceURI()
+    String result = outputBuilder.bind {
+        namespaces << ["": defaultNamespace]
+        mkp.yield project
+    }
+    pom.write(result.replace("tmpRepositories", "repositories").replace("tmpVersion", "version"))
+}
+
+void runCmd(String cmd, File baseDir) {
+    println cmd
+
+    def sout = new StringBuffer()
+    def serr = new StringBuffer()
+    def outProc = Runtime.runtime.exec(cmd, [] as String[], baseDir)
+    def running = true
+    def bufferPrinter = {buffer ->
+        def lastIndex = 0
+        while (running) {
+            def length = buffer.length()
+            if (length > lastIndex) {
+                print buffer.subSequence(lastIndex, length)
+                lastIndex = length
+            }
+            Thread.sleep(100)
+        }
+    }
+    Thread.start bufferPrinter.curry(sout)
+    Thread.start bufferPrinter.curry(serr)
+
+    outProc.consumeProcessOutput(sout, serr)
+    try {
+        outProc.waitFor()
+    } catch (Exception e) {
+        e.printStackTrace()
+    }
+    finally {
+        running = false
+    }
+
+    if (outProc.exitValue()) {
+        println "Error code: ${outProc.exitValue()}"
+        System.exit(1)
+    }
+}

@@ -87,11 +87,10 @@ public class DormGuiceServletContextListener extends GuiceServletContextListener
         return null;
     }
 
-    public void contextInitialized
-            (ServletContextEvent
-                     servletContextEvent) {
+    @Override
+    public void contextInitialized(ServletContextEvent servletContextEvent) {
         ServletContext servletContext = servletContextEvent.getServletContext();
-        JULConfigurer.configureJULtoSLF4J(servletContext);
+//        JULConfigurer.configureJULtoSLF4J(servletContext);
         super.contextInitialized(servletContextEvent);
     }
 

@@ -1,4 +1,7 @@
-apply plugin: 'war'
+apply plugin: 'tomcat'
+
+[tomcatRun, tomcatStop]*.stopPort = 8081
+[tomcatRun, tomcatStop]*.stopKey = 'stopKey'
 
 dependencies {
     // Internal dependencies
@@ -6,18 +9,39 @@ dependencies {
 
     // External dependencies
     // FIXME : servlet-api should not be in configuration compile (we need something like maven's provided)
-    compile libraries.servlet_api
+    providedCompile libraries.servlet_api
     compile libraries.jersey_guice
     compile libraries.guice_assistedinject
 
-    testCompile libraries.tomcat_embeded_core
-    testCompile libraries.tomcat_embeded_juli
-
     testCompile project(path: ':core:core', configuration: 'sharedTests')
     testCompile project(path: ':plugins:maven', configuration: 'sharedTests')
+
+    def tomcatVersion = '7.0.11'
+    tomcat "org.apache.tomcat.embed:tomcat-embed-core:${tomcatVersion}",
+            "org.apache.tomcat.embed:tomcat-embed-logging-juli:${tomcatVersion}"
+    tomcat("org.apache.tomcat.embed:tomcat-embed-jasper:${tomcatVersion}") {
+        exclude group: 'org.eclipse.jdt.core.compiler', module: 'ecj'
+    }
 }
 
 test {
     excludes = ['SuiteIntegrationTest', // temporary ignored
             'MavenResourceIntegrationTest', 'DormResourceIntegrationTest']
 }
+
+buildscript {
+    repositories {
+        add(new org.apache.ivy.plugins.resolver.URLResolver()) {
+            name = 'GitHub'
+            addArtifactPattern 'http://cloud.github.com/downloads/[organisation]/[module]/[module]-[revision].[ext]'
+        }
+    }
+    dependencies {
+        classpath 'bmuschko:gradle-tomcat-plugin:0.9.1'
+    }
+}
+
+tomcatRun {
+    contextPath = "dorm-server"
+}
+
