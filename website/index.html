@@ -13,106 +13,99 @@
 
 <body>
 
-<div class="container-fluid">
-
-    <div class="sidebar">
-        <p style="text-align: center">
-            <a href="index.html"><img src="images/flag.jpg" alt="Drapeau Union Européenne"/></a>
-            DORM est cofinancé par l’Union européenne. L’Europe s’engage en Ile de France avec le Fonds européen de
-            développement régional.
-        </p>
-
-        <div class="well">
-            <h5>Présentation du projet</h5>
-            <ul>
-                <li><a href="#">Link</a></li>
-                <li><a href="#">Link</a></li>
-                <li><a href="#">Link</a></li>
-                <li><a href="#">Link</a></li>
-            </ul>
-
-            <h5>Développement</h5>
-            <ul>
-                <li><a href="#">Repository github</a></li>
-                <li><a href="#">Mailing list</a></li>
-            </ul>
-
-            <h5>Partenaires</h5>
-            <ul>
-                <li><a href="http://www.zenika.com/">Zenika</a></li>
-                <li><a href="http://www.nuxeo.com/en">Nuxeo</a></li>
-                <li><a href="http://www.univ-paris-diderot.fr/">Paris Diderot</a></li>
-                <li><a href="http://www.inria.fr/">INRIA</a></li>
-            </ul>
-        </div>
-    </div>
-
-    <div class="content">
-
-        <div class="hero-unit" style="padding-top: 30px">
-            <h1>DORM</h1>
-
-            <br/>
-
-            <div class="alert-message" style="padding-top: 30px">
-                <p>Plus d'informations à venir</p>
-            </div>
-
-            <p style="margin-top: 10px">
-                DORM (Derived Object Repository Manager) est un outil de stockage des artefacts binaires issue d'une
-                chaîne de build.
+<div class="container-fluid"> 
+    <div class="row-fluid">
+        <div class="span2">
+            <p style="text-align: center;">
+                <a href="#"><img src="images/flag.jpg" alt="Drapeau Union Européenne"/></a>
+                DORM est cofinancé par l’Union européenne. L’Europe s’engage en Ile de France avec le Fonds européen de
+                développement régional.
             </p>
-
-            <!--
-                       <p><a class="btn primary large" href="presentation.html">Découvrez le projet &raquo;</a></p>
-					-->
+            <ul class="nav nav-list">
+                <li class="nav-header">Navigation</li>
+                <li class="active"><a href="#home">Accueil</a></li>
+                <li><a href="#desc">Description</a></li>
+                <li class="nav-header">Partenaires</li>
+                <li><a href="http://www.zenika.com/" target="_blank">Zenika</a></li>
+                <li><a href="http://www.nuxeo.com/en" target="_blank">Nuxeo</a></li>
+                <li><a href="http://www.pps.univ-paris-diderot.fr/" target="_blank">Paris Diderot</a></li>
+                <li><a href="http://www.inria.fr/" target="_blank">INRIA</a></li>
+            </ul>
         </div>
+        <!-- /sidebar -->
 
-        <div class="row">
-            <div class="span13 offset6">
-                <ul class="media-grid" style="margin:auto 0">
-                    <li>
-                        <a href="http://www.zenika.com">
-                            <img class="thumbnail" src="images/zenika-logo.png" alt="Zenika"/>
-                        </a>
-                    <li>
-                    <li>
-                        <a href="http://www.univ-paris-diderot.fr/">
-                            <img class="thumbnail" src="images/logodiderot.jpeg" alt="Paris Diderot"/>
-                        </a>
-                    <li>
-                </ul>
-                <br/>
-                <ul class="media-grid" style="margin:auto 0">
-                    <li>
-                        <a href="http://www.inria.fr/">
-                            <img class="thumbnail" src="images/inria-logo.png" alt="INRIA"/>
-                        </a>
-                    <li>
-                    <li>
-                        <a href="http://www.nuxeo.com/en">
-                            <img class="thumbnail" src="images/nuxeo-logo.png" alt="Nuxeo"/>
-                        </a>
-                    <li>
+        <div class="span8">
+            <div class="hero-unit" id="home">
+                <h1>DORM</h1>
+                <p>
+                    DORM (Derived Object Repository Manager) est un outil de stockage des artefacts binaires issue d'une
+                    chaîne de build.
+                </p>
+                <div class="alert alert-info">
+                    Plus d'informations à venir
+                </div>
+            </div>
 
-
-                        <!--
+            <div id="desc" class="well well-large">
+                <h1 class="page-header">Description</h1>
+                <p>
+                    DORM est basé sur les outils <a href="http://archiva.apache.org" target="_blank">Archiva</a> et <a href="http://ivy.apache.org" target="_blank">Ivy</a> de la communauté <a href="http://www.apache.org" target="_blank">Apache</a>. Le développement est effectué sous licence compatible avec les projets de source. Le développement est destiné à être contribué à 100%.
+                </p>
+                <p>
+                    Voici les liens pour chaque sous-partie du projet: 
+                    <ul>
                         <li>
-                            <a href="#"><img class="thumbnail" src="http://placehold.it/330x230" alt="" /></a>
+                            Archiva
+                            <ul>
+                                <li><a href="http://archiva.apache.org" target="_blank">Projet source</a></li>
+                                <li><a href="https://github.com/Zenika/archiva" target="_blank">Code source pour DORM</a></li>
+                            </ul>
+                        </li>
                         <li>
-
-                        <li>
-                            <a href="#"><img class="thumbnail" src="http://placehold.it/330x230" alt="" /></a>
-                        <li>
-                        -->
-                </ul>
+                            Ivy
+                            <ul>
+                                <li><a href="http://ivy.apache.org" target="_blank">Projet source</a></li>
+                                <li><a href="https://github.com/Zenika/ivy" target="_blank">Code source pour DORM</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </p>
+                <p>
+                    DORM est co-développé par quatres acteurs: 
+                    <table style="text-align: center;width:100%">
+                        <tr>
+                            <td>
+                                <a href="http://www.zenika.com">
+                                    <img src="images/zenika-logo.png" alt="Zenika"/>
+                                </a>
+                            </td>
+                            <td>
+                                <a href="http://www.pps.univ-paris-diderot.fr/">
+                                    <img src="images/logodiderot.jpeg" alt="Paris Diderot"/>
+                                </a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <a href="http://www.inria.fr/">
+                                    <img src="images/inria-logo.png" alt="INRIA"/>
+                                </a>
+                            </td>
+                            <td>
+                                <a href="http://www.nuxeo.com/en">
+                                    <img src="images/nuxeo-logo.png" alt="Nuxeo"/>
+                                </a>
+                            </td>
+                        </tr>
+                    </table>
+                </p>
             </div>
         </div>
-
-        <footer>
-            <p style="text-align:center">&copy; DORM 2012</p>
-        </footer>
     </div>
+    <hr/>
+    <footer>
+        <p style="text-align:center">&copy; DORM 2012</p>
+    </footer>
 </div>
 
 </body>
